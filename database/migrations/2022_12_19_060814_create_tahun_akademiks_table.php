@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('tahun_akademiks', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
-            $table->enum('role', ['admin', 'pimpinan', 'guru', 'waliAsrama', 'siswa']);
-            // $table->string('email')->unique();
-            // $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('nama', 50);
+            $table->date('tgl_mulai')->unique();
+            $table->date('tgl_berakhir');
+            $table->enum('semester', ['ganjil', 'genap']);
+            $table->enum('status', ['aktif', 'tidak aktif']);
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('tahun_akademiks');
     }
 };

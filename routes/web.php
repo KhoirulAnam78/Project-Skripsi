@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\JadwalGuruPiketController;
 use Illuminate\Support\Facades\Route;
 
 /*
