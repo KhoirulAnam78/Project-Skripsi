@@ -16,8 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('dashboard');
-});
+})->middleware('auth');
 
 Route::get('/login', function () {
     return view('login');
-});
+})->name('login')->middleware('guest');
+
+Route::get('/logout', function () {
+    Auth()->logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('/login');
+})->middleware('auth');
