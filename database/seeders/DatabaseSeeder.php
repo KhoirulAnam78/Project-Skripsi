@@ -32,6 +32,11 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('1234'),
             'role' => 'siswa'
         ]);
+        User::create([
+            'username' => 'admin',
+            'password' => bcrypt('1234'),
+            'role' => 'admin'
+        ]);
         $this->call([
             GuruSeeder::class,
             SiswaSeeder::class,
