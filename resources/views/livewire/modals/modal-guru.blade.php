@@ -4,7 +4,8 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <h5 class="modal-title text-white" id="exampleModalLabel1">Tambah Data Guru</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" wire:click="empty()" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <form wire:submit.prevent="save">
                 <div class="modal-body">
@@ -76,14 +77,19 @@
                                     aria-describedby="password" />
                                 <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                             </div>
+                            <input class="form-check-input" type="checkbox" id='checkbox'
+                                {{ $checkbox === true ? 'checked' : '' }} wire:click="defaultPw()">
+                            <span style="font-size: 12px">Password Default</span>
                             @error('password')
-                                <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
+                                <span class="error" style="font-size:12px; font-style:italic">*
+                                    {{ $message }}</span>
                             @enderror
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-outline-secondary" wire:click="empty()"
+                        data-bs-dismiss="modal">
                         Close
                     </button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -228,7 +234,8 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <h5 class="modal-title text-white" id="exampleModalLabel1">Import Data</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" wire:click="empty()" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <form wire:submit.prevent="import">
                 <div class="modal-body">

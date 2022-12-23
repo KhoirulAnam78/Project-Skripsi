@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Exports\ExportGuru;
 use App\Models\Guru;
 use App\Models\User;
 use Livewire\Component;
@@ -16,8 +17,8 @@ class TabelGuru extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     //Inisialisasi Variable
-    public $nip, $nama, $kode_guru, $status, $no_telp, $username, $password = 'smantitianteras', $guru_edit_id;
-    public $file, $search = '';
+    public $nip, $nama, $kode_guru, $status, $no_telp, $username, $password, $guru_edit_id;
+    public $file, $search = '', $checkbox;
     //Rules Validation
     protected $rules = [
         'file' => 'required|mimes:xlsx,xls',
@@ -33,14 +34,15 @@ class TabelGuru extends Component
     //Mengosongkan inputan pada modal
     public function empty()
     {
-        $this->nip = '';
-        $this->file = '';
-        $this->kode_guru = '';
-        $this->nama = '';
-        $this->status = '';
-        $this->no_telp = '';
-        $this->username = '';
-        $this->password = 'smantitianteras';
+        $this->nip = null;
+        $this->file = null;
+        $this->kode_guru = null;
+        $this->nama = null;
+        $this->status = null;
+        $this->no_telp = null;
+        $this->username = null;
+        $this->password = null;
+        $this->checkbox = false;
     }
 
     //Custom Errror messages for validation
@@ -196,10 +198,28 @@ class TabelGuru extends Component
         }
     }
 
+    public function defaultPw()
+    {
+        if ($this->password === null) {
+            $this->password = 'smantitianteras';
+            $this->checkbox = true;
+        } else {
+            $this->password = null;
+            $this->checkbox = false;
+        }
+    }
+
+    public function export()
+    {
+        return Excel::download(new ExportGuru, 'Data Guru SMAN Titian Teras.xlsx');
+    }
+
+
     public function render()
     {
-        return view('livewire.tabel-guru', [
-            'guru' => Guru::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5)
+        return view('livewire.guru', [
+            'guru' => Guru::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5),
+            'show' => true
         ]);
     }
 
