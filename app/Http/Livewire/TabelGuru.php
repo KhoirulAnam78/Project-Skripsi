@@ -169,6 +169,7 @@ class TabelGuru extends Component
         $guru = Guru::where('id', $this->guru_delete_id)->first();
         try {
             $guru->delete();
+            User::destroy($guru->user_id);
             session()->flash('message', 'Data berhasil dihapus');
         } catch (\Throwable $th) {
             session()->flash('error', 'Data gagal dihapus karena digunakan di dalam sistem');

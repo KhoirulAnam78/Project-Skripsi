@@ -250,6 +250,12 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <a href="/download-template-guru"class="btn btn-success active"><i
+                                    class='bx bxs-download'></i>Download Template</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" wire:click="empty()" class="btn btn-outline-secondary"

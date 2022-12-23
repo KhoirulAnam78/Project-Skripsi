@@ -85,7 +85,7 @@
 
             <ul class="menu-sub">
                 <li class="menu-item {{ $title === 'Tahun Akademik' ? 'active' : '' }}">
-                    <a href="#" class="menu-link">
+                    <a href="tahun-akademik" class="menu-link">
                         <div data-i18n="Tahun Akademik">Tahun Akademik</div>
                     </a>
                 </li>

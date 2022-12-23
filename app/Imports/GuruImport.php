@@ -58,7 +58,7 @@ class GuruImport implements ToCollection, WithHeadingRow, WithValidation
                 'kode_guru' => $row['kode_guru'],
                 'nama' => $row['nama'],
                 'no_telp' => $row['nomor_telepon'],
-                'status' => $row['status'],
+                'status' => strToLower($row['status']),
                 'user_id' => $user->id,
             ]);
         }
