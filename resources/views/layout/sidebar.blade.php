@@ -3,7 +3,7 @@
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="index.html" class="app-brand-link">
-            <span class="app-brand-logo demo">
+            {{-- <span class="app-brand-logo demo">
                 <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink">
                     <defs>
@@ -46,7 +46,12 @@
                         </g>
                     </g>
                 </svg>
-            </span>
+            </span> --}}
+            <div class="app-brand-logo demo">
+                <img src="{{ url('') }}/assets/assets/img/icons/brands/sman-titian-teras.jpg"
+                    alt="Logo SMAN TITIAN TERAS.jpg" width="40px">
+                {{-- <span class="text-body fw-bolder">SMAN TITIAN TERAS</span> --}}
+            </div>
             <span class="app-brand-text demo menu-text fw-bolder ms-2">SiMonEv</span>
         </a>
 

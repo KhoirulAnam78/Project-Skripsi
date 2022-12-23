@@ -35,7 +35,10 @@
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#example').DataTable();
+            $('#example').DataTable({
+                // stateSave: true
+            });
+
         });
     </script>
 @endsection
