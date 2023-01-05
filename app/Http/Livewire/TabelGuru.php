@@ -22,9 +22,9 @@ class TabelGuru extends Component
     //Rules Validation
     protected $rules = [
         'file' => 'required|mimes:xlsx,xls',
-        'nip' => 'required|min:18|unique:gurus',
+        'nip' => 'required|numeric|min:18|unique:gurus',
         'nama' => 'required',
-        'no_telp' => 'required|max:14',
+        'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
         'status' => 'required',
         'kode_guru' => 'required|min:2|max:2|unique:gurus',
         'username' => 'required|unique:users',
@@ -49,10 +49,12 @@ class TabelGuru extends Component
     protected $messages = [
         'nip.required' => 'NIP wajib diisi !',
         'nip.min' => 'NIP harus berisi 18 karakter !',
+        'nip.numeric' => 'NIP harus merupakan angka !',
         'nip.unique' => 'NIP telah digunakan !',
         'nama.required' => 'Nama wajib diisi !',
         'no_telp.required' => 'No Telp wajib diisi !',
-        'no_telp.max' => 'No Telp maksimal 14 karakter number !',
+        'no_telp.max' => 'No Telp maksimal 14 karakter angka (numeric) !',
+        'no_telp.regex' => 'No Telp merupakan angka dan boleh menggunakan karakter + !',
         'status.required' => 'Status wajib diisi !',
         'kode_guru.required' => 'Kode Guru wajib diisi !',
         'kode_guru.min' => 'Kode Guru harus berisi 2 karakter !',
@@ -89,9 +91,9 @@ class TabelGuru extends Component
     public function save()
     {
         $this->validate([
-            'nip' => 'required|min:18|unique:gurus',
+            'nip' => 'required|numeric|min:18|unique:gurus',
             'nama' => 'required',
-            'no_telp' => 'required|max:14',
+            'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             'status' => 'required',
             'kode_guru' => 'required|min:2|max:2|unique:gurus',
             'username' => 'required|unique:users',
@@ -135,9 +137,9 @@ class TabelGuru extends Component
     public function update()
     {
         $this->validate([
-            'nip' => 'required|min:18|unique:gurus,nip,' . $this->guru_edit_id,
+            'nip' => 'required|numeric|min:18|unique:gurus,nip,' . $this->guru_edit_id,
             'nama' => 'required',
-            'no_telp' => 'required|max:14',
+            'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             'status' => 'required',
             'kode_guru' => 'required|min:2|max:2|unique:gurus,kode_guru,' . $this->guru_edit_id,
         ]);

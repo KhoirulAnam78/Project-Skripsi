@@ -6,7 +6,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <h5 class="card-header">Tahun Akademik</h5>
-                    {{-- <livewire:tabel-guru /> --}}
+                    <livewire:tabel-tahun-akademik />
                 </div>
                 <!--/ Striped Rows -->
             </div>
