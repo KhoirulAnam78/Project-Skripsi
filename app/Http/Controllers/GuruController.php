@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Guru;
-use App\Http\Requests\StoreGuruRequest;
-use App\Http\Requests\UpdateGuruRequest;
 use Illuminate\Support\Facades\Response;
 
 class GuruController extends Controller

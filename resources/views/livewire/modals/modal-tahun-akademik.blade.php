@@ -60,6 +60,8 @@
                             @enderror
                         </div>
                     </div>
+                    <span style="font-size:12px; font-style:italic">Nore : Apabila status diisi aktif maka tahun
+                        akademik yang aktif saat ini akan dinonaktifkan !</span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" wire:click="empty()"
@@ -141,6 +143,9 @@
                             @enderror
                         </div>
                     </div>
+                    <span style="font-size:12px; font-style:italic">Nore : Apabila status diubah dari tidak aktif
+                        menjadi aktif maka tahun
+                        akademik yang aktif saat ini akan dinonaktifkan !</span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" wire:click="empty()"
@@ -165,7 +170,7 @@
             </div>
             <div class="modal-body">
                 <h6>Benar ingin menghapus data?</h6>
-                <p class="text-warning">* Jika data digunakan didalam sistem maka tidak
+                <p class="text-danger">* Jika data digunakan didalam sistem maka tidak
                     akan bisa dihapus, Hal ini
                     untuk mempertahankan history data!</p>
             </div>

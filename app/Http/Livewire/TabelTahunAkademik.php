@@ -65,6 +65,7 @@ class TabelTahunAkademik extends Component
     public function save()
     {
         $this->validate();
+        $akademik_aktif = TahunAkademik::where('status', 'aktif')->get()->all();
         TahunAkademik::create([
             'nama' => $this->nama,
             'tgl_mulai' => $this->tgl_mulai,
@@ -72,6 +73,10 @@ class TabelTahunAkademik extends Component
             'status' => $this->status,
             'semester' => $this->semester,
         ]);
+
+        foreach ($akademik_aktif as $a) {
+            TahunAkademik::where('id', $a->id)->update(['status' => 'tidak aktif']);
+        }
         session()->flash('message', 'Data berhasil ditambahkan !');
         $this->empty();
         $this->dispatchBrowserEvent('close-modal');
@@ -100,7 +105,12 @@ class TabelTahunAkademik extends Component
             'status' => 'required',
             'semester' => 'required'
         ]);
-
+        if ($this->status === 'aktif') {
+            $akademik_aktif = TahunAkademik::where('status', 'aktif')->get()->all();
+            foreach ($akademik_aktif as $a) {
+                TahunAkademik::where('id', $a->id)->update(['status' => 'tidak aktif']);
+            }
+        }
         TahunAkademik::where('id', $this->tahun_akademik_edit_id)->update([
             'nama' => $this->nama,
             'tgl_mulai' => $this->tgl_mulai,

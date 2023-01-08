@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kelas;
-use App\Http\Requests\StoreKelasRequest;
-use App\Http\Requests\UpdateKelasRequest;
+use Illuminate\Support\Facades\Response;
+
 
 class KelasController extends Controller
 {
@@ -15,72 +14,17 @@ class KelasController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.kelas', [
+            'title' => 'Data Kelas'
+        ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function download()
     {
-        //
-    }
+        $file = public_path() . '\assets\template-excel\Data Kelas.xlsx';
+        $headers = array(
+            'Content-Type: application/xlsx',
+        );
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreKelasRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreKelasRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Kelas  $kelas
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Kelas $kelas)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Kelas  $kelas
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Kelas $kelas)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateKelasRequest  $request
-     * @param  \App\Models\Kelas  $kelas
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateKelasRequest $request, Kelas $kelas)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Kelas  $kelas
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Kelas $kelas)
-    {
-        //
+        return Response::download($file, 'Template Import Data Kelas.xlsx', $headers);
     }
 }

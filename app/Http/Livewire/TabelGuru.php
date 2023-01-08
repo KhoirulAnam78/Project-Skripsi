@@ -17,7 +17,7 @@ class TabelGuru extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     //Inisialisasi Variable
-    public $nip, $nama, $kode_guru, $status, $no_telp, $username, $password, $guru_edit_id;
+    public $nip, $nama, $kode_guru, $status, $no_telp, $username, $password, $guru_edit_id, $guru_delete_id;
     public $file, $search = '', $checkbox;
     //Rules Validation
     protected $rules = [

@@ -2,6 +2,9 @@
     <div class="mx-3">
         <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "><i
                 class='bx bx-add-to-queue'></i> Tambah</a>
+        <a href="" class="btn btn-success active mb-2" data-bs-toggle="modal" data-bs-target="#importModal"
+            style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
+            Import</a>
     </div>
     @if (session()->has('message'))
         <div class="mb-2 mx-3">
@@ -19,20 +22,40 @@
             </div>
         </div>
     @endif
-
-    <div class="col-lg-4 col-md-4 mb-0 mx-3">
-        <input type="text" wire:model="search" id="no_telp" class="form-control"
-            placeholder="Cari berdasarkan nama tahun akademik" />
+    @if (session()->has('importError'))
+        <div class="mb-2 mx-3">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @foreach (session('importError') as $err)
+                    Error pada baris ke {{ $err->row() }} : {{ ' ' . $err->errors()[0] }} <br>
+                @endforeach
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
+    <div class="row justify-content-between">
+        <div class="col-lg-4 col-md-4 mb-0 mx-3">
+            <label for="search" class="form-label">Pencarian</label>
+            <input type="text" wire:model="search" id="search" class="form-control"
+                placeholder="Cari berdasarkan nama kelas" />
+        </div>
+        <div class="col-lg-4 col-md-4 mb-3 mx-3">
+            <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
+            <select wire:model="filter" id="tahun_akademik_id" class="form-select">
+                <option value="">Semua</option>
+                @foreach ($tahun_akademik as $ta)
+                    <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
+
     <div class="table-responsive text-nowrap mx-3 mb-3">
         <table class="table table-striped" id="examplei">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama Tahun Akademik</th>
-                    <th>Semester</th>
-                    <th>Tanggal Mulai</th>
-                    <th>Tanggal Berakhir</th>
+                    <th>Nama Kelas</th>
+                    <th>Tahun Akademik</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -41,20 +64,18 @@
                 @php
                     $i = 0;
                 @endphp
-                @if (count($tahun_akademik) === 0)
+                @if (count($kelas) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
                     </tr>
                 @else
-                    @foreach ($tahun_akademik as $ta)
+                    @foreach ($kelas as $ta)
                         <tr>
                             <td>{{ ++$i }}</td>
                             <td>{{ $ta->nama }}</td>
-                            <td>{{ ucfirst($ta->semester) }}</td>
-                            <td>{{ $ta->tgl_mulai }}</td>
-                            <td>{{ $ta->tgl_berakhir }}</td>
+                            <td>{{ $ta->tahunAkademik->nama }}</td>
                             <td>
-                                @if ($ta->status === 'aktif')
+                                @if ($ta->tahunAkademik->status === 'aktif')
                                     <span class="badge bg-label-info me-1">Aktif</span>
                                 @else
                                     <span class="badge bg-label-danger me-1">Tidak Aktif</span>
@@ -69,7 +90,8 @@
                                         <a class="dropdown-item" wire:click="edit({{ $ta->id }})"><i
                                                 class="bx bx-edit-alt me-1"></i>
                                             Edit</a>
-                                        <a class="dropdown-item" wire:click="deleteConfirmation({{ $ta->id }})"><i
+                                        <a class="dropdown-item"
+                                            wire:click="deleteConfirmation({{ $ta->id }})"><i
                                                 class="bx bx-trash me-1"></i>
                                             Delete</a>
                                     </div>
@@ -83,9 +105,9 @@
 
         </table>
 
-        {{ $tahun_akademik->links() }}
+        {{ $kelas->links() }}
     </div>
-    @include('livewire.modals.modal-tahun-akademik')
+    @include('livewire.modals.modal-kelas')
     <script>
         window.addEventListener('close-modal', event => {
             $('#inputModal').modal('hide');
@@ -102,5 +124,8 @@
         window.addEventListener('show-delete-confirmation-modal', event => {
             $('#deleteModal').modal('show')
         });
+        window.addEventListener('close-modal-import', event => {
+            $('#importModal').modal('hide')
+        })
     </script>
 </div>
