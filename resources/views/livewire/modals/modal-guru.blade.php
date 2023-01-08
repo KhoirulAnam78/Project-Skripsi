@@ -63,6 +63,9 @@
                             <label for="username" class="form-label">Username</label>
                             <input type="text" wire:model="username" id="username" class="form-control"
                                 placeholder="khoirul1234" value="{{ $nip }}" />
+                            <input class="form-check-input" type="checkbox" id='checkbox'
+                                {{ $checkboxUname === true ? 'checked' : '' }} wire:click="defaultUname()">
+                            <span style="font-size: 12px">Username Default</span>
                             @error('username')
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
                             @enderror

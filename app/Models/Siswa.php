@@ -14,9 +14,9 @@ class Siswa extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function rombels()
+    public function kelas()
     {
-        return $this->hasMany(Rombel::class);
+        return $this->belongsToManyMany(Kelas::class);
     }
 
     public function kehadiranPembelajarans()

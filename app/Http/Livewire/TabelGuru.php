@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire;
 
-use App\Exports\ExportGuru;
 use App\Models\Guru;
 use App\Models\User;
 use Livewire\Component;
+use App\Exports\ExportGuru;
 use App\Imports\GuruImport;
-use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TabelGuru extends Component
@@ -18,11 +19,11 @@ class TabelGuru extends Component
     protected $paginationTheme = 'bootstrap';
     //Inisialisasi Variable
     public $nip, $nama, $kode_guru, $status, $no_telp, $username, $password, $guru_edit_id, $guru_delete_id;
-    public $file, $search = '', $checkbox;
+    public $file, $search = '', $checkbox, $checkboxUname;
     //Rules Validation
     protected $rules = [
         'file' => 'required|mimes:xlsx,xls',
-        'nip' => 'required|numeric|min:18|unique:gurus',
+        'nip' => 'required|numeric|min_digits:18|max_digits:18|unique:gurus',
         'nama' => 'required',
         'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
         'status' => 'required',
@@ -43,12 +44,16 @@ class TabelGuru extends Component
         $this->username = null;
         $this->password = null;
         $this->checkbox = false;
+        $this->checkboxUname = false;
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     //Custom Errror messages for validation
     protected $messages = [
         'nip.required' => 'NIP wajib diisi !',
-        'nip.min' => 'NIP harus berisi 18 karakter !',
+        'nip.min_digits' => 'NIP harus berisi 18 karakter !',
+        'nip.max_digits' => 'NIP lebih dari 18 karakter !',
         'nip.numeric' => 'NIP harus merupakan angka !',
         'nip.unique' => 'NIP telah digunakan !',
         'nama.required' => 'Nama wajib diisi !',
@@ -73,7 +78,7 @@ class TabelGuru extends Component
     {
         if ($this->guru_edit_id) {
             $this->rules = [
-                'nip' => 'required|min:18|unique:gurus,nip,' . $this->guru_edit_id,
+                'nip' => 'required|min_digits:18|max_digits:18|unique:gurus,nip,' . $this->guru_edit_id,
                 'nama' => 'required',
                 'no_telp' => 'required|max:14',
                 'status' => 'required',
@@ -90,8 +95,14 @@ class TabelGuru extends Component
     //Save data to database
     public function save()
     {
+        if ($this->nip === null or Str::length($this->nip) < 18) {
+            $this->checkbox = false;
+            $this->checkboxUname = false;
+            $this->username = null;
+            $this->password = null;
+        }
         $this->validate([
-            'nip' => 'required|numeric|min:18|unique:gurus',
+            'nip' => 'required|numeric|min_digits:18|max_digits:18|unique:gurus',
             'nama' => 'required',
             'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             'status' => 'required',
@@ -137,7 +148,7 @@ class TabelGuru extends Component
     public function update()
     {
         $this->validate([
-            'nip' => 'required|numeric|min:18|unique:gurus,nip,' . $this->guru_edit_id,
+            'nip' => 'required|numeric|min_digits:18|max_digits:18|unique:gurus,nip,' . $this->guru_edit_id,
             'nama' => 'required',
             'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             'status' => 'required',
@@ -204,11 +215,21 @@ class TabelGuru extends Component
     public function defaultPw()
     {
         if ($this->password === null) {
-            $this->password = 'smantitianteras';
+            $this->password = $this->nip;
             $this->checkbox = true;
         } else {
             $this->password = null;
             $this->checkbox = false;
+        }
+    }
+    public function defaultUname()
+    {
+        if ($this->username === null) {
+            $this->username = $this->nip;
+            $this->checkboxUname = true;
+        } else {
+            $this->username = null;
+            $this->checkboxUname = false;
         }
     }
 

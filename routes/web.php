@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TahunAkademikController;
 use App\Http\Controllers\JadwalGuruPiketController;
 
@@ -44,3 +45,6 @@ Route::get('/tahun-akademik', [TahunAkademikController::class, 'index'])->middle
 //Data Kelas
 Route::get('/kelas', [KelasController::class, 'index'])->middleware('auth');
 Route::get('/download-template-kelas', [KelasController::class, 'download'])->middleware('auth');
+//Data Siswa
+Route::get('/siswa', [SiswaController::class, 'index'])->middleware('auth');
+Route::get('/download-template-siswa', [SiswaController::class, 'download'])->middleware('auth');

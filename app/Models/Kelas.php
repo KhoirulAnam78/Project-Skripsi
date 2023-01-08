@@ -14,9 +14,9 @@ class Kelas extends Model
         return $this->belongsTo(TahunAkademik::class);
     }
 
-    public function rombels()
+    public function siswas()
     {
-        return $this->hasMany(Rombel::class);
+        return $this->belongsToMany(Siswa::class);
     }
 
     public function jadwalPelajarans()

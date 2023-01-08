@@ -38,6 +38,8 @@ class TabelKelas extends Component
         $this->nama = null;
         $this->tahun_akademik_id = null;
         $this->file = null;
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     //Custom Errror messages for validation

@@ -11,7 +11,7 @@ class TabelTahunAkademik extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     //Inisialisasi Variable
-    public $nama, $tgl_mulai, $semester, $tgl_berakhir, $tahun_akademik_edit_id, $status, $search = '';
+    public $nama, $tgl_mulai, $semester, $tgl_berakhir, $tahun_akademik_edit_id, $tahun_akademik_delete_id, $status, $search = '';
     //Rules Validation
     protected $rules = [
         'nama' => 'required|unique:tahun_akademiks',
@@ -30,6 +30,8 @@ class TabelTahunAkademik extends Component
         $this->status = null;
         $this->semester = null;
         $this->tahun_akademik_edit_id = null;
+        $this->resetErrorBag();
+        $this->resetValidation();
     }
 
     //Custom Errror messages for validation
