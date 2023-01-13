@@ -39,7 +39,7 @@
             </thead>
             <tbody class="table-border-bottom-0">
                 @php
-                    $i = 0;
+                    $i = $tahun_akademik->firstItem() - 1;
                 @endphp
                 @if (count($tahun_akademik) === 0)
                     <tr>

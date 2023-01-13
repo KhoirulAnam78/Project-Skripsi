@@ -62,7 +62,7 @@
             </thead>
             <tbody class="table-border-bottom-0">
                 @php
-                    $i = 0;
+                    $i = $kelas->firstItem() - 1;
                 @endphp
                 @if (count($kelas) === 0)
                     <tr>

@@ -60,7 +60,7 @@
                         <option value="{{ $k->id }}">{{ $k->nama }}</option>
                     @endforeach
                 @else
-                    <option>Tidak ada kelas</option>
+                    <option>Pilih tahun akademik</option>
                 @endif
             </select>
         </div>

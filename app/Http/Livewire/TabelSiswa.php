@@ -20,7 +20,8 @@ class TabelSiswa extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     //Inisialisasi Variable
-    public $nisn, $nama, $status, $no_telp, $username, $password, $siswa_edit_id, $siswa_delete_id;
+    public $nisn, $nama, $status, $no_telp, $username, $password, $tahun_akademik_id = '', $kelas_id = '';
+    public $siswa_edit_id, $siswa_delete_id;
     public $file, $search = '', $filter_tahun_akademik = '', $filter_kelas = '', $checkbox, $checkboxUname;
     //Rules Validation
     protected $rules = [
@@ -238,23 +239,18 @@ class TabelSiswa extends Component
             } else {
                 $siswa = [];
             }
-            // $this->filter_kelas = $kelas->first()->id;
-            // if ($this->filter_kelas !== '') {
-            //     $siswa = Kelas::where('id', $this->filter_kelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
-            // } else {
-            //     $siswa = collect([])->paginate(5);
-            // }
-            // dd($kelas);
-            // $siswa = Kelas::where('id', $this->filter_kelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
         } else {
             $kelas = null;
             $siswa = Siswa::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
-            // $this->filter_kelas = $kelas->first()->id;
-            // $siswa = Kelas::where('id', $this->filter_kelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
         }
-
+        if ($this->tahun_akademik_id !== '') {
+            $kelasModal = TahunAkademik::where('id', $this->tahun_akademik_id)->first()->kelas;
+        } else {
+            $kelasModal = null;
+        }
         return view('livewire.tabel-siswa', [
             'kelas' => $kelas,
+            'kelasModal' => $kelasModal,
             'siswa' => $siswa,
             'tahun_akademik' => TahunAkademik::all()
         ]);

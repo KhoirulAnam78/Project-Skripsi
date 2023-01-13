@@ -95,7 +95,7 @@
                     </a>
                 </li>
                 <li class="menu-item {{ $title === 'Data Siswa' ? 'active' : '' }}">
-                    <a href="#" class="menu-link">
+                    <a href="/siswa" class="menu-link">
                         <div data-i18n="Data Siswa">Data Siswa</div>
                     </a>
                 </li>
