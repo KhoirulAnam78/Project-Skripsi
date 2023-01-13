@@ -9,6 +9,7 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use App\Exports\ExportSiswa;
 use App\Imports\SiswaImport;
+use App\Models\Rombel;
 use Livewire\WithPagination;
 use App\Models\TahunAkademik;
 use Livewire\WithFileUploads;
@@ -30,6 +31,8 @@ class TabelSiswa extends Component
         'nama' => 'required',
         'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
         'status' => 'required',
+        'tahun_akademik_id' => 'required',
+        'kelas_id' => 'required',
         'username' => 'required|unique:users',
         'password' => 'required|min:8'
     ];
@@ -42,6 +45,8 @@ class TabelSiswa extends Component
         $this->nama = null;
         $this->status = null;
         $this->no_telp = null;
+        $this->tahun_akademik_id = '';
+        $this->kelas_id = '';
         $this->username = null;
         $this->password = null;
         $this->checkbox = false;
@@ -58,6 +63,8 @@ class TabelSiswa extends Component
         'nisn.numeric' => 'NISN harus merupakan angka !',
         'nisn.unique' => 'NISN telah digunakan !',
         'nama.required' => 'Nama wajib diisi !',
+        'tahun_akademik_id.required' => 'Nama wajib diisi !',
+        'kelas_id.required' => 'Nama wajib diisi !',
         'no_telp.required' => 'No Telp wajib diisi !',
         'no_telp.max' => 'No Telp maksimal 14 karakter angka (numeric) !',
         'no_telp.regex' => 'No Telp merupakan angka dan boleh menggunakan karakter + !',
@@ -80,6 +87,8 @@ class TabelSiswa extends Component
                 'no_telp' => 'required|max:14',
                 'status' => 'required',
                 'username' => 'required|unique:users',
+                'tahun_akademik_id' => 'required',
+                'kelas_id' => 'required',
                 // 'password' => 'required|min:8'
             ];
             $this->validateOnly($propertyName);
@@ -103,7 +112,9 @@ class TabelSiswa extends Component
             'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             'status' => 'required',
             'username' => 'required|unique:users',
-            'password' => 'required|min:8'
+            'password' => 'required|min:8',
+            'tahun_akademik_id' => 'required',
+            'kelas_id' => 'required',
         ]);
         $user = User::create([
             'username' => $this->username,
@@ -111,12 +122,16 @@ class TabelSiswa extends Component
             'role' => 'siswa'
         ]);
 
-        Siswa::create([
+        $siswa  = Siswa::create([
             'nisn' => $this->nisn,
             'nama' => $this->nama,
             'status' => $this->status,
             'no_telp' => $this->no_telp,
             'user_id' => $user->id,
+        ]);
+        Rombel::create([
+            'siswa_id' => $siswa->id,
+            'kelas_id' => $this->kelas_id
         ]);
         session()->flash('message', 'Data berhasil ditambahkan !');
         $this->empty();

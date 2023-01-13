@@ -9,6 +9,7 @@ class Rombel extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+    protected $table = 'kelas_siswa';
     // public function siswa()
     // {
     //     return $this->belongsTo(Siswa::class);
