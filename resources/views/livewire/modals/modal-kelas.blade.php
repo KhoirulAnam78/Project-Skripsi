@@ -9,7 +9,7 @@
             </div>
             <form wire:submit.prevent="save">
                 <div class="modal-body">
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col mb-0">
                             <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
                             <select name="tahun_akademik_id" wire:model.defer="tahun_akademik_id" id="tahun_akademik_id"
@@ -23,7 +23,7 @@
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col mb-3">
                             <label for="nama" class="form-label">Nama</label>
@@ -59,7 +59,7 @@
             </div>
             <form wire:submit.prevent="update">
                 <div class="modal-body">
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col mb-0">
                             <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
                             <select name="tahun_akademik_id" wire:model.defer="tahun_akademik_id" id="tahun_akademik_id"
@@ -73,7 +73,7 @@
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col mb-3">
                             <label for="nama" class="form-label">Nama</label>
@@ -114,8 +114,7 @@
                     untuk mempertahankan history data!</p>
             </div>
             <div class="modal-footer">
-                <button type="button" wire:click="empty()" class="btn btn-outline-secondary"
-                    data-bs-dismiss="modal">
+                <button type="button" wire:click="empty()" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                     Close
                 </button>
                 <button type="submit" class="btn btn-danger" wire:click="deleteKelasData()">Delete</button>
@@ -148,7 +147,7 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <a href="/download-template-kelas"class="btn btn-success active"><i
+                            <a href="/download-template-kelas"class="btn btn-primary"><i
                                     class='bx bxs-download'></i>Download Template</a>
                         </div>
                     </div>

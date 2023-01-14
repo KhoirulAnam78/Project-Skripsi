@@ -23,12 +23,21 @@ class TabelKelas extends Component
 
     public function rules()
     {
-        return
-            [
-                'file' => 'required|mimes:xlsx,xls',
-                'nama' => 'required|unique:kelas,nama,NULL,id,tahun_akademik_id,' . $this->tahun_akademik_id,
-                'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
-            ];
+        if ($this->kelas_edit_id !== null) {
+            return
+                [
+                    'file' => 'required|mimes:xlsx,xls',
+                    'nama' => 'required|unique:kelas,nama,' . $this->kelas_edit_id . ',id,tahun_akademik_id,' . $this->tahun_akademik_id,
+                    // 'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
+                ];
+        } else {
+            return
+                [
+                    'file' => 'required|mimes:xlsx,xls',
+                    'nama' => 'required|unique:kelas,nama,NULL,id,tahun_akademik_id,' . $this->tahun_akademik_id,
+                    // 'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
+                ];
+        }
     }
 
 
@@ -36,7 +45,7 @@ class TabelKelas extends Component
     public function empty()
     {
         $this->nama = null;
-        $this->tahun_akademik_id = null;
+        // $this->tahun_akademik_id = null;
         $this->file = null;
         $this->resetErrorBag();
         $this->resetValidation();
@@ -46,8 +55,8 @@ class TabelKelas extends Component
     protected $messages = [
         'nama.required' => 'Nama kelas wajib diisi !',
         'nama.unique' => 'Nama kelas pada tahun akademik ini sudah ada !',
-        'tahun_akademik_id.required' => 'Tahun akademik wajib diisi !',
-        'tahun_akademik_id.unique' => '',
+        // 'tahun_akademik_id.required' => 'Tahun akademik wajib diisi !',
+        // 'tahun_akademik_id.unique' => '',
         'file.required' => 'File tidak boleh kosong',
         'file.mimes' => 'File harus memiliki format excel(.xlxs/.xls)'
     ];
@@ -63,7 +72,7 @@ class TabelKelas extends Component
     {
         $this->validate([
             'nama' => 'required|unique:kelas,nama,NULL,id,tahun_akademik_id,' . $this->tahun_akademik_id,
-            'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
+            // 'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
         ]);
         Kelas::create([
             'nama' => $this->nama,
@@ -78,7 +87,7 @@ class TabelKelas extends Component
     public function edit($id)
     {
         $kelas = Kelas::find($id);
-        $this->tahun_akademik_id = $kelas->tahun_akademik_id;
+        // $this->tahun_akademik_id = $kelas->tahun_akademik_id;
         $this->nama = $kelas->nama;
         $this->kelas_edit_id = $id;
         $this->dispatchBrowserEvent('show-edit-modal');
@@ -89,7 +98,7 @@ class TabelKelas extends Component
     {
         $this->validate([
             'nama' => 'required|unique:kelas,nama,' . $this->kelas_edit_id . ',id,tahun_akademik_id,' . $this->tahun_akademik_id,
-            'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,' . $this->kelas_edit_id . ',id,nama,' . $this->nama
+            // 'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,' . $this->kelas_edit_id . ',id,nama,' . $this->nama
         ]);
         Kelas::where('id', $this->kelas_edit_id)->update([
             'nama' => $this->nama,
@@ -130,6 +139,7 @@ class TabelKelas extends Component
     }
     public function render()
     {
+        $this->tahun_akademik_id = TahunAkademik::where('status', 'aktif')->first()->id;
         return view('livewire.tabel-kelas', [
             'kelas' => Kelas::where('nama', 'like', '%' . $this->search . '%')->where('tahun_akademik_id', 'like', '%' . $this->filter . '%')->latest()->paginate(5),
             'tahun_akademik' => TahunAkademik::all()
@@ -138,6 +148,7 @@ class TabelKelas extends Component
 
     public function import()
     {
+        // dd($this->file);
         $this->validate([
             'file' => 'required|mimes:xlsx,xls'
         ]);

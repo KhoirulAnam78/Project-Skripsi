@@ -18,24 +18,26 @@ class KelasImport implements ToCollection, WithHeadingRow, WithValidation
      */
     public $tahun_akademik_id, $nama;
 
-    public function prepareForValidation(array $row)
-    {
-        $this->nama = $row['nama_kelas'];;
-        $akademik = TahunAkademik::where('nama', 'like', '%' . $row['tahun_akademik'] . '%')->first();
+    // public function prepareForValidation(array $row)
+    // {
+    //     $this->nama = $row['nama_kelas'];;
+    //     $akademik = TahunAkademik::where('nama', 'like', '%' . $row['tahun_akademik'] . '%')->first();
 
-        if ($akademik !== null) {
-            $this->tahun_akademik_id = $akademik->id;
-        } else {
-            $this->tahun_akademik_id = '-1';
-        }
-        $row['tahun_akademik'] = $this->tahun_akademik_id;
-        return $row;
-    }
+    //     if ($akademik !== null) {
+    //         $this->tahun_akademik_id = $akademik->id;
+    //     } else {
+    //         $this->tahun_akademik_id = '-1';
+    //     }
+    //     $row['tahun_akademik'] = $this->tahun_akademik_id;
+    //     return $row;
+    // }
+
     public function rules(): array
     {
+        $this->tahun_akademik_id = TahunAkademik::where('status', 'aktif')->first()->id;
         return [
             'nama_kelas' => 'required|unique:kelas,nama,NULL,id,tahun_akademik_id,' . $this->tahun_akademik_id,
-            'tahun_akademik' => 'required|exists:kelas,id|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
+            // 'tahun_akademik' => 'required|exists:kelas,id|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
         ];
     }
 
@@ -44,9 +46,9 @@ class KelasImport implements ToCollection, WithHeadingRow, WithValidation
         return [
             'nama_kelas.required' => 'Nama kelas wajib diisi !',
             'nama_kelas.unique' => 'Nama kelas pada tahun akademik ini sudah ada !',
-            'tahun_akademik.required' => 'Tahun akademik wajib diisi !',
-            'tahun_akademik.unique' => 'Nama kelas pada tahun akademik ini sudah ada !',
-            'tahun_akademik.exists' => 'Nama tahun akademik tidak ada didalam sistem !',
+            // 'tahun_akademik.required' => 'Tahun akademik wajib diisi !',
+            // 'tahun_akademik.unique' => 'Nama kelas pada tahun akademik ini sudah ada !',
+            // 'tahun_akademik.exists' => 'Nama tahun akademik tidak ada didalam sistem !',
         ];
     }
 
@@ -54,7 +56,7 @@ class KelasImport implements ToCollection, WithHeadingRow, WithValidation
     {
         foreach ($rows as $row) {
             Kelas::create([
-                'nama' => $this->nama,
+                'nama' => $row['nama_kelas'],
                 'tahun_akademik_id' => $this->tahun_akademik_id
             ]);
         }
