@@ -48,30 +48,6 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="row g-2 mb-3">
-                        <div class="col mb-0">
-                            <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
-                            <select wire:model="tahun_akademik_id" id="tahun_akademik_id" class="form-select">
-                                <option value=''>Pilih</option>
-                                @foreach ($tahun_akademik as $ta)
-                                    <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col mb-0">
-                            <label for="kelas_id" class="form-label">Kelas</label>
-                            <select wire:model="kelas_id" id="kelas_id" class="form-select">
-                                @if ($kelasModal !== null)
-                                    <option value="">Pilih</option>
-                                    @foreach ($kelasModal as $k)
-                                        <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                                    @endforeach
-                                @else
-                                    <option>Tidak ada kelas</option>
-                                @endif
-                            </select>
-                        </div>
-                    </div>
                     <div class="row g-2">
                         <div class="col mb-0">
                             <label for="username" class="form-label">Username</label>
@@ -117,7 +93,7 @@
 </div>
 
 {{-- MODAL EDIT --}}
-{{-- <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -127,28 +103,16 @@
             </div>
             <form wire:submit.prevent="update">
                 <div class="modal-body">
-
                     <div class="row g-2">
                         <div class="col mb-0">
-                            <label for="nip" class="form-label">NIP</label>
-                            <input type="text" wire:model="nip" id="nip" class="form-control"
-                                placeholder="123456789098765432" />
-                            @error('nip')
-                                <span class="error" style="font-size:210; font-style:italicpx"style="font-size:10px">*
-                                    {{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col mb-0">
-                            <label for="kode_guru" class="form-label">Kode Guru</label>
-                            <input type="text" wire:model="kode_guru" id="kode_guru" class="form-control"
-                                placeholder="KA" onkeyup="this.value = this.value.toUpperCase();" />
-                            @error('kode_guru')
+                            <label for="nisn" class="form-label">NISN</label>
+                            <input type="text" wire:model="nisn" id="nisn" class="form-control"
+                                placeholder="1234567890" />
+                            @error('nisn')
                                 <span class="error" style="font-size:12px; font-style:italic">*
                                     {{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col mb-3">
                             <label for="nama" class="form-label">Nama</label>
                             <input type="text" id="nama" class="form-control" placeholder="Khoirul Anam"
@@ -193,10 +157,10 @@
             </form>
         </div>
     </div>
-</div> --}}
+</div>
 
 {{-- MODAL DELETE --}}
-{{-- <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -206,7 +170,7 @@
             </div>
             <div class="modal-body">
                 <h6>Benar ingin menghapus data?</h6>
-                <p class="text-warning">* Jika data digunakan didalam sistem maka tidak
+                <p style="font-style: italic">* Jika data digunakan didalam sistem maka tidak
                     akan bisa dihapus, Hal ini
                     untuk mempertahankan history data!</p>
             </div>
@@ -215,14 +179,14 @@
                     data-bs-dismiss="modal">
                     Close
                 </button>
-                <button type="submit" class="btn btn-danger" wire:click="deleteGuruData()">Delete</button>
+                <button type="submit" class="btn btn-danger" wire:click="deleteSiswaData()">Delete</button>
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 
 {{-- IMPORT DATA --}}
-{{-- <div class="modal fade" id="importModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="importModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -245,7 +209,7 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <a href="/download-template-guru"class="btn btn-success active"><i
+                            <a href="/download-template-siswa"class="btn btn-success active"><i
                                     class='bx bxs-download'></i>Download Template</a>
                         </div>
                     </div>
@@ -260,4 +224,4 @@
             </form>
         </div>
     </div>
-</div> --}}
+</div>

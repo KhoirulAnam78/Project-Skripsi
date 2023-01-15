@@ -21,9 +21,10 @@ class TabelSiswa extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     //Inisialisasi Variable
-    public $nisn, $nama, $status, $no_telp, $username, $password, $tahun_akademik_id = '', $kelas_id = '';
+    public $nisn, $nama, $status, $no_telp, $username, $password;
     public $siswa_edit_id, $siswa_delete_id;
-    public $file, $search = '', $filter_tahun_akademik = '', $filter_kelas = '', $checkbox, $checkboxUname;
+    public $file, $search = '', $checkbox, $checkboxUname;
+    // public $filter_kelas = '', $filter_tahun_akademik = '';
     //Rules Validation
     protected $rules = [
         'file' => 'required|mimes:xlsx,xls',
@@ -31,8 +32,6 @@ class TabelSiswa extends Component
         'nama' => 'required',
         'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
         'status' => 'required',
-        'tahun_akademik_id' => 'required',
-        'kelas_id' => 'required',
         'username' => 'required|unique:users',
         'password' => 'required|min:8'
     ];
@@ -45,9 +44,8 @@ class TabelSiswa extends Component
         $this->nama = null;
         $this->status = null;
         $this->no_telp = null;
-        $this->tahun_akademik_id = '';
-        $this->kelas_id = '';
         $this->username = null;
+        $this->siswa_edit_id = null;
         $this->password = null;
         $this->checkbox = false;
         $this->checkboxUname = false;
@@ -63,8 +61,6 @@ class TabelSiswa extends Component
         'nisn.numeric' => 'NISN harus merupakan angka !',
         'nisn.unique' => 'NISN telah digunakan !',
         'nama.required' => 'Nama wajib diisi !',
-        'tahun_akademik_id.required' => 'Nama wajib diisi !',
-        'kelas_id.required' => 'Nama wajib diisi !',
         'no_telp.required' => 'No Telp wajib diisi !',
         'no_telp.max' => 'No Telp maksimal 14 karakter angka (numeric) !',
         'no_telp.regex' => 'No Telp merupakan angka dan boleh menggunakan karakter + !',
@@ -87,8 +83,7 @@ class TabelSiswa extends Component
                 'no_telp' => 'required|max:14',
                 'status' => 'required',
                 'username' => 'required|unique:users',
-                'tahun_akademik_id' => 'required',
-                'kelas_id' => 'required',
+                // 'kelas_id' => 'required',
                 // 'password' => 'required|min:8'
             ];
             $this->validateOnly($propertyName);
@@ -113,8 +108,6 @@ class TabelSiswa extends Component
             'status' => 'required',
             'username' => 'required|unique:users',
             'password' => 'required|min:8',
-            'tahun_akademik_id' => 'required',
-            'kelas_id' => 'required',
         ]);
         $user = User::create([
             'username' => $this->username,
@@ -122,17 +115,17 @@ class TabelSiswa extends Component
             'role' => 'siswa'
         ]);
 
-        $siswa  = Siswa::create([
+        Siswa::create([
             'nisn' => $this->nisn,
             'nama' => $this->nama,
             'status' => $this->status,
             'no_telp' => $this->no_telp,
             'user_id' => $user->id,
         ]);
-        Rombel::create([
-            'siswa_id' => $siswa->id,
-            'kelas_id' => $this->kelas_id
-        ]);
+        // Rombel::create([
+        //     'siswa_id' => $siswa->id,
+        //     'kelas_id' => $this->kelas_id
+        // ]);
         session()->flash('message', 'Data berhasil ditambahkan !');
         $this->empty();
         $this->dispatchBrowserEvent('close-modal');
@@ -183,7 +176,7 @@ class TabelSiswa extends Component
     }
 
     //Delete data
-    public function deleteGuruData()
+    public function deleteSiswaData()
     {
         $siswa = Siswa::where('id', $this->siswa_delete_id)->first();
         try {
@@ -199,24 +192,24 @@ class TabelSiswa extends Component
         $this->siswa_delete_id = '';
     }
 
-    // public function import()
-    // {
-    //     $this->validate([
-    //         'file' => 'required|mimes:xlsx,xls'
-    //     ]);
+    public function import()
+    {
+        $this->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
 
-    //     try {
-    //         Excel::import(new SiswaImport, $this->file);
-    //         session()->flash('message', 'Data berhasil diimport');
-    //         $this->file = '';
-    //         $this->dispatchBrowserEvent('close-modal-import');
-    //     } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-    //         $failures = $e->failures();
-    //         session()->flash('importError', $failures);
-    //         $this->file = '';
-    //         $this->dispatchBrowserEvent('close-modal-import');
-    //     }
-    // }
+        try {
+            Excel::import(new SiswaImport, $this->file);
+            session()->flash('message', 'Data berhasil diimport');
+            $this->file = '';
+            $this->dispatchBrowserEvent('close-modal-import');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            session()->flash('importError', $failures);
+            $this->file = '';
+            $this->dispatchBrowserEvent('close-modal-import');
+        }
+    }
 
     public function defaultPw()
     {
@@ -239,35 +232,39 @@ class TabelSiswa extends Component
         }
     }
 
-    // public function export()
-    // {
-    //     return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
-    // }
+    public function export()
+    {
+        return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
+    }
 
 
     public function render()
     {
-        if ($this->filter_tahun_akademik !== '') {
-            $kelas = TahunAkademik::where('id', $this->filter_tahun_akademik)->first()->kelas;
-            if ($this->filter_kelas !== '') {
-                $siswa = Kelas::where('id', $this->filter_kelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
-            } else {
-                $siswa = [];
-            }
-        } else {
-            $kelas = null;
-            $siswa = Siswa::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
-        }
-        if ($this->tahun_akademik_id !== '') {
-            $kelasModal = TahunAkademik::where('id', $this->tahun_akademik_id)->first()->kelas;
-        } else {
-            $kelasModal = null;
-        }
+        // if ($this->filter_tahun_akademik !== '') {
+        //     $kelas = TahunAkademik::where('id', $this->filter_tahun_akademik)->first()->kelas;
+        //     if ($this->filter_kelas !== '') {
+        //         $siswa = Kelas::where('id', $this->filter_kelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
+        //     } else {
+        //         $siswa = [];
+        //     }
+        // } else {
+        //     $kelas = null;
+        //     $siswa = Siswa::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
+        // }
+
+        $siswa = Siswa::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
+
+        // if ($this->tahun_akademik_id !== '') {
+        //     $kelasModal = TahunAkademik::where('id', $this->tahun_akademik_id)->first()->kelas;
+        // } else {
+        //     $kelasModal = null;
+        // }
+
         return view('livewire.tabel-siswa', [
-            'kelas' => $kelas,
-            'kelasModal' => $kelasModal,
+            // 'kelas' => $kelas,
+            // 'kelasModal' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'siswa' => $siswa,
-            'tahun_akademik' => TahunAkademik::all()
+            // 'tahun_akademik' => TahunAkademik::all()
         ]);
     }
 

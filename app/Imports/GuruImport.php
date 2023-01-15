@@ -16,14 +16,18 @@ class GuruImport implements ToCollection, WithHeadingRow, WithValidation
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
-
+    public function prepareForValidation(array $row)
+    {
+        $row['status'] = strtolower($row['status']);
+        return $row;
+    }
     public function rules(): array
     {
         return [
             'nip' => 'required|min:18|unique:gurus',
             'nama' => 'required',
             'nomor_telepon' => 'required|max:14',
-            'status' => 'required',
+            'status' => 'in:aktif,tidak aktif',
             'kode_guru' => 'required|min:2|max:2|unique:gurus',
         ];
     }
@@ -37,7 +41,7 @@ class GuruImport implements ToCollection, WithHeadingRow, WithValidation
             'nama.required' => 'Nama wajib diisi !',
             'nomor_telepon.required' => 'No Telp wajib diisi !',
             'no_telepon.max' => 'No Telp maksimal 14 karakter number !',
-            'status.required' => 'Status wajib diisi !',
+            'status.in' => 'Status tidak diketahui (Harap isi dengan aktif/tidak aktif) !',
             'kode_guru.required' => 'Kode Guru wajib diisi !',
             'kode_guru.min' => 'Kode Guru harus berisi 2 karakter !',
             'kode_guru.max' => 'Kode Guru harus berisi 2 karakter !',
@@ -58,7 +62,7 @@ class GuruImport implements ToCollection, WithHeadingRow, WithValidation
                 'kode_guru' => $row['kode_guru'],
                 'nama' => $row['nama'],
                 'no_telp' => $row['nomor_telepon'],
-                'status' => strToLower($row['status']),
+                'status' => $row['status'],
                 'user_id' => $user->id,
             ]);
         }

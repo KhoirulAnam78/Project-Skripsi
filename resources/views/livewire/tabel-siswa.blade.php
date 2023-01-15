@@ -40,9 +40,9 @@
         <div class="col-lg-4 col-md-4 mb-0 mx-3">
             <label for="search" class="form-label">Pencarian</label>
             <input type="text" wire:model="search" id="search" class="form-control"
-                placeholder="Cari berdasarkan nama kelas" />
+                placeholder="Cari berdasarkan nama siswa" />
         </div>
-        <div class="col-lg-3 col-md-3 mb-3 mx-3">
+        {{-- <div class="col-lg-3 col-md-3 mb-3 mx-3">
             <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
             <select wire:model="filter_tahun_akademik" id="tahun_akademik_id" class="form-select">
                 <option value=''>Pilih</option>
@@ -63,7 +63,7 @@
                     <option>Pilih tahun akademik</option>
                 @endif
             </select>
-        </div>
+        </div> --}}
     </div>
     <div class="table-responsive text-nowrap mx-3 mb-3">
         <table class="table table-striped" id="examplei">
@@ -105,11 +105,10 @@
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" wire:click="editGuru({{ $g->id }})"><i
+                                        <a class="dropdown-item" wire:click="editSiswa({{ $g->id }})"><i
                                                 class="bx bx-edit-alt me-1"></i>
                                             Edit</a>
-                                        <a class="dropdown-item"
-                                            wire:click="deleteConfirmation({{ $g->id }})"><i
+                                        <a class="dropdown-item" wire:click="deleteConfirmation({{ $g->id }})"><i
                                                 class="bx bx-trash me-1"></i>
                                             Delete</a>
                                     </div>

@@ -170,7 +170,7 @@
             </div>
             <div class="modal-body">
                 <h6>Benar ingin menghapus data?</h6>
-                <p class="text-danger">* Jika data digunakan didalam sistem maka tidak
+                <p style="font-style: italic">* Jika data digunakan didalam sistem maka tidak
                     akan bisa dihapus, Hal ini
                     untuk mempertahankan history data!</p>
             </div>
