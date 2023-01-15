@@ -65,7 +65,7 @@
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
         <li class="menu-item {{ $title === 'Dashboard' ? 'active' : '' }}">
-            <a href="index.html" class="menu-link">
+            <a href="/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
@@ -104,7 +104,19 @@
                         <div data-i18n="Data Guru">Data Guru</div>
                     </a>
                 </li>
+                <li class="menu-item {{ $title === 'Mata Pelajaran' ? 'active' : '' }}">
+                    <a href="/mata-pelajaran" class="menu-link">
+                        <div data-i18n="Mata Pelajaran">Mata Pelajaran</div>
+                    </a>
+                </li>
             </ul>
+        </li>
+
+        <li class="menu-item {{ $title === 'Rombongan Belajar' ? 'active' : '' }}">
+            <a href="/rombongan-belajar" class="menu-link">
+                <i class='menu-icon bx bxs-group'></i>
+                <div data-i18n="Rombongan Belajar">Rombongan Belajar</div>
+            </a>
         </li>
 
         <li
