@@ -6,6 +6,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TahunAkademikController;
 use App\Http\Controllers\JadwalGuruPiketController;
+use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\RombelController;
 
 /*
@@ -51,3 +52,6 @@ Route::get('/siswa', [SiswaController::class, 'index'])->middleware('auth');
 Route::get('/download-template-siswa', [SiswaController::class, 'download'])->middleware('auth');
 //DATA ROMBEL
 Route::get('/rombongan-belajar', [RombelController::class, 'index'])->middleware('auth');
+
+//DATA MAPEL
+Route::get('/mata-pelajaran', [MataPelajaranController::class, 'index'])->middleware('auth');

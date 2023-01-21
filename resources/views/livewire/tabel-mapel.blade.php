@@ -36,16 +36,7 @@
         <div class="col-lg-4 col-md-4 mb-0 mx-3">
             <label for="search" class="form-label">Pencarian</label>
             <input type="text" wire:model="search" id="search" class="form-control"
-                placeholder="Cari berdasarkan nama kelas" />
-        </div>
-        <div class="col-lg-4 col-md-4 mb-3 mx-3">
-            <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
-            <select wire:model="filter" id="tahun_akademik_id" class="form-select">
-                <option value="">Semua</option>
-                @foreach ($tahun_akademik as $ta)
-                    <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
-                @endforeach
-            </select>
+                placeholder="Cari berdasarkan nama mata pelajaran" />
         </div>
     </div>
 
@@ -54,33 +45,23 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama Kelas</th>
-                    <th>Tahun Akademik</th>
-                    <th>Status</th>
+                    <th>Nama Mata Pelajaran</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
                 @php
-                    $i = $kelas->firstItem() - 1;
+                    $i = $mapel->firstItem() - 1;
                 @endphp
-                @if (count($kelas) === 0)
+                @if (count($mapel) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
                     </tr>
                 @else
-                    @foreach ($kelas as $ta)
+                    @foreach ($mapel as $m)
                         <tr>
                             <td>{{ ++$i }}</td>
-                            <td>{{ $ta->nama }}</td>
-                            <td>{{ $ta->tahunAkademik->nama }}</td>
-                            <td>
-                                @if ($ta->tahunAkademik->status === 'aktif')
-                                    <span class="badge bg-label-info me-1">Aktif</span>
-                                @else
-                                    <span class="badge bg-label-danger me-1">Tidak Aktif</span>
-                                @endif
-                            </td>
+                            <td>{{ $m->nama }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -88,11 +69,10 @@
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" wire:click="edit({{ $ta->id }})"><i
+                                        <a class="dropdown-item" wire:click="edit({{ $m->id }})"><i
                                                 class="bx bx-edit-alt me-1"></i>
                                             Edit</a>
-                                        <a class="dropdown-item"
-                                            wire:click="deleteConfirmation({{ $ta->id }})"><i
+                                        <a class="dropdown-item" wire:click="deleteConfirmation({{ $m->id }})"><i
                                                 class="bx bx-trash me-1"></i>
                                             Delete</a>
                                     </div>
@@ -106,9 +86,9 @@
 
         </table>
 
-        {{ $kelas->links() }}
+        {{ $mapel->links() }}
     </div>
-    @include('livewire.modals.modal-kelas')
+    @include('livewire.modals.modal-mapel')
     <script>
         window.addEventListener('close-modal', event => {
             $('#inputModal').modal('hide');

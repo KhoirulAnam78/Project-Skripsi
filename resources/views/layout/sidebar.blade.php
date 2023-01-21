@@ -77,13 +77,18 @@
         </li>
         <!-- Layouts -->
         <li
-            class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa') ? 'active open' : '' }}">
+            class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div>Data Master</div>
             </a>
 
             <ul class="menu-sub">
+                <li class="menu-item {{ $title === 'Data Guru' ? 'active' : '' }}">
+                    <a href="/data-guru" class="menu-link">
+                        <div data-i18n="Data Guru">Data Guru</div>
+                    </a>
+                </li>
                 <li class="menu-item {{ $title === 'Tahun Akademik' ? 'active' : '' }}">
                     <a href="tahun-akademik" class="menu-link">
                         <div data-i18n="Tahun Akademik">Tahun Akademik</div>
@@ -97,11 +102,6 @@
                 <li class="menu-item {{ $title === 'Data Siswa' ? 'active' : '' }}">
                     <a href="/siswa" class="menu-link">
                         <div data-i18n="Data Siswa">Data Siswa</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title === 'Data Guru' ? 'active' : '' }}">
-                    <a href="/data-guru" class="menu-link">
-                        <div data-i18n="Data Guru">Data Guru</div>
                     </a>
                 </li>
                 <li class="menu-item {{ $title === 'Mata Pelajaran' ? 'active' : '' }}">

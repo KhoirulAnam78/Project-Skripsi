@@ -144,7 +144,7 @@ class TabelKelas extends Component
     {
         return view('livewire.tabel-kelas', [
             'kelas' => Kelas::where('nama', 'like', '%' . $this->search . '%')->where('tahun_akademik_id', 'like', '%' . $this->filter . '%')->latest()->paginate(5),
-            'tahun_akademik' => TahunAkademik::all()
+            'tahun_akademik' => TahunAkademik::latest()->get()->all()
         ]);
     }
 

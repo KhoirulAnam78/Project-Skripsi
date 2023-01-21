@@ -97,7 +97,8 @@
                             <td>{{ $s->nisn }}</td>
                             <td>{{ $s->nama }}</td>
                             <td>
-                                <button class="btn btn-danger" wire:click="deleteConfirmation({{ $s->id }})"><i
+                                <button class="btn btn-danger {{ $allow === false ? 'disabled' : '' }}"
+                                    wire:click="deleteConfirmation({{ $s->id }})"><i
                                         class="bx bx-trash me-1"></i>
                                     Delete</button>
                             </td>

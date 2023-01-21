@@ -240,31 +240,10 @@ class TabelSiswa extends Component
 
     public function render()
     {
-        // if ($this->filter_tahun_akademik !== '') {
-        //     $kelas = TahunAkademik::where('id', $this->filter_tahun_akademik)->first()->kelas;
-        //     if ($this->filter_kelas !== '') {
-        //         $siswa = Kelas::where('id', $this->filter_kelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
-        //     } else {
-        //         $siswa = [];
-        //     }
-        // } else {
-        //     $kelas = null;
-        //     $siswa = Siswa::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
-        // }
-
         $siswa = Siswa::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
 
-        // if ($this->tahun_akademik_id !== '') {
-        //     $kelasModal = TahunAkademik::where('id', $this->tahun_akademik_id)->first()->kelas;
-        // } else {
-        //     $kelasModal = null;
-        // }
-
         return view('livewire.tabel-siswa', [
-            // 'kelas' => $kelas,
-            // 'kelasModal' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'siswa' => $siswa,
-            // 'tahun_akademik' => TahunAkademik::all()
         ]);
     }
 
