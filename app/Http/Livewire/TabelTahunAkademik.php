@@ -11,15 +11,27 @@ class TabelTahunAkademik extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     //Inisialisasi Variable
-    public $nama, $tgl_mulai, $semester, $tgl_berakhir, $tahun_akademik_edit_id, $tahun_akademik_delete_id, $status, $search = '';
+    public $nama, $tgl_mulai, $tgl_berakhir, $tahun_akademik_edit_id, $tahun_akademik_delete_id, $status, $search = '';
     //Rules Validation
-    protected $rules = [
-        'nama' => 'required|unique:tahun_akademiks',
-        'tgl_mulai' => 'required|date',
-        'tgl_berakhir' => 'required|date',
-        'status' => 'required',
-        'semester' => 'required'
-    ];
+
+    public function rules()
+    {
+        if ($this->tahun_akademik_edit_id) {
+            return [
+                'nama' => 'required|unique:tahun_akademiks,nama,' . $this->tahun_akademik_edit_id,
+                'tgl_mulai' => 'required|date',
+                'tgl_berakhir' => 'required|date',
+                'status' => 'required',
+            ];
+        } else {
+            return [
+                'nama' => 'required|unique:tahun_akademiks',
+                'tgl_mulai' => 'required|date',
+                'tgl_berakhir' => 'required|date',
+                'status' => 'required',
+            ];
+        }
+    }
 
     //Mengosongkan inputan pada modal
     public function empty()
@@ -28,7 +40,6 @@ class TabelTahunAkademik extends Component
         $this->tgl_mulai = null;
         $this->tgl_berakhir = null;
         $this->status = null;
-        $this->semester = null;
         $this->tahun_akademik_edit_id = null;
         $this->resetErrorBag();
         $this->resetValidation();
@@ -43,24 +54,12 @@ class TabelTahunAkademik extends Component
         'tgl_berakhir.required' => 'Tanggal berakhir wajib diisi !',
         'tgl_berakhir.date' => 'Data yang diperbolehkan adalah date !',
         'status.required' => 'Status wajib diisi !',
-        'semester.required' => 'Semester wajib diisi !',
     ];
 
     //Reatime Validation
     public function updated($propertyName)
     {
-        if ($this->tahun_akademik_edit_id) {
-            $this->rules = [
-                'nama' => 'required|unique:tahun_akademiks,nama,' . $this->tahun_akademik_edit_id,
-                'tgl_mulai' => 'required|date',
-                'tgl_berakhir' => 'required|date',
-                'status' => 'required',
-                'semester' => 'required'
-            ];
-            $this->validateOnly($propertyName);
-        } else {
-            $this->validateOnly($propertyName);
-        }
+        $this->validateOnly($propertyName);
     }
 
     //Save data to database
@@ -73,7 +72,6 @@ class TabelTahunAkademik extends Component
             'tgl_mulai' => $this->tgl_mulai,
             'tgl_berakhir' => $this->tgl_berakhir,
             'status' => $this->status,
-            'semester' => $this->semester,
         ]);
 
         foreach ($akademik_aktif as $a) {
@@ -93,7 +91,6 @@ class TabelTahunAkademik extends Component
         $this->tgl_mulai = $tahun_akademik->tgl_mulai;
         $this->tgl_berakhir = $tahun_akademik->tgl_berakhir;
         $this->status = $tahun_akademik->status;
-        $this->semester = $tahun_akademik->semester;
         $this->dispatchBrowserEvent('show-edit-modal');
     }
 
@@ -105,7 +102,6 @@ class TabelTahunAkademik extends Component
             'tgl_mulai' => 'required|date',
             'tgl_berakhir' => 'required|date',
             'status' => 'required',
-            'semester' => 'required'
         ]);
         if ($this->status === 'aktif') {
             $akademik_aktif = TahunAkademik::where('status', 'aktif')->get()->all();
@@ -118,7 +114,6 @@ class TabelTahunAkademik extends Component
             'tgl_mulai' => $this->tgl_mulai,
             'tgl_berakhir' => $this->tgl_berakhir,
             'status' => $this->status,
-            'semester' => $this->semester,
         ]);
 
         session()->flash('message', 'Data berhasil diedit !');

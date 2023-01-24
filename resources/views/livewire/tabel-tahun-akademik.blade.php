@@ -30,7 +30,6 @@
                 <tr>
                     <th>No</th>
                     <th>Nama Tahun Akademik</th>
-                    <th>Semester</th>
                     <th>Tanggal Mulai</th>
                     <th>Tanggal Berakhir</th>
                     <th>Status</th>
@@ -50,7 +49,6 @@
                         <tr>
                             <td>{{ ++$i }}</td>
                             <td>{{ $ta->nama }}</td>
-                            <td>{{ ucfirst($ta->semester) }}</td>
                             <td>{{ $ta->tgl_mulai }}</td>
                             <td>{{ $ta->tgl_berakhir }}</td>
                             <td>

@@ -38,17 +38,6 @@
                     </div>
                     <div class="row g-2 mb-3">
                         <div class="col mb-0">
-                            <label for="semester" class="form-label">Semester</label>
-                            <select name="semester" wire:model.defer="semester" id="semester" class="form-select">
-                                <option value="">Semester</option>
-                                <option value="ganjil">Ganjil</option>
-                                <option value="genap">Genap</option>
-                            </select>
-                            @error('semester')
-                                <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col mb-0">
                             <label for="status" class="form-label">Status</label>
                             <select name="status" wire:model.defer="status" id="status" class="form-select">
                                 <option value="">Status</option>
@@ -118,18 +107,6 @@
 
                     </div>
                     <div class="row g-2 mb-3">
-                        <div class="col mb-0">
-                            <label for="semester" class="form-label">Semester</label>
-                            <select name="semester" wire:model.defer="semester" id="semester" class="form-select">
-                                <option value="">Semester</option>
-                                <option value="ganjil">Ganjil</option>
-                                <option value="genap">Genap</option>
-                            </select>
-                            @error('semester')
-                                <span class="error" style="font-size:12px; font-style:italic">*
-                                    {{ $message }}</span>
-                            @enderror
-                        </div>
                         <div class="col mb-0">
                             <label for="status" class="form-label">Status</label>
                             <select name="status" wire:model.defer="status" id="status" class="form-select">

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('nama', 50);
             $table->date('tgl_mulai')->unique();
             $table->date('tgl_berakhir');
-            $table->enum('semester', ['ganjil', 'genap']);
             $table->enum('status', ['aktif', 'tidak aktif']);
             $table->timestamps();
         });

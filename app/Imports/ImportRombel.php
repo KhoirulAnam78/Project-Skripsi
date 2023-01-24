@@ -51,7 +51,6 @@ class ImportRombel implements ToCollection, WithHeadingRow, WithValidation
 
     public function collection(Collection $rows)
     {
-        dd($rows);
         foreach ($rows as $row) {
             // $siswa_id = Siswa::where('id', $row['nisn'])->first()->id;
             Rombel::create([

@@ -5,6 +5,9 @@
         <a href="" class="btn btn-success active mb-2" data-bs-toggle="modal" data-bs-target="#importModal"
             style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
             Import</a>
+        <a class="btn btn-info mb-2 text-white" wire:click="export()"
+            style="background-color: rgb(0, 143, 0);border-color: rgb(0, 143, 0)"><i class='bx bxs-file-export'></i>
+            Export</a>
     </div>
     @if (session()->has('message'))
         <div class="mb-2 mx-3">
@@ -39,11 +42,11 @@
                 placeholder="Cari berdasarkan nama kelas" />
         </div>
         <div class="col-lg-4 col-md-4 mb-3 mx-3">
-            <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
+            <label for="tahun_akademik_id" class="form-label">Semester Akademik</label>
             <select wire:model="filter" id="tahun_akademik_id" class="form-select">
                 <option value="">Semua</option>
                 @foreach ($tahun_akademik as $ta)
-                    <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
+                    <option value="{{ $ta->id }}">{{ $ta->nama }} <b>{{ ucwords($ta->semester) }}</b></option>
                 @endforeach
             </select>
         </div>

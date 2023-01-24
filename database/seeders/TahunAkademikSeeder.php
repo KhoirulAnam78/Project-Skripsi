@@ -19,7 +19,6 @@ class TahunAkademikSeeder extends Seeder
             'nama' => 'Tahun Ajaran 2022/2023',
             'tgl_mulai' => '2022-01-07',
             'tgl_berakhir' => '2022-06-07',
-            'semester' => 'genap',
             'status' => 'aktif'
         ]);
     }

@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Kelas;
 use Livewire\Component;
+use App\Exports\ExportKelas;
 use App\Imports\KelasImport;
 use Livewire\WithPagination;
 use App\Models\TahunAkademik;
@@ -150,7 +151,6 @@ class TabelKelas extends Component
 
     public function import()
     {
-        // dd($this->file);
         $this->validate([
             'file' => 'required|mimes:xlsx,xls'
         ]);
@@ -166,5 +166,11 @@ class TabelKelas extends Component
             $this->file = '';
             $this->dispatchBrowserEvent('close-modal-import');
         }
+    }
+
+    public function export()
+    {
+        $id = $this->filter;
+        return Excel::download(new ExportKelas($id), 'Data Kelas SMAN Titian Teras.xlsx');
     }
 }
