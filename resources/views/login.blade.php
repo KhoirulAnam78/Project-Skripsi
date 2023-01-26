@@ -67,7 +67,7 @@
                         <!-- /Logo -->
                         <h4 class="my-2" align='center'>SiMonEv Pembelajaran</h4>
                         <h5 align='center'>SMAN TITIAN TERAS</h5>
-                        <p class="mb-2">Silahkan login terlebih dahulu</p>
+                        <p class="mb-2">Silahkan login terlebih dahulu Guys</p>
                         @if (session()->has('loginError'))
                             <div class="mb-2">
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
