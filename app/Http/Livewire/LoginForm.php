@@ -12,7 +12,7 @@ class LoginForm extends Component
 
     protected $rules = [
         'username' => 'required',
-        'password' => 'required|min:4'
+        'password' => 'required|min:8'
     ];
 
     protected $messages = [
