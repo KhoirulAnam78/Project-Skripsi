@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         ]);
         User::create([
             'username' => 'admin',
-            'password' => bcrypt('1234'),
+            'password' => bcrypt('monitoring2023'),
             'role' => 'admin'
         ]);
         $this->call([

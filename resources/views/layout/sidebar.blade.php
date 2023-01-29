@@ -131,8 +131,8 @@
                         <div data-i18n="Jadwal Pelajaran">Jadwal Pelajaran</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="" class="menu-link">
+                <li class="menu-item {{ $title === 'Jadwal Guru Piket' ? 'active' : '' }}">
+                    <a href="/jadwal-guru-piket" class="menu-link">
                         <div data-i18n="Jadwal Guru Piket">Jadwal Guru Piket</div>
                     </a>
                 </li>

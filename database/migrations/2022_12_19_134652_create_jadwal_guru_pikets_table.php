@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('hari', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']);
             $table->time('waktu_mulai');
             $table->time('waktu_berakhir');
-            $table->foreignId('guru')->constrained('gurus');
+            $table->foreignId('guru_id')->constrained('gurus');
             $table->timestamps();
         });
     }
