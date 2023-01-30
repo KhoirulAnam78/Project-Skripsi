@@ -47,10 +47,10 @@ class TabelJadwalPiket extends Component
     protected $messages = [
         'guru_id.required' => 'Field guru wajib diisi !',
         'waktu_mulai.required' => 'Waktu mulai wajib diisi !',
-        'waktu_mulai.date_format' => 'Hanya diperbolehkan format waktu !',
+        'waktu_mulai.date_format' => 'Waktu mulai hanya diperbolehkan format waktu !',
         'waktu_mulai.unique' => 'Jadwal piket pada waktu ini sudah ada !',
         'waktu_berakhir.required' => 'Waktu berakhir wajib diisi !',
-        'waktu_berakhir.date_format' => 'Hanya diperbolehkan format waktu !',
+        'waktu_berakhir.date_format' => 'Waktu berakhir hanya diperbolehkan format waktu !',
         'waktu_berakhir.after' => 'Waktu berakhir harus lebih besar dari waktu mulai !',
         'hari.required' => 'Hari wajib diisi !',
         'hari.unique' => 'Guru telah piket pada hari yang dipilih',
@@ -66,6 +66,7 @@ class TabelJadwalPiket extends Component
     //Mengosongkan inputan pada modal
     public function empty()
     {
+        $this->file = null;
         $this->guru_id = null;
         $this->waktu_mulai = null;
         $this->waktu_berakhir = null;
