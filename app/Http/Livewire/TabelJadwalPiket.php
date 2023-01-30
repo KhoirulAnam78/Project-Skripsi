@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire;
 
-use App\Exports\ExportJadwalPiket;
 use App\Models\Guru;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Carbon;
 use App\Models\JadwalGuruPiket;
+use App\Exports\ExportJadwalPiket;
 use App\Imports\ImportJadwalPiket;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -164,6 +165,7 @@ class TabelJadwalPiket extends Component
 
     public function render()
     {
+        // dd(Carbon::now()->isoFormat('dddd, D MMMM Y'));
         return view('livewire.tabel-jadwal-piket', [
             'jadwalPiket' => Guru::with('jadwalGuruPikets')->whereHas('jadwalGuruPikets')->where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(10),
             // 'guru' => Guru::doesntHave('jadwalGuruPikets')->get()

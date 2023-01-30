@@ -54,7 +54,6 @@
                             @error('waktu_berakhir')
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
                             @enderror
-
                         </div>
                     </div>
                 </div>
