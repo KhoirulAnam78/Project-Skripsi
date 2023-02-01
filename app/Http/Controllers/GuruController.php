@@ -20,7 +20,7 @@ class GuruController extends Controller
 
     public function download()
     {
-        $file = public_path() . '\assets\template-excel\Data Guru.xlsx';
+        $file = public_path() . '/assets/template-excel/Data Guru.xlsx';
         $headers = array(
             'Content-Type: application/xlsx',
         );

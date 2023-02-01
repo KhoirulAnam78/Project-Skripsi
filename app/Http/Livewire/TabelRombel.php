@@ -30,7 +30,7 @@ class TabelRombel extends Component
     public $selectedSiswa = [];
     //Rules Validation
     protected $rules = [
-        'file' => 'required|mimes:xlsx,xls',
+        'file' => 'required|file|mimes:xlsx,xls',
     ];
 
     //Mengosongkan inputan pada modal

@@ -20,7 +20,7 @@ class KelasController extends Controller
     }
     public function download()
     {
-        $file = public_path() . '\assets\template-excel\Data Kelas.xlsx';
+        $file = public_path() . '/assets/template-excel/Data Kelas.xlsx';
         $headers = array(
             'Content-Type: application/xlsx',
         );

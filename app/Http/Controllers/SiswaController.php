@@ -15,7 +15,7 @@ class SiswaController extends Controller
 
     public function download()
     {
-        $file = public_path() . '\assets\template-excel\Data Siswa.xlsx';
+        $file = public_path() . '/assets/template-excel/Data Siswa.xlsx';
         $headers = array(
             'Content-Type: application/xlsx',
         );
