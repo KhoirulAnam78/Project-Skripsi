@@ -70,11 +70,6 @@
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
         </li>
-
-
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Operasional</span>
-        </li>
         <!-- Layouts -->
         <li
             class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran') ? 'active open' : '' }}">
@@ -112,6 +107,10 @@
             </ul>
         </li>
 
+
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Operasional</span>
+        </li>
         <li class="menu-item {{ $title === 'Rombongan Belajar' ? 'active' : '' }}">
             <a href="/rombongan-belajar" class="menu-link">
                 <i class='menu-icon bx bxs-group'></i>
@@ -127,7 +126,7 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item {{ $title === 'Jadwal Pelajaran' ? 'active' : '' }}">
-                    <a href="" class="menu-link">
+                    <a href="/jadwal-pelajaran" class="menu-link">
                         <div data-i18n="Jadwal Pelajaran">Jadwal Pelajaran</div>
                     </a>
                 </li>

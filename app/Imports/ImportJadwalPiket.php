@@ -68,7 +68,7 @@ class ImportJadwalPiket implements ToCollection, WithHeadingRow, WithValidation
         foreach ($rows as $row) {
             JadwalGuruPiket::create([
                 'guru_id' => $row['guru_id'],
-                'hari' => $row['nama_siswa'],
+                'hari' => $row['hari'],
                 'waktu_mulai' => $row['waktu_mulai'],
                 'waktu_berakhir' => $row['waktu_berakhir']
             ]);

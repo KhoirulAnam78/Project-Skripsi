@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('kelas_id')->constrained('kelas');
             $table->foreignId('mata_pelajaran_id')->constrained('mata_pelajarans');
             $table->foreignId('guru_id')->constrained('gurus');
+            $table->unique(['hari', 'waktu_mulai', 'kelas_id']);
             $table->timestamps();
         });
     }

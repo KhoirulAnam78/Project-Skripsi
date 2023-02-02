@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <h5 class="card-header">Daftar Kelas</h5>
+                    <h5 class="card-header px-3">Daftar Kelas</h5>
                     <livewire:tabel-kelas />
                 </div>
                 <!--/ Striped Rows -->

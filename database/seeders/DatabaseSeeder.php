@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\JadwalPelajaran;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -41,7 +42,9 @@ class DatabaseSeeder extends Seeder
             GuruSeeder::class,
             SiswaSeeder::class,
             TahunAkademikSeeder::class,
-            KelasSeeder::class
+            KelasSeeder::class,
+            MataPelajaranSeeder::class,
+            JadwalPelajaranSeeder::class
         ]);
     }
 }

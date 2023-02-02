@@ -15,6 +15,17 @@ class JadwalPelajaranController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.jadwal_pelajaran', [
+            'title' => 'Jadwal Pelajaran'
+        ]);
     }
+    // public function download()
+    // {
+    //     $file = public_path() . '/assets/template-excel/Data Jadwal Piket Guru.xlsx';
+    //     $headers = array(
+    //         'Content-Type: application/xlsx',
+    //     );
+
+    //     return Response::download($file, 'Template Import Data Jadwal Piket Guru.xlsx', $headers);
+    // }
 }

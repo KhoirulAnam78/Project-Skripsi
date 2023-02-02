@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <h5 class="card-header">Daftar Guru</h5>
+                    <h5 class="card-header px-3">Daftar Guru</h5>
                     <livewire:tabel-guru />
                 </div>
                 <!--/ Striped Rows -->

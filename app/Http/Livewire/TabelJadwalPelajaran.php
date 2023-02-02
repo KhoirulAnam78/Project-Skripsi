@@ -4,56 +4,49 @@ namespace App\Http\Livewire;
 
 use App\Models\Guru;
 use Livewire\Component;
-use Livewire\WithPagination;
-use Livewire\WithFileUploads;
-use Illuminate\Support\Carbon;
-use App\Models\JadwalGuruPiket;
-use App\Exports\ExportJadwalPiket;
-use App\Imports\ImportJadwalPiket;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\MataPelajaran;
+use App\Models\TahunAkademik;
+use App\Models\JadwalPelajaran;
 
-class TabelJadwalPiket extends Component
+class TabelJadwalPelajaran extends Component
 {
-
-    use WithFileUploads;
-    use WithPagination;
-    protected $paginationTheme = 'bootstrap';
-    public $search = '';
-    public $file;
+    public $filterTahunAkademik = '', $filterKelas = '', $kelas = null, $filterHari = '';
+    public $hari, $waktu_mulai, $waktu_berakhir, $guru_id, $mata_pelajaran_id;
     public $jadwal_edit_id, $jadwal_delete_id;
-    public $guru_id, $hari, $waktu_mulai, $waktu_berakhir;
 
     public function rules()
     {
         if ($this->jadwal_edit_id) {
             return [
+                'mata_pelajaran_id' => 'required',
                 'guru_id' => 'required',
-                'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_guru_pikets,waktu_mulai,' . $this->jadwal_edit_id . ',id,hari,' . $this->hari,
+                'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_pelajarans,waktu_mulai,' . $this->jadwal_edit_id . ',id,hari,' . $this->hari . ',kelas_id,' . $this->filterKelas,
                 'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_guru_pikets,hari,' . $this->jadwal_edit_id . ',id,guru_id,' . $this->guru_id
+                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_pelajarans,hari,' . $this->jadwal_edit_id . ',id,kelas_id,' . $this->filterKelas . ',waktu_mulai,' . $this->waktu_mulai
             ];
         } else {
             return [
-                'file' => 'required|mimes:xlsx,xls',
+                'mata_pelajaran_id' => 'required',
                 'guru_id' => 'required',
-                'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_guru_pikets,waktu_mulai,NULL,id,hari,' . $this->hari,
+                'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_pelajarans,waktu_mulai,NULL,id,hari,' . $this->hari . ',kelas_id,' . $this->filterKelas,
                 'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_guru_pikets,hari,NULL,id,guru_id,' . $this->guru_id
+                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_pelajarans,hari,NULL,id,kelas_id,' . $this->filterKelas . ',waktu_mulai,' . $this->waktu_mulai
             ];
         }
     }
 
     //Custom Errror messages for validation
     protected $messages = [
+        'mata_pelajaran_id.required' => 'Field mata pelajaran wajib diisi !',
         'guru_id.required' => 'Field guru wajib diisi !',
         'waktu_mulai.required' => 'Waktu mulai wajib diisi !',
         'waktu_mulai.date_format' => 'Waktu mulai hanya diperbolehkan format waktu !',
-        'waktu_mulai.unique' => 'Jadwal piket pada waktu ini sudah ada !',
+        'waktu_mulai.unique' => 'Telah ada jadwal pada hari, waktu dan kelas yang dipilih !',
         'waktu_berakhir.required' => 'Waktu berakhir wajib diisi !',
         'waktu_berakhir.date_format' => 'Waktu berakhir hanya diperbolehkan format waktu !',
         'waktu_berakhir.after' => 'Waktu berakhir harus lebih besar dari waktu mulai !',
         'hari.required' => 'Hari wajib diisi !',
-        'hari.unique' => 'Guru telah piket pada hari yang dipilih',
+        'hari.unique' => 'Telah ada jadwal pada hari, waktu dan kelas yang dipilih !',
         'file.required' => 'File tidak boleh kosong',
         'file.mimes' => 'File harus memiliki format excel(.xlxs/.xls)'
     ];
@@ -66,8 +59,8 @@ class TabelJadwalPiket extends Component
     //Mengosongkan inputan pada modal
     public function empty()
     {
-        $this->file = null;
         $this->guru_id = null;
+        $this->mata_pelajaran_id = null;
         $this->waktu_mulai = null;
         $this->waktu_berakhir = null;
         $this->hari = null;
@@ -77,17 +70,14 @@ class TabelJadwalPiket extends Component
 
     public function save()
     {
-        $this->validate([
-            'guru_id' => 'required',
-            'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_guru_pikets,waktu_mulai,NULL,id,hari,' . $this->hari,
-            'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_guru_pikets,hari,NULL,id,guru_id,' . $this->guru_id
-        ]);
-        JadwalGuruPiket::create([
+        $this->validate();
+        JadwalPelajaran::create([
             'hari' => $this->hari,
             'guru_id' => $this->guru_id,
             'waktu_mulai' => $this->waktu_mulai,
             'waktu_berakhir' => $this->waktu_berakhir,
+            'mata_pelajaran_id' => $this->mata_pelajaran_id,
+            'kelas_id' => $this->filterKelas
         ]);
         session()->flash('message', 'Data berhasil ditambahkan !');
         $this->empty();
@@ -96,22 +86,23 @@ class TabelJadwalPiket extends Component
 
     public function edit($id)
     {
-        $jadwal = JadwalGuruPiket::find($id);
+        $jadwal = JadwalPelajaran::find($id);
         $this->guru_id = $jadwal->guru_id;
         // dd($this->tahun_akademik_id);
         $this->hari = $jadwal->hari;
+        $this->mata_pelajaran_id = $jadwal->mata_pelajaran_id;
         $this->waktu_mulai = substr($jadwal->waktu_mulai, 0, -3);
         $this->waktu_berakhir = substr($jadwal->waktu_berakhir, 0, -3);
         $this->jadwal_edit_id = $id;
         $this->dispatchBrowserEvent('show-edit-modal');
     }
 
-    //Update data
     public function update()
     {
         $this->validate();
-        JadwalGuruPiket::where('id', $this->jadwal_edit_id)->update([
+        JadwalPelajaran::where('id', $this->jadwal_edit_id)->update([
             'hari' => $this->hari,
+            'mata_pelajaran_id' => $this->mata_pelajaran_id,
             'waktu_mulai' => $this->waktu_mulai,
             'waktu_berakhir' => $this->waktu_berakhir,
             'guru_id' => $this->guru_id,
@@ -121,7 +112,6 @@ class TabelJadwalPiket extends Component
         $this->dispatchBrowserEvent('close-edit-modal');
     }
 
-    //Show modal delete confirmation
     public function deleteConfirmation($id)
     {
         $this->jadwal_delete_id = $id; //tahun_akademik id
@@ -132,7 +122,7 @@ class TabelJadwalPiket extends Component
     //Delete data
     public function deleteJadwalData()
     {
-        $jadwal = JadwalGuruPiket::where('id', $this->jadwal_delete_id)->first();
+        $jadwal = JadwalPelajaran::where('id', $this->jadwal_delete_id)->first();
         try {
             $jadwal->delete();
             session()->flash('message', 'Data berhasil dihapus');
@@ -145,37 +135,43 @@ class TabelJadwalPiket extends Component
         $this->jadwal_delete_id = '';
     }
 
-    public function import()
+    public function updatedFilterTahunAkademik($tahunAkademik_id)
     {
-        $this->validate([
-            'file' => 'required|mimes:xlsx,xls'
-        ]);
-
-        try {
-            Excel::import(new ImportJadwalPiket, $this->file);
-            session()->flash('message', 'Data berhasil diimport');
-            $this->file = '';
-            $this->dispatchBrowserEvent('close-modal-import');
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
-            session()->flash('importError', $failures);
-            $this->file = '';
-            $this->dispatchBrowserEvent('close-modal-import');
-        }
+        $this->filterKelas = '';
+        $this->kelas = TahunAkademik::where('id', $tahunAkademik_id)->first()->kelas;
     }
 
-    public function export()
-    {
-        return Excel::download(new ExportJadwalPiket, 'Jadwal Piket Guru SMAN Titian Teras.xlsx');
-    }
+
 
     public function render()
     {
-        // dd(Carbon::now()->isoFormat('dddd, D MMMM Y'));
-        return view('livewire.tabel-jadwal-piket', [
-            'jadwalPiket' => Guru::with('jadwalGuruPikets')->whereHas('jadwalGuruPikets')->where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(10),
-            // 'guru' => Guru::doesntHave('jadwalGuruPikets')->get()
-            'guru' => Guru::all()
+        if ($this->filterTahunAkademik !== '') {
+            $status = TahunAkademik::where('id', $this->filterTahunAkademik)->first()->status;
+            if ($status === 'aktif') {
+                $allow = true;
+            } else {
+                $allow = false;
+            }
+            if ($this->filterKelas !== '') {
+                if ($this->filterHari !== '') {
+                    $jadwalPelajaran = JadwalPelajaran::with('guru')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->where('hari', $this->filterHari)->latest()->paginate(5);
+                } else {
+                    $jadwalPelajaran = JadwalPelajaran::with('guru')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->latest()->paginate(5);
+                }
+            } else {
+                $jadwalPelajaran = [];
+            }
+        } else {
+            $jadwalPelajaran = [];
+            $allow = false;
+        }
+
+        return view('livewire.tabel-jadwal-pelajaran', [
+            'jadwalPelajaran' => $jadwalPelajaran,
+            'allow' => $allow,
+            'matapelajaran' => MataPelajaran::all(),
+            'guru' => Guru::all(),
+            'tahun_akademik' => TahunAkademik::latest()->get()->all()
         ]);
     }
 }

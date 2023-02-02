@@ -6,6 +6,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TahunAkademikController;
 use App\Http\Controllers\JadwalGuruPiketController;
+use App\Http\Controllers\JadwalPelajaranController;
 use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\RombelController;
 
@@ -59,3 +60,7 @@ Route::get('/mata-pelajaran', [MataPelajaranController::class, 'index'])->middle
 //Jadwal Piket Guru
 Route::get('/jadwal-guru-piket', [JadwalGuruPiketController::class, 'index'])->middleware('auth');
 Route::get('/download-template-jadwal-guru-piket', [JadwalGuruPiketController::class, 'download'])->middleware('auth');
+
+//Jadwal Pelajaran
+Route::get('/jadwal-pelajaran', [JadwalPelajaranController::class, 'index'])->middleware('auth');
+Route::get('/download-template-jadwal-pelajaran', [JadwalPelajaranController::class, 'download'])->middleware('auth');

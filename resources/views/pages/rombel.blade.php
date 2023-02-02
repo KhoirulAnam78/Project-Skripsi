@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <h5 class="card-header">Daftar Siswa Berdasarkan Rombongan Belajar</h5>
+                    <h5 class="card-header px-3">Daftar Siswa Berdasarkan Rombongan Belajar</h5>
                     <livewire:tabel-rombel />
                 </div>
                 <!--/ Striped Rows -->
