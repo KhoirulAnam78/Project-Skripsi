@@ -3,13 +3,24 @@
 namespace App\Http\Livewire;
 
 use App\Models\Guru;
+use App\Models\Kelas;
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\MataPelajaran;
 use App\Models\TahunAkademik;
+use Livewire\WithFileUploads;
 use App\Models\JadwalPelajaran;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\JadwalPelajaranExport;
+use App\Imports\JadwalPelajaranImport;
 
 class TabelJadwalPelajaran extends Component
 {
+    use WithFileUploads;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+    public $file;
+
     public $filterTahunAkademik = '', $filterKelas = '', $kelas = null, $filterHari = '';
     public $hari, $waktu_mulai, $waktu_berakhir, $guru_id, $mata_pelajaran_id;
     public $jadwal_edit_id, $jadwal_delete_id;
@@ -141,8 +152,37 @@ class TabelJadwalPelajaran extends Component
         $this->kelas = TahunAkademik::where('id', $tahunAkademik_id)->first()->kelas;
     }
 
+    public function updatedFile()
+    {
+        $this->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+    }
 
+    public function import()
+    {
+        $this->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
 
+        try {
+            Excel::import(new JadwalPelajaranImport($this->filterKelas), $this->file);
+            session()->flash('message', 'Data berhasil diimport');
+            $this->file = '';
+            $this->dispatchBrowserEvent('close-modal-import');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            session()->flash('importError', $failures);
+            $this->file = '';
+            $this->dispatchBrowserEvent('close-modal-import');
+        }
+    }
+
+    public function export()
+    {
+        $namaKelas = Kelas::where('id', $this->filterKelas)->first()->nama;
+        return Excel::download(new JadwalPelajaranExport($this->filterKelas), 'Jadwal Pelajaran ' . $namaKelas . '.xlsx');
+    }
     public function render()
     {
         if ($this->filterTahunAkademik !== '') {
