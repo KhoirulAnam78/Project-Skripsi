@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\MonitoringPembelajaran;
 use App\Http\Requests\StoreMonitoringPembelajaranRequest;
 use App\Http\Requests\UpdateMonitoringPembelajaranRequest;
+use Carbon\Carbon;
+use Illuminate\Support\Carbon as SupportCarbon;
 
 class MonitoringPembelajaranController extends Controller
 {
@@ -15,7 +17,10 @@ class MonitoringPembelajaranController extends Controller
      */
     public function index()
     {
-        //
+        return view('pages.presensi_pembelajaran', [
+            'title' => 'Presensi Pembelajaran',
+            'day' => \Carbon\Carbon::now()->translatedFormat('l')
+        ]);
     }
 
     /**

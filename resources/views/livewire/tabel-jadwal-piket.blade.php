@@ -81,9 +81,6 @@
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-                @php
-                    $i = 0;
-                @endphp
                 @if (count($jadwalPiket) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
@@ -96,7 +93,8 @@
                     @foreach ($jadwalPiket as $j)
                         @foreach ($j->jadwalGuruPikets as $k)
                             <tr>
-                                <td>{{ ++$i }}</td>
+                                <td>{{ ($jadwalPiket->currentpage() - 1) * $jadwalPiket->perpage() + $loop->index + 1 }}
+                                </td>
                                 <td>{{ $j->nama }}</td>
                                 <td>{{ $j->kode_guru }}</td>
                                 <td>{{ $k->hari }}</td>

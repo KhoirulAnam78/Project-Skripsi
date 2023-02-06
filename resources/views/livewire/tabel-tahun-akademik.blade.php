@@ -37,9 +37,6 @@
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-                @php
-                    $i = $tahun_akademik->firstItem() - 1;
-                @endphp
                 @if (count($tahun_akademik) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
@@ -47,7 +44,8 @@
                 @else
                     @foreach ($tahun_akademik as $ta)
                         <tr>
-                            <td>{{ ++$i }}</td>
+                            <td>{{ ($tahun_akademik->currentpage() - 1) * $tahun_akademik->perpage() + $loop->index + 1 }}
+                            </td>
                             <td>{{ $ta->nama }}</td>
                             <td>{{ $ta->tgl_mulai }}</td>
                             <td>{{ $ta->tgl_berakhir }}</td>

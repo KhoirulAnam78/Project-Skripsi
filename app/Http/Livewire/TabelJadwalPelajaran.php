@@ -214,4 +214,9 @@ class TabelJadwalPelajaran extends Component
             'tahun_akademik' => TahunAkademik::latest()->get()->all()
         ]);
     }
+
+    public function updatingFilterHari()
+    {
+        $this->resetPage();
+    }
 }

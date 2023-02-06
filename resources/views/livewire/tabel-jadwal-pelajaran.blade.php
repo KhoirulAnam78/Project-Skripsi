@@ -92,9 +92,6 @@
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-                @php
-                    $i = 0;
-                @endphp
                 @if (count($jadwalPelajaran) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
@@ -102,7 +99,8 @@
                 @else
                     @foreach ($jadwalPelajaran as $j)
                         <tr>
-                            <td>{{ ++$i }}</td>
+                            <td>{{ ($jadwalPelajaran->currentpage() - 1) * $jadwalPelajaran->perpage() + $loop->index + 1 }}
+                            </td>
                             <td>{{ $j->hari }}</td>
                             <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
                             <td>{{ $j->mataPelajaran->nama }}</td>

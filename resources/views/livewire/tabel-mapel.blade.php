@@ -50,9 +50,6 @@
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-                @php
-                    $i = $mapel->firstItem() - 1;
-                @endphp
                 @if (count($mapel) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
@@ -60,7 +57,7 @@
                 @else
                     @foreach ($mapel as $m)
                         <tr>
-                            <td>{{ ++$i }}</td>
+                            <td>{{ ($mapel->currentpage() - 1) * $mapel->perpage() + $loop->index + 1 }}</td>
                             <td>{{ $m->nama }}</td>
                             <td>
                                 <div class="dropdown">

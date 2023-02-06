@@ -54,9 +54,6 @@
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-                @php
-                    $i = 0;
-                @endphp
                 @if (count($guru) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
@@ -64,7 +61,7 @@
                 @else
                     @foreach ($guru as $g)
                         <tr>
-                            <td>{{ ++$i }}</td>
+                            <td>{{ ($guru->currentpage() - 1) * $guru->perpage() + $loop->index + 1 }}</td>
                             <td>{{ $g->nip }}</td>
                             <td>{{ $g->kode_guru }}</td>
                             <td>{{ $g->nama }}</td>

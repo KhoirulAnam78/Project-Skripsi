@@ -78,9 +78,6 @@
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-                @php
-                    $i = 0;
-                @endphp
                 @if (count($siswa) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
@@ -88,7 +85,7 @@
                 @else
                     @foreach ($siswa as $g)
                         <tr>
-                            <td>{{ ++$i }}</td>
+                            <td>{{ ($siswa->currentpage() - 1) * $siswa->perpage() + $loop->index + 1 }}</td>
                             <td>{{ $g->nisn }}</td>
                             <td>{{ $g->nama }}</td>
                             <td>{{ $g->no_telp }}</td>
