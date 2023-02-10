@@ -69,3 +69,6 @@ Route::get('/download-template-jadwal-pelajaran', [JadwalPelajaranController::cl
 
 //PRESENSI PEMBELAJARAN
 Route::get('/presensi-pembelajaran', [MonitoringPembelajaranController::class, 'index'])->middleware('auth');
+
+//Daftar PErtemuan
+Route::get('/daftar-pertemuan', [MonitoringPembelajaranController::class, 'daftarPertemuan'])->middleware('auth');

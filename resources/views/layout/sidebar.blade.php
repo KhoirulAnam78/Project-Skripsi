@@ -150,6 +150,12 @@
                 </li>
             </ul>
         </li>
+        <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
+            <a href="/daftar-pertemuan" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Validasi Pembelajaran">Daftar Pertemuan</div>
+            </a>
+        </li>
         <li class="menu-item">
             <a href="cards-basic.html" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>

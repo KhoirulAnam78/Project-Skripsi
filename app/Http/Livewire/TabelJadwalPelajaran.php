@@ -210,7 +210,7 @@ class TabelJadwalPelajaran extends Component
             'jadwalPelajaran' => $jadwalPelajaran,
             'allow' => $allow,
             'matapelajaran' => MataPelajaran::all(),
-            'guru' => Guru::all(),
+            'guru' => Guru::where('status', 'aktif')->get()->all(),
             'tahun_akademik' => TahunAkademik::latest()->get()->all()
         ]);
     }

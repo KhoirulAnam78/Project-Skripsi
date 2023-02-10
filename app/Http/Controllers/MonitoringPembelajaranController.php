@@ -19,7 +19,13 @@ class MonitoringPembelajaranController extends Controller
     {
         return view('pages.presensi_pembelajaran', [
             'title' => 'Presensi Pembelajaran',
-            'day' => \Carbon\Carbon::now()->translatedFormat('l')
+        ]);
+    }
+
+    public function daftarPertemuan()
+    {
+        return view('pages.daftar_pertemuan', [
+            'title' => 'Daftar Pertemuan'
         ]);
     }
 

@@ -15,41 +15,128 @@
             </div>
         </div>
     @endif
-    <div class="col-lg-3 col-md-3 mb-4 mx-3">
-        <label for="kelas_id" class="form-label">Kelas</label>
-        <select wire:model="filterKelas" id="kelas_id" class="form-select">
-            @if ($kelas !== null)
-                @foreach ($kelas as $k)
-                    <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                @endforeach
-            @else
-                <option>Tidak ada kelas</option>
-            @endif
-        </select>
-    </div>
     <div class="row mx-2 mb-3">
-        @if ($mapel !== null)
-            @foreach ($mapel as $m)
-                <div class="col-lg-4 col-md-4 col-xl-4">
-                    <button data-bs-toggle="modal" data-bs-target="#inputModal"
-                        wire:click="inputPresensi({{ $m->id }})" class="btn btn-primary">
-                        <h5 class="card-title text-white">{{ $m->kelas->nama }}</h5>
-                        <h6 class="card-title text-white">Guru : {{ $m->guru->nama }}</h6>
-                        <h5 class="card-title text-white">{{ $m->mataPelajaran->nama }}</h5>
-                        <h6 class="card-title text-white">Jam pelajaran
-                            {{ substr($m->waktu_mulai, 0, -3) . '-' . substr($m->waktu_berakhir, 0, -3) }}</h6>
-                    </button>
-                </div>
-            @endforeach
-        @endif
+        <div class="col-lg-4 col-md-4">
+            <label for="kelas_id" class="form-label">Kelas</label>
+            <select wire:model="filterKelas" id="kelas_id" class="form-select">
+                @if ($kelas !== null)
+                    @foreach ($kelas as $k)
+                        <option value="{{ $k->id }}">{{ $k->nama }}</option>
+                    @endforeach
+                @else
+                    <option>Tidak ada kelas</option>
+                @endif
+            </select>
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <label for="japel_id" class="form-label">Mata Pelajaran</label>
+            <select wire:model="filterMapel" id="japel_id" class="form-select">
+                @if (count($mapel) !== 0)
+                    @foreach ($mapel as $m)
+                        <option value="{{ $m->id }}">{{ $m->mataPelajaran->nama }}</option>
+                    @endforeach
+                @else
+                    <option selected>Tidak ada jadwal pelajaran</option>
+                @endif
+            </select>
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <label for="tanggal" class="form-label">Tanggal</label>
+            <input type="date" wire:model="tanggal" name="tanggal" id="tanggal" class="form-control" />
+            @error('tanggal')
+                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                    {{ $message }}</span>
+            @enderror
+        </div>
     </div>
-    @include('livewire.modals.modal-input-presensi')
-    <script>
-        window.addEventListener('close-input-modal', event => {
-            $('#InputModal').modal('hide')
-        })
-        window.addEventListener('show-input-modal', event => {
-            $('#inputModal').modal('show');
-        });
-    </script>
+
+    <div class="row mx-2 mb-3">
+        <div class="col-lg-4 col-md-4">
+            <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
+            <input type="time" id="waktu_mulai" class="form-control" wire:model="waktu_mulai" />
+            @error('waktu_mulai')
+                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                    {{ $message }}</span>
+            @enderror
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <label for="waktu_berakhir" class="form-label">Waktu Berakhir</label>
+            <input type="time" wire:model="waktu_berakhir" id="waktu_berakhir" class="form-control" />
+            @error('waktu_berakhir')
+                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                    {{ $message }}</span>
+            @enderror
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <label for="topik" class="form-label">Topik/Agenda Pembelajaran</label>
+            <textarea name="topik" wire:model="topik" id="topik" class="form-control"></textarea>
+            @error('topik')
+                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                    {{ $message }}</span>
+            @enderror
+        </div>
+    </div>
+    <div class="row mx-3">
+        <div class="table-responsive text-nowrap mb-3">
+            <table class="table table-striped" id="examplei">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>NISN</th>
+                        <th>Nama</th>
+                        <th>Presensi</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (count($siswa) === 0)
+                        <tr>
+                            <td colspan='7' align="center"><span>Tidak ada data</span></td>
+                        </tr>
+                    @else
+                        @foreach ($siswa as $s)
+                            <tr>
+                                <td>{{ ($siswa->currentpage() - 1) * $siswa->perpage() + $loop->index + 1 }}</td>
+                                <td>{{ $s->nisn }}</td>
+                                <td>{{ $s->nama }}</td>
+                                <td>
+                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
+                                        id="presensihadir" name="presensi.{{ $s->id }}" value='hadir'
+                                        wire:model="presensi.{{ $s->id }}">
+                                    H
+                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio" id="presensiIzin"
+                                        name="presensi.{{ $s->id }}" value='izin'
+                                        wire:model="presensi.{{ $s->id }}">
+                                    I
+                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio" id="presensiAlfa"
+                                        name="presensi.{{ $s->id }}" value='sakit'
+                                        wire:model="presensi.{{ $s->id }}">
+                                    S
+                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio" id="presensiAlfa"
+                                        name="presensi.{{ $s->id }}" value='alfa'
+                                        wire:model="presensi.{{ $s->id }}">
+                                    A
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+
+                </tbody>
+
+            </table>
+            @if (count($siswa) !== 0)
+                {{ $siswa->links() }}
+            @endif
+        </div>
+    </div>
+    <div class="row mx-3 justify-content-end my-3">
+        <div class="col-2">
+            @if ($update === false)
+                <button class="btn btn-primary" {{ $filterMapel === '' ? 'disabled' : '' }}
+                    wire:click="save()">Simpan</button>
+            @else
+                <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
+                    {{ $filterMapel === '' ? 'disabled' : '' }} wire:click="update()">Update</button>
+            @endif
+        </div>
+    </div>
 </div>
