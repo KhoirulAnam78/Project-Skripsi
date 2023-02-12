@@ -52,10 +52,13 @@
                         <th>Topik Pembelajaran</th>
                         <th>Waktu</th>
                         <th>Jml Siswa</th>
-                        <th>Hadir</th>
-                        <th>Izin</th>
-                        <th>Sakit</th>
-                        <th>Alpa</th>
+                        <th>H</th>
+                        <th>I</th>
+                        <th>S</th>
+                        <th>A</th>
+                        <th>DD</th>
+                        <th>DL</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
@@ -80,6 +83,15 @@
                                 </td>
                                 <td align="center">{{ count($s->kehadiranPembelajarans->where('status', 'alfa')) }}
                                 </td>
+                                <td align="center">
+                                    {{ count($s->kehadiranPembelajarans->where('status', 'dinas dalam')) }}
+                                </td>
+                                <td align="center">
+                                    {{ count($s->kehadiranPembelajarans->where('status', 'dinas luar')) }}
+                                </td>
+                                <td><a class="btn btn-primary text-white"wire:click="edit({{ $k->id }})"><i
+                                            class="bx bx-edit-alt"></i>
+                                    </a></td>
                             </tr>
                         @endforeach
                     @endif

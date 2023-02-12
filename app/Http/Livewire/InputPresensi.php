@@ -8,6 +8,7 @@ use Livewire\WithPagination;
 use App\Models\TahunAkademik;
 use App\Models\JadwalGuruPiket;
 use App\Models\JadwalPelajaran;
+use App\Models\JadwalPengganti;
 use App\Models\KehadiranPembelajaran;
 use App\Models\MonitoringPembelajaran;
 
@@ -34,6 +35,7 @@ class InputPresensi extends Component
         $this->day = \Carbon\Carbon::now()->translatedFormat('l');
         $this->tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
         $this->mapel = JadwalPelajaran::with('guru')->with('kelas')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->where('hari', $this->day)->get()->all();
+
         if (count($this->mapel) !== 0) {
             $this->filterMapel = $this->mapel[0]->id;
             if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
@@ -50,7 +52,26 @@ class InputPresensi extends Component
                 }
                 // dd($this->presensi);
             } else {
+                $this->waktu_mulai = substr($this->mapel[0]->waktu_mulai, 0, -3);
+                $this->waktu_berakhir = substr($this->mapel[0]->waktu_berakhir, 0, -3);
                 $this->update = false;
+            }
+        } else if (count(JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get()) !== 0) {
+            $jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->first();
+            $this->filterMapel = $jadwalPengganti->jadwal_pelajaran_id;
+            if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
+                $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
+                $this->editPresensi = $monitoring->id;
+                $this->tanggal = $monitoring->tanggal;
+                $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
+                $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
+                $this->topik = $monitoring->topik;
+                $this->update = true;
+                $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+                foreach ($kehadiran as $k) {
+                    $this->presensi[$k->siswa_id] = $k->status;
+                }
+                // dd($this->presensi);
             }
         } else {
             $this->filterMapel = '';
@@ -169,28 +190,29 @@ class InputPresensi extends Component
             $query->where('waktu_mulai', '<=', \Carbon\Carbon::now()->translatedFormat('h:i'))->orWhere('waktu_berakhir', '>=', \Carbon\Carbon::now()->translatedFormat('h:i'));
         })->first();
         if ($jadwalToday === null) {
-            session()->flash('error', 'Presensi tidak dapat ditambahkan karena tidak ada guru piket pada jam saat ini !');
+            $guruPiketId = null;
         } else {
             $guruPiketId = $jadwalToday->guru_id;
-            $monitoring = MonitoringPembelajaran::create([
-                'tanggal' => $this->tanggal,
-                'topik' => $this->topik,
-                'waktu_mulai' => $this->waktu_mulai,
-                'waktu_berakhir' => $this->waktu_berakhir,
-                'status_validasi' => 'belum tervalidasi',
-                'jadwal_pelajaran_id' => $this->filterMapel,
-                'guru_piket_id' => $guruPiketId
-            ]);
-            foreach ($this->presensi as $key => $value) {
-                KehadiranPembelajaran::create([
-                    'siswa_id' => $key,
-                    'status' => $value,
-                    'monitoring_pembelajaran_id' => $monitoring->id
-                ]);
-            }
-            session()->flash('message', 'Presensi berhasil diinputkan !');
-            $this->empty();
         }
+        $guruPiketId = null;
+        $monitoring = MonitoringPembelajaran::create([
+            'tanggal' => $this->tanggal,
+            'topik' => $this->topik,
+            'waktu_mulai' => $this->waktu_mulai,
+            'waktu_berakhir' => $this->waktu_berakhir,
+            'status_validasi' => 'valid',
+            'jadwal_pelajaran_id' => $this->filterMapel,
+            'guru_piket_id' => $guruPiketId
+        ]);
+        foreach ($this->presensi as $key => $value) {
+            KehadiranPembelajaran::create([
+                'siswa_id' => $key,
+                'status' => $value,
+                'monitoring_pembelajaran_id' => $monitoring->id
+            ]);
+        }
+        session()->flash('message', 'Presensi berhasil diinputkan !');
+        $this->empty();
     }
 
     public function update()
@@ -216,7 +238,8 @@ class InputPresensi extends Component
         return view('livewire.input-presensi', [
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'mapel' => $this->mapel,
-            'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10)
+            'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10),
+            'jadwal_pengganti' => JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get()
         ]);
     }
 }

@@ -35,6 +35,12 @@
                     @foreach ($mapel as $m)
                         <option value="{{ $m->id }}">{{ $m->mataPelajaran->nama }}</option>
                     @endforeach
+                @elseif (count($jadwal_pengganti) !== 0)
+                    @foreach ($jadwal_pengganti as $j)
+                        <option value="{{ $j->jadwal_pelajaran_id }}">{{ $j->jadwalPelajaran->mataPelajaran->nama }}
+                            (pengganti)
+                        </option>
+                    @endforeach
                 @else
                     <option selected>Tidak ada jadwal pelajaran</option>
                 @endif
@@ -42,7 +48,7 @@
         </div>
         <div class="col-lg-4 col-md-4">
             <label for="tanggal" class="form-label">Tanggal</label>
-            <input type="date" wire:model="tanggal" name="tanggal" id="tanggal" class="form-control" />
+            <input disabled type="date" wire:model="tanggal" name="tanggal" id="tanggal" class="form-control" />
             @error('tanggal')
                 <span class="error" style="color:red; font-size:12px; font-style:italic">*
                     {{ $message }}</span>
@@ -53,7 +59,7 @@
     <div class="row mx-2 mb-3">
         <div class="col-lg-4 col-md-4">
             <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
-            <input type="time" id="waktu_mulai" class="form-control" wire:model="waktu_mulai" />
+            <input disabled type="time" id="waktu_mulai" class="form-control" wire:model="waktu_mulai" />
             @error('waktu_mulai')
                 <span class="error" style="color:red; font-size:12px; font-style:italic">*
                     {{ $message }}</span>
@@ -61,7 +67,7 @@
         </div>
         <div class="col-lg-4 col-md-4">
             <label for="waktu_berakhir" class="form-label">Waktu Berakhir</label>
-            <input type="time" wire:model="waktu_berakhir" id="waktu_berakhir" class="form-control" />
+            <input disabled type="time" wire:model="waktu_berakhir" id="waktu_berakhir" class="form-control" />
             @error('waktu_berakhir')
                 <span class="error" style="color:red; font-size:12px; font-style:italic">*
                     {{ $message }}</span>
@@ -102,19 +108,27 @@
                                     <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
                                         id="presensihadir" name="presensi.{{ $s->id }}" value='hadir'
                                         wire:model="presensi.{{ $s->id }}">
-                                    H
+                                    H <span class="mx-1"></span>
                                     <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio" id="presensiIzin"
                                         name="presensi.{{ $s->id }}" value='izin'
                                         wire:model="presensi.{{ $s->id }}">
-                                    I
-                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio" id="presensiAlfa"
-                                        name="presensi.{{ $s->id }}" value='sakit'
+                                    I <span class="mx-1"></span>
+                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
+                                        id="presensiSakit" name="presensi.{{ $s->id }}" value='sakit'
                                         wire:model="presensi.{{ $s->id }}">
-                                    S
+                                    S <span class="mx-1"></span>
                                     <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio" id="presensiAlfa"
                                         name="presensi.{{ $s->id }}" value='alfa'
                                         wire:model="presensi.{{ $s->id }}">
-                                    A
+                                    A <span class="mx-1"></span>
+                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
+                                        id="presensiDinasDalam" name="presensi.{{ $s->id }}"
+                                        value='dinas dalam' wire:model="presensi.{{ $s->id }}">
+                                    DD <span class="mx-1"></span>
+                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
+                                        id="presensiDinasLuar" name="presensi.{{ $s->id }}"
+                                        value='dinas luar' wire:model="presensi.{{ $s->id }}">
+                                    DL <span class="mx-1"></span>
                                 </td>
                             </tr>
                         @endforeach
