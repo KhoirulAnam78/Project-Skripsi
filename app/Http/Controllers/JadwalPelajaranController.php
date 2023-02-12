@@ -19,6 +19,13 @@ class JadwalPelajaranController extends Controller
             'title' => 'Jadwal Pelajaran'
         ]);
     }
+
+    public function jadwalPengganti()
+    {
+        return view('pages.jadwal_pengganti', [
+            'title' => 'Jadwal Pengganti'
+        ]);
+    }
     // public function download()
     // {
     //     $file = public_path() . '/assets/template-excel/Data Jadwal Piket Guru.xlsx';

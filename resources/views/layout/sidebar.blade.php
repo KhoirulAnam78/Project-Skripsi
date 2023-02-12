@@ -119,7 +119,7 @@
         </li>
 
         <li
-            class="menu-item {{ ($title === 'Jadwal Pelajaran' or $title === 'Jadwal Guru Piket') ? 'active open' : '' }}">
+            class="menu-item {{ ($title === 'Jadwal Pelajaran' or $title === 'Jadwal Guru Piket' or $title === 'Jadwal Pengganti') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Account Settings">Penjadwalan</div>
