@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kehadiran_pembelajarans', function (Blueprint $table) {
+        Schema::create('jadwal_penggantis', function (Blueprint $table) {
             $table->id();
-            $table->enum('status', ['hadir', 'sakit', 'alfa', 'izin', 'dinas luar', 'dinas dalam']);
-            $table->foreignId('siswa_id')->constrained('siswas');
-            $table->foreignId('monitoring_pembelajaran_id')->constrained('monitoring_pembelajarans');
+            $table->date('tanggal');
+            $table->time('waktu_mulai');
+            $table->time('waktu_berakhir');
+            $table->foreignId('jadwal_pelajaran_id')->constrained('jadwal_pelajarans');
+            $table->unique(['tanggal', 'jadwal_pelajaran_id']);
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kehadiran_pembelajarans');
+        Schema::dropIfExists('jadwal_penggantis');
     }
 };

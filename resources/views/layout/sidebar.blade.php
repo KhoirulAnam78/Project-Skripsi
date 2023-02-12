@@ -130,6 +130,11 @@
                         <div data-i18n="Jadwal Pelajaran">Jadwal Pelajaran</div>
                     </a>
                 </li>
+                <li class="menu-item {{ $title === 'Jadwal Pengganti' ? 'active' : '' }}">
+                    <a href="/jadwal-pengganti" class="menu-link">
+                        <div data-i18n="Jadwal Pengganti">Jadwal Pengganti</div>
+                    </a>
+                </li>
                 <li class="menu-item {{ $title === 'Jadwal Guru Piket' ? 'active' : '' }}">
                     <a href="/jadwal-guru-piket" class="menu-link">
                         <div data-i18n="Jadwal Guru Piket">Jadwal Guru Piket</div>

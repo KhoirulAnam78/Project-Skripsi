@@ -19,7 +19,7 @@ return new class extends Migration
             $table->time('waktu_mulai');
             $table->time('waktu_berakhir');
             $table->string('topik');
-            $table->enum('status_validasi', ['valid', 'tidak valid']);
+            $table->enum('status_validasi', ['valid', 'tidak valid', 'belum tervalidasi']);
             $table->foreignId('jadwal_pelajaran_id')->constrained('jadwal_pelajarans');
             $table->foreignId('guru_piket_id')->constrained('gurus');
             $table->timestamps();

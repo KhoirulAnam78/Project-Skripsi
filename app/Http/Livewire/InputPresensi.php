@@ -33,7 +33,7 @@ class InputPresensi extends Component
         }
         $this->day = \Carbon\Carbon::now()->translatedFormat('l');
         $this->tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
-        $this->mapel = JadwalPelajaran::with('guru')->with('kelas')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->get()->all();
+        $this->mapel = JadwalPelajaran::with('guru')->with('kelas')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->where('hari', $this->day)->get()->all();
         if (count($this->mapel) !== 0) {
             $this->filterMapel = $this->mapel[0]->id;
             if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
@@ -97,7 +97,7 @@ class InputPresensi extends Component
     public function updatedFilterKelas()
     {
         $this->empty();
-        $this->mapel = JadwalPelajaran::with('guru')->with('kelas')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->get()->all();
+        $this->mapel = JadwalPelajaran::with('guru')->with('kelas')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->where('hari', $this->day)->get()->all();
         $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas->all();
         $this->presensi = [];
         foreach ($this->student as $s) {
@@ -212,7 +212,7 @@ class InputPresensi extends Component
 
     public function render()
     {
-        $this->mapel = JadwalPelajaran::with('guru')->with('kelas')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->get()->all();
+        $this->mapel = JadwalPelajaran::with('guru')->with('kelas')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->where('hari', $this->day)->get()->all();
         return view('livewire.input-presensi', [
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'mapel' => $this->mapel,
