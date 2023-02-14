@@ -14,70 +14,124 @@ use App\Models\MonitoringPembelajaran;
 
 class InputPresensi extends Component
 {
+    //pagination
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
+    //filter
     public $filterKelas = '', $filterMapel;
+    //menampung data siswa berdasarkan kelas
     public $student;
+    //menampung hari ini
     public $day;
+    //memberitahu sistem apakah data akan diupdate atau inputan baru
     public $update = false;
     public $editPresensi;
-    public $mapel;
+    //menampung jadwal pelajaran dan jadwal pengganti
+    public $mapel, $mapelPengganti;
+    //atribut inputan
     public $tanggal, $waktu_mulai, $waktu_berakhir, $topik;
+    //menampung kehadiran siswa
     public $presensi = [];
 
     public function mount()
     {
+        //Set default kelas pada tahun akademik yang aktif 
         $this->filterKelas = TahunAkademik::where('status', 'aktif')->first()->kelas->first()->id;
+
+        //mengambil semua data siswa berdasarkan kelas default
         $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas->all();
+
+        //set deafult presensi menjadi "hadir" untuk setiap siswa
         foreach ($this->student as $s) {
             $this->presensi[$s->id] = 'hadir';
         }
+
+        //mengambil nama hari 
         $this->day = \Carbon\Carbon::now()->translatedFormat('l');
+
+        //mengambil tanggal
         $this->tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
+
+        //mengambil jadwal pelajaran berdasarkan pada kelas default
         $this->mapel = JadwalPelajaran::with('guru')->with('kelas')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->where('hari', $this->day)->get()->all();
 
-        if (count($this->mapel) !== 0) {
-            $this->filterMapel = $this->mapel[0]->id;
+        //mengambil Jadwal Pengganti
+        $this->mapelPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+
+        //cek apakah ada jadwal
+        if (count($this->mapel) !== 0 or count($this->mapelPengganti) !== 0) {
+
+            //kalau ada jadwal mapel maka set default filter mapel pertama
+            if (count($this->mapel) !== 0) {
+                $this->filterMapel = $this->mapel[0]->id;
+            } else {
+                //kalau tidak set default mapel dari jadwal pengganti
+                $this->filterMapel = $this->mapelPengganti[0]->id;
+            }
+
+            //Cek apakah presensi sudah diinputkan
             if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
+                //ambil data
                 $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
+
+                //set data berdasarkan data yang sudah diinputkan
                 $this->editPresensi = $monitoring->id;
                 $this->tanggal = $monitoring->tanggal;
                 $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
                 $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
                 $this->topik = $monitoring->topik;
+
+                //set update true, berarti data akan diupdate
                 $this->update = true;
+
+                //ambil data kehadiran siswa yang sudah diinputkan
                 $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
                 foreach ($kehadiran as $k) {
                     $this->presensi[$k->siswa_id] = $k->status;
                 }
-                // dd($this->presensi);
             } else {
-                $this->waktu_mulai = substr($this->mapel[0]->waktu_mulai, 0, -3);
-                $this->waktu_berakhir = substr($this->mapel[0]->waktu_berakhir, 0, -3);
+                //kalau data belum diinputkan maka cek apakah ada jadwal mapel
+                if (count($this->mapel) !== 0) {
+                    //set waktu belajar berdasarkan jadwal
+                    $this->waktu_mulai = substr($this->mapel[0]->waktu_mulai, 0, -3);
+                    $this->waktu_berakhir = substr($this->mapel[0]->waktu_berakhir, 0, -3);
+                } else {
+                    //kalau jadwal mapel tidak ada maka ambil dari jadwal pengganti
+                    $this->waktu_mulai = substr($this->mapelPengganti[0]->waktu_mulai, 0, -3);
+                    $this->waktu_berakhir = substr($this->mapelPengganti[0]->waktu_berakhir, 0, -3);
+                }
                 $this->update = false;
             }
-        } else if (count(JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get()) !== 0) {
-            $jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->first();
-            $this->filterMapel = $jadwalPengganti->jadwal_pelajaran_id;
-            if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
-                $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
-                $this->editPresensi = $monitoring->id;
-                $this->tanggal = $monitoring->tanggal;
-                $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
-                $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
-                $this->topik = $monitoring->topik;
-                $this->update = true;
-                $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
-                foreach ($kehadiran as $k) {
-                    $this->presensi[$k->siswa_id] = $k->status;
-                }
-                // dd($this->presensi);
-            }
+            // if (count(JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get()) !== 0) {
+            //     $jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+            //     // $this->filterMapel = $jadwalPengganti->jadwal_pelajaran_id;
+            //     if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
+            //         $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
+            //         $this->editPresensi = $monitoring->id;
+            //         $this->tanggal = $monitoring->tanggal;
+            //         $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
+            //         $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
+            //         $this->topik = $monitoring->topik;
+            //         $this->update = true;
+            //         $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+            //         foreach ($kehadiran as $k) {
+            //             $this->presensi[$k->siswa_id] = $k->status;
+            //         }
+            //         // dd($this->presensi);
+            //     } else {
+            //         $this->tanggal = $jadwalPengganti[0]->tanggal;
+            //         $this->waktu_mulai = substr($jadwalPengganti[0]->waktu_mulai, 0, -3);
+            //         $this->waktu_berakhir = substr($jadwalPengganti[0]->waktu_berakhir, 0, -3);
+            //         $this->update = false;
+            //     }
+            // }
         } else {
+            //set null apabila tidak ada jadwal mapel ataupun jadwal pengganti pada hari ini
             $this->filterMapel = '';
         }
     }
 
+    //Rules validasi data inputan
     public function rules()
     {
         return [
@@ -99,6 +153,7 @@ class InputPresensi extends Component
         'topik.required' => 'Topik/Agenda wajib diisi !',
     ];
 
+    //mengosongkan inputan
     public function empty()
     {
         $this->topik = null;
@@ -107,74 +162,149 @@ class InputPresensi extends Component
         $this->editPresensi = null;
         $this->resetErrorBag();
         $this->resetValidation();
-        // $this->dispatchBrowserEvent('close-input-modal');
     }
 
+    //realtime validation
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
     }
 
+    //method yang mengani perubahan pada filter kelas
     public function updatedFilterKelas()
     {
+        //kosongkan data
         $this->empty();
+
+        //ambil data mapel berdasarkan filter yang dipilih
         $this->mapel = JadwalPelajaran::with('guru')->with('kelas')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->where('hari', $this->day)->get()->all();
+
+        //mengambil Jadwal Pengganti
+        $this->mapelPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+
+        //ambil data siswa kelas yang dipilih
         $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas->all();
+
+        //set presensi menjadi hadir bagi setiap siswa
         $this->presensi = [];
         foreach ($this->student as $s) {
             $this->presensi[$s->id] = 'hadir';
         }
-        if (count($this->mapel) !== 0) {
-            $this->filterMapel = $this->mapel[0]->id;
+
+        //cek apakah ada jadwal
+        if (count($this->mapel) !== 0 or count($this->mapelPengganti) !== 0) {
+
+            //kalau ada jadwal mapel maka set default filter mapel pertama
+            if (count($this->mapel) !== 0) {
+                $this->filterMapel = $this->mapel[0]->id;
+            } else {
+                //kalau tidak set default mapel dari jadwal pengganti
+                $this->filterMapel = $this->mapelPengganti[0]->id;
+            }
+
+            //Cek apakah presensi sudah diinputkan
+            if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
+                //ambil data
+                $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
+
+                //set data berdasarkan data yang sudah diinputkan
+                $this->editPresensi = $monitoring->id;
+                $this->tanggal = $monitoring->tanggal;
+                $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
+                $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
+                $this->topik = $monitoring->topik;
+
+                //set update true, berarti data akan diupdate
+                $this->update = true;
+
+                //ambil data kehadiran siswa yang sudah diinputkan
+                $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+                foreach ($kehadiran as $k) {
+                    $this->presensi[$k->siswa_id] = $k->status;
+                }
+            } else {
+                //kalau data belum diinputkan maka cek apakah ada jadwal mapel
+                if (count($this->mapel) !== 0) {
+                    //set waktu belajar berdasarkan jadwal
+                    $this->waktu_mulai = substr($this->mapel[0]->waktu_mulai, 0, -3);
+                    $this->waktu_berakhir = substr($this->mapel[0]->waktu_berakhir, 0, -3);
+                } else {
+                    //kalau jadwal mapel tidak ada maka ambil dari jadwal pengganti
+                    $this->waktu_mulai = substr($this->mapelPengganti[0]->waktu_mulai, 0, -3);
+                    $this->waktu_berakhir = substr($this->mapelPengganti[0]->waktu_berakhir, 0, -3);
+                }
+                $this->update = false;
+            }
+            // if (count(JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get()) !== 0) {
+            //     $jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+            //     // $this->filterMapel = $jadwalPengganti->jadwal_pelajaran_id;
+            //     if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
+            //         $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
+            //         $this->editPresensi = $monitoring->id;
+            //         $this->tanggal = $monitoring->tanggal;
+            //         $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
+            //         $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
+            //         $this->topik = $monitoring->topik;
+            //         $this->update = true;
+            //         $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+            //         foreach ($kehadiran as $k) {
+            //             $this->presensi[$k->siswa_id] = $k->status;
+            //         }
+            //         // dd($this->presensi);
+            //     } else {
+            //         $this->tanggal = $jadwalPengganti[0]->tanggal;
+            //         $this->waktu_mulai = substr($jadwalPengganti[0]->waktu_mulai, 0, -3);
+            //         $this->waktu_berakhir = substr($jadwalPengganti[0]->waktu_berakhir, 0, -3);
+            //         $this->update = false;
+            //     }
+            // }
         } else {
+            //set null apabila tidak ada jadwal mapel ataupun jadwal pengganti pada hari ini
             $this->filterMapel = '';
         }
     }
 
     public function updatedFilterMapel()
     {
+        //Cek apakah presensi sudah diinputkan
         if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
+
+            //ambil data yang sudah diinputkan
             $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
+
+            //set form inputan dengan nilai yang ada di database
             $this->tanggal = $monitoring->tanggal;
             $this->editPresensi = $monitoring->id;
             $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
             $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
             $this->topik = $monitoring->topik;
-            $this->update = true;
-            $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
-            foreach ($kehadiran as $k) {
-                $this->presensi[$k->siswa_id] = $k->status;
-            }
-            // dd($this->presensi);
-        } else {
-            $this->empty();
-            $this->update = false;
-            $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas->all();
-            $this->presensi = [];
-            foreach ($this->student as $s) {
-                $this->presensi[$s->id] = 'hadir';
-            }
-        }
-    }
 
-    public function updatedTanggal()
-    {
-        if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
-            $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
-            // $this->tanggal = $monitoring->tanggal;
-            $this->editPresensi = $monitoring->id;
-            $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
-            $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
-            $this->topik = $monitoring->topik;
+            //data akan diupdate
             $this->update = true;
+
+            //set kehadiran berdasarkan database
             $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
             foreach ($kehadiran as $k) {
                 $this->presensi[$k->siswa_id] = $k->status;
             }
-            // dd($this->presensi);
         } else {
-            $this->empty();
+            //kalau data belum diinputkan cek apakah ada jadwal berdarkan filter yang dipilih
+            if (count(JadwalPelajaran::where('hari', $this->day)->where('id', $this->filterMapel)->get()) !== 0) {
+                //ambil data jadwal berdasarkan filter yang dipilih
+                $jadwal = JadwalPelajaran::where('hari', $this->day)->where('id', $this->filterMapel)->first();
+            } else {
+                //ambil data jadwal pengganti 
+                $jadwal = JadwalPengganti::where('tanggal', $this->tanggal)->where('jadwal_pelajaran_id', $this->filterMapel)->first();
+            }
+
+            //set form inputan berdasarkan jadwal
+            $this->waktu_mulai = substr($jadwal->waktu_mulai, 0, -3);
+            $this->waktu_berakhir = substr($jadwal->waktu_berakhir, 0, -3);
+
+            //data tidak diupdate karena data baru
             $this->update = false;
+
+            //set default kehadiran siswa
             $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas->all();
             $this->presensi = [];
             foreach ($this->student as $s) {
@@ -239,7 +369,7 @@ class InputPresensi extends Component
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'mapel' => $this->mapel,
             'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10),
-            'jadwal_pengganti' => JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get()
+            'jadwal_pengganti' => $this->mapelPengganti
         ]);
     }
 }

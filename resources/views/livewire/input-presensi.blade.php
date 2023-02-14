@@ -29,18 +29,19 @@
             </select>
         </div>
         <div class="col-lg-4 col-md-4">
-            <label for="japel_id" class="form-label">Mata Pelajaran</label>
-            <select wire:model="filterMapel" id="japel_id" class="form-select">
+            <label for="filterMapel" class="form-label">Mata Pelajaran</label>
+            <select wire:model="filterMapel" id="filterMapel" class="form-select">
                 @if (count($mapel) !== 0)
                     @foreach ($mapel as $m)
                         <option value="{{ $m->id }}">{{ $m->mataPelajaran->nama }}</option>
                     @endforeach
-                @elseif (count($jadwal_pengganti) !== 0)
-                    @foreach ($jadwal_pengganti as $j)
-                        <option value="{{ $j->jadwal_pelajaran_id }}">{{ $j->jadwalPelajaran->mataPelajaran->nama }}
-                            (pengganti)
-                        </option>
-                    @endforeach
+                    @if (count($jadwal_pengganti) !== 0)
+                        @foreach ($jadwal_pengganti as $j)
+                            <option value="{{ $j->jadwal_pelajaran_id }}">{{ $j->jadwalPelajaran->mataPelajaran->nama }}
+                                (pengganti)
+                            </option>
+                        @endforeach
+                    @endif
                 @else
                     <option selected>Tidak ada jadwal pelajaran</option>
                 @endif

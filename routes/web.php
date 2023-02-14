@@ -23,12 +23,17 @@ use App\Models\MonitoringPembelajaran;
 |
 */
 
-Route::get('/', function () {
+Route::get('/dashboard', function () {
     return view('dashboard', [
         'title' => 'Dashboard'
     ]);
 })->middleware('auth');
 
+Route::get('/', function () {
+    return view('welcome', [
+        'title' => 'Halaman Awal'
+    ]);
+});
 //AUTH
 Route::get('/login', function () {
     return view('login');

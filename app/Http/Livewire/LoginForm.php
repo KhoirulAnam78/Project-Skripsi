@@ -37,7 +37,7 @@ class LoginForm extends Component
         $validatedData = $this->validate();
         if (Auth::attempt($validatedData)) {
             request()->session()->regenerate();
-            return redirect()->intended('/');
+            return redirect()->intended('/dashboard');
         } else {
             return redirect('/login')->with('loginError', 'Username atau Password Anda salah!!');
         }
