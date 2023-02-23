@@ -83,3 +83,6 @@ Route::get('/jadwal-pengganti', [JadwalPelajaranController::class, 'jadwalPengga
 
 //Validasi Pembelajaran
 Route::get('/validasi-pembelajaran', [MonitoringPembelajaranController::class, 'validasi'])->middleware('auth');
+
+//Validasi Pembelajaran
+Route::get('/rekapitulasi-siswa', [MonitoringPembelajaranController::class, 'rekapSiswa'])->middleware('auth');

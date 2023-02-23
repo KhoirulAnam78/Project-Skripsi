@@ -178,14 +178,14 @@
         <!-- Components -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
         <!-- Data Rekapitulasi -->
-        <li class="menu-item">
+        <li class="menu-item {{ $title === 'Rekapitulasi Siswa' ? 'active open' : '' }}">
             <a href="javascript:void(0)" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-box"></i>
                 <div data-i18n="Pembelajaran">Pembelajaran</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="" class="menu-link">
+                <li class="menu-item {{ $title === 'Rekapitulasi Siswa' ? 'active' : '' }}">
+                    <a href="/rekapitulasi-siswa" class="menu-link">
                         <div data-i18n="Rekapitulasi Siswa">Rekapitulasi Siswa</div>
                     </a>
                 </li>
