@@ -13,7 +13,8 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ url('') }}/assets/assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon"
+        href="{{ url('') }}/assets/assets/img/icons/brands/sman-titian-teras.jpg" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

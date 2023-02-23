@@ -69,7 +69,7 @@
                                 <script>
                                     document.write(new Date().getFullYear());
                                 </script>
-                                , SMAN Titian Teras H.Abdurrahman Sayoeti Jambi
+                                SMAN Titian Teras H.Abdurrahman Sayoeti Jambi
 
                             </div>
                         </div>
