@@ -71,98 +71,106 @@
             </a>
         </li>
         <!-- Layouts -->
-        <li
-            class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran') ? 'active open' : '' }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div>Data Master</div>
-            </a>
+        @can('admin')
+            <li
+                class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran') ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div>Data Master</div>
+                </a>
 
-            <ul class="menu-sub">
-                <li class="menu-item {{ $title === 'Data Guru' ? 'active' : '' }}">
-                    <a href="/data-guru" class="menu-link">
-                        <div data-i18n="Data Guru">Data Guru</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title === 'Tahun Akademik' ? 'active' : '' }}">
-                    <a href="tahun-akademik" class="menu-link">
-                        <div data-i18n="Tahun Akademik">Tahun Akademik</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title === 'Data Kelas' ? 'active' : '' }}">
-                    <a href="/kelas" class="menu-link">
-                        <div data-i18n="Data Kelas">Data Kelas</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title === 'Data Siswa' ? 'active' : '' }}">
-                    <a href="/siswa" class="menu-link">
-                        <div data-i18n="Data Siswa">Data Siswa</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title === 'Mata Pelajaran' ? 'active' : '' }}">
-                    <a href="/mata-pelajaran" class="menu-link">
-                        <div data-i18n="Mata Pelajaran">Mata Pelajaran</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Operasional</span>
-        </li>
-        <li class="menu-item {{ $title === 'Rombongan Belajar' ? 'active' : '' }}">
-            <a href="/rombongan-belajar" class="menu-link">
-                <i class='menu-icon bx bxs-group'></i>
-                <div data-i18n="Rombongan Belajar">Rombongan Belajar</div>
-            </a>
-        </li>
-
-        <li
-            class="menu-item {{ ($title === 'Jadwal Pelajaran' or $title === 'Jadwal Guru Piket' or $title === 'Jadwal Pengganti') ? 'active open' : '' }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
-                <div data-i18n="Account Settings">Penjadwalan</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ $title === 'Jadwal Pelajaran' ? 'active' : '' }}">
-                    <a href="/jadwal-pelajaran" class="menu-link">
-                        <div data-i18n="Jadwal Pelajaran">Jadwal Pelajaran</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title === 'Jadwal Pengganti' ? 'active' : '' }}">
-                    <a href="/jadwal-pengganti" class="menu-link">
-                        <div data-i18n="Jadwal Pengganti">Jadwal Pengganti</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title === 'Jadwal Guru Piket' ? 'active' : '' }}">
-                    <a href="/jadwal-guru-piket" class="menu-link">
-                        <div data-i18n="Jadwal Guru Piket">Jadwal Guru Piket</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="menu-item {{ $title === 'Presensi Pembelajaran' ? 'active open' : '' }}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
-                <div data-i18n="Input Presensi">Input Presensi</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ $title === 'Presensi Pembelajaran' ? 'active' : '' }}">
-                    <a href="/presensi-pembelajaran" class="menu-link">
-                        <div data-i18n="Presensi Pembelajaran">Presensi Pembelajaran</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ $title === 'Data Guru' ? 'active' : '' }}">
+                        <a href="/data-guru" class="menu-link">
+                            <div data-i18n="Data Guru">Data Guru</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Tahun Akademik' ? 'active' : '' }}">
+                        <a href="tahun-akademik" class="menu-link">
+                            <div data-i18n="Tahun Akademik">Tahun Akademik</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Data Kelas' ? 'active' : '' }}">
+                        <a href="/kelas" class="menu-link">
+                            <div data-i18n="Data Kelas">Data Kelas</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Data Siswa' ? 'active' : '' }}">
+                        <a href="/siswa" class="menu-link">
+                            <div data-i18n="Data Siswa">Data Siswa</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Mata Pelajaran' ? 'active' : '' }}">
+                        <a href="/mata-pelajaran" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Mata Pelajaran</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text">Operasional</span>
+            </li>
+            <li class="menu-item {{ $title === 'Rombongan Belajar' ? 'active' : '' }}">
+                <a href="/rombongan-belajar" class="menu-link">
+                    <i class='menu-icon bx bxs-group'></i>
+                    <div data-i18n="Rombongan Belajar">Rombongan Belajar</div>
+                </a>
+            </li>
+            <li
+                class="menu-item {{ ($title === 'Jadwal Pelajaran' or $title === 'Jadwal Guru Piket' or $title === 'Jadwal Pengganti') ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                    <div data-i18n="Account Settings">Penjadwalan</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ $title === 'Jadwal Pelajaran' ? 'active' : '' }}">
+                        <a href="/jadwal-pelajaran" class="menu-link">
+                            <div data-i18n="Jadwal Pelajaran">Jadwal Pelajaran</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Jadwal Pengganti' ? 'active' : '' }}">
+                        <a href="/jadwal-pengganti" class="menu-link">
+                            <div data-i18n="Jadwal Pengganti">Jadwal Pengganti</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Jadwal Guru Piket' ? 'active' : '' }}">
+                        <a href="/jadwal-guru-piket" class="menu-link">
+                            <div data-i18n="Jadwal Guru Piket">Jadwal Guru Piket</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu-item {{ $title === 'Presensi Pembelajaran' ? 'active open' : '' }}">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                    <div data-i18n="Input Presensi">Input Presensi</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ $title === 'Presensi Pembelajaran' ? 'active' : '' }}">
+                        <a href="/presensi-pembelajaran" class="menu-link">
+                            <div data-i18n="Presensi Pembelajaran">Presensi Pembelajaran</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endcan
+        @can('guru')
+            <li class="menu-item {{ $title === 'Presensi Pembelajaran' ? 'active' : '' }}">
+                <a href="/presensi-pembelajaran" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-collection"></i>
+                    <div data-i18n="Presensi Pembelajaran">Presensi Pembelajaran</div>
+                </a>
+            </li>
+        @endcan
         <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
             <a href="/daftar-pertemuan" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Validasi Pembelajaran">Daftar Pertemuan</div>
             </a>
         </li>
-        <li class="menu-item">
-            <a href="cards-basic.html" class="menu-link">
+
+        <li class="menu-item {{ $title === 'Validasi Pembelajaran' ? 'active' : '' }}">
+            <a href="/validasi-pembelajaran" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-collection"></i>
                 <div data-i18n="Validasi Pembelajaran">Validasi Pembelajaran</div>
             </a>

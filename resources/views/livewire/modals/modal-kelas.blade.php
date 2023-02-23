@@ -1,5 +1,6 @@
 <!-- Modal Input-->
-<div class="modal fade" id="inputModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="inputModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true"
+    wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -9,21 +10,6 @@
             </div>
             <form wire:submit.prevent="save">
                 <div class="modal-body">
-                    {{-- <div class="row">
-                        <div class="col mb-0">
-                            <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
-                            <select name="tahun_akademik_id" wire:model.defer="tahun_akademik_id" id="tahun_akademik_id"
-                                class="form-select">
-                                <option value="">Tahun Akademik</option>
-                                @foreach ($tahun_akademik as $ta)
-                                    <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('tahun_akademik_id')
-                                <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div> --}}
                     <div class="row">
                         <div class="col mb-3">
                             <label for="nama" class="form-label">Nama</label>
@@ -49,7 +35,8 @@
 </div>
 
 {{-- MODAL EDIT --}}
-<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -59,21 +46,6 @@
             </div>
             <form wire:submit.prevent="update">
                 <div class="modal-body">
-                    {{-- <div class="row">
-                        <div class="col mb-0">
-                            <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
-                            <select name="tahun_akademik_id" wire:model.defer="tahun_akademik_id" id="tahun_akademik_id"
-                                class="form-select">
-                                <option value="">Tahun Akademik</option>
-                                @foreach ($tahun_akademik as $ta)
-                                    <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('tahun_akademik_id')
-                                <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div> --}}
                     <div class="row">
                         <div class="col mb-3">
                             <label for="nama" class="form-label">Nama</label>
@@ -99,7 +71,8 @@
 </div>
 
 {{-- MODAL DELETE --}}
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -124,7 +97,8 @@
 </div>
 
 {{-- IMPORT DATA --}}
-<div class="modal fade" id="importModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="importModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">

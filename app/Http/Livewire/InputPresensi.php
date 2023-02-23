@@ -36,10 +36,10 @@ class InputPresensi extends Component
     public function mount()
     {
         //Set default kelas pada tahun akademik yang aktif 
-        $this->filterKelas = TahunAkademik::where('status', 'aktif')->first()->kelas->first()->id;
+        $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
 
         //mengambil semua data siswa berdasarkan kelas default
-        $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas->all();
+        $this->student = Kelas::select('id')->where('id', $this->filterKelas)->first()->siswas->all();
 
         //set deafult presensi menjadi "hadir" untuk setiap siswa
         foreach ($this->student as $s) {
@@ -266,6 +266,7 @@ class InputPresensi extends Component
 
     public function updatedFilterMapel()
     {
+        $this->empty();
         //Cek apakah presensi sudah diinputkan
         if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
 
@@ -341,8 +342,9 @@ class InputPresensi extends Component
                 'monitoring_pembelajaran_id' => $monitoring->id
             ]);
         }
+        $this->update = true;
         session()->flash('message', 'Presensi berhasil diinputkan !');
-        $this->empty();
+        // $this->empty();
     }
 
     public function update()

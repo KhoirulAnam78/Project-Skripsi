@@ -29,6 +29,13 @@ class MonitoringPembelajaranController extends Controller
         ]);
     }
 
+    public function validasi()
+    {
+        return view('pages.validasi_pembelajaran', [
+            'title' => 'Validasi Pembelajaran'
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

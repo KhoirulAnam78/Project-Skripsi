@@ -44,7 +44,7 @@
 
     <div class="row mx-3">
         <div class="table-responsive text-nowrap mb-3">
-            <table class="table table-striped" id="examplei">
+            <table class="table table-striped align-top" id="examplei">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -58,7 +58,8 @@
                         <th>A</th>
                         <th>DD</th>
                         <th>DL</th>
-                        <th>Aksi</th>
+                        <th>Status</th>
+                        <th>Validator</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
@@ -72,7 +73,7 @@
                                 <td>{{ ($pertemuan->currentpage() - 1) * $pertemuan->perpage() + $loop->index + 1 }}
                                 </td>
                                 <td>{{ $s->tanggal }}</td>
-                                <td>{{ $s->topik }}</td>
+                                <td style="white-space: normal">{{ $s->topik }}</td>
                                 <td>{{ substr($s->waktu_mulai, 0, -3) . '-' . substr($s->waktu_berakhir, 0, -3) }}</td>
                                 <td align="center">{{ $jml_siswa }}</td>
                                 <td align="center">{{ count($s->kehadiranPembelajarans->where('status', 'hadir')) }}
@@ -89,9 +90,14 @@
                                 <td align="center">
                                     {{ count($s->kehadiranPembelajarans->where('status', 'dinas luar')) }}
                                 </td>
-                                <td><a class="btn btn-primary text-white"wire:click="edit({{ $k->id }})"><i
-                                            class="bx bx-edit-alt"></i>
-                                    </a></td>
+                                <td>
+                                    @if ($s->status_validasi === 'valid')
+                                        <span class="badge bg-label-info me-1">Valid</span>
+                                    @else
+                                        <span class="badge bg-label-danger me-1">Tidak Valid</span>
+                                    @endif
+                                </td>
+                                <td>{{ $s->guru_piket_id === null ? 'Admin' : $s->guru->nama }}</td>
                             </tr>
                         @endforeach
                     @endif
@@ -99,9 +105,9 @@
                 </tbody>
 
             </table>
-            {{-- @if (count($pertemuan) !== 0)
-                {{ $pertemuan->links() }} --}}
-            {{-- @endif --}}
+            @if (count($pertemuan) !== 0)
+                {{ $pertemuan->links() }}
+            @endif
         </div>
     </div>
 </div>

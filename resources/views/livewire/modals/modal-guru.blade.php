@@ -1,5 +1,6 @@
 <!-- Modal Input-->
-<div class="modal fade" id="inputModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="inputModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true"
+    wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -103,7 +104,8 @@
 </div>
 
 {{-- MODAL EDIT --}}
-<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="editModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -206,7 +208,8 @@
 </div>
 
 {{-- MODAL DELETE --}}
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -232,7 +235,8 @@
 </div>
 
 {{-- IMPORT DATA --}}
-<div class="modal fade" id="importModal" tabindex="-1" aria-hidden="true" wire:ignore.self>
+<div class="modal fade" id="importModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">

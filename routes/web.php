@@ -80,3 +80,6 @@ Route::get('/daftar-pertemuan', [MonitoringPembelajaranController::class, 'dafta
 
 //Jadwal Pengganti
 Route::get('/jadwal-pengganti', [JadwalPelajaranController::class, 'jadwalPengganti'])->middleware('auth');
+
+//Validasi Pembelajaran
+Route::get('/validasi-pembelajaran', [MonitoringPembelajaranController::class, 'validasi'])->middleware('auth');

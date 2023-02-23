@@ -27,7 +27,7 @@ class JadwalPelajaran extends Model
 
     public function monitoringPembelajarans()
     {
-        return $this->hasMany(MonitoringPelajaran::class);
+        return $this->hasMany(MonitoringPembelajaran::class);
     }
 
     public function jadwalPenggantis()
