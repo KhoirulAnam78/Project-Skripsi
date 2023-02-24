@@ -15,6 +15,13 @@
             </div>
         </div>
     @endif
+    <div class="row mx-2 mb-3 justify-content-start">
+        <div class="col-lg-2">
+            <a class="btn btn-info mb-2 text-white"
+                style="background-color: rgb(0, 143, 0);border-color: rgb(0, 143, 0)"><i class='bx bxs-file-export'></i>
+                Export</a>
+        </div>
+    </div>
     <div class="row mx-2 mb-3">
         <div class="col-lg-4 col-md-4">
             <label for="kelas_id" class="form-label">Kelas</label>
