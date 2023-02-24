@@ -42,4 +42,10 @@ class MonitoringPembelajaranController extends Controller
             'title' => 'Rekapitulasi Siswa'
         ]);
     }
+    public function rekapGuru()
+    {
+        return view('pages.rekapitulasi_guru', [
+            'title' => 'Rekapitulasi Guru'
+        ]);
+    }
 }

@@ -33,7 +33,7 @@
             <select wire:model="filterMapel" id="japel_id" class="form-select">
                 @if (count($mapel) !== 0)
                     @foreach ($mapel as $m)
-                        <option value="{{ $m->id }}">{{ $m->mataPelajaran->nama }}</option>
+                        <option value="{{ $m->id }}">{{ $m->nama }}</option>
                     @endforeach
                 @else
                     <option selected>Tidak ada jadwal pelajaran</option>
@@ -65,7 +65,7 @@
                 <tbody class="table-border-bottom-0">
                     @if (count($pertemuan) === 0)
                         <tr>
-                            <td colspan='9' align="center"><span>Tidak ada data</span></td>
+                            <td colspan='10' align="center"><span>Tidak ada data</span></td>
                         </tr>
                     @else
                         @foreach ($pertemuan as $s)

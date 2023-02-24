@@ -178,7 +178,8 @@
         <!-- Components -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
         <!-- Data Rekapitulasi -->
-        <li class="menu-item {{ $title === 'Rekapitulasi Siswa' ? 'active open' : '' }}">
+        <li
+            class="menu-item {{ ($title === 'Rekapitulasi Siswa' or $title === 'Rekapitulasi Guru') ? 'active open' : '' }}">
             <a href="javascript:void(0)" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-box"></i>
                 <div data-i18n="Pembelajaran">Pembelajaran</div>
@@ -189,9 +190,9 @@
                         <div data-i18n="Rekapitulasi Siswa">Rekapitulasi Siswa</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="" class="menu-link">
-                        <div data-i18n="Rekapitulasi Siswa">Rekapitulasi Guru</div>
+                <li class="menu-item {{ $title === 'Rekapitulasi Guru' ? 'active' : '' }}">
+                    <a href="/rekapitulasi-guru" class="menu-link">
+                        <div data-i18n="Rekapitulasi Guru">Rekapitulasi Guru</div>
                     </a>
                 </li>
             </ul>
