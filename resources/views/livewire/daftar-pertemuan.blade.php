@@ -65,7 +65,7 @@
                 <tbody class="table-border-bottom-0">
                     @if (count($pertemuan) === 0)
                         <tr>
-                            <td colspan='10' align="center"><span>Tidak ada data</span></td>
+                            <td colspan='13' align="center"><span>Tidak ada data</span></td>
                         </tr>
                     @else
                         @foreach ($pertemuan as $s)
