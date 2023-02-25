@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -18,10 +19,12 @@ class AuthController extends Controller
         }
         $user = User::where('username', $request->username)->firstOrFail();
         $token = $user->createToken('auth_token')->plainTextToken;
+        // $data = PersonalAccessToken::findToken($token)->tokenable();
         return response()->json([
             'message' => 'Login success',
             'access_token' => $token,
-            'token_type' => 'Bearer'
+            'token_type' => 'Bearer',
+            // 'user' => auth('sanctum')->user()
         ]);
     }
 

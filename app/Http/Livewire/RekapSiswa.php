@@ -2,9 +2,12 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Kelas;
 use App\Models\Siswa;
 use Livewire\Component;
 use App\Models\TahunAkademik;
+use App\Exports\RekapSiswaExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RekapSiswa extends Component
 {
@@ -20,6 +23,13 @@ class RekapSiswa extends Component
         $this->tanggalAwal =  \Carbon\Carbon::now()->subDays(6)->translatedFormat('Y-m-d');
         $this->filterKelas = TahunAkademik::where('status', 'aktif')->first()->kelas->first()->id;
     }
+
+    public function export()
+    {
+        $namaKelas = Kelas::select('nama')->where('id', $this->filterKelas)->first()->nama;
+        return Excel::download(new RekapSiswaExport($this->filterKelas, $this->tanggalAwal, $this->tanggalAkhir), 'Rekap Kehadiran Siswa ' . $namaKelas . 'Tanggal ' . $this->tanggalAwal . ' Sampai ' . $this->tanggalAkhir . '.xlsx');
+    }
+
     public function render()
     {
         return view('livewire.rekap-siswa', [

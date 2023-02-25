@@ -4,14 +4,13 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <h5 class="modal-title text-white" id="exampleModalLabel1">Lihat Pembelajaran</h5>
-                <button type="button" class="btn-close" wire:click="empty()" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+                <button type="button" class="btn-close"data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form wire:submit.prevent="save">
                 <div class="modal-body">
                     <div class="col">
                         <label for="topik" class="form-label">Topik/Agenda Pembelajaran</label>
-                        <textarea name="topik" wire:model="topik" id="topik" class="form-control"></textarea>
+                        <textarea readonly name="topik" wire:model="topik" id="topik" class="form-control"></textarea>
                         @error('topik')
                             <span class="error" style="color:red; font-size:12px; font-style:italic">*
                                 {{ $message }}</span>
@@ -40,27 +39,27 @@
                                             <td>{{ $s->nisn }}</td>
                                             <td>{{ $s->nama }}</td>
                                             <td>
-                                                <input type="radio" id="presensihadir"
+                                                <input disabled type="radio" id="presensihadir"
                                                     name="presensi.{{ $s->id }}" value='hadir'
                                                     wire:model="presensi.{{ $s->id }}">
                                                 H <span class="mx-1"></span>
-                                                <input type="radio" id="presensiIzin"
+                                                <input disabled type="radio" id="presensiIzin"
                                                     name="presensi.{{ $s->id }}" value='izin'
                                                     wire:model="presensi.{{ $s->id }}">
                                                 I <span class="mx-1"></span>
-                                                <input type="radio" id="presensiSakit"
+                                                <input disabled type="radio" id="presensiSakit"
                                                     name="presensi.{{ $s->id }}" value='sakit'
                                                     wire:model="presensi.{{ $s->id }}">
                                                 S <span class="mx-1"></span>
-                                                <input type="radio" id="presensiAlfa"
+                                                <input disabled type="radio" id="presensiAlfa"
                                                     name="presensi.{{ $s->id }}" value='alfa'
                                                     wire:model="presensi.{{ $s->id }}">
                                                 A <span class="mx-1"></span>
-                                                <input type="radio" id="presensiDinasDalam"
+                                                <input disabled type="radio" id="presensiDinasDalam"
                                                     name="presensi.{{ $s->id }}" value='dinas dalam'
                                                     wire:model="presensi.{{ $s->id }}">
                                                 DD <span class="mx-1"></span>
-                                                <input type="radio" id="presensiDinasLuar"
+                                                <input disabled type="radio" id="presensiDinasLuar"
                                                     name="presensi.{{ $s->id }}" value='dinas luar'
                                                     wire:model="presensi.{{ $s->id }}">
                                                 DL <span class="mx-1"></span>

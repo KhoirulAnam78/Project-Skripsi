@@ -25,6 +25,14 @@ class TabelJadwalPelajaran extends Component
     public $hari, $waktu_mulai, $waktu_berakhir, $guru_id, $mata_pelajaran_id;
     public $jadwal_edit_id, $jadwal_delete_id;
 
+    public function mount()
+    {
+        $this->filterTahunAkademik = TahunAkademik::select('id')->where('status', 'aktif')->first()->id;
+        $this->kelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas;
+        $this->filterKelas = $this->kelas->first()->id;
+        // dd($this->filterKelas);
+    }
+
     public function rules()
     {
         if ($this->jadwal_edit_id) {
@@ -123,6 +131,7 @@ class TabelJadwalPelajaran extends Component
         $this->dispatchBrowserEvent('close-edit-modal');
     }
 
+
     public function deleteConfirmation($id)
     {
         $this->jadwal_delete_id = $id; //tahun_akademik id
@@ -148,8 +157,8 @@ class TabelJadwalPelajaran extends Component
 
     public function updatedFilterTahunAkademik($tahunAkademik_id)
     {
-        $this->filterKelas = '';
         $this->kelas = TahunAkademik::where('id', $tahunAkademik_id)->first()->kelas;
+        $this->filterKelas = $this->kelas->first()->id;
     }
 
     public function updatedFile()

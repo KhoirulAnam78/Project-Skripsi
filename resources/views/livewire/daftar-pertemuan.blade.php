@@ -17,7 +17,7 @@
     @endif
     <div class="row mx-2 mb-3 justify-content-start">
         <div class="col-lg-2">
-            <a class="btn btn-info mb-2 text-white"
+            <a class="btn btn-info mb-2 text-white" wire:click="export({{ $filterKelas }},{{ $filterMapel }})"
                 style="background-color: rgb(0, 143, 0);border-color: rgb(0, 143, 0)"><i class='bx bxs-file-export'></i>
                 Export</a>
         </div>
@@ -67,6 +67,7 @@
                         <th>DL</th>
                         <th>Status</th>
                         <th>Validator</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
@@ -105,6 +106,8 @@
                                     @endif
                                 </td>
                                 <td>{{ $s->guru_piket_id === null ? 'Admin' : $s->guru->nama }}</td>
+                                <td><button wire:click="detail({{ $s->id }})" class="btn btn-primary"><i
+                                            class='bx bx-show'></i></button></td>
                             </tr>
                         @endforeach
                     @endif
@@ -117,4 +120,11 @@
             @endif
         </div>
     </div>
+    @include('livewire.modals.modal-detail')
+    <script>
+        window.addEventListener('show-detail-modal', event => {
+            $('#showModal').modal('show');
+        });
+    </script>
+
 </div>

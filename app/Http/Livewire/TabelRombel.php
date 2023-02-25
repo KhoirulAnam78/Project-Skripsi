@@ -49,6 +49,14 @@ class TabelRombel extends Component
         'file.mimes' => 'File harus memiliki format excel(.xlxs/.xls)'
     ];
 
+    public function mount()
+    {
+        $this->filterTahunAkademik = TahunAkademik::select('id')->where('status', 'aktif')->first()->id;
+        $this->kelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas;
+        $this->filterKelas = $this->kelas->first()->id;
+        // dd($this->filterKelas);
+    }
+
     public function save()
     {
         foreach ($this->selectedSiswa as $siswa) {
@@ -90,8 +98,8 @@ class TabelRombel extends Component
 
     public function updatedFilterTahunAkademik($tahunAkademik_id)
     {
-        $this->filterKelas = '';
         $this->kelas = TahunAkademik::where('id', $tahunAkademik_id)->first()->kelas;
+        $this->filterKelas = $this->kelas->first()->id;
     }
 
 

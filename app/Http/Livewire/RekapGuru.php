@@ -5,6 +5,8 @@ namespace App\Http\Livewire;
 use App\Models\Guru;
 use Livewire\Component;
 use App\Models\TahunAkademik;
+use App\Exports\RekapGuruExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RekapGuru extends Component
 {
@@ -21,6 +23,10 @@ class RekapGuru extends Component
         foreach ($data as $d) {
             array_push($this->kelasAktif, $d->id);
         }
+    }
+    public function export()
+    {
+        return Excel::download(new RekapGuruExport($this->tanggalAwal, $this->tanggalAkhir, $this->kelasAktif), 'Rekap Guru ' . 'Tanggal ' . $this->tanggalAwal . ' Sampai ' . $this->tanggalAkhir . '.xlsx');
     }
     public function render()
     {
