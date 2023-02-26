@@ -50,6 +50,7 @@
                     <th>Nama</th>
                     <th>No Telp</th>
                     <th>Status</th>
+                    <th>Pimpinan</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -72,6 +73,8 @@
                                 @else
                                     <span class="badge bg-label-danger me-1">Tidak Aktif</span>
                                 @endif
+                            </td>
+                            <td>{{ $g->pimpinan === 0 ? 'Tidak' : 'Ya' }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -86,6 +89,15 @@
                                             wire:click="deleteConfirmation({{ $g->id }})"><i
                                                 class="bx bx-trash me-1"></i>
                                             Delete</a>
+                                        @if ($g->pimpinan === 0)
+                                            <a class="dropdown-item" wire:click="setPimpinan({{ $g->id }})"><i
+                                                    class="bx bxs-user-check"></i>
+                                                Set Pimpinan</a>
+                                        @else
+                                            <a class="dropdown-item" wire:click="setPimpinan({{ $g->id }})"><i
+                                                    class="bx bxs-user-x"></i>
+                                                Unset Pimpinan</a>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
