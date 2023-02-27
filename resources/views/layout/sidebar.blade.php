@@ -162,12 +162,6 @@
                 </a>
             </li>
         @endcan
-        <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
-            <a href="/daftar-pertemuan" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Validasi Pembelajaran">Daftar Pertemuan</div>
-            </a>
-        </li>
 
         <li class="menu-item {{ $title === 'Validasi Pembelajaran' ? 'active' : '' }}">
             <a href="/validasi-pembelajaran" class="menu-link">
@@ -178,6 +172,12 @@
         <!-- Components -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
         <!-- Data Rekapitulasi -->
+        <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
+            <a href="/daftar-pertemuan" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-collection"></i>
+                <div data-i18n="Validasi Pembelajaran">Daftar Pertemuan</div>
+            </a>
+        </li>
         <li
             class="menu-item {{ ($title === 'Rekapitulasi Siswa' or $title === 'Rekapitulasi Guru') ? 'active open' : '' }}">
             <a href="javascript:void(0)" class="menu-link menu-toggle">
