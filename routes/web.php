@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
@@ -23,11 +24,7 @@ use App\Models\MonitoringPembelajaran;
 |
 */
 
-Route::get('/dashboard', function () {
-    return view('dashboard', [
-        'title' => 'Dashboard'
-    ]);
-})->middleware('auth');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
 
 Route::get('/', function () {
     return view('welcome', [
@@ -87,3 +84,8 @@ Route::get('/validasi-pembelajaran', [MonitoringPembelajaranController::class, '
 //Rekapitulasi Pembelajaran
 Route::get('/rekapitulasi-siswa', [MonitoringPembelajaranController::class, 'rekapSiswa'])->middleware('auth');
 Route::get('/rekapitulasi-guru', [MonitoringPembelajaranController::class, 'rekapGuru'])->middleware('auth');
+
+
+//HALAMAN WALI MURID
+Route::get('/jadwal-siswa', [SiswaController::class, 'jadwal'])->middleware('auth');
+Route::get('/rekap-pembelajaran-siswa', [SiswaController::class, 'rekapPembelajaran'])->middleware('auth');

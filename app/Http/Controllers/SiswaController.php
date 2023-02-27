@@ -8,7 +8,7 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        return view('pages.siswa', [
+        return view('pages.admin.siswa', [
             'title' => 'Data Siswa'
         ]);
     }
@@ -21,5 +21,20 @@ class SiswaController extends Controller
         );
 
         return Response::download($file, 'Template Import Data Siswa.xlsx', $headers);
+    }
+
+    public function jadwal()
+    {
+        $this->authorize('siswa');
+        return view('pages.siswa.jadwal', [
+            'title' => 'Jadwal Siswa'
+        ]);
+    }
+
+    public function rekapPembelajaran()
+    {
+        return view('pages.siswa.rekap-pembelajaran', [
+            'title' => 'Rekap Pembelajaran Siswa'
+        ]);
     }
 }

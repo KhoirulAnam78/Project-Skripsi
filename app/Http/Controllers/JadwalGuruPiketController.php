@@ -16,7 +16,7 @@ class JadwalGuruPiketController extends Controller
      */
     public function index()
     {
-        return view('pages.jadwal_guru_piket', [
+        return view('pages.admin.jadwal_guru_piket', [
             'title' => 'Jadwal Guru Piket'
         ]);
     }

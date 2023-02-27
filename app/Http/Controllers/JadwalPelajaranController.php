@@ -15,14 +15,14 @@ class JadwalPelajaranController extends Controller
      */
     public function index()
     {
-        return view('pages.jadwal_pelajaran', [
+        return view('pages.admin.jadwal_pelajaran', [
             'title' => 'Jadwal Pelajaran'
         ]);
     }
 
     public function jadwalPengganti()
     {
-        return view('pages.jadwal_pengganti', [
+        return view('pages.admin.jadwal_pengganti', [
             'title' => 'Jadwal Pengganti'
         ]);
     }

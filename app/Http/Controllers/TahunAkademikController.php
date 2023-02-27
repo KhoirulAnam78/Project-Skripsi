@@ -15,7 +15,7 @@ class TahunAkademikController extends Controller
      */
     public function index()
     {
-        return view('pages.tahun_akademik', [
+        return view('pages.admin.tahun_akademik', [
             'title' => 'Tahun Akademik'
         ]);
     }

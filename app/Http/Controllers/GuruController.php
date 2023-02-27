@@ -13,7 +13,8 @@ class GuruController extends Controller
      */
     public function index()
     {
-        return view('pages.guru', [
+        $this->authorize('admin');
+        return view('pages.admin.guru', [
             'title' => 'Data Guru'
         ]);
     }

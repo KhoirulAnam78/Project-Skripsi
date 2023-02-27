@@ -15,7 +15,7 @@ class RombelController extends Controller
      */
     public function index()
     {
-        return view('pages.rombel', [
+        return view('pages.admin.rombel', [
             'title' => 'Rombongan Belajar'
         ]);
     }

@@ -2,12 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MonitoringPembelajaran;
-use App\Http\Requests\StoreMonitoringPembelajaranRequest;
-use App\Http\Requests\UpdateMonitoringPembelajaranRequest;
-use Carbon\Carbon;
-use Illuminate\Support\Carbon as SupportCarbon;
-
 class MonitoringPembelajaranController extends Controller
 {
     /**
@@ -17,34 +11,34 @@ class MonitoringPembelajaranController extends Controller
      */
     public function index()
     {
-        return view('pages.presensi_pembelajaran', [
+        return view('pages.admin.presensi_pembelajaran', [
             'title' => 'Presensi Pembelajaran',
         ]);
     }
 
     public function daftarPertemuan()
     {
-        return view('pages.daftar_pertemuan', [
+        return view('pages.admin.daftar_pertemuan', [
             'title' => 'Daftar Pertemuan'
         ]);
     }
 
     public function validasi()
     {
-        return view('pages.validasi_pembelajaran', [
+        return view('pages.admin.validasi_pembelajaran', [
             'title' => 'Validasi Pembelajaran'
         ]);
     }
 
     public function rekapSiswa()
     {
-        return view('pages.rekapitulasi_siswa', [
+        return view('pages.admin.rekapitulasi_siswa', [
             'title' => 'Rekapitulasi Siswa'
         ]);
     }
     public function rekapGuru()
     {
-        return view('pages.rekapitulasi_guru', [
+        return view('pages.admin.rekapitulasi_guru', [
             'title' => 'Rekapitulasi Guru'
         ]);
     }

@@ -162,41 +162,60 @@
                 </a>
             </li>
         @endcan
+        @can('admin')
+            <li class="menu-item {{ $title === 'Validasi Pembelajaran' ? 'active' : '' }}">
+                <a href="/validasi-pembelajaran" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-collection"></i>
+                    <div data-i18n="Validasi Pembelajaran">Validasi Pembelajaran</div>
+                </a>
+            </li>
+            <!-- Components -->
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
+            <!-- Data Rekapitulasi -->
+            <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
+                <a href="/daftar-pertemuan" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-collection"></i>
+                    <div data-i18n="Validasi Pembelajaran">Daftar Pertemuan</div>
+                </a>
+            </li>
+            <li
+                class="menu-item {{ ($title === 'Rekapitulasi Siswa' or $title === 'Rekapitulasi Guru') ? 'active open' : '' }}">
+                <a href="javascript:void(0)" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-box"></i>
+                    <div data-i18n="Pembelajaran">Pembelajaran</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ $title === 'Rekapitulasi Siswa' ? 'active' : '' }}">
+                        <a href="/rekapitulasi-siswa" class="menu-link">
+                            <div data-i18n="Rekapitulasi Siswa">Rekapitulasi Siswa</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Rekapitulasi Guru' ? 'active' : '' }}">
+                        <a href="/rekapitulasi-guru" class="menu-link">
+                            <div data-i18n="Rekapitulasi Guru">Rekapitulasi Guru</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endcan
 
-        <li class="menu-item {{ $title === 'Validasi Pembelajaran' ? 'active' : '' }}">
-            <a href="/validasi-pembelajaran" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Validasi Pembelajaran">Validasi Pembelajaran</div>
-            </a>
-        </li>
-        <!-- Components -->
-        <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
-        <!-- Data Rekapitulasi -->
-        <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
-            <a href="/daftar-pertemuan" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-collection"></i>
-                <div data-i18n="Validasi Pembelajaran">Daftar Pertemuan</div>
-            </a>
-        </li>
-        <li
-            class="menu-item {{ ($title === 'Rekapitulasi Siswa' or $title === 'Rekapitulasi Guru') ? 'active open' : '' }}">
-            <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-box"></i>
-                <div data-i18n="Pembelajaran">Pembelajaran</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item {{ $title === 'Rekapitulasi Siswa' ? 'active' : '' }}">
-                    <a href="/rekapitulasi-siswa" class="menu-link">
-                        <div data-i18n="Rekapitulasi Siswa">Rekapitulasi Siswa</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ $title === 'Rekapitulasi Guru' ? 'active' : '' }}">
-                    <a href="/rekapitulasi-guru" class="menu-link">
-                        <div data-i18n="Rekapitulasi Guru">Rekapitulasi Guru</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
+        @can('siswa')
+            <li class="menu-item {{ $title === 'Jadwal Siswa' ? 'active' : '' }}">
+                <a href="/jadwal-siswa" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-collection"></i>
+                    <div data-i18n="Jadwal Siswa">Jadwal Siswa</div>
+                </a>
+            </li>
+            <!-- Components -->
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
+            <li class="menu-item {{ $title === 'Rekap Pembelajaran Siswa' ? 'active' : '' }}">
+                <a href="/rekap-pembelajaran-siswa" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-collection"></i>
+                    <div data-i18n="Pembelajaran">Pembelajaran</div>
+                </a>
+            </li>
+        @endcan
+
     </ul>
 </aside>
 <!-- / Menu -->
