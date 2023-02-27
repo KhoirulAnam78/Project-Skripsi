@@ -3,15 +3,12 @@
 namespace App\Http\Livewire;
 
 use App\Models\User;
-use App\Models\Kelas;
 use App\Models\Siswa;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use App\Exports\ExportSiswa;
 use App\Imports\SiswaImport;
-use App\Models\Rombel;
 use Livewire\WithPagination;
-use App\Models\TahunAkademik;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
 

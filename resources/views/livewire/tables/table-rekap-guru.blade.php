@@ -49,8 +49,8 @@
                         <td align="center">{{ $diff->format('g.i') }}</td>
 
                         @php
+                            $jml = new DateTime('00:00');
                             foreach ($b as $j) {
-                                $jml = new DateTime('00:00');
                                 if (count($j->monitoringPembelajarans) !== 0) {
                                     foreach ($j->monitoringPembelajarans as $m) {
                                         if ($m->status_validasi === 'tidak valid') {
@@ -73,7 +73,7 @@
                                     $data2 = $diff->format('g.i');
                                     $data1int = (int) $data1;
                                     $data2int = (int) $data2;
-                                    $total = (($data2int - $data1int) / $data2int) * 100;
+                                    $total = round((($data2int - $data1int) / $data2int) * 100);
                                 @endphp
                                 {{ $total . '%' }}
                             @endif
@@ -97,8 +97,8 @@
                             <td align="center">{{ $diff->format('g.i') }}</td>
 
                             @php
+                                $jml = new DateTime('00:00');
                                 foreach ($b as $j) {
-                                    $jml = new DateTime('00:00');
                                     if (count($j->monitoringPembelajarans) !== 0) {
                                         foreach ($j->monitoringPembelajarans as $m) {
                                             if ($m->status_validasi === 'tidak valid') {
@@ -121,7 +121,7 @@
                                         $data2 = $diff->format('g.i');
                                         $data1int = (int) $data1;
                                         $data2int = (int) $data2;
-                                        $total = (($data2int - $data1int) / $data2int) * 100;
+                                        $total = round((($data2int - $data1int) / $data2int) * 100);
                                     @endphp
                                     {{ $total . '%' }}
                                 @endif

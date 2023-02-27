@@ -63,7 +63,7 @@
                                     <button {{ count($j->monitoringPembelajarans) === 0 ? 'disabled' : '' }}
                                         @if (count($j->monitoringPembelajarans) !== 0) @if ($j->monitoringPembelajarans->first()->status_validasi === 'valid')
                                         {{ 'disabled' }} @endif
-                                        @endif
+                                        @endif wire:click="showValid({{ $j->id }})"
                                         class="btn btn-success"><i class='bx bx-check'></i>
                                     </button>
                                     <button wire:click="presensi({{ $j->id }})" class="btn btn-danger"><i
@@ -92,7 +92,9 @@
                                         @if (count($j->jadwalPelajaran->monitoringPembelajarans) !== 0) @if ($j->jadwalPelajaran->monitoringPembelajarans->first()->status_validasi === 'valid')
                                                 {{ 'disabled' }} @endif
                                         @endif
-                                        class="btn btn-success"><i class='bx bx-check'></i>
+                                        class="btn btn-success"
+                                        wire:click="showValid({{ $j->jadwal_pelajaran_id }})"><i
+                                            class='bx bx-check'></i>
                                     </button>
                                     <button wire:click="presensi({{ $j->jadwal_pelajaran_id }})"
                                         class="btn btn-danger"><i class='bx bx-x'></i></button>
@@ -109,13 +111,17 @@
         window.addEventListener('show-modal', event => {
             $('#showModal').modal('show');
         });
-
         window.addEventListener('close-edit-modal', event => {
             $('#editModal').modal('hide');
-        })
-
+        });
         window.addEventListener('show-edit-modal', event => {
             $('#editModal').modal('show');
+        });
+        window.addEventListener('close-valid-modal', event => {
+            $('#validModal').modal('hide');
+        });
+        window.addEventListener('show-valid-modal', event => {
+            $('#validModal').modal('show');
         });
     </script>
 </div>

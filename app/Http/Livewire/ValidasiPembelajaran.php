@@ -23,7 +23,7 @@ class ValidasiPembelajaran extends Component
     //atribut inputan
     public $waktu_mulai, $waktu_berakhir, $topik;
     //menampung kehadiran siswa
-    public $presensi = [];
+    public $presensi = [], $keterangan, $status, $editPresensi;
     public $update = false;
 
     public function mount()
@@ -53,6 +53,12 @@ class ValidasiPembelajaran extends Component
         $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
     }
 
+    //Custom Errror messages for validation
+    protected $messages = [
+        'keterangan.required' => 'Keterangan wajib diisi !',
+        'topik.required' => 'Topik wajib diisi !',
+    ];
+
     public function updatedFilterKelas()
     {
         //Mengambil jadwal hari ini
@@ -73,6 +79,24 @@ class ValidasiPembelajaran extends Component
         $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
     }
 
+    public function empty()
+    {
+        $this->editPresensi = null;
+        $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+            [
+                'kelas' => function ($query) {
+                    $query->select('id', 'nama');
+                },
+                'mataPelajaran' => function ($query) {
+                    $query->select('id', 'nama');
+                },
+            ]
+        )->with(['monitoringPembelajarans' => function ($query) {
+            $query->where('tanggal', $this->tanggal)->get();
+        }])->get();
+        $this->resetErrorBag();
+        $this->resetValidation();
+    }
     public function showId($id)
     {
         //ambil data jadwal
@@ -93,6 +117,8 @@ class ValidasiPembelajaran extends Component
             //set data berdasarkan data yang sudah diinputkan
             // $this->tanggal = $monitoring->tanggal;
             $this->topik = $monitoring->topik;
+            $this->keterangan = $monitoring->keterangan;
+            $this->status = $monitoring->status_validasi;
 
             //ambil data kehadiran siswa yang sudah diinputkan
             $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
@@ -123,6 +149,8 @@ class ValidasiPembelajaran extends Component
             //set data berdasarkan data yang sudah diinputkan
             // $this->tanggal = $monitoring->tanggal;
             $this->topik = $monitoring->topik;
+            $this->editPresensi = $monitoring->id;
+            $this->keterangan = $monitoring->keterangan;
 
             //ambil data kehadiran siswa yang sudah diinputkan
             $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
@@ -132,10 +160,59 @@ class ValidasiPembelajaran extends Component
             $this->update = true;
         } else {
             $this->topik = '';
+            $this->keterangan = '';
             $this->update = false;
         }
-
         $this->dispatchBrowserEvent('show-edit-modal');
+    }
+
+    public function showValid($id)
+    {
+        //cek apakah ada data yang diinputkan
+        if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $id)->where('tanggal', $this->tanggal)->first()) {
+            //ambil data
+            $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $id)->where('tanggal', $this->tanggal)->first();
+            //set data berdasarkan data yang sudah diinputkan
+            $this->editPresensi = $monitoring->id;
+        }
+        $this->dispatchBrowserEvent('show-valid-modal');
+    }
+
+
+    public function valid()
+    {
+        MonitoringPembelajaran::where('id', $this->editPresensi)->update([
+            'status_validasi' => 'valid',
+            'keterangan' => '',
+            'guru_piket_id' => null
+        ]);
+
+        session()->flash('message', 'Presensi berhasil diperbarui !');
+        $this->empty();
+        $this->dispatchBrowserEvent('close-valid-modal');
+    }
+
+    public function tidakValid()
+    {
+        $this->validate([
+            'keterangan' => 'required',
+            'topik' => 'required',
+            'presensi' => 'required'
+        ]);
+        MonitoringPembelajaran::where('id', $this->editPresensi)->update([
+            'keterangan' => $this->keterangan,
+            'topik' => $this->topik,
+            'status_validasi' => 'tidak valid',
+        ]);
+        foreach ($this->presensi as $key => $value) {
+            KehadiranPembelajaran::where('monitoring_pembelajaran_id', $this->editPresensi)->where('siswa_id', $key)->update([
+                'status' => $value,
+            ]);
+        }
+        session()->flash('message', 'Presensi berhasil diperbarui !');
+        $this->dispatchBrowserEvent('close-edit-modal');
+        $this->empty();
+        $this->render();
     }
 
     public function render()
