@@ -39,41 +39,38 @@
                             {{ $g->kode_guru }}</td>
                         <td>{{ $b->first()->mataPelajaran->nama }}</td>
                         @php
-                            $diff = new DateTime('00:00');
+                            $diff = 0;
                             foreach ($b as $j) {
-                                $date1 = new DateTime(substr($j->waktu_mulai, 0, -3));
-                                $date2 = new DateTime(substr($j->waktu_berakhir, 0, -3));
-                                $diff = $diff->sub($date2->diff($date1));
+                                $perbedaan = (float) substr($j->waktu_berakhir, 0, -3) - (float) substr($j->waktu_mulai, 0, -3);
+                                $diff = $diff + $perbedaan;
                             }
                         @endphp
-                        <td align="center">{{ $diff->format('g.i') }}</td>
+                        <td align="center">{{ $diff }}</td>
 
                         @php
-                            $jml = new DateTime('00:00');
+                            $jml = 0;
                             foreach ($b as $j) {
                                 if (count($j->monitoringPembelajarans) !== 0) {
                                     foreach ($j->monitoringPembelajarans as $m) {
                                         if ($m->status_validasi === 'tidak valid') {
-                                            $date1 = new DateTime(substr($m->waktu_mulai, 0, -3));
-                                            $date2 = new DateTime(substr($m->waktu_berakhir, 0, -3));
-                                            $jml = $jml->sub($date2->diff($date1));
+                                            $date1 = (float) substr($m->waktu_mulai, 0, -3);
+                                            $date2 = (float) substr($m->waktu_berakhir, 0, -3);
+                                            $jml = $jml + ($date2 - $date1);
                                         }
                                     }
                                 }
                             }
                         @endphp
-                        <td align="center">{{ $jml->format('g.i') === '12.00' ? '0' : $jml->format('g.i') }}
+                        <td align="center">{{ $jml === 0 ? '0' : $jml }}
                         </td>
                         <td align="center">
-                            @if ($jml->format('g.i') === '12.00')
+                            @if ($jml === 0)
                                 {{ '100%' }}
                             @else
                                 @php
-                                    $data1 = $jml->format('g.i');
-                                    $data2 = $diff->format('g.i');
-                                    $data1int = (int) $data1;
-                                    $data2int = (int) $data2;
-                                    $total = round((($data2int - $data1int) / $data2int) * 100);
+                                    $data1 = $jml;
+                                    $data2 = $diff;
+                                    $total = round((($data2 - $data1) / $data2) * 100);
                                 @endphp
                                 {{ $total . '%' }}
                             @endif
@@ -87,41 +84,40 @@
                         <tr>
                             <td>{{ $b->first()->mataPelajaran->nama }}</td>
                             @php
-                                $diff = new DateTime('00:00');
+                                $diff = 0;
                                 foreach ($b as $j) {
                                     $date1 = new DateTime(substr($j->waktu_mulai, 0, -3));
                                     $date2 = new DateTime(substr($j->waktu_berakhir, 0, -3));
-                                    $diff = $diff->sub($date2->diff($date1));
+                                    $perbedaan = (float) substr($j->waktu_berakhir, 0, -3) - (float) substr($j->waktu_mulai, 0, -3);
+                                    $diff = $diff + $perbedaan;
                                 }
                             @endphp
-                            <td align="center">{{ $diff->format('g.i') }}</td>
+                            <td align="center">{{ $diff }}</td>
 
                             @php
-                                $jml = new DateTime('00:00');
+                                $jml = 0;
                                 foreach ($b as $j) {
                                     if (count($j->monitoringPembelajarans) !== 0) {
                                         foreach ($j->monitoringPembelajarans as $m) {
                                             if ($m->status_validasi === 'tidak valid') {
-                                                $date1 = new DateTime(substr($m->waktu_mulai, 0, -3));
-                                                $date2 = new DateTime(substr($m->waktu_berakhir, 0, -3));
-                                                $jml = $jml->sub($date2->diff($date1));
+                                                $date1 = (float) substr($m->waktu_mulai, 0, -3);
+                                                $date2 = (float) substr($m->waktu_berakhir, 0, -3);
+                                                $jml = $jml + ($date2 - $date1);
                                             }
                                         }
                                     }
                                 }
                             @endphp
                             <td align="center">
-                                {{ $jml->format('g.i') === '12.00' ? '0' : $jml->format('g.i') }}</td>
+                                {{ $jml === 0 ? '0' : $jml }}</td>
                             <td align="center">
-                                @if ($jml->format('g.i') === '12.00')
+                                @if ($jml === 0)
                                     {{ '100%' }}
                                 @else
                                     @php
-                                        $data1 = $jml->format('g.i');
-                                        $data2 = $diff->format('g.i');
-                                        $data1int = (int) $data1;
-                                        $data2int = (int) $data2;
-                                        $total = round((($data2int - $data1int) / $data2int) * 100);
+                                        $data1 = $jml;
+                                        $data2 = $diff;
+                                        $total = round((($data2 - $data1) / $data2) * 100);
                                     @endphp
                                     {{ $total . '%' }}
                                 @endif
