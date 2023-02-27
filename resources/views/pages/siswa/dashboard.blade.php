@@ -79,11 +79,11 @@
                                                         $status = 'Sedang Berlangsung';
                                                     }
                                                 } else {
-                                                    $status = 'Belum Dimulai';
+                                                    $status = 'Tidak Terlaksana';
                                                 }
                                             @endphp
                                             <td
-                                                class="{{ (($status === 'Telah Berakhir' ? 'badge bg-label-warning my-1' : $status === 'Belum Dimulai') ? 'badge bg-label-danger my-1' : $status === 'Sedang Berlangsung') ? 'badge bg-label-success my-1' : '' }}">
+                                                class="{{ ((($status === 'Telah Berakhir' ? 'badge bg-label-info my-1' : $status === 'Belum Dimulai') ? 'badge bg-label-warning my-1' : $status === 'Sedang Berlangsung') ? 'badge bg-label-success my-1' : $status === 'Tidak Terlaksana') ? 'badge bg-label-danger my-1' : '' }}">
                                                 {{ $status }}</td>
 
                                         </tr>
