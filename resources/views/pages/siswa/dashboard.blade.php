@@ -67,7 +67,17 @@
                                                     {{ '' }}
                                                 @endif
                                             </td>
-                                            <td>Hadir</td>
+                                            <td>
+                                                @if (count($j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0)
+                                                    @php
+                                                        $get = $j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->first()->kehadiranPembelajarans;
+                                                        $kehadiran = $get->where('siswa_id', Auth::user()->siswa->id);
+                                                    @endphp
+                                                    {{ $kehadiran->first()->status }}
+                                                @else
+                                                    {{ '' }}
+                                                @endif
+                                            </td>
                                             @php
                                                 // dd();
                                                 if (count($j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0) {
@@ -83,7 +93,17 @@
                                                 }
                                             @endphp
                                             <td
-                                                class="{{ ((($status === 'Telah Berakhir' ? 'badge bg-label-info my-1' : $status === 'Belum Dimulai') ? 'badge bg-label-warning my-1' : $status === 'Sedang Berlangsung') ? 'badge bg-label-success my-1' : $status === 'Tidak Terlaksana') ? 'badge bg-label-danger my-1' : '' }}">
+                                                class="
+                                                @php
+if ($status === 'Telah Berakhir'){
+                                                        echo 'badge bg-label-info my-1';
+                                                    } else if($status === 'Belum Dimulai'){
+                                                    echo 'badge bg-label-warning my-1';
+                                                    }else if ($status === 'Sedang Berlangsung'){
+                                                        echo'badge bg-label-success my-1';
+                                                    } else {
+                                                        echo'badge bg-label-danger my-1';
+                                                    } @endphp">
                                                 {{ $status }}</td>
 
                                         </tr>
