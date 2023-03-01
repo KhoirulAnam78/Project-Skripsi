@@ -8,6 +8,16 @@
             </div>
             <form wire:submit.prevent="save">
                 <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="keterangan" class="form-label">Keterangan</label>
+                            <textarea disabled name="keterangan" wire:model="keterangan" id="keterangan" class="form-control"></textarea>
+                            @error('keterangan')
+                                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                                    {{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
                     <div class="table-responsive text-nowrap mb-3">
                         <table class="table table-striped" id="examplei">
                             <thead>

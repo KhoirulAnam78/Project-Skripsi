@@ -35,16 +35,18 @@
                     @foreach ($mapel as $m)
                         <option value="{{ $m->id }}">{{ $m->mataPelajaran->nama }}</option>
                     @endforeach
-                    @if (count($jadwal_pengganti) !== 0)
-                        @foreach ($jadwal_pengganti as $j)
-                            <option value="{{ $j->jadwal_pelajaran_id }}">{{ $j->jadwalPelajaran->mataPelajaran->nama }}
-                                (pengganti)
-                            </option>
-                        @endforeach
-                    @endif
-                @else
-                    <option selected>Tidak ada jadwal pelajaran</option>
                 @endif
+                @if (count($jadwal_pengganti) !== 0)
+                    @foreach ($jadwal_pengganti as $j)
+                        <option value="{{ $j->jadwal_pelajaran_id }}">{{ $j->jadwalPelajaran->mataPelajaran->nama }}
+                            (pengganti)
+                        </option>
+                    @endforeach
+                @endif
+                @if (count($mapel) === 0 and count($jadwal_pengganti) === 0)
+                    <option value="" selected>Tidak ada jadwal pelajaran</option>
+                @endif
+
             </select>
         </div>
         <div class="col-lg-4 col-md-4">
@@ -76,7 +78,7 @@
         </div>
         <div class="col-lg-4 col-md-4">
             <label for="topik" class="form-label">Topik/Agenda Pembelajaran</label>
-            <textarea name="topik" wire:model="topik" id="topik" class="form-control"></textarea>
+            <textarea required name="topik" wire:model="topik" id="topik" class="form-control"></textarea>
             @error('topik')
                 <span class="error" style="color:red; font-size:12px; font-style:italic">*
                     {{ $message }}</span>
@@ -145,13 +147,44 @@
     </div>
     <div class="row mx-3 justify-content-end my-3">
         <div class="col-2">
-            @if ($update === false)
-                <button class="btn btn-primary" {{ $filterMapel === '' ? 'disabled' : '' }}
-                    wire:click="save()">Simpan</button>
-            @else
-                <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
-                    {{ $filterMapel === '' ? 'disabled' : '' }} wire:click="update()">Update</button>
-            @endif
+            @can('admin')
+                @if ($update === false)
+                    <button class="btn btn-primary" {{ $filterMapel === '' ? 'disabled' : '' }}
+                        wire:click="save()">Simpan</button>
+                @else
+                    <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
+                        {{ $filterMapel === '' ? 'disabled' : '' }} wire:click="update()">Update</button>
+                @endif
+
+            @endcan
+            @can('guru')
+                @if ($update === false)
+                    <button class="btn btn-primary"
+                        @php
+if($filterMapel === ''){
+                            echo 'disabled';
+                            // dd('Filter Mapel');
+                        } else if(\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai){
+                            echo 'disabled';
+                        } else if(\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir){
+                            echo 'disabled';
+                            
+                            // dd('>');
+                        } @endphp
+                        wire:click="save()">Simpan</button>
+                @else
+                    <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
+                        @php
+if($filterMapel === ''){
+                                                echo 'disabled';
+                                            } else if(\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai){
+                                                echo 'disabled';
+                                            } else if(\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir){
+                                                echo 'disabled';
+                                            } @endphp
+                        wire:click="update()">Update</button>
+                @endif
+            @endcan
         </div>
     </div>
 </div>

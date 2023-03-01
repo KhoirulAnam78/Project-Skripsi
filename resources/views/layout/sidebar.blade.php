@@ -155,10 +155,37 @@
             </li>
         @endcan
         @can('guru')
+            <li class="menu-item {{ $title === 'Jadwal Mengajar' ? 'active' : '' }}">
+                <a href="/jadwal-mengajar" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-collection"></i>
+                    <div data-i18n="Jadwal Mengajar">Jadwal Mengajar</div>
+                </a>
+            </li>
             <li class="menu-item {{ $title === 'Presensi Pembelajaran' ? 'active' : '' }}">
                 <a href="/presensi-pembelajaran" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-collection"></i>
                     <div data-i18n="Presensi Pembelajaran">Presensi Pembelajaran</div>
+                </a>
+            </li>
+            <li class="menu-item {{ $title === 'Validasi Pembelajaran' ? 'active' : '' }}">
+                <a href="/validasi-pembelajaran" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-collection"></i>
+                    <div data-i18n="Validasi Pembelajaran">Validasi Pembelajaran</div>
+                </a>
+            </li>
+            <!-- Components -->
+            <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
+
+            <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
+                <a href="/daftar-pertemuan" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-collection"></i>
+                    <div data-i18n="Validasi Pembelajaran">Daftar Pertemuan</div>
+                </a>
+            </li>
+            <li class="menu-item {{ $title === 'Rekapitulasi Guru' ? 'active' : '' }}">
+                <a href="/rekapitulasi-guru" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-collection"></i>
+                    <div data-i18n="Rekap Pembelajaran">Rekap Pembelajaran</div>
                 </a>
             </li>
         @endcan

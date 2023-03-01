@@ -42,6 +42,7 @@ class DaftarPertemuanExport extends DefaultValueBinder implements FromCollection
             'I' => NumberFormat::FORMAT_NUMBER,
             'J' => NumberFormat::FORMAT_NUMBER,
             'K' => NumberFormat::FORMAT_TEXT,
+            'L' => NumberFormat::FORMAT_TEXT
         ];
     }
 
@@ -77,12 +78,13 @@ class DaftarPertemuanExport extends DefaultValueBinder implements FromCollection
             count($mapel->kehadiranPembelajarans->where('status', 'alfa')),
             count($mapel->kehadiranPembelajarans->where('status', 'dinas dalam')),
             count($mapel->kehadiranPembelajarans->where('status', 'dinas luar')),
-            $mapel->status_validasi
+            $mapel->status_validasi,
+            $mapel->keterangan
         ];
     }
 
     public function headings(): array
     {
-        return ['Tanggal', 'Topik', 'Waktu', 'Jml Siswa', 'Hadir', 'Izin', 'Sakit', 'Alfa', 'DD', 'DL', 'Status'];
+        return ['Tanggal', 'Topik', 'Waktu', 'Jml Siswa', 'Hadir', 'Izin', 'Sakit', 'Alfa', 'DD', 'DL', 'Status', 'Keterangan'];
     }
 }

@@ -6,8 +6,10 @@ use App\Models\Kelas;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\TahunAkademik;
+use App\Models\JadwalGuruPiket;
 use App\Models\JadwalPelajaran;
 use App\Models\JadwalPengganti;
+use Illuminate\Support\Facades\Auth;
 use App\Models\KehadiranPembelajaran;
 use App\Models\MonitoringPembelajaran;
 
@@ -35,22 +37,49 @@ class ValidasiPembelajaran extends Component
         //mengambil tanggal
         $this->tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
 
-        //Mengambil jadwal hari ini
-        $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
-            [
-                'kelas' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-                'mataPelajaran' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-            ]
-        )->with(['monitoringPembelajarans' => function ($query) {
-            $query->where('tanggal', $this->tanggal)->get();
-        }])->get();
+        if (Auth::user()->role === 'guru') {
+            $jadwalToday = JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->where(function ($query) {
+                $query->where('waktu_mulai', '<=', \Carbon\Carbon::now()->translatedFormat('h:i'))->orWhere('waktu_berakhir', '>=', \Carbon\Carbon::now()->translatedFormat('h:i'));
+            })->first();
+            if ($jadwalToday === null) {
+                $this->jadwal = [];
+                $this->jadwalPengganti = [];
+            } else {
+                //Mengambil jadwal hari ini
+                $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+                    [
+                        'kelas' => function ($query) {
+                            $query->select('id', 'nama');
+                        },
+                        'mataPelajaran' => function ($query) {
+                            $query->select('id', 'nama');
+                        },
+                    ]
+                )->with(['monitoringPembelajarans' => function ($query) {
+                    $query->where('tanggal', $this->tanggal)->get();
+                }])->get();
 
-        //Get Jadwal Pengganti
-        $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+                //Get Jadwal Pengganti
+                $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+            }
+        } else {
+            //Mengambil jadwal hari ini
+            $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+                [
+                    'kelas' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                    'mataPelajaran' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                ]
+            )->with(['monitoringPembelajarans' => function ($query) {
+                $query->where('tanggal', $this->tanggal)->get();
+            }])->get();
+
+            //Get Jadwal Pengganti
+            $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+        }
     }
 
     //Custom Errror messages for validation
@@ -181,10 +210,22 @@ class ValidasiPembelajaran extends Component
 
     public function valid()
     {
+        if (Auth::user()->role === 'guru') {
+            $jadwalToday = JadwalGuruPiket::where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->where(function ($query) {
+                $query->where('waktu_mulai', '<=', \Carbon\Carbon::now()->translatedFormat('h:i'))->orWhere('waktu_berakhir', '>=', \Carbon\Carbon::now()->translatedFormat('h:i'));
+            })->first();
+            if ($jadwalToday === null) {
+                $guruPiketId = null;
+            } else {
+                $guruPiketId = $jadwalToday->guru_id;
+            }
+        } else {
+            $guruPiketId = null;
+        }
         MonitoringPembelajaran::where('id', $this->editPresensi)->update([
             'status_validasi' => 'valid',
             'keterangan' => '',
-            'guru_piket_id' => null
+            'guru_piket_id' => $guruPiketId
         ]);
 
         session()->flash('message', 'Presensi berhasil diperbarui !');
@@ -199,10 +240,16 @@ class ValidasiPembelajaran extends Component
             'topik' => 'required',
             'presensi' => 'required'
         ]);
+        if (Auth::user()->role === 'guru') {
+            $guruPiketId = Auth::user()->guru->id;
+        } else {
+            $guruPiketId = null;
+        }
         MonitoringPembelajaran::where('id', $this->editPresensi)->update([
             'keterangan' => $this->keterangan,
             'topik' => $this->topik,
             'status_validasi' => 'tidak valid',
+            'guru_piket_id' => $guruPiketId
         ]);
         foreach ($this->presensi as $key => $value) {
             KehadiranPembelajaran::where('monitoring_pembelajaran_id', $this->editPresensi)->where('siswa_id', $key)->update([

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Siswa;
+use App\Models\TahunAkademik;
+use App\Models\JadwalPelajaran;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -26,7 +28,27 @@ class DashboardController extends Controller
                 'title' => 'Dashboard'
             ]);
         } else if (Auth::user()->role === 'guru') {
+            $kelasAktif = [];
+            $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->all();
+            foreach ($data as $d) {
+                array_push($kelasAktif, $d->id);
+            }
+            //mengambil nama hari 
+            $day = \Carbon\Carbon::now()->translatedFormat('l');
+
+            $jadwal = JadwalPelajaran::where('guru_id', Auth::user()->guru->id)->whereIn('kelas_id', $kelasAktif)->where('hari', $day)->with(['kelas' => function ($query) {
+                $query->select('id', 'nama');
+            }])->with(['mataPelajaran' => function ($query) {
+                $query->select('id', 'nama');
+            }])->paginate(10);
+            return view('pages.guru.dashboard', [
+                'title' => 'Dashboard',
+                'jadwal' => $jadwal
+            ]);
         } else if (Auth::user()->role === 'pimpinan') {
+            return view('pages.pimpinan.dashboard', [
+                'title' => 'Dashboard'
+            ]);
         } else {
             return abort(403, 'Unauthorized action.');
         }

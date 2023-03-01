@@ -41,13 +41,15 @@
             @enderror
         </div>
     </div>
-    <div class="row mx-2 mb-3">
-        <div class="col-lg-4 col-md-4 mb-0">
-            <label for="search" class="form-label">Pencarian</label>
-            <input type="text" wire:model="search" id="search" class="form-control"
-                placeholder="Cari berdasarkan nama guru" />
+    @can('admin')
+        <div class="row mx-2 mb-3">
+            <div class="col-lg-4 col-md-4 mb-0">
+                <label for="search" class="form-label">Pencarian</label>
+                <input type="text" wire:model="search" id="search" class="form-control"
+                    placeholder="Cari berdasarkan nama guru" />
+            </div>
         </div>
-    </div>
+    @endcan
     <div class="row mx-3">
         <div class="table-responsive text-nowrap mb-3">
             @include('livewire.tables.table-rekap-guru')

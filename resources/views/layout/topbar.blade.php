@@ -14,7 +14,19 @@
             <!-- User -->
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                    <span class="d-inline">Khoirul Anam</span>
+                    <span class="d-inline">
+                        @php
+                            if (Auth::user()->role === 'admin') {
+                                echo 'Administrator';
+                            } elseif (Auth::user()->role === 'guru') {
+                                echo Auth::user()->guru->nama;
+                            } elseif (Auth::user()->role === 'siswa') {
+                                echo Auth::user()->siswa->nama;
+                            } else {
+                                echo 'User';
+                            }
+                        @endphp
+                    </span>
                     <div class="avatar avatar-online d-inline">
                         <img src="{{ url('') }}/assets/assets/img/avatars/1.png" alt
                             class="w-px-40 h-auto rounded-circle" />

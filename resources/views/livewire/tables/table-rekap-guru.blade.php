@@ -49,9 +49,11 @@
 
                         @php
                             $jml = 0;
+                            $keterangan = [];
                             foreach ($b as $j) {
                                 if (count($j->monitoringPembelajarans) !== 0) {
                                     foreach ($j->monitoringPembelajarans as $m) {
+                                        array_push($keterangan, $m->keterangan);
                                         if ($m->status_validasi === 'tidak valid') {
                                             $date1 = (float) substr($m->waktu_mulai, 0, -3);
                                             $date2 = (float) substr($m->waktu_berakhir, 0, -3);
@@ -75,7 +77,11 @@
                                 {{ $total . '%' }}
                             @endif
                         </td>
-                        <td></td>
+                        <td>
+                            @foreach ($keterangan as $k)
+                                {{ $k }}
+                            @endforeach
+                        </td>
                     </tr>
                     @foreach ($g->jadwalPelajarans->groupBy('mata_pelajaran_id') as $key => $b)
                         @if ($loop->first)
@@ -96,9 +102,11 @@
 
                             @php
                                 $jml = 0;
+                                $keterangan = [];
                                 foreach ($b as $j) {
                                     if (count($j->monitoringPembelajarans) !== 0) {
                                         foreach ($j->monitoringPembelajarans as $m) {
+                                            array_push($keterangan, $m->keterangan);
                                             if ($m->status_validasi === 'tidak valid') {
                                                 $date1 = (float) substr($m->waktu_mulai, 0, -3);
                                                 $date2 = (float) substr($m->waktu_berakhir, 0, -3);
@@ -122,7 +130,11 @@
                                     {{ $total . '%' }}
                                 @endif
                             </td>
-                            <td></td>
+                            <td>
+                                @foreach ($keterangan as $k)
+                                    {{ $k }}
+                                @endforeach
+                            </td>
                         </tr>
                     @endforeach
                 @endif

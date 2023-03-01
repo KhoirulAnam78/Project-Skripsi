@@ -28,4 +28,11 @@ class GuruController extends Controller
 
         return Response::download($file, 'Template Import Data Guru.xlsx', $headers);
     }
+
+    public function jadwal()
+    {
+        return view('pages.guru.jadwal_mengajar', [
+            'title' => 'Jadwal Mengajar'
+        ]);
+    }
 }

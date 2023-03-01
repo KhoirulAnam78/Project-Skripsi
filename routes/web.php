@@ -89,3 +89,6 @@ Route::get('/rekapitulasi-guru', [MonitoringPembelajaranController::class, 'reka
 //HALAMAN WALI MURID
 Route::get('/jadwal-siswa', [SiswaController::class, 'jadwal'])->middleware('auth');
 Route::get('/rekap-pembelajaran-siswa', [SiswaController::class, 'rekapPembelajaran'])->middleware('auth');
+
+//HALAMAN GURU
+Route::get('jadwal-mengajar', [GuruController::class, 'jadwal'])->middleware('auth');

@@ -4,8 +4,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <h5 class="modal-title text-white" id="exampleModalLabel1">Lihat Pembelajaran</h5>
-                <button type="button" class="btn-close wire:click="empty()""data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+                <button type="button" class="btn-close"data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form wire:submit.prevent="save">
                 <div class="modal-body">
