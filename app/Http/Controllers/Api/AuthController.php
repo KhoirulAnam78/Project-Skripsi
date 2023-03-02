@@ -24,7 +24,7 @@ class AuthController extends Controller
             'message' => 'Login success',
             'access_token' => $token,
             'token_type' => 'Bearer',
-            // 'user' => auth('sanctum')->user()
+            'user' => auth('sanctum')->user()
         ]);
     }
 
