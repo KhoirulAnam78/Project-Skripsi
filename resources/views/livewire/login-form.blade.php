@@ -2,7 +2,7 @@
     <form id="formAuthentication" class="mb-3" wire:submit.prevent="authenticate">
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" wire:model="username" placeholder="Enter your username" autofocus />
+            <input type="text" class="form-control" wire:model="username" placeholder="Masukkan username" autofocus />
             @error('username')
                 <span class="error">{{ $message }}</span>
             @enderror
