@@ -20,11 +20,19 @@ class AuthController extends Controller
         $user = User::where('username', $request->username)->firstOrFail();
         $token = $user->createToken('auth_token')->plainTextToken;
         // $data = PersonalAccessToken::findToken($token)->tokenable();
+        if ($user->role === 'admin') {
+            $dataUser = auth('sanctum')->user();
+        } else if ($user->role === 'guru') {
+            $dataUser = $user->guru;
+        } else {
+            $dataUser = $user->siswa;
+        }
         return response()->json([
             'message' => 'Login success',
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'user' => auth('sanctum')->user()
+            'role' => auth('sanctum')->user()->role,
+            'user' => $dataUser
         ]);
     }
 
