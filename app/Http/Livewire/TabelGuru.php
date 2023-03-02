@@ -215,7 +215,7 @@ class TabelGuru extends Component
     public function setPimpinan($id)
     {
         $guru = Guru::find($id);
-        if ($guru->pimpinan === 0) {
+        if ($guru->pimpinan == 0) {
             $set = 1;
         } else {
             $set = 0;
