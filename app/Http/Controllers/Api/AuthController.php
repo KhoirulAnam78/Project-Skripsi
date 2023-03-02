@@ -56,7 +56,13 @@ class AuthController extends Controller
                 'mapel' => $mapel
             ]);
         } else {
-            $dataUser = $user->siswa;
+            return response()->json([
+                'message' => 'Login success',
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'role' => auth('sanctum')->user()->role,
+                'nama' => $user->siswa->nama
+            ]);
         }
     }
 
