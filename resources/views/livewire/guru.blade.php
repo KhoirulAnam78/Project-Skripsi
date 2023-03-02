@@ -75,7 +75,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if ($g->pimpinan === 0)
+                                @if ($g->pimpinan == 0)
                                     Tidak
                                 @else
                                     Ya
