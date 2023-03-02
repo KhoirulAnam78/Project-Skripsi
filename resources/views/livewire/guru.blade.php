@@ -74,7 +74,13 @@
                                     <span class="badge bg-label-danger me-1">Tidak Aktif</span>
                                 @endif
                             </td>
-                            <td>{{ $g->pimpinan == 0 ? 'Tidak' : 'Ya' }}</td>
+                            <td>
+                                @if ($g->pimpinan === 0)
+                                    Tidak
+                                @else
+                                    Ya
+                                @endif
+                            </td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
