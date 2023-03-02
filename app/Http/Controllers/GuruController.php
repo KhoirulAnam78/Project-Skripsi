@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class GuruController extends Controller
@@ -13,7 +14,9 @@ class GuruController extends Controller
      */
     public function index()
     {
-        $this->authorize('admin');
+        if (Auth::user()->role === 'siswa') {
+            return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
+        }
         return view('pages.admin.guru', [
             'title' => 'Data Guru'
         ]);
@@ -21,6 +24,9 @@ class GuruController extends Controller
 
     public function download()
     {
+        if (Auth::user()->role === 'siswa') {
+            return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
+        }
         $file = public_path() . '/assets/template-excel/Data Guru.xlsx';
         $headers = array(
             'Content-Type: application/xlsx',
@@ -31,6 +37,9 @@ class GuruController extends Controller
 
     public function jadwal()
     {
+        if (Auth::user()->role === 'siswa') {
+            return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
+        }
         return view('pages.guru.jadwal_mengajar', [
             'title' => 'Jadwal Mengajar'
         ]);

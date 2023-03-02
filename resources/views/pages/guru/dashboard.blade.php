@@ -17,7 +17,7 @@
                                 <h5 class="card-title text-primary">Selamat Datang Bapak/Ibu Guru
                                     {{ Auth::user()->guru->nama }}</h5>
                                 <p>
-                                    Sistem infromasi monitoring merupakan sistem yang bertujuan untuk memantau kegiatan
+                                    Sistem informasi monitoring merupakan sistem yang bertujuan untuk memantau kegiatan
                                     pembelajaran yang dilakukan siswa di SMAN Titian Teras H. Abdurrahman Sayoeti Jambi.
                                 </p>
                                 <p class="mb-4">Dalam sistem informasi ini guru dapat melakukan presensi kehadiran siswa

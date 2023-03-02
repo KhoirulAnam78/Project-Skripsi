@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class SiswaController extends Controller
 {
     public function index()
     {
+
+        $this->authorize('siswa');
         return view('pages.admin.siswa', [
             'title' => 'Data Siswa'
         ]);
@@ -15,6 +18,8 @@ class SiswaController extends Controller
 
     public function download()
     {
+
+        $this->authorize('siswa');
         $file = public_path() . '/assets/template-excel/Data Siswa.xlsx';
         $headers = array(
             'Content-Type: application/xlsx',
@@ -33,6 +38,7 @@ class SiswaController extends Controller
 
     public function rekapPembelajaran()
     {
+        $this->authorize('siswa');
         return view('pages.siswa.rekap-pembelajaran', [
             'title' => 'Rekap Pembelajaran Siswa'
         ]);

@@ -28,7 +28,7 @@
                         @endphp
                     </span>
                     <div class="avatar avatar-online d-inline">
-                        <img src="{{ url('') }}/assets/assets/img/avatars/1.png" alt
+                        <img src="{{ url('') }}/assets/assets/img/avatars/default-user.jpg" alt
                             class="w-px-40 h-auto rounded-circle" />
                     </div>
                 </a>
@@ -52,12 +52,12 @@
                     {{-- <li>
                         <div class="dropdown-divider"></div>
                     </li> --}}
-                    {{-- <li>
-                        <a class="dropdown-item" href="#">
+                    <li>
+                        <a class="dropdown-item" href="/profile">
                             <i class="bx bx-user me-2"></i>
-                            <span class="align-middle">My Profile</span>
+                            <span class="align-middle">Profil</span>
                         </a>
-                    </li> --}}
+                    </li>
                     {{-- <li>
                         <a class="dropdown-item" href="#">
                             <i class="bx bx-cog me-2"></i>

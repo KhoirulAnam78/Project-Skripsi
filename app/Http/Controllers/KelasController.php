@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 
@@ -14,12 +15,18 @@ class KelasController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->role === 'siswa') {
+            return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
+        }
         return view('pages.admin.kelas', [
             'title' => 'Data Kelas'
         ]);
     }
     public function download()
     {
+        if (Auth::user()->role === 'siswa') {
+            return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
+        }
         $file = public_path() . '/assets/template-excel/Data Kelas.xlsx';
         $headers = array(
             'Content-Type: application/xlsx',

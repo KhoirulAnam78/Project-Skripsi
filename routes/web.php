@@ -91,4 +91,7 @@ Route::get('/jadwal-siswa', [SiswaController::class, 'jadwal'])->middleware('aut
 Route::get('/rekap-pembelajaran-siswa', [SiswaController::class, 'rekapPembelajaran'])->middleware('auth');
 
 //HALAMAN GURU
-Route::get('jadwal-mengajar', [GuruController::class, 'jadwal'])->middleware('auth');
+Route::get('/jadwal-mengajar', [GuruController::class, 'jadwal'])->middleware('auth');
+
+//HALAMAN PROFILE
+Route::get('/profile', [DashboardController::class, 'profile'])->middleware('auth');

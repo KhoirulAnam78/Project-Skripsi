@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JadwalPelajaran;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreJadwalPelajaranRequest;
 use App\Http\Requests\UpdateJadwalPelajaranRequest;
 
@@ -22,6 +23,9 @@ class JadwalPelajaranController extends Controller
 
     public function jadwalPengganti()
     {
+        if (Auth::user()->role === 'siswa') {
+            return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
+        }
         return view('pages.admin.jadwal_pengganti', [
             'title' => 'Jadwal Pengganti'
         ]);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TahunAkademik;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTahunAkademikRequest;
 use App\Http\Requests\UpdateTahunAkademikRequest;
 
@@ -15,6 +16,9 @@ class TahunAkademikController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->role === 'siswa') {
+            return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
+        }
         return view('pages.admin.tahun_akademik', [
             'title' => 'Tahun Akademik'
         ]);
