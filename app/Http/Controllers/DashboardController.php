@@ -50,7 +50,14 @@ class DashboardController extends Controller
                 'title' => 'Dashboard'
             ]);
         } else {
-            return abort(403, 'Unauthorized action.');
+            return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
         }
+    }
+
+    public function profile()
+    {
+        return view('profile', [
+            'title' => 'Halaman Profile'
+        ]);
     }
 }
