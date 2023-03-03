@@ -52,7 +52,13 @@
                     alt="Logo SMAN TITIAN TERAS.jpg" width="40px">
                 {{-- <span class="text-body fw-bolder">SMAN TITIAN TERAS</span> --}}
             </div>
-            <span class="app-brand-text demo menu-text fw-bolder ms-2">SiMonEv</span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2"
+                style="background-color: #0402FC; font-weight : bold;
+            background-image: linear-gradient(45deg,#0402FC, #FC0204,#FCFE04);
+            background-size: 100%; background-repeat: repeat;-webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; 
+            -moz-background-clip: text;
+            -moz-text-fill-color: transparent;">Simonev</span>
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">

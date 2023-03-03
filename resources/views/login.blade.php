@@ -66,9 +66,28 @@
                             {{-- <span class="text-body fw-bolder">SMAN TITIAN TERAS</span> --}}
                         </div>
                         <!-- /Logo -->
-                        <h4 class="my-2" align='center'>SiMonEv Pembelajaran</h4>
+                        <div align="center">
+                            <span align="center" class="app-brand-text demo menu-text fw-bolder ms-2"
+                                style="background-color: #0402FC; font-weight : bold;
+        background-image: linear-gradient(45deg,#0402FC, #FC0204,#FCFE04);
+        background-size: 100%; background-repeat: repeat;-webkit-background-clip: text;
+        -webkit-text-fill-color: transparent; 
+        -moz-background-clip: text;
+        -moz-text-fill-color: transparent;">
+                                Simonev</span>
+
+                        </div>
+                        {{-- <h4 class="my-2" align='center'
+                            style="background-color: #0402FC; font-weight : bold;
+                        background-image: linear-gradient(45deg,#0402FC, #FC0204,#FCFE04);
+                        background-size: 100%; background-repeat: repeat;-webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent; 
+                        -moz-background-clip: text;
+                        -moz-text-fill-color: transparent;">
+                            Simonev</h4> --}}
+                        <h6 align="center" class="my-2">Sistem Informasi Monitoring Pembelajaran</h6>
                         <h5 align='center'>SMAN TITIAN TERAS</h5>
-                        <p class="mb-2">Silahkan login terlebih dahulu</p>
+                        {{-- <p class="mb-2">Silahkan login terlebih dahulu</p> --}}
                         @if (session()->has('loginError'))
                             <div class="mb-2">
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">

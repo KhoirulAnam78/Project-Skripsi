@@ -22,6 +22,11 @@ class TabelKelas extends Component
     //Rules Validation
 
 
+    public function mount()
+    {
+        $this->tahun_akademik_id = TahunAkademik::where('status', 'aktif')->first()->id;
+        $this->filter = $this->tahun_akademik_id;
+    }
     public function rules()
     {
         if ($this->kelas_edit_id !== null) {
@@ -46,7 +51,6 @@ class TabelKelas extends Component
     public function empty()
     {
         $this->nama = null;
-        $this->tahun_akademik_id = null;
         $this->file = null;
         $this->kelas_delete_id = null;
         $this->resetErrorBag();
@@ -72,7 +76,6 @@ class TabelKelas extends Component
     //Save data to database
     public function save()
     {
-        $this->tahun_akademik_id = TahunAkademik::where('status', 'aktif')->first()->id;
         $this->validate([
             'nama' => 'required|unique:kelas,nama,NULL,id,tahun_akademik_id,' . $this->tahun_akademik_id,
             // 'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
@@ -144,7 +147,7 @@ class TabelKelas extends Component
     public function render()
     {
         return view('livewire.tabel-kelas', [
-            'kelas' => Kelas::where('nama', 'like', '%' . $this->search . '%')->where('tahun_akademik_id', 'like', '%' . $this->filter . '%')->latest()->paginate(5),
+            'kelas' => Kelas::where('nama', 'like', '%' . $this->search . '%')->where('tahun_akademik_id', $this->filter)->latest()->paginate(5),
             'tahun_akademik' => TahunAkademik::latest()->get()->all()
         ]);
     }

@@ -44,7 +44,6 @@
         <div class="col-lg-4 col-md-4 mb-3 mx-3">
             <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
             <select wire:model="filter" id="tahun_akademik_id" class="form-select">
-                <option value="">Semua</option>
                 @foreach ($tahun_akademik as $ta)
                     <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
                 @endforeach
