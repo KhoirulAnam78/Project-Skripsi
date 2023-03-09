@@ -24,5 +24,5 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/get-user', [AuthController::class, 'getUser']);
-    Route::get('/get-jadwal', [GuruApiController::class, 'getJadwal']);
+    Route::post('/get-jadwal', [GuruApiController::class, 'getJadwal']);
 });
