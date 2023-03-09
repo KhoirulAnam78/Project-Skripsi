@@ -51,7 +51,8 @@
         </div>
         <div class="col-lg-4 col-md-4">
             <label for="tanggal" class="form-label">Tanggal</label>
-            <input disabled type="date" wire:model="tanggal" name="tanggal" id="tanggal" class="form-control" />
+            <input disabled type="date" value="{{ $tanggal }}" name="tanggal" id="tanggal"
+                class="form-control" />
             @error('tanggal')
                 <span class="error" style="color:red; font-size:12px; font-style:italic">*
                     {{ $message }}</span>
@@ -62,7 +63,7 @@
     <div class="row mx-2 mb-3">
         <div class="col-lg-4 col-md-4">
             <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
-            <input disabled type="time" id="waktu_mulai" class="form-control" wire:model="waktu_mulai" />
+            <input disabled type="time" id="waktu_mulai" class="form-control" value="{{ $waktu_mulai }}" />
             @error('waktu_mulai')
                 <span class="error" style="color:red; font-size:12px; font-style:italic">*
                     {{ $message }}</span>
@@ -70,7 +71,7 @@
         </div>
         <div class="col-lg-4 col-md-4">
             <label for="waktu_berakhir" class="form-label">Waktu Berakhir</label>
-            <input disabled type="time" wire:model="waktu_berakhir" id="waktu_berakhir" class="form-control" />
+            <input disabled type="time" value="{{ $waktu_berakhir }}" id="waktu_berakhir" class="form-control" />
             @error('waktu_berakhir')
                 <span class="error" style="color:red; font-size:12px; font-style:italic">*
                     {{ $message }}</span>
@@ -168,10 +169,9 @@ if($filterMapel === ''){
                             echo 'disabled';
                         } else if(\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir){
                             echo 'disabled';
-                            
-                            // dd('>');
-                        } @endphp
-                        wire:click="save()">Simpan</button>
+                        } else{
+                            echo 'wire:click="save()"';
+                        } @endphp>Simpan</button>
                 @else
                     <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
                         @php
@@ -181,8 +181,9 @@ if($filterMapel === ''){
                                                 echo 'disabled';
                                             } else if(\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir){
                                                 echo 'disabled';
-                                            } @endphp
-                        wire:click="update()">Update</button>
+                                            } else {
+                                                echo 'wire:click="update()"';
+                                            } @endphp>Update</button>
                 @endif
             @endcan
         </div>

@@ -110,9 +110,9 @@
                 </tbody>
 
             </table>
-            {{-- @if (count($dataSiswa) !== 0)
+            @if (count($dataSiswa) !== 0)
                 {{ $dataSiswa->links() }}
-            @endif --}}
+            @endif
         </div>
     </div>
 </div>

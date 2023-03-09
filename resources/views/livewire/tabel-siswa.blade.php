@@ -37,33 +37,11 @@
         </div>
     @endif
     <div class="row justify-content-between">
-        <div class="col-lg-4 col-md-4 mb-0 mx-3">
+        <div class="col-lg-4 col-md-4 mb-3 mx-3">
             <label for="search" class="form-label">Pencarian</label>
             <input type="text" wire:model="search" id="search" class="form-control"
                 placeholder="Cari berdasarkan nama siswa" />
         </div>
-        {{-- <div class="col-lg-3 col-md-3 mb-3 mx-3">
-            <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
-            <select wire:model="filter_tahun_akademik" id="tahun_akademik_id" class="form-select">
-                <option value=''>Pilih</option>
-                @foreach ($tahun_akademik as $ta)
-                    <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-lg-3 col-md-3 mb-3 mx-3">
-            <label for="kelas_id" class="form-label">Kelas</label>
-            <select wire:model="filter_kelas" id="kelas_id" class="form-select">
-                @if ($kelas !== null)
-                    <option value="">Pilih</option>
-                    @foreach ($kelas as $k)
-                        <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                    @endforeach
-                @else
-                    <option>Pilih tahun akademik</option>
-                @endif
-            </select>
-        </div> --}}
     </div>
     <div class="table-responsive text-nowrap mx-3 mb-3">
         <table class="table table-striped" id="examplei">
@@ -74,7 +52,7 @@
                     <th>Nama</th>
                     <th>No Telp</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">

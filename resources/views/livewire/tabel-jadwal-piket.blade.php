@@ -26,33 +26,6 @@
             </div>
         </div>
     @endif
-    {{-- <div class="mx-3 my-2">
-        <p>Pilih tahun akademik dan kelas terlebih dahulu !</p>
-    </div>
-    <div class="row justify-content-start">
-        <div class="col-lg-3 col-md-3 mb-3 mx-3">
-            <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
-            <select wire:model="filterTahunAkademik" id="filterTahunAkademik" class="form-select">
-                <option value=''>Pilih</option>
-                @foreach ($tahun_akademik as $ta)
-                    <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="col-lg-3 col-md-3 mb-3 mx-3">
-            <label for="kelas_id" class="form-label">Kelas</label>
-            <select wire:model="filterKelas" id="kelas_id" class="form-select">
-                @if ($kelas !== null)
-                    <option value="">Pilih</option>
-                    @foreach ($kelas as $k)
-                        <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                    @endforeach
-                @else
-                    <option>Pilih tahun akademik</option>
-                @endif
-            </select>
-        </div>
-    </div> --}}
     <div class="mx-3 my-2">
         <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2"><i
                 class='bx bx-add-to-queue'></i> Tambah</a>
@@ -77,7 +50,7 @@
                     <th>Kode Guru</th>
                     <th>Hari</th>
                     <th>Jam Piket</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -86,10 +59,6 @@
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
                     </tr>
                 @else
-                    @php
-                        
-                        // dd($jadwalPiket);
-                    @endphp
                     @foreach ($jadwalPiket as $j)
                         @foreach ($j->jadwalGuruPikets as $k)
                             <tr>

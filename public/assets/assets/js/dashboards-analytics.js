@@ -423,13 +423,13 @@
   const chartOrderStatistics = document.querySelector('#orderStatisticsChart'),
     orderChartConfig = {
       chart: {
-        height: 165,
-        width: 130,
+        height: 250,
+        width: 200,
         type: 'donut'
       },
-      labels: ['Electronic', 'Sports', 'Decor', 'Fashion'],
-      series: [85, 15, 50, 50],
-      colors: [config.colors.primary, config.colors.secondary, config.colors.info, config.colors.success],
+      labels: ['Terlaksana', 'Tidak Terlaksana'],
+      series: [80, 20],
+      colors: [config.colors.primary, config.colors.secondary],
       stroke: {
         width: 5,
         colors: cardColor
@@ -453,7 +453,7 @@
       plotOptions: {
         pie: {
           donut: {
-            size: '75%',
+            size: '70%',
             labels: {
               show: true,
               value: {
@@ -471,11 +471,11 @@
               },
               total: {
                 show: true,
-                fontSize: '0.8125rem',
+                fontSize: '0.6125rem',
                 color: axisColor,
-                label: 'Weekly',
+                // label: '%',
                 formatter: function (w) {
-                  return '38%';
+                  return '100%';
                 }
               }
             }
@@ -494,7 +494,7 @@
     incomeChartConfig = {
       series: [
         {
-          data: [24, 21, 30, 22, 42, 26, 35, 29]
+          data: [0, 10, 5, 20, 6, 3, 1, 0]
         }
       ],
       chart: {
@@ -526,7 +526,7 @@
             fillColor: config.colors.white,
             seriesIndex: 0,
             dataPointIndex: 7,
-            strokeColor: config.colors.primary,
+            strokeColor: config.colors.danger,
             strokeWidth: 2,
             size: 6,
             radius: 8
@@ -536,7 +536,7 @@
           size: 7
         }
       },
-      colors: [config.colors.primary],
+      colors: [config.colors.danger],
       fill: {
         type: 'gradient',
         gradient: {
@@ -577,14 +577,113 @@
         labels: {
           show: false
         },
-        min: 10,
-        max: 50,
+        min: 0,
+        max: 20,
         tickAmount: 4
       }
     };
   if (typeof incomeChartEl !== undefined && incomeChartEl !== null) {
     const incomeChart = new ApexCharts(incomeChartEl, incomeChartConfig);
     incomeChart.render();
+  }
+
+  // Income Chart - Area chart
+  // --------------------------------------------------------------------
+  const incomeChartEl2 = document.querySelector('#incomeChart2'),
+    incomeChartConfig2 = {
+      series: [
+        {
+          data: [0, 10, 5, 20, 6, 3, 1, 0]
+        }
+      ],
+      chart: {
+        height: 215,
+        parentHeightOffset: 0,
+        parentWidthOffset: 0,
+        toolbar: {
+          show: false
+        },
+        type: 'area'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        width: 2,
+        curve: 'smooth'
+      },
+      legend: {
+        show: false
+      },
+      markers: {
+        size: 6,
+        colors: 'transparent',
+        strokeColors: 'transparent',
+        strokeWidth: 4,
+        discrete: [
+          {
+            fillColor: config.colors.white,
+            seriesIndex: 0,
+            dataPointIndex: 7,
+            strokeColor: config.colors.warning,
+            strokeWidth: 2,
+            size: 6,
+            radius: 8
+          }
+        ],
+        hover: {
+          size: 7
+        }
+      },
+      colors: [config.colors.warning],
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: shadeColor,
+          shadeIntensity: 0.6,
+          opacityFrom: 0.5,
+          opacityTo: 0.25,
+          stops: [0, 95, 100]
+        }
+      },
+      grid: {
+        borderColor: borderColor,
+        strokeDashArray: 3,
+        padding: {
+          top: -20,
+          bottom: -8,
+          left: -10,
+          right: 8
+        }
+      },
+      xaxis: {
+        categories: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        axisBorder: {
+          show: false
+        },
+        axisTicks: {
+          show: false
+        },
+        labels: {
+          show: true,
+          style: {
+            fontSize: '13px',
+            colors: axisColor
+          }
+        }
+      },
+      yaxis: {
+        labels: {
+          show: false
+        },
+        min: 0,
+        max: 20,
+        tickAmount: 4
+      }
+    };
+  if (typeof incomeChartEl2 !== undefined && incomeChartEl2 !== null) {
+    const incomeChart2 = new ApexCharts(incomeChartEl2, incomeChartConfig2);
+    incomeChart2.render();
   }
 
   // Expenses Mini Chart - Radial Chart

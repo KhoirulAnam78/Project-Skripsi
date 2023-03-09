@@ -59,7 +59,7 @@
                     <th>Nama Kelas</th>
                     <th>Tahun Akademik</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">

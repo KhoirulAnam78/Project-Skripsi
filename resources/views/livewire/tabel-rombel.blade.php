@@ -82,7 +82,7 @@
                     <th>No</th>
                     <th>NISN</th>
                     <th>Nama</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">

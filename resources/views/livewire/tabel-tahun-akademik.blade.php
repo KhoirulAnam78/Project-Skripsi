@@ -20,7 +20,7 @@
         </div>
     @endif
 
-    <div class="col-lg-4 col-md-4 mb-0 mx-3">
+    <div class="col-lg-4 col-md-4 mb-3 mx-3">
         <input type="text" wire:model="search" id="no_telp" class="form-control"
             placeholder="Cari berdasarkan nama tahun akademik" />
     </div>
@@ -33,7 +33,7 @@
                     <th>Tanggal Mulai</th>
                     <th>Tanggal Berakhir</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">

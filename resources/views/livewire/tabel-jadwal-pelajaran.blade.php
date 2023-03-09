@@ -52,14 +52,29 @@
         </div>
     </div>
     <div class="mx-3 my-2">
-        <a href="" data-bs-toggle="modal" data-bs-target="#inputModal"
+        @if ($allow !== false)
+            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal"
+                class="btn btn-primary active mb-2 {{ $allow === false ? 'disabled' : '' }}"><i
+                    class='bx bx-add-to-queue'></i> Tambah</a>
+            <a href="" class="btn btn-success active mb-2 {{ $allow === false ? 'disabled' : '' }}"
+                data-bs-toggle="modal" data-bs-target="#importModal"
+                style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
+                Import</a>
+        @else
+            <a href="" class="btn btn-primary active mb-2 disabled"><i class='bx bx-add-to-queue'></i> Tambah</a>
+            <a href="" class="btn btn-success active mb-2 disabled"
+                style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
+                Import</a>
+        @endif
+
+        {{-- <a href="" data-bs-toggle="modal" data-bs-target="#inputModal"
             class="btn btn-primary active mb-2 {{ ($filterTahunAkademik === '' or $filterKelas === '' or $allow === false) ? 'disabled' : '' }}"><i
                 class='bx bx-add-to-queue'></i> Tambah</a>
         <a href=""
             class="btn btn-success active mb-2 {{ ($filterTahunAkademik === '' or $filterKelas === '' or $allow === false) ? 'disabled' : '' }}"
             data-bs-toggle="modal" data-bs-target="#importModal"
             style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
-            Import</a>
+            Import</a> --}}
         <a class="btn btn-info mb-2 text-white {{ ($filterTahunAkademik === '' or $filterKelas === '') ? 'disabled' : '' }}"
             wire:click="export()" style="background-color: rgb(0, 143, 0);border-color: rgb(0, 143, 0)"><i
                 class='bx bxs-file-export'></i>
@@ -86,7 +101,7 @@
                     <th>Jam Pelajaran</th>
                     <th>Mata pelajaran</th>
                     <th>Guru</th>
-                    <th>Action</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">

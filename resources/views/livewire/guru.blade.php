@@ -36,7 +36,7 @@
             </div>
         </div>
     @endif
-    <div class="col-lg-3 col-md-3 mb-0 mx-3">
+    <div class="col-lg-3 col-md-3 mb-3 mx-3">
         <input type="text" wire:model="search" id="no_telp" class="form-control"
             placeholder="Cari berdasarkan nama guru" />
     </div>
@@ -51,7 +51,7 @@
                     <th>No Telp</th>
                     <th>Status</th>
                     <th>Pimpinan</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">

@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\TahunAkademik;
 use App\Exports\RekapSiswaExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -15,6 +16,8 @@ class RekapSiswa extends Component
     public $tanggalAwal, $tanggalAkhir;
     public $search = '';
     public $siswa;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
     public function mount()
     {

@@ -33,7 +33,7 @@
         </div>
     @endif
     <div class="row justify-content-between">
-        <div class="col-lg-4 col-md-4 mb-0 mx-3">
+        <div class="col-lg-4 col-md-4 mb-3 mx-3">
             <label for="search" class="form-label">Pencarian</label>
             <input type="text" wire:model="search" id="search" class="form-control"
                 placeholder="Cari berdasarkan nama mata pelajaran" />
@@ -46,7 +46,7 @@
                 <tr>
                     <th>No</th>
                     <th>Nama Mata Pelajaran</th>
-                    <th>Actions</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">

@@ -117,13 +117,13 @@ class TabelRombel extends Component
                     }
                 }
                 $allow = true;
-                $addSiswa = Siswa::whereNotIn('id', $this->listSiswa)->where('nama', 'like', '%' . $this->search2 . '%')->where('status', 'aktif')->paginate(10);
+                $addSiswa = Siswa::whereNotIn('id', $this->listSiswa)->where('nama', 'like', '%' . $this->search2 . '%')->where('status', 'aktif')->orderBy('created_at')->paginate(5);
             } else {
                 $addSiswa = null;
                 $allow = false;
             }
             if ($this->filterKelas !== '') {
-                $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5);
+                $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->paginate(5);
             } else {
                 $siswa = [];
             }

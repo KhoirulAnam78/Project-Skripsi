@@ -30,7 +30,7 @@
                     <th>Jam Pelajaran</th>
                     <th>Mata pelajaran</th>
                     <th>Guru</th>
-                    <th>Action</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
