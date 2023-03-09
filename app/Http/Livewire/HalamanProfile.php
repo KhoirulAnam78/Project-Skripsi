@@ -29,7 +29,7 @@ class HalamanProfile extends Component
     {
         $this->user = User::find(Auth::user()->id);
         $this->username = $this->user->username;
-        if ($this->user->role === 'guru') {
+        if ($this->user->role === 'guru' or $this->user->role === 'pimpinan') {
             $this->no_telp = $this->user->guru->no_telp;
             $this->validation = [
                 'username' => 'required|unique:users,username,' . $this->user->id,
@@ -73,9 +73,14 @@ class HalamanProfile extends Component
         if ($this->user->role === 'guru') {
             Guru::where('user_id', $this->user->id)->update(['no_telp' => $this->no_telp]);
         }
+        if ($this->user->role === 'pimpinan') {
+            Guru::where('user_id', $this->user->id)->update(['no_telp' => $this->no_telp]);
+        }
         if ($this->user->role === 'siswa') {
             Siswa::where('user_id', $this->user->id)->update(['no_telp' => $this->no_telp]);
         }
+
+
 
         $this->empty();
         session()->flash('message', 'Data berhasil diubah !');
@@ -87,6 +92,13 @@ class HalamanProfile extends Component
         $this->user = User::find(Auth::user()->id);
         $this->username = $this->user->username;
         if ($this->user->role === 'guru') {
+            $this->no_telp = $this->user->guru->no_telp;
+            $this->validation = [
+                'username' => 'required|unique:users,username,' . $this->user->id,
+                'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
+            ];
+        }
+        if ($this->user->role === 'pimpinan') {
             $this->no_telp = $this->user->guru->no_telp;
             $this->validation = [
                 'username' => 'required|unique:users,username,' . $this->user->id,

@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <span class="fw-semibold d-block mb-1">Guru Aktif</span>
-                        <h3 class="card-title mb-2">60</h3>
+                        <h3 class="card-title mb-2">{{ $guruAktif }}</h3>
                     </div>
                 </div>
             </div>
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <span class="fw-semibold d-block mb-2">Siswa Aktif</span>
-                        <h3 class="card-title text-nowrap mb-2">200</h3>
+                        <h3 class="card-title text-nowrap mb-2">{{ $siswaAktif }}</h3>
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <span class="fw-semibold d-block mb-2">Kelas Aktif</span>
-                        <h3 class="card-title text-nowrap mb-2">24</h3>
+                        <h3 class="card-title text-nowrap mb-2">{{ $kelasAktif }}</h3>
                     </div>
                 </div>
             </div>
@@ -183,164 +183,19 @@
             </div> --}}
             <!--/ Total Revenue -->
         </div>
+        <livewire:persentase-dashboard />
         <div class="row">
-            <!-- Order Statistics -->
-            <div class="col-md-6 col-lg-6 col-xl-6 order-0 mb-4">
+            <div class="col-md-12 col-lg-12 col-xl-12 order-0 mb-2">
                 <div class="card h-100">
                     <div class="card-header d-flex align-items-center justify-content-between pb-0">
                         <div class="card-title mb-0">
-                            <h5 class="m-0 me-2">Persentase Pembelajaran</h5>
-                            <small class="text-muted"></small>
+                            <h5 class="m-0 me-2">Grafik</h5>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="d-flex flex-column align-items-center gap-1">
-                                <h2 class="mb-2">40</h2>
-                                <span>Total Pembelajaran</span>
-                            </div>
-                            <div id="orderStatisticsChart"></div>
-                        </div>
-                        <ul class="p-0 m-0">
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <span class="avatar-initial rounded bg-label-primary"><i
-                                            class="bx bx-mobile-alt"></i></span>
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Terlaksana</h6>
-                                        <small class="text-muted"></small>
-                                    </div>
-                                    <div class="user-progress">
-                                        <small class="fw-semibold">32</small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <span class="avatar-initial rounded bg-label-success"><i
-                                            class="bx bx-closet"></i></span>
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Tidak Terlaksana</h6>
-                                        <small class="text-muted"></small>
-                                    </div>
-                                    <div class="user-progress">
-                                        <small class="fw-semibold">8</small>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
-            <!--/ Order Statistics -->
-
-            <!-- Transactions -->
-            <div class="col-md-6 col-lg-6 order-2 mb-4">
-                <div class="card h-100">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <h5 class="card-title m-0 me-2">Persentase Kehadiran</h5>
-                    </div>
-                    <div class="card-body">
-                        <ul class="p-0 m-0">
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <img src="{{ url('') }}/assets/assets/img/icons/unicons/paypal.png" alt="User"
-                                        class="rounded" />
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Hadir</h6>
-                                    </div>
-                                    <div class="user-progress d-flex align-items-center gap-1">
-                                        <h6 class="mb-0">75</h6>
-                                        <span class="text-muted">%</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <img src="{{ url('') }}/assets/assets/img/icons/unicons/wallet.png"
-                                        alt="User" class="rounded" />
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Izin</h6>
-                                    </div>
-                                    <div class="user-progress d-flex align-items-center gap-1">
-                                        <h6 class="mb-0">5</h6>
-                                        <span class="text-muted">%</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <img src="{{ url('') }}/assets/assets/img/icons/unicons/chart.png"
-                                        alt="User" class="rounded" />
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Sakit</h6>
-                                    </div>
-                                    <div class="user-progress d-flex align-items-center gap-1">
-                                        <h6 class="mb-0">10</h6>
-                                        <span class="text-muted">%</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <img src="{{ url('') }}/assets/assets/img/icons/unicons/cc-success.png"
-                                        alt="User" class="rounded" />
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Alfa</h6>
-                                    </div>
-                                    <div class="user-progress d-flex align-items-center gap-1">
-                                        <h6 class="mb-0">0</h6>
-                                        <span class="text-muted">%</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="d-flex mb-4 pb-1">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <img src="{{ url('') }}/assets/assets/img/icons/unicons/wallet.png"
-                                        alt="User" class="rounded" />
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Dinas Dalam</h6>
-                                    </div>
-                                    <div class="user-progress d-flex align-items-center gap-1">
-                                        <h6 class="mb-0">5</h6>
-                                        <span class="text-muted">%</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="d-flex">
-                                <div class="avatar flex-shrink-0 me-3">
-                                    <img src="{{ url('') }}/assets/assets/img/icons/unicons/cc-warning.png"
-                                        alt="User" class="rounded" />
-                                </div>
-                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                    <div class="me-2">
-                                        <h6 class="mb-0">Dinas Luar</h6>
-                                    </div>
-                                    <div class="user-progress d-flex align-items-center gap-1">
-                                        <h6 class="mb-0">5</h6>
-                                        <span class="text-muted">%</span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!--/ Transactions -->
         </div>
         <div class="row">
             <div class="col-md-6 col-lg-6 order-1 mb-4">
@@ -348,7 +203,7 @@
                     <div class="card-header d-flex align-items-center justify-content-between pb-0">
                         <div class="card-title mb-0">
                             <h5 class="m-0 me-2">Grafik Pembelajaran Tidak Terlaksana</h5>
-                            <small class="text-muted"></small>
+                            <small class="text-muted">Pembelajaran yang digantikan guru piket</small>
                         </div>
                     </div>
                     <div class="card-body px-0">
@@ -365,7 +220,7 @@
                     <div class="card-header d-flex align-items-center justify-content-between pb-0">
                         <div class="card-title mb-0">
                             <h5 class="m-0 me-2">Grafik Siswa Tidak Hadir</h5>
-                            <small class="text-muted"></small>
+                            <small class="text-muted">(Sakit,Izin,Alfa,Dinas Dalam, Dinas Luar)</small>
                         </div>
                     </div>
                     <div class="card-body px-0">

@@ -25,7 +25,7 @@
                             <div class="table-responsive text-nowrap">
                                 <table class="table table-striped">
                                     <tbody class="table-border-bottom-0">
-                                        @if ($user->role === 'guru')
+                                        @if ($user->role === 'guru' or $user->role === 'pimpinan')
                                             <tr>
                                                 <td>Username</td>
                                                 <td>: {{ $user->username }}</td>

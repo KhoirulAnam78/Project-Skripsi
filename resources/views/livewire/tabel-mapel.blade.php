@@ -1,7 +1,9 @@
 <div>
     <div class="mx-3">
-        <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "><i
-                class='bx bx-add-to-queue'></i> Tambah</a>
+        @can('admin')
+            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "><i
+                    class='bx bx-add-to-queue'></i> Tambah</a>
+        @endcan
         <a href="" class="btn btn-success active mb-2" data-bs-toggle="modal" data-bs-target="#importModal"
             style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
             Import</a>
@@ -46,7 +48,9 @@
                 <tr>
                     <th>No</th>
                     <th>Nama Mata Pelajaran</th>
-                    <th>Aksi</th>
+                    @can('admin')
+                        <th>Aksi</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -59,22 +63,24 @@
                         <tr>
                             <td>{{ ($mapel->currentpage() - 1) * $mapel->perpage() + $loop->index + 1 }}</td>
                             <td>{{ $m->nama }}</td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" wire:click="edit({{ $m->id }})"><i
-                                                class="bx bx-edit-alt me-1"></i>
-                                            Edit</a>
-                                        <a class="dropdown-item" wire:click="deleteConfirmation({{ $m->id }})"><i
-                                                class="bx bx-trash me-1"></i>
-                                            Delete</a>
+                            @can('admin')
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" wire:click="edit({{ $m->id }})"><i
+                                                    class="bx bx-edit-alt me-1"></i>
+                                                Edit</a>
+                                            <a class="dropdown-item" wire:click="deleteConfirmation({{ $m->id }})"><i
+                                                    class="bx bx-trash me-1"></i>
+                                                Delete</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
+                            @endcan
                         </tr>
                     @endforeach
                 @endif

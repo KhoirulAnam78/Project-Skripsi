@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guru;
 use App\Models\Siswa;
 use App\Models\TahunAkademik;
 use App\Models\JadwalPelajaran;
@@ -25,7 +26,10 @@ class DashboardController extends Controller
             ]);
         } else if (Auth::user()->role === 'admin') {
             return view('pages.admin.dashboard', [
-                'title' => 'Dashboard'
+                'title' => 'Dashboard',
+                'siswaAktif' => Siswa::where('status', 'aktif')->select('id')->count(),
+                'guruAktif' => Guru::where('status', 'aktif')->select('id')->count(),
+                'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count()
             ]);
         } else if (Auth::user()->role === 'guru') {
             $kelasAktif = [];
@@ -46,8 +50,11 @@ class DashboardController extends Controller
                 'jadwal' => $jadwal
             ]);
         } else if (Auth::user()->role === 'pimpinan') {
-            return view('pages.pimpinan.dashboard', [
-                'title' => 'Dashboard'
+            return view('pages.admin.dashboard', [
+                'title' => 'Dashboard',
+                'siswaAktif' => Siswa::where('status', 'aktif')->select('id')->count(),
+                'guruAktif' => Guru::where('status', 'aktif')->select('id')->count(),
+                'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count()
             ]);
         } else {
             return abort(403, 'Anda tidak memiliki akses kehalaman ini.');

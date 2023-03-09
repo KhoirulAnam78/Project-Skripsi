@@ -22,6 +22,8 @@
                                 echo Auth::user()->guru->nama;
                             } elseif (Auth::user()->role === 'siswa') {
                                 echo Auth::user()->siswa->nama;
+                            } elseif (Auth::user()->role === 'pimpinan') {
+                                echo Auth::user()->guru->nama;
                             } else {
                                 echo 'User';
                             }
@@ -67,6 +69,28 @@
                     {{-- <li>
                         <div class="dropdown-divider"></div>
                     </li> --}}
+                    @if (Auth::user()->role === 'guru')
+                        @if (Auth::user()->guru->pimpinan === 1)
+                            <li>
+                                <a class="dropdown-item" href="/login-pimpinan">
+                                    <i class="bx bx-power-off me-2"></i>
+                                    <span class="align-middle">Login Pimpinan</span>
+                                </a>
+                            </li>
+                        @endif
+                    @endif
+                    @if (Auth::user()->role === 'pimpinan')
+                        @if (Auth::user()->guru->pimpinan === 1)
+                            <li>
+                                <a class="dropdown-item" href="/login-guru">
+                                    <i class="bx bx-power-off me-2"></i>
+                                    <span class="align-middle">Login Guru</span>
+                                </a>
+                            </li>
+                        @endif
+                    @endif
+
+
                     <li>
                         <a class="dropdown-item" href="/logout">
                             <i class="bx bx-power-off me-2"></i>

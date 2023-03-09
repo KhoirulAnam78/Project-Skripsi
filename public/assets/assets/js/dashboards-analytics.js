@@ -494,7 +494,7 @@
     incomeChartConfig = {
       series: [
         {
-          data: [0, 10, 5, 20, 6, 3, 1, 0]
+          data: [0, 10, 5, 20, 6, 3, 1, 0,2,0,0,2]
         }
       ],
       chart: {
@@ -558,7 +558,7 @@
         }
       },
       xaxis: {
-        categories: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        categories: ['', 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul','Agu','Sep','Nov','Des'],
         axisBorder: {
           show: false
         },

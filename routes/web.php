@@ -8,6 +8,7 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TahunAkademikController;
 use App\Http\Controllers\JadwalGuruPiketController;
 use App\Http\Controllers\JadwalPelajaranController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\MonitoringPembelajaranController;
 use App\Http\Controllers\RombelController;
@@ -95,3 +96,7 @@ Route::get('/jadwal-mengajar', [GuruController::class, 'jadwal'])->middleware('a
 
 //HALAMAN PROFILE
 Route::get('/profile', [DashboardController::class, 'profile'])->middleware('auth');
+
+//LOGIN PIMPINAN + GURU
+Route::get('/login-guru', [LoginController::class, 'loginGuru'])->middleware('auth');
+Route::get('/login-pimpinan', [LoginController::class, 'loginPimpinan'])->middleware('auth');

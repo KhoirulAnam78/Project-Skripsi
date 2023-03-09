@@ -14,6 +14,7 @@ class MataPelajaranController extends Controller
     if (Auth::user()->role === 'siswa') {
       return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
     }
+    $this->authorize('adpim');
     return view('pages.admin.mapel', [
       'title' => 'Mata Pelajaran'
     ]);

@@ -27,11 +27,13 @@
         </div>
     @endif
     <div class="mx-3 my-2">
-        <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2"><i
-                class='bx bx-add-to-queue'></i> Tambah</a>
-        <a href="" class="btn btn-success active mb-2" data-bs-toggle="modal" data-bs-target="#importModal"
-            style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
-            Import</a>
+        @can('admin')
+            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2"><i
+                    class='bx bx-add-to-queue'></i> Tambah</a>
+            <a href="" class="btn btn-success active mb-2" data-bs-toggle="modal" data-bs-target="#importModal"
+                style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
+                Import</a>
+        @endcan
         <a class="btn btn-info mb-2 text-white" wire:click="export()"
             style="background-color: rgb(0, 143, 0);border-color: rgb(0, 143, 0)"><i class='bx bxs-file-export'></i>
             Export</a>
@@ -50,7 +52,9 @@
                     <th>Kode Guru</th>
                     <th>Hari</th>
                     <th>Jam Piket</th>
-                    <th>Aksi</th>
+                    @can('admin')
+                        <th>Aksi</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -71,23 +75,25 @@
                                     {{ substr($k->waktu_mulai, 0, -3) . '-' . substr($k->waktu_berakhir, 0, -3) }}
                                 </td>
                                 </td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                            data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" wire:click="edit({{ $k->id }})"><i
-                                                    class="bx bx-edit-alt me-1"></i>
-                                                Edit</a>
-                                            <a class="dropdown-item"
-                                                wire:click="deleteConfirmation({{ $k->id }})"><i
-                                                    class="bx bx-trash me-1"></i>
-                                                Delete</a>
+                                @can('admin')
+                                    <td>
+                                        <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                data-bs-toggle="dropdown">
+                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" wire:click="edit({{ $k->id }})"><i
+                                                        class="bx bx-edit-alt me-1"></i>
+                                                    Edit</a>
+                                                <a class="dropdown-item"
+                                                    wire:click="deleteConfirmation({{ $k->id }})"><i
+                                                        class="bx bx-trash me-1"></i>
+                                                    Delete</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
+                                @endcan
                             </tr>
                         @endforeach
                     @endforeach

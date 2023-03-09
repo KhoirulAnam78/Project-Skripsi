@@ -16,11 +16,12 @@
         </div>
     @endif
 
-
-    <div class="mx-3 my-2">
-        <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2"><i
-                class='bx bx-add-to-queue'></i> Tambah</a>
-    </div>
+    @can('admin')
+        <div class="mx-3 my-2">
+            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2"><i
+                    class='bx bx-add-to-queue'></i> Tambah</a>
+        </div>
+    @endcan
     <div class="table-responsive text-nowrap mx-3 mb-3">
         <table class="table table-striped" id="examplei">
             <thead>
@@ -30,7 +31,9 @@
                     <th>Jam Pelajaran</th>
                     <th>Mata pelajaran</th>
                     <th>Guru</th>
-                    <th>Aksi</th>
+                    @can('admin')
+                        <th>Aksi</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -47,22 +50,24 @@
                             <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
                             <td>{{ $j->jadwalPelajaran->mataPelajaran->nama }}</td>
                             <td>{{ $j->jadwalPelajaran->guru->nama }}</td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" wire:click="edit({{ $j->id }})"><i
-                                                class="bx bx-edit-alt me-1"></i>
-                                            Edit</a>
-                                        <a class="dropdown-item" wire:click="deleteConfirmation({{ $j->id }})"><i
-                                                class="bx bx-trash me-1"></i>
-                                            Delete</a>
+                            @can('admin')
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" wire:click="edit({{ $j->id }})"><i
+                                                    class="bx bx-edit-alt me-1"></i>
+                                                Edit</a>
+                                            <a class="dropdown-item" wire:click="deleteConfirmation({{ $j->id }})"><i
+                                                    class="bx bx-trash me-1"></i>
+                                                Delete</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
+                            @endcan
                         </tr>
                     @endforeach
                 @endif

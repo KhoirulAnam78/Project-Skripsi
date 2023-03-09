@@ -1,10 +1,12 @@
 <div>
     <div class="mx-3">
-        <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "><i
-                class='bx bx-add-to-queue'></i> Tambah</a>
-        <a href="" class="btn btn-success active mb-2" data-bs-toggle="modal" data-bs-target="#importModal"
-            style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
-            Import</a>
+        @can('admin')
+            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "><i
+                    class='bx bx-add-to-queue'></i> Tambah</a>
+            <a href="" class="btn btn-success active mb-2" data-bs-toggle="modal" data-bs-target="#importModal"
+                style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
+                Import</a>
+        @endcan
         <a class="btn btn-info mb-2 text-white" wire:click="export()"
             style="background-color: rgb(0, 143, 0);border-color: rgb(0, 143, 0)"><i class='bx bxs-file-export'></i>
             Export</a>
@@ -51,7 +53,9 @@
                     <th>No Telp</th>
                     <th>Status</th>
                     <th>Pimpinan</th>
-                    <th>Aksi</th>
+                    @can('admin')
+                        <th>Aksi</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -81,32 +85,34 @@
                                     Ya
                                 @endif
                             </td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" wire:click="editGuru({{ $g->id }})"><i
-                                                class="bx bx-edit-alt me-1"></i>
-                                            Edit</a>
-                                        <a class="dropdown-item"
-                                            wire:click="deleteConfirmation({{ $g->id }})"><i
-                                                class="bx bx-trash me-1"></i>
-                                            Delete</a>
-                                        @if ($g->pimpinan == 0)
-                                            <a class="dropdown-item" wire:click="setPimpinan({{ $g->id }})"><i
-                                                    class="bx bxs-user-check"></i>
-                                                Set Pimpinan</a>
-                                        @else
-                                            <a class="dropdown-item" wire:click="setPimpinan({{ $g->id }})"><i
-                                                    class="bx bxs-user-x"></i>
-                                                Unset Pimpinan</a>
-                                        @endif
+                            @can('admin')
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" wire:click="editGuru({{ $g->id }})"><i
+                                                    class="bx bx-edit-alt me-1"></i>
+                                                Edit</a>
+                                            <a class="dropdown-item"
+                                                wire:click="deleteConfirmation({{ $g->id }})"><i
+                                                    class="bx bx-trash me-1"></i>
+                                                Delete</a>
+                                            @if ($g->pimpinan == 0)
+                                                <a class="dropdown-item" wire:click="setPimpinan({{ $g->id }})"><i
+                                                        class="bx bxs-user-check"></i>
+                                                    Set Pimpinan</a>
+                                            @else
+                                                <a class="dropdown-item" wire:click="setPimpinan({{ $g->id }})"><i
+                                                        class="bx bxs-user-x"></i>
+                                                    Unset Pimpinan</a>
+                                            @endif
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
+                            @endcan
                         </tr>
                     @endforeach
                 @endif

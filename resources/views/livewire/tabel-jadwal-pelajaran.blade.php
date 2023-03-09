@@ -52,29 +52,23 @@
         </div>
     </div>
     <div class="mx-3 my-2">
-        @if ($allow !== false)
-            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal"
-                class="btn btn-primary active mb-2 {{ $allow === false ? 'disabled' : '' }}"><i
-                    class='bx bx-add-to-queue'></i> Tambah</a>
-            <a href="" class="btn btn-success active mb-2 {{ $allow === false ? 'disabled' : '' }}"
-                data-bs-toggle="modal" data-bs-target="#importModal"
-                style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
-                Import</a>
-        @else
-            <a href="" class="btn btn-primary active mb-2 disabled"><i class='bx bx-add-to-queue'></i> Tambah</a>
-            <a href="" class="btn btn-success active mb-2 disabled"
-                style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
-                Import</a>
-        @endif
+        @can('admin')
+            @if ($allow !== false)
+                <a href="" data-bs-toggle="modal" data-bs-target="#inputModal"
+                    class="btn btn-primary active mb-2 {{ $allow === false ? 'disabled' : '' }}"><i
+                        class='bx bx-add-to-queue'></i> Tambah</a>
+                <a href="" class="btn btn-success active mb-2 {{ $allow === false ? 'disabled' : '' }}"
+                    data-bs-toggle="modal" data-bs-target="#importModal"
+                    style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
+                    Import</a>
+            @else
+                <a href="" class="btn btn-primary active mb-2 disabled"><i class='bx bx-add-to-queue'></i> Tambah</a>
+                <a href="" class="btn btn-success active mb-2 disabled"
+                    style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
+                    Import</a>
+            @endif
+        @endcan
 
-        {{-- <a href="" data-bs-toggle="modal" data-bs-target="#inputModal"
-            class="btn btn-primary active mb-2 {{ ($filterTahunAkademik === '' or $filterKelas === '' or $allow === false) ? 'disabled' : '' }}"><i
-                class='bx bx-add-to-queue'></i> Tambah</a>
-        <a href=""
-            class="btn btn-success active mb-2 {{ ($filterTahunAkademik === '' or $filterKelas === '' or $allow === false) ? 'disabled' : '' }}"
-            data-bs-toggle="modal" data-bs-target="#importModal"
-            style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
-            Import</a> --}}
         <a class="btn btn-info mb-2 text-white {{ ($filterTahunAkademik === '' or $filterKelas === '') ? 'disabled' : '' }}"
             wire:click="export()" style="background-color: rgb(0, 143, 0);border-color: rgb(0, 143, 0)"><i
                 class='bx bxs-file-export'></i>
@@ -101,7 +95,9 @@
                     <th>Jam Pelajaran</th>
                     <th>Mata pelajaran</th>
                     <th>Guru</th>
-                    <th>Aksi</th>
+                    @can('admin')
+                        <th>Aksi</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -118,23 +114,25 @@
                             <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
                             <td>{{ $j->mataPelajaran->nama }}</td>
                             <td>{{ $j->guru->nama }}</td>
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" wire:click="edit({{ $j->id }})"><i
-                                                class="bx bx-edit-alt me-1 {{ $allow === false ? 'disabled' : '' }}"></i>
-                                            Edit</a>
-                                        <a class="dropdown-item"
-                                            wire:click="deleteConfirmation({{ $j->id }})"><i
-                                                class="bx bx-trash me-1 {{ $allow === false ? 'disabled' : '' }}"></i>
-                                            Delete</a>
+                            @can('admin')
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" wire:click="edit({{ $j->id }})"><i
+                                                    class="bx bx-edit-alt me-1 {{ $allow === false ? 'disabled' : '' }}"></i>
+                                                Edit</a>
+                                            <a class="dropdown-item"
+                                                wire:click="deleteConfirmation({{ $j->id }})"><i
+                                                    class="bx bx-trash me-1 {{ $allow === false ? 'disabled' : '' }}"></i>
+                                                Delete</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
+                            @endcan
                         </tr>
                     @endforeach
                 @endif

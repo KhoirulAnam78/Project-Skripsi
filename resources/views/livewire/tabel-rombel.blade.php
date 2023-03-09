@@ -52,20 +52,23 @@
         </div>
     </div>
     <div class="mx-3 my-2">
-        @if ($allow !== false)
-            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal"
-                class="btn btn-primary active mb-2 {{ $allow === false ? 'disabled' : '' }}"><i
-                    class='bx bx-add-to-queue'></i> Tambah</a>
-            <a href="" class="btn btn-success active mb-2 {{ $allow === false ? 'disabled' : '' }}"
-                data-bs-toggle="modal" data-bs-target="#importModal"
-                style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
-                Import</a>
-        @else
-            <a href="" class="btn btn-primary active mb-2 disabled"><i class='bx bx-add-to-queue'></i> Tambah</a>
-            <a href="" class="btn btn-success active mb-2 disabled"
-                style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
-                Import</a>
-        @endif
+        @can('admin')
+
+            @if ($allow !== false)
+                <a href="" data-bs-toggle="modal" data-bs-target="#inputModal"
+                    class="btn btn-primary active mb-2 {{ $allow === false ? 'disabled' : '' }}"><i
+                        class='bx bx-add-to-queue'></i> Tambah</a>
+                <a href="" class="btn btn-success active mb-2 {{ $allow === false ? 'disabled' : '' }}"
+                    data-bs-toggle="modal" data-bs-target="#importModal"
+                    style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
+                    Import</a>
+            @else
+                <a href="" class="btn btn-primary active mb-2 disabled"><i class='bx bx-add-to-queue'></i> Tambah</a>
+                <a href="" class="btn btn-success active mb-2 disabled"
+                    style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
+                    Import</a>
+            @endif
+        @endcan
         <a class="btn btn-info mb-2 text-white" wire:click="export()"
             style="background-color: rgb(0, 143, 0);border-color: rgb(0, 143, 0)"><i class='bx bxs-file-export'></i>
             Export</a>
@@ -82,7 +85,9 @@
                     <th>No</th>
                     <th>NISN</th>
                     <th>Nama</th>
-                    <th>Aksi</th>
+                    @can('admin')
+                        <th>Aksi</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -96,17 +101,19 @@
                             <td>{{ ($siswa->currentpage() - 1) * $siswa->perpage() + $loop->index + 1 }}</td>
                             <td>{{ $s->nisn }}</td>
                             <td>{{ $s->nama }}</td>
-                            <td>
-                                @if ($allow === true)
-                                    <button class="btn btn-danger"
-                                        wire:click="deleteConfirmation({{ $s->id }})"><i
-                                            class="bx bx-trash me-1"></i>
-                                        Delete</button>
-                                @else
-                                    <button class="btn btn-danger disabled"><i class="bx bx-trash me-1"></i>
-                                        Delete</button>
-                                @endif
-                            </td>
+                            @can('admin')
+                                <td>
+                                    @if ($allow === true)
+                                        <button class="btn btn-danger"
+                                            wire:click="deleteConfirmation({{ $s->id }})"><i
+                                                class="bx bx-trash me-1"></i>
+                                            Delete</button>
+                                    @else
+                                        <button class="btn btn-danger disabled"><i class="bx bx-trash me-1"></i>
+                                            Delete</button>
+                                    @endif
+                                </td>
+                            @endcan
                         </tr>
                     @endforeach
                 @endif

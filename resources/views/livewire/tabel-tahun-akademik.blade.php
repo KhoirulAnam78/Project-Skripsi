@@ -1,8 +1,10 @@
 <div>
-    <div class="mx-3">
-        <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "><i
-                class='bx bx-add-to-queue'></i> Tambah</a>
-    </div>
+    @can('admin')
+        <div class="mx-3">
+            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "><i
+                    class='bx bx-add-to-queue'></i> Tambah</a>
+        </div>
+    @endcan
     @if (session()->has('message'))
         <div class="mb-2 mx-3">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -33,7 +35,9 @@
                     <th>Tanggal Mulai</th>
                     <th>Tanggal Berakhir</th>
                     <th>Status</th>
-                    <th>Aksi</th>
+                    @can('admin')
+                        <th>Aksi</th>
+                    @endcan
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -55,22 +59,25 @@
                                 @else
                                     <span class="badge bg-label-danger me-1">Tidak Aktif</span>
                                 @endif
-                            <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                        data-bs-toggle="dropdown">
-                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" wire:click="edit({{ $ta->id }})"><i
-                                                class="bx bx-edit-alt me-1"></i>
-                                            Edit</a>
-                                        <a class="dropdown-item" wire:click="deleteConfirmation({{ $ta->id }})"><i
-                                                class="bx bx-trash me-1"></i>
-                                            Delete</a>
+
+                                @can('admin')
+                                <td>
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" wire:click="edit({{ $ta->id }})"><i
+                                                    class="bx bx-edit-alt me-1"></i>
+                                                Edit</a>
+                                            <a class="dropdown-item" wire:click="deleteConfirmation({{ $ta->id }})"><i
+                                                    class="bx bx-trash me-1"></i>
+                                                Delete</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
+                            @endcan
                         </tr>
                     @endforeach
                 @endif
