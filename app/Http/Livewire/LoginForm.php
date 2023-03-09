@@ -44,7 +44,7 @@ class LoginForm extends Component
     {
         $validatedData = $this->validate();
         if (Auth::attempt($validatedData)) {
-            if (Auth::user()->role === 'guru' and Auth::user()->guru->pimpinan == 1) {
+            if (Auth::user()->role == 'guru' and Auth::user()->guru->pimpinan == 1) {
                 $this->dispatchBrowserEvent('role-modal');
             } else {
                 request()->session()->regenerate();

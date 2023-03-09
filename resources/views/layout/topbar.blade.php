@@ -16,13 +16,13 @@
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <span class="d-inline">
                         @php
-                            if (Auth::user()->role === 'admin') {
+                            if (Auth::user()->role == 'admin') {
                                 echo 'Administrator';
-                            } elseif (Auth::user()->role === 'guru') {
+                            } elseif (Auth::user()->role == 'guru') {
                                 echo Auth::user()->guru->nama;
-                            } elseif (Auth::user()->role === 'siswa') {
+                            } elseif (Auth::user()->role == 'siswa') {
                                 echo Auth::user()->siswa->nama;
-                            } elseif (Auth::user()->role === 'pimpinan') {
+                            } elseif (Auth::user()->role == 'pimpinan') {
                                 echo Auth::user()->guru->nama;
                             } else {
                                 echo 'User';
@@ -69,8 +69,8 @@
                     {{-- <li>
                         <div class="dropdown-divider"></div>
                     </li> --}}
-                    @if (Auth::user()->role === 'guru')
-                        @if (Auth::user()->guru->pimpinan === 1)
+                    @if (Auth::user()->role == 'guru')
+                        @if (Auth::user()->guru->pimpinan == 1)
                             <li>
                                 <a class="dropdown-item" href="/login-pimpinan">
                                     <i class="bx bx-power-off me-2"></i>
@@ -79,8 +79,8 @@
                             </li>
                         @endif
                     @endif
-                    @if (Auth::user()->role === 'pimpinan')
-                        @if (Auth::user()->guru->pimpinan === 1)
+                    @if (Auth::user()->role == 'pimpinan')
+                        @if (Auth::user()->guru->pimpinan == 1)
                             <li>
                                 <a class="dropdown-item" href="/login-guru">
                                     <i class="bx bx-power-off me-2"></i>
