@@ -23,7 +23,7 @@ class GuruApiController extends Controller
         $query->select('id', 'nama');
       }])->with(['mataPelajaran' => function ($query) {
         $query->select('id', 'nama');
-      }])->select('hari', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->get();
+      }])->select('id', 'hari', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->get();
       return response()->json([
         'message' => 'Fetch data success',
         'jadwal-mengajar' => $jadwal,
