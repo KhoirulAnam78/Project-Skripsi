@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\MataPelajaran;
 use App\Models\TahunAkademik;
 use App\Http\Controllers\Controller;
+use App\Models\JadwalGuruPiket;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -31,29 +32,39 @@ class AuthController extends Controller
                 'role' => auth('sanctum')->user()->role,
             ]);
         } else if ($user->role === 'guru') {
+            //Get Kelas AKtif Saat ini
             $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->all();
             foreach ($data as $d) {
                 array_push($this->kelasAktif, $d->id);
             }
+
+            //Ambil Data Mata Pelajaran Yang Diampu Guru
             $dataUser = Guru::where('user_id', auth('sanctum')->user()->id)->select('id', 'nama')->with(['jadwalPelajarans' => function ($query) {
                 $query->select('id', 'guru_id', 'mata_pelajaran_id')->whereIn('kelas_id', $this->kelasAktif)->with(['mataPelajaran' => function ($query) {
                     $query->select('id', 'nama');
                 }]);
             }])->first();
-            $user = ['nama' => $dataUser->nama];
-            $mapel = [];
             $dataMapel = $dataUser->jadwalPelajarans->groupBy('mata_pelajaran_id');
+            $mapel = [];
             foreach ($dataMapel as $key => $dm) {
                 $mataPelajaran = MataPelajaran::select('nama')->where('id', $key)->first();
-                array_push($mapel, $mataPelajaran->nama);
+                array_push($mapel, ['nama' => $mataPelajaran->nama]);
             }
+
+            //Get Nama Guru
+            $user = ['nama' => $dataUser->nama];
+
+            //Ambil Jadwal Piket
+            $jadwalPiket = JadwalGuruPiket::where('guru_id', $dataUser->id)->first();
+
             return response()->json([
                 'message' => 'Login success',
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
                 'user' => $user,
-                'mapel' => $mapel
+                'mapel' => $mapel,
+                'jadwalPiket' => $jadwalPiket
             ]);
         } else {
             return response()->json([
