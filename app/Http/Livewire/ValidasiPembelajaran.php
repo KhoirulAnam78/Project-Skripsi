@@ -271,4 +271,9 @@ class ValidasiPembelajaran extends Component
             'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10)
         ]);
     }
+
+    public function updatingFilterKelas()
+    {
+        $this->resetPage();
+    }
 }

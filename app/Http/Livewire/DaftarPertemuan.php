@@ -98,4 +98,13 @@ class DaftarPertemuan extends Component
             'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10)
         ]);
     }
+    public function updatingMapel()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingFilterKelas()
+    {
+        $this->resetPage();
+    }
 }

@@ -144,6 +144,11 @@ class TabelKelas extends Component
     {
         $this->resetPage();
     }
+    public function updatingFilter()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
         return view('livewire.tabel-kelas', [

@@ -141,6 +141,17 @@ class TabelRombel extends Component
         ]);
     }
 
+    public function updatingFilterTahunAkademik()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingFilterKelas()
+    {
+        $this->resetPage();
+    }
+
+
     public function updatingSearch()
     {
         $this->resetPage();

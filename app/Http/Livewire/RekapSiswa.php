@@ -42,4 +42,13 @@ class RekapSiswa extends Component
             }])->where('nama', 'like', '%' . $this->search . '%')->paginate(10)
         ]);
     }
+    public function updatingFilterTahunAkademik()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingFilterKelas()
+    {
+        $this->resetPage();
+    }
 }

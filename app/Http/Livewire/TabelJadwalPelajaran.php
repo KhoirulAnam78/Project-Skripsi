@@ -161,6 +161,22 @@ class TabelJadwalPelajaran extends Component
         $this->filterKelas = $this->kelas->first()->id;
     }
 
+    public function updatingFilterTahunAkademik()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingFilterKelas()
+    {
+        $this->resetPage();
+    }
+
+
+    public function updatingFilterHari()
+    {
+        $this->resetPage();
+    }
+
     public function updatedFile()
     {
         $this->validate([
@@ -222,10 +238,5 @@ class TabelJadwalPelajaran extends Component
             'guru' => Guru::where('status', 'aktif')->get()->all(),
             'tahun_akademik' => TahunAkademik::latest()->get()->all()
         ]);
-    }
-
-    public function updatingFilterHari()
-    {
-        $this->resetPage();
     }
 }
