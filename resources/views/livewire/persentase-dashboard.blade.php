@@ -62,7 +62,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
                         <div class="d-flex flex-column align-items-center gap-1">
                             <h2 class="mb-2">40</h2>
                             <span>Total Pembelajaran</span>
@@ -70,7 +70,7 @@
                         <div id="orderStatisticsChart"></div>
                     </div>
                     <ul class="p-0 m-0">
-                        <li class="d-flex mb-4 pb-1">
+                        <li class="d-flex mb-2 pb-1">
                             <div class="avatar flex-shrink-0 me-3">
                                 <span class="avatar-initial rounded bg-label-primary"><i
                                         class="bx bx-mobile-alt"></i></span>
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="d-flex mb-4 pb-1">
+                        <li class="d-flex mb-2 pb-1">
                             <div class="avatar flex-shrink-0 me-3">
                                 <span class="avatar-initial rounded bg-label-success"><i
                                         class="bx bx-closet"></i></span>
