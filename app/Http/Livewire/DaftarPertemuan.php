@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Kelas;
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\MataPelajaran;
 use App\Models\TahunAkademik;
 use App\Models\JadwalPelajaran;
@@ -15,6 +16,9 @@ use App\Models\MonitoringPembelajaran;
 
 class DaftarPertemuan extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $mapel;
     public $filterKelas = '';
     public $filterMapel = null;

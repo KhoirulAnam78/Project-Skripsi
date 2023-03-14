@@ -29,7 +29,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('aut
 
 Route::get('/', function () {
     return view('welcome', [
-        'title' => 'Halaman Awal'
+        'title' => 'Beranda'
     ]);
 });
 //AUTH
@@ -100,3 +100,10 @@ Route::get('/profile', [DashboardController::class, 'profile'])->middleware('aut
 //LOGIN PIMPINAN + GURU
 Route::get('/login-guru', [LoginController::class, 'loginGuru'])->middleware('auth');
 Route::get('/login-pimpinan', [LoginController::class, 'loginPimpinan'])->middleware('auth');
+
+//HALAMAN TANPA LOGIN
+Route::get('/monitoring', function () {
+    return view('monitoring', [
+        'title' => 'Monitoring Pembelajaran'
+    ]);
+});

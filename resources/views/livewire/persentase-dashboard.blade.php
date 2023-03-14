@@ -11,32 +11,31 @@
                 <div class="card-body">
                     <div class="row">
 
-                        <div class="col-lg-4 col-md-4">
+                        {{-- <div class="col-lg-4 col-md-4">
                             <label for="filterTahun" class="form-label">Tahun</label>
                             <select wire:model="filterTahun" id="filterTahun" class="form-select">
                                 <option value="2022">2022</option>
                                 <option value="2023">2023</option>
                                 <option value="2024">2024</option>
                             </select>
-                        </div>
+                        </div> --}}
+                        <input type="hidden" id="pembelajaranPerbulan"
+                            value="{{ json_encode($grafikJmlPembelajaran) }}">
+                        <input type="hidden" id="kehadiranPerbulan" value="{{ json_encode($grafikJmlTidakHadir) }}">
+                        <input type="hidden" id="jmlPembelajaran" value="{{ $pembelajaran->count() }}">
+                        <input type="hidden" id="terlaksana"
+                            value="{{ $pembelajaran->where('status_validasi', 'valid')->count() }}">
+                        <input type="hidden" id="tidakTerlaksana"
+                            value="{{ $pembelajaran->where('status_validasi', '!=', 'valid') }}">
                         <div class="col-lg-4 col-md-4">
                             <label for="filterBulan" class="form-label">Bulan</label>
                             <select wire:model="filterBulan" id="filterBulan" class="form-select">
-                                <option value="Januari">Januari</option>
-                                <option value="Februari">Februari</option>
-                                <option value="Maret">Maret</option>
-                                <option value="April">April</option>
-                                <option value="Mei">Mei</option>
-                                <option value="Juni">Juni</option>
-                                <option value="Juli">Juli</option>
-                                <option value="Agustus">Agustus</option>
-                                <option value="September">September</option>
-                                <option value="Oktober">Oktober</option>
-                                <option value="November">November</option>
-                                <option value="Desember">Desember</option>
+                                @foreach ($bulan as $b)
+                                    <option value="{{ $b['tanggal'] }}">{{ $b['bulan'] }}</option>
+                                @endforeach
                             </select>
                         </div>
-                        <div class="col-lg-4 col-md-4">
+                        {{-- <div class="col-lg-4 col-md-4">
                             <label for="minggu" class="form-label">Minggu</label>
                             <select wire:model="filterMinggu" id="minggu" class="form-select">
                                 <option value="">Semua</option>
@@ -45,7 +44,7 @@
                                 <option value="Ketiga">Ketiga</option>
                                 <option value="Keempat">Keempat</option>
                             </select>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -64,7 +63,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <div class="d-flex flex-column align-items-center gap-1">
-                            <h2 class="mb-2">40</h2>
+                            <h2 class="mb-2">{{ $pembelajaran->count() }}</h2>
                             <span>Total Pembelajaran</span>
                         </div>
                         <div id="orderStatisticsChart"></div>
@@ -81,7 +80,8 @@
                                     <small class="text-muted"></small>
                                 </div>
                                 <div class="user-progress">
-                                    <small class="fw-semibold">32</small>
+                                    <small
+                                        class="fw-semibold">{{ $pembelajaran->where('status_validasi', 'valid')->count() }}</small>
                                 </div>
                             </div>
                         </li>
@@ -96,7 +96,8 @@
                                     <small class="text-muted"></small>
                                 </div>
                                 <div class="user-progress">
-                                    <small class="fw-semibold">8</small>
+                                    <small
+                                        class="fw-semibold">{{ $pembelajaran->where('status_validasi', '!=', 'valid')->count() }}</small>
                                 </div>
                             </div>
                         </li>
@@ -116,16 +117,15 @@
                     <ul class="p-0 m-0">
                         <li class="d-flex mb-1">
                             <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/paypal.png" alt="User"
-                                    class="rounded" />
+                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/paypal.png"
+                                    alt="User" class="rounded" />
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                 <div class="me-2">
                                     <h6 class="mb-0">Hadir</h6>
                                 </div>
                                 <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">75</h6>
-                                    <span class="text-muted">%</span>
+                                    <h6 class="mb-0">{{ $presensi[0]['hadir'] }}</h6>
                                 </div>
                             </div>
                         </li>
@@ -139,23 +139,21 @@
                                     <h6 class="mb-0">Izin</h6>
                                 </div>
                                 <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">5</h6>
-                                    <span class="text-muted">%</span>
+                                    <h6 class="mb-0">{{ $presensi[0]['izin'] }}</h6>
                                 </div>
                             </div>
                         </li>
                         <li class="d-flex pb-1">
                             <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/chart.png"
-                                    alt="User" class="rounded" />
+                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/chart.png" alt="User"
+                                    class="rounded" />
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                 <div class="me-2">
                                     <h6 class="mb-0">Sakit</h6>
                                 </div>
                                 <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">10</h6>
-                                    <span class="text-muted">%</span>
+                                    <h6 class="mb-0">{{ $presensi[0]['sakit'] }}</h6>
                                 </div>
                             </div>
                         </li>
@@ -169,8 +167,7 @@
                                     <h6 class="mb-0">Alfa</h6>
                                 </div>
                                 <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">0</h6>
-                                    <span class="text-muted">%</span>
+                                    <h6 class="mb-0">{{ $presensi[0]['alfa'] }}</h6>
                                 </div>
                             </div>
                         </li>
@@ -184,8 +181,7 @@
                                     <h6 class="mb-0">Dinas Dalam</h6>
                                 </div>
                                 <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">5</h6>
-                                    <span class="text-muted">%</span>
+                                    <h6 class="mb-0">{{ $presensi[0]['dd'] }}</h6>
                                 </div>
                             </div>
                         </li>
@@ -199,8 +195,7 @@
                                     <h6 class="mb-0">Dinas Luar</h6>
                                 </div>
                                 <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">5</h6>
-                                    <span class="text-muted">%</span>
+                                    <h6 class="mb-0">{{ $presensi[0]['dl'] }}</h6>
                                 </div>
                             </div>
                         </li>
@@ -210,4 +205,11 @@
         </div>
         <!--/ Transactions -->
     </div>
+
+    {{-- <script>
+        var data = JSON.parse(document.getElementById("pembelajaranPerbulan").value);
+        console.log('Hallo');
+        console.log(data);
+    </script> --}}
+
 </div>
