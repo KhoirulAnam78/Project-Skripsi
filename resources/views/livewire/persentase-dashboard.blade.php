@@ -111,11 +111,11 @@
         <div class="col-sm-12 col-md-4 col-lg-4 order-2 mb-4">
             <div class="card h-100">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="card-title m-0 me-2">Persentase Kehadiran</h5>
+                    <h5 class="card-title m-0 me-2">Jumlah Ketidakhadiran</h5>
                 </div>
                 <div class="card-body">
                     <ul class="p-0 m-0">
-                        <li class="d-flex mb-1">
+                        {{-- <li class="d-flex mb-1">
                             <div class="avatar flex-shrink-0 me-3">
                                 <img src="{{ url('') }}/assets/assets/img/icons/unicons/paypal.png"
                                     alt="User" class="rounded" />
@@ -128,8 +128,8 @@
                                     <h6 class="mb-0">{{ $presensi[0]['hadir'] }}</h6>
                                 </div>
                             </div>
-                        </li>
-                        <li class="d-flex pb-1">
+                        </li> --}}
+                        <li class="d-flex pb-2">
                             <div class="avatar flex-shrink-0 me-3">
                                 <img src="{{ url('') }}/assets/assets/img/icons/unicons/wallet.png"
                                     alt="User" class="rounded" />
@@ -143,7 +143,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="d-flex pb-1">
+                        <li class="d-flex pb-2">
                             <div class="avatar flex-shrink-0 me-3">
                                 <img src="{{ url('') }}/assets/assets/img/icons/unicons/chart.png" alt="User"
                                     class="rounded" />
@@ -157,7 +157,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="d-flex pb-1">
+                        <li class="d-flex pb-2">
                             <div class="avatar flex-shrink-0 me-3">
                                 <img src="{{ url('') }}/assets/assets/img/icons/unicons/cc-success.png"
                                     alt="User" class="rounded" />
@@ -171,7 +171,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="d-flex pb-1">
+                        <li class="d-flex pb-2">
                             <div class="avatar flex-shrink-0 me-3">
                                 <img src="{{ url('') }}/assets/assets/img/icons/unicons/wallet.png"
                                     alt="User" class="rounded" />
@@ -185,7 +185,7 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="d-flex pb-1">
+                        <li class="d-flex pb-2">
                             <div class="avatar flex-shrink-0 me-3">
                                 <img src="{{ url('') }}/assets/assets/img/icons/unicons/cc-warning.png"
                                     alt="User" class="rounded" />
