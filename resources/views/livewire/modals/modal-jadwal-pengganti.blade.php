@@ -33,11 +33,14 @@
                             </select>
                         </div>
                         <div class="col mb-3">
-                            <label for="japel_id" class="form-label">Mata Pelajaran</label>
+                            <label for="japel_id" class="form-label">Jadwal Mata Pelajaran</label>
                             <select wire:model="japel_id" id="japel_id" class="form-select">
                                 @if (count($mapel) !== 0)
+
                                     @foreach ($mapel as $m)
-                                        <option value="{{ $m->id }}">{{ $m->mataPelajaran->nama }}</option>
+                                        <option value="{{ $m->id }}">
+                                            {{ $m->hari . ' => ' . $m->mataPelajaran->nama }}
+                                        </option>
                                     @endforeach
                                 @else
                                     <option selected>Tidak ada jadwal pelajaran</option>

@@ -36,14 +36,16 @@
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    @if (count($jadwal) === 0)
+                    @if (count($jadwal) === 0 and count($jadwalPengganti) === 0)
                         <tr>
                             <td colspan='9' align="center"><span>Tidak ada data</span></td>
                         </tr>
-                    @else
-                        @php
-                            $a = 0;
-                        @endphp
+                    @endif
+                    @php
+                        $a = 0;
+                    @endphp
+
+                    @if (count($jadwal) !== 0)
                         @foreach ($jadwal as $j)
                             <tr>
                                 <td>{{ ++$a }}
@@ -62,7 +64,7 @@
                                     </button>
                                     <button {{ count($j->monitoringPembelajarans) === 0 ? 'disabled' : '' }}
                                         @if (count($j->monitoringPembelajarans) !== 0) @if ($j->monitoringPembelajarans->first()->status_validasi === 'valid')
-                                        {{ 'disabled' }} @endif
+                                {{ 'disabled' }} @endif
                                         @endif wire:click="showValid({{ $j->id }})"
                                         class="btn btn-success"><i class='bx bx-check'></i>
                                     </button>
@@ -71,6 +73,10 @@
                                 </td>
                             </tr>
                         @endforeach
+                    @endif
+
+                    @if (count($jadwalPengganti) !== 0)
+
                         @foreach ($jadwalPengganti as $j)
                             <tr>
                                 <td>{{ ++$a }}
@@ -90,7 +96,7 @@
                                     <button
                                         {{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? 'disabled' : '' }}
                                         @if (count($j->jadwalPelajaran->monitoringPembelajarans) !== 0) @if ($j->jadwalPelajaran->monitoringPembelajarans->first()->status_validasi === 'valid')
-                                                {{ 'disabled' }} @endif
+                                        {{ 'disabled' }} @endif
                                         @endif
                                         class="btn btn-success"
                                         wire:click="showValid({{ $j->jadwal_pelajaran_id }})"><i
