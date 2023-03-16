@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Guru;
 use App\Models\Siswa;
 use App\Models\TahunAkademik;
+use App\Models\JadwalGuruPiket;
 use App\Models\JadwalPelajaran;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,9 +46,14 @@ class DashboardController extends Controller
             }])->with(['mataPelajaran' => function ($query) {
                 $query->select('id', 'nama');
             }])->paginate(10);
+
+            //Ambil Jadwal Piket
+            $jadwalPiket = JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()->hari;
+
             return view('pages.guru.dashboard', [
                 'title' => 'Dashboard',
-                'jadwal' => $jadwal
+                'jadwal' => $jadwal,
+                'jadwalPiket' => $jadwalPiket
             ]);
         } else if (Auth::user()->role === 'pimpinan') {
             return view('pages.admin.dashboard', [

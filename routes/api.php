@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GuruApiController;
+use App\Http\Controllers\Api\PresensiController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,4 +26,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/get-user', [AuthController::class, 'getUser']);
     Route::post('/get-jadwal', [GuruApiController::class, 'getJadwal']);
+    Route::post('/get-siswa', [PresensiController::class, 'getSiswa']);
 });

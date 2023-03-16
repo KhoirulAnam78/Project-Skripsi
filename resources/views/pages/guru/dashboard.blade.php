@@ -15,7 +15,8 @@
                         <div class="col-sm-8">
                             <div class="card-body">
                                 <h5 class="card-title text-primary">Selamat Datang Bapak/Ibu Guru
-                                    {{ Auth::user()->guru->nama }}</h5>
+                                    {{ Auth::user()->guru->nama }}
+                                </h5>
                                 <p>
                                     Sistem informasi monitoring merupakan sistem yang bertujuan untuk memantau kegiatan
                                     pembelajaran yang dilakukan siswa di SMAN Titian Teras H. Abdurrahman Sayoeti Jambi.
@@ -24,7 +25,9 @@
                                     dan
                                     melihat
                                     rekapitulasi keterlaksanaan
-                                    pembelajaran.</p>
+                                    pembelajaran.
+                                </p>
+                                <h5 class="card-title text-primary">Jadwal Piket : {{ $jadwalPiket }}
                             </div>
                         </div>
                         <div class="col-sm-4 text-center text-sm-left">
