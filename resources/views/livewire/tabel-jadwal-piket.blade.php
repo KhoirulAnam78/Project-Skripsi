@@ -64,16 +64,59 @@
                     </tr>
                 @else
                     @foreach ($jadwalPiket as $j)
-                        @foreach ($j->jadwalGuruPikets as $k)
-                            <tr>
-                                <td>{{ ($jadwalPiket->currentpage() - 1) * $jadwalPiket->perpage() + $loop->index + 1 }}
-                                </td>
-                                <td>{{ $j->nama }}</td>
-                                <td>{{ $j->kode_guru }}</td>
-                                <td>{{ $k->hari }}</td>
+                        {{-- <tr>
+                            <td>
+                                {{ ($jadwalPiket->currentpage() - 1) * $jadwalPiket->perpage() + $loop->index + 1 }}
+                            </td>
+                            <td>
+                                {{ $j->nama }}</td>
+                            <td>
+                                {{ $j->kode_guru }}</td>
+                            <td>{{ $j->jadwalGuruPikets->first()->hari }}</td>
+                            <td>
+                                {{ substr($j->jadwalGuruPikets->first()->waktu_mulai, 0, -3) . '-' . substr($j->jadwalGuruPikets->first()->waktu_berakhir, 0, -3) }}
+                            </td>
+                            @can('admin')
                                 <td>
-                                    {{ substr($k->waktu_mulai, 0, -3) . '-' . substr($k->waktu_berakhir, 0, -3) }}
+                                    <div class="dropdown">
+                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="dropdown">
+                                            <i class="bx bx-dots-vertical-rounded"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item"
+                                                wire:click="edit({{ $j->jadwalGuruPikets->first()->id }})"><i
+                                                    class="bx bx-edit-alt me-1"></i>
+                                                Edit</a>
+                                            <a class="dropdown-item"
+                                                wire:click="deleteConfirmation({{ $j->jadwalGuruPikets->first()->id }})"><i
+                                                    class="bx bx-trash me-1"></i>
+                                                Delete</a>
+                                        </div>
+                                    </div>
                                 </td>
+                            @endcan
+                        </tr> --}}
+
+                        @if (count($j->jadwalGuruPikets->groupBy('guru_id')) !== 0)
+                            @php
+                                $b = $j->jadwalGuruPikets->groupBy('guru_id')->first();
+                                $rowCount = count($j->jadwalGuruPikets->groupBy('guru_id'));
+                            @endphp
+                            <tr>
+                                <td
+                                    {{ count($j->jadwalGuruPikets->groupBy('guru_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
+                                    {{ ($jadwalPiket->currentpage() - 1) * $jadwalPiket->perpage() + $loop->index + 1 }}
+                                </td>
+                                <td
+                                    {{ count($j->jadwalGuruPikets->groupBy('guru_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
+                                    {{ $j->nama }}</td>
+                                <td
+                                    {{ count($j->jadwalGuruPikets->groupBy('guru_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
+                                    {{ $j->kode_guru }}</td>
+                                <td>{{ $b->first()->hari }}</td>
+                                <td>
+                                    {{ substr($b->first()->waktu_mulai, 0, -3) . '-' . substr($b->first()->waktu_berakhir, 0, -3) }}
                                 </td>
                                 @can('admin')
                                     <td>
@@ -83,19 +126,57 @@
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" wire:click="edit({{ $k->id }})"><i
+                                                <a class="dropdown-item" wire:click="edit({{ $b->first()->id }})"><i
                                                         class="bx bx-edit-alt me-1"></i>
                                                     Edit</a>
                                                 <a class="dropdown-item"
-                                                    wire:click="deleteConfirmation({{ $k->id }})"><i
+                                                    wire:click="deleteConfirmation({{ $b->first()->id }})"><i
                                                         class="bx bx-trash me-1"></i>
                                                     Delete</a>
                                             </div>
                                         </div>
                                     </td>
                                 @endcan
+
                             </tr>
-                        @endforeach
+                            @foreach ($j->jadwalGuruPikets->groupBy('guru_id') as $key => $b)
+                                @foreach ($b as $k)
+                                    @if ($loop->first)
+                                        @continue
+                                    @endif
+                                    {{-- @dump(count($b)) --}}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{ $k->hari }}</td>
+                                        <td>
+                                            {{ substr($k->waktu_mulai, 0, -3) . '-' . substr($k->waktu_berakhir, 0, -3) }}
+                                        </td>
+                                        @can('admin')
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+                                                        data-bs-toggle="dropdown">
+                                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" wire:click="edit({{ $k->id }})"><i
+                                                                class="bx bx-edit-alt me-1"></i>
+                                                            Edit</a>
+                                                        <a class="dropdown-item"
+                                                            wire:click="deleteConfirmation({{ $k->id }})"><i
+                                                                class="bx bx-trash me-1"></i>
+                                                            Delete</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        @endcan
+
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        @endif
                     @endforeach
                 @endif
 
