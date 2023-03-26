@@ -6,7 +6,7 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class PresensiController extends Controller
 {
@@ -25,5 +25,11 @@ class PresensiController extends Controller
                 'siswa' => $siswa,
             ]);
         }
+    }
+
+    public function presensiPembelajaran(Request $request)
+    {
+        $data = json_decode($request->presensi);
+        return $data[0]->id;
     }
 }

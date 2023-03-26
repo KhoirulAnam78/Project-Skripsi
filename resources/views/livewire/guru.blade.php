@@ -42,6 +42,12 @@
         <input type="text" wire:model="search" id="no_telp" class="form-control"
             placeholder="Cari berdasarkan nama guru" />
     </div>
+    <div class="col-lg-2 col-md-2 mx-3">
+        <div wire:loading.delay class="z-50 static flex fixed left-0 top-0 bottom-0 w-full bg-gray-400 bg-opacity-50">
+            <img src="https://paladins-draft.com/img/circle_loading.gif" width="50" height="50"
+                class="m-auto mt-1/4"> <span>Loading ...</span>
+        </div>
+    </div>
     <div class="table-responsive text-nowrap mx-3 mb-3">
         <table class="table table-striped" id="examplei">
             <thead>

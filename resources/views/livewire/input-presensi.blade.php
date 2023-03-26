@@ -15,6 +15,15 @@
             </div>
         </div>
     @endif
+    <div class="row mx-2">
+        <div class="col-lg-2 col-md-2">
+            <div wire:loading.delay
+                class="z-50 static flex fixed left-0 top-0 bottom-0 w-full bg-gray-400 bg-opacity-50">
+                <img src="https://paladins-draft.com/img/circle_loading.gif" width="50" height="50"
+                    class="m-auto mt-1/4"> <span>Loading ...</span>
+            </div>
+        </div>
+    </div>
     <div class="row mx-2 mb-3">
         <div class="col-lg-4 col-md-4">
             <label for="kelas_id" class="form-label">Kelas</label>
@@ -121,8 +130,8 @@
                                         id="presensiSakit" name="presensi.{{ $s->id }}" value='sakit'
                                         wire:model="presensi.{{ $s->id }}">
                                     S <span class="mx-1"></span>
-                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio" id="presensiAlfa"
-                                        name="presensi.{{ $s->id }}" value='alfa'
+                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
+                                        id="presensiAlfa" name="presensi.{{ $s->id }}" value='alfa'
                                         wire:model="presensi.{{ $s->id }}">
                                     A <span class="mx-1"></span>
                                     <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"

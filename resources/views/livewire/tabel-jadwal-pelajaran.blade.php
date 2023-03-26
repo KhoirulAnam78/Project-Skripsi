@@ -51,6 +51,12 @@
             </select>
         </div>
     </div>
+    <div class="col-lg-2 col-md-2 mx-3">
+        <div wire:loading.delay class="z-50 static flex fixed left-0 top-0 bottom-0 w-full bg-gray-400 bg-opacity-50">
+            <img src="https://paladins-draft.com/img/circle_loading.gif" width="50" height="50"
+                class="m-auto mt-1/4"> <span>Loading ...</span>
+        </div>
+    </div>
     <div class="mx-3 my-2">
         @can('admin')
             @if ($allow !== false)

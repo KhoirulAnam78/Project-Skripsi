@@ -40,7 +40,8 @@ class InputPresensi extends Component
         $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
 
         //mengambil semua data siswa berdasarkan kelas default
-        $this->student = Kelas::select('id')->where('id', $this->filterKelas)->first()->siswas->all();
+        $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+        // $this->student = Kelas::select('id')->where('id', $this->filterKelas)->first()->siswas->orderBy('nama', 'asc')->all();
 
         //set deafult presensi menjadi "hadir" untuk setiap siswa
         foreach ($this->student as $s) {
@@ -182,7 +183,9 @@ class InputPresensi extends Component
         }
 
         //ambil data siswa kelas yang dipilih
-        $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas->all();
+
+        $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+        // $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas->orderBy('nama', 'asc')->all();
 
         //set presensi menjadi hadir bagi setiap siswa
         $this->presensi = [];
@@ -364,7 +367,7 @@ class InputPresensi extends Component
         return view('livewire.input-presensi', [
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'mapel' => $this->mapel,
-            'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10),
+            'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->paginate(10),
             'jadwal_pengganti' => $this->mapelPengganti
         ]);
     }

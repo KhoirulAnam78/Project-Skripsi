@@ -39,7 +39,7 @@ class RekapSiswa extends Component
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'dataSiswa' => Siswa::whereRelation('kelas', 'kelas_id', $this->filterKelas)->with(['kehadiranPembelajarans' => function ($query) {
                 $query->whereRelation('monitoringPembelajaran', 'tanggal', '>=', $this->tanggalAwal)->whereRelation('monitoringPembelajaran', 'tanggal', '<=', $this->tanggalAkhir);
-            }])->where('nama', 'like', '%' . $this->search . '%')->paginate(10)
+            }])->where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(10)
         ]);
     }
     public function updatingFilterTahunAkademik()

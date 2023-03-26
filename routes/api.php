@@ -27,4 +27,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get-user', [AuthController::class, 'getUser']);
     Route::post('/get-jadwal', [GuruApiController::class, 'getJadwal']);
     Route::post('/get-siswa', [PresensiController::class, 'getSiswa']);
+    Route::post('/presensi-pembelajaran', [PresensiController::class, 'presensiPembelajaran']);
 });

@@ -123,7 +123,7 @@ class TabelRombel extends Component
                 $allow = false;
             }
             if ($this->filterKelas !== '') {
-                $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->paginate(5);
+                $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(5);
             } else {
                 $siswa = [];
             }
