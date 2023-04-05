@@ -38,7 +38,7 @@ class PresensiController extends Controller
             'waktu_mulai' => $request->jamDimulai,
             'waktu_berakhir' => $request->jamBerakhir,
             'topik' => $request->agendaBelajar,
-            'presensi' => json_decode($request->presensi),
+            'presensi' => $request->presensi,
             'jadwal_id' => $request->jadwalId
         ]);
     }
