@@ -53,7 +53,7 @@ class PresensiController extends Controller
             'waktu_mulai' => $request->jamDimulai,
             'waktu_berakhir' => $request->jamBerakhir,
             'status_validasi' => $status,
-            'jadwal_pelajaran_id' => $request->filterMapel,
+            'jadwal_pelajaran_id' => $request->jadwalId,
             'guru_piket_id' => $guruPiketId
         ]);
         foreach ($presensi as $value) {
