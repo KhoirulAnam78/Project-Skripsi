@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('nama', 50);
             $table->char('no_telp', 14);
             $table->enum('status', ['aktif', 'tidak aktif']);
+            $table->boolean('pimpinan')->default(false);
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });
