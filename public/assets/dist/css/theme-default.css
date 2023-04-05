@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body{
-  background-color: #DFF6FF;
+  background-color: #D0E0F9;
 }
 
 .layout-navbar-fixed .layout-wrapper:not(.layout-horizontal) .layout-page:before {
@@ -754,11 +754,11 @@ html:not(.layout-menu-collapsed) .bg-menu-theme .menu-inner .menu-item .menu-lin
   background-color: rgba(67, 89, 113, 0.04);
 }
 .bg-menu-theme .menu-inner .menu-sub > .menu-item.active .menu-icon {
-  color: #1363df;
+  color: #09316F;
 }
 .bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
-  color: #1363df;
-  background-color: rgba(71, 181, 255, 0.2)
+  color: #09316F;
+  background-color: #D0E0F9
   !important;
 }
 .bg-menu-theme .menu-inner > .menu-item.active:before {

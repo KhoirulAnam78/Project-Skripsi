@@ -29,7 +29,17 @@ class PresensiController extends Controller
 
     public function presensiPembelajaran(Request $request)
     {
-        $data = json_decode($request->presensi);
-        return $data[0]->id;
+
+        // $data = json_decode($request->presensi);
+        // return $data[0]->id;
+        return response()->json([
+            'message' => 'Data berhasil dikirim',
+            'tanggal' => $request->tanggal,
+            'waktu_mulai' => $request->jamDimulai,
+            'waktu_berakhir' => $request->jamBerakhir,
+            'topik' => $request->agendaBelajar,
+            'presensi' => json_decode($request->presensi),
+            'jadwal_id' => $request->jadwalId
+        ]);
     }
 }
