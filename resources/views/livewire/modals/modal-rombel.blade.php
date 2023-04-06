@@ -123,7 +123,7 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <a href="/download-template-rombel"class="btn btn-success active"><i
+                            <a href="/download-template-rombel"class="btn btn-primary active"><i
                                     class='bx bxs-download'></i>Download Template</a>
                         </div>
                     </div>

@@ -1,14 +1,14 @@
 <div>
     <div class="mx-3">
         @can('admin')
-            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "><i
-                    class='bx bx-add-to-queue'></i> Tambah</a>
+            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "
+                style="background-color : #1052BA;border-color: #1052BA"><i class='bx bx-add-to-queue'></i> Tambah</a>
             <a href="" class="btn btn-success active mb-2" data-bs-toggle="modal" data-bs-target="#importModal"
-                style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"><i class='bx bxs-file-import'></i>
+                style="background-color: #5CB85C;border-color: #5CB85C"><i class='bx bxs-file-import'></i>
                 Import</a>
         @endcan
         <a class="btn btn-info mb-2 text-white" wire:click="export()"
-            style="background-color: rgb(0, 143, 0);border-color: rgb(0, 143, 0)"><i class='bx bxs-file-export'></i>
+            style="background-color: #F0AD4E;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
             Export</a>
     </div>
     @if (session()->has('message'))
