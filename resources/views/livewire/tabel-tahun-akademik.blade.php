@@ -1,8 +1,8 @@
 <div>
     @can('admin')
         <div class="mx-3">
-            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "><i
-                    class='bx bx-add-to-queue'></i> Tambah</a>
+            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "
+                style="background-color : #1052BA;border-color: #1052BA"><i class='bx bx-add-to-queue'></i> Tambah</a>
         </div>
     @endcan
     @if (session()->has('message'))
