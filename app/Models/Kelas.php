@@ -21,7 +21,7 @@ class Kelas extends Model
 
     public function waliAsramas()
     {
-        return $this->belongsToMany(WaliAsrama::class);
+        return $this->hasMany(WaliAsrama::class);
     }
 
     public function jadwalPelajarans()

@@ -16,6 +16,6 @@ class WaliAsrama extends Model
 
     public function kelas()
     {
-        return $this->belongsToMany(Kelas::class);
+        return $this->belongsTo(Kelas::class);
     }
 }

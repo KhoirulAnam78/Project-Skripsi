@@ -19,6 +19,7 @@ return new class extends Migration
             $table->char('no_telp', 14);
             $table->enum('status', ['aktif', 'tidak aktif']);
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('kelas_id')->constrained('kelas');
             $table->timestamps();
         });
     }
