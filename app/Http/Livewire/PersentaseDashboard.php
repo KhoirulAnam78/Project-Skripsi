@@ -36,7 +36,9 @@ class PersentaseDashboard extends Component
         $period   = new DatePeriod($start, $interval, $end);
 
         foreach ($period as $dt) {
-            $bulan = strftime('%B %Y', strtotime($dt->format('d-m-Y')));
+            $carbon = \Carbon\Carbon::createFromFormat('d-m-Y', $dt->format('d-m-Y'));
+            // $bulan = strftime('%B %Y', strtotime($dt->format('d-m-Y')));
+            $bulan = $carbon->translatedFormat('F Y');
             $tanggal = $dt->format('d-m-Y');
 
             array_push($this->bulan, ['bulan' => $bulan, 'tanggal' => $tanggal,]);
@@ -55,8 +57,7 @@ class PersentaseDashboard extends Component
         }
 
         // dd($this->grafikJmlTidakHadir);
-
-        $this->filterBulan = $this->bulan[2]['tanggal'];
+        $this->filterBulan = "02-" . \Carbon\Carbon::now()->translatedFormat('m-Y');
 
 
         //Ambil Jumlah Pembelajaran Terlaksana dan tidak terlaksana
