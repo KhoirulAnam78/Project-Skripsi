@@ -111,7 +111,8 @@
                                     @if ($s->status_validasi === 'valid')
                                         <span class="badge bg-label-info me-1">Valid</span>
                                     @else
-                                        <span class="badge bg-label-danger me-1">Tidak Valid</span>
+                                        <span
+                                            class="badge bg-label-danger me-1">{{ ucfirst($s->status_validasi) }}</span>
                                     @endif
                                 </td>
                                 <td>{{ $s->guru_piket_id === null ? 'Admin' : $s->guru->nama }}</td>
