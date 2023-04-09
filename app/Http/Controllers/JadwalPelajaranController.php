@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Response;
 use App\Models\JadwalPelajaran;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreJadwalPelajaranRequest;
@@ -35,13 +36,13 @@ class JadwalPelajaranController extends Controller
             'title' => 'Jadwal Pengganti'
         ]);
     }
-    // public function download()
-    // {
-    //     $file = public_path() . '/assets/template-excel/Data Jadwal Piket Guru.xlsx';
-    //     $headers = array(
-    //         'Content-Type: application/xlsx',
-    //     );
+    public function download()
+    {
+        $file = public_path() . '/assets/template-excel/Data Jadwal Pelajaran.xlsx';
+        $headers = array(
+            'Content-Type: application/xlsx',
+        );
 
-    //     return Response::download($file, 'Template Import Data Jadwal Piket Guru.xlsx', $headers);
-    // }
+        return Response::download($file, 'Template Import Data Jadwal Pelajaran.xlsx', $headers);
+    }
 }
