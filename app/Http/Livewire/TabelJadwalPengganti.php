@@ -19,7 +19,8 @@ class TabelJadwalPengganti extends Component
     public function mount()
     {
         $this->filterKelas = TahunAkademik::where('status', 'aktif')->first()->kelas->first()->id;
-        $this->mapel = JadwalPelajaran::with('mataPelajaran')->with('guru')->where('kelas_id', $this->filterKelas)->get()->all();
+        $this->mapel = JadwalPelajaran::with('mataPelajaran')->with('guru')->where('kelas_id', $this->filterKelas)->orderBy('hari', 'asc')->get()->all();
+        // dd($this->mapel);
         $this->japel_id = $this->mapel[0]->id;
     }
     public function rules()
@@ -142,7 +143,7 @@ class TabelJadwalPengganti extends Component
 
     public function render()
     {
-        $this->mapel = JadwalPelajaran::with('mataPelajaran')->with('guru')->where('kelas_id', $this->filterKelas)->get()->all();
+        $this->mapel = JadwalPelajaran::with('mataPelajaran')->with('guru')->where('kelas_id', $this->filterKelas)->orderBy('hari', 'asc')->get()->all();
         return view('livewire.tabel-jadwal-pengganti', [
             'jadwalPengganti' => JadwalPengganti::latest()->paginate(10),
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
