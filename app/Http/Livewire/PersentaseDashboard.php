@@ -45,10 +45,12 @@ class PersentaseDashboard extends Component
         }
         //Ambil Bulan Tahun dan jumlah Pembelajaran tidak terlaksana
         foreach ($this->bulan as $b) {
-            $tgl = new DateTime($b['tanggal']);
-            $monitoring = MonitoringPembelajaran::whereMonth('tanggal', $tgl->format('m'))->whereYear('tanggal', '=', $tgl->format('Y'))->select('id', 'tanggal')->get();
+            $carbon = \Carbon\Carbon::createFromFormat('d-m-Y', $b['tanggal']);
+            // $bulan = strftime('%B %Y', strtotime($dt->format('d-m-Y')));
+            // $tgl = new DateTime($b['tanggal']);
+            $monitoring = MonitoringPembelajaran::whereMonth('tanggal', $carbon->translatedFormat('m'))->whereYear('tanggal', '=', $carbon->translatedFormat('Y'))->select('id', 'tanggal')->get();
             $jml = $monitoring->count();
-            array_push($this->grafikJmlPembelajaran, ['bulan' => $tgl->format('F Y'), 'jml' => $jml]);
+            array_push($this->grafikJmlPembelajaran, ['bulan' => $carbon->translatedFormat('F Y'), 'jml' => $jml]);
             $tidakHadir = 0;
             foreach ($monitoring as $m) {
                 $tidakHadir = $tidakHadir + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $m->id)->where('status', '!=', 'hadir')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
