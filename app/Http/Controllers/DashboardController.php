@@ -28,7 +28,7 @@ class DashboardController extends Controller
         } else if (Auth::user()->role === 'admin') {
             return view('pages.admin.dashboard', [
                 'title' => 'Dashboard',
-                'siswaAktif' => Siswa::where('status', 'aktif')->select('id')->count(),
+                'siswaAktif' => Siswa::where('status', 'belum lulus')->select('id')->count(),
                 'guruAktif' => Guru::where('status', 'aktif')->select('id')->count(),
                 'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count()
             ]);
@@ -58,7 +58,7 @@ class DashboardController extends Controller
         } else if (Auth::user()->role === 'pimpinan') {
             return view('pages.admin.dashboard', [
                 'title' => 'Dashboard',
-                'siswaAktif' => Siswa::where('status', 'aktif')->select('id')->count(),
+                'siswaAktif' => Siswa::where('status', 'belum lulus')->select('id')->count(),
                 'guruAktif' => Guru::where('status', 'aktif')->select('id')->count(),
                 'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count()
             ]);
