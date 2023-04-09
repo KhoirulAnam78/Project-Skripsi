@@ -26,7 +26,7 @@ class TabelRombel extends Component
     public $rombel_delete_id;
     public $file, $search = '', $search2 = '';
     public $filterKelas = '', $filterTahunAkademik = '', $kelas = null;
-    public $listSiswa;
+    public $listSiswa, $setSiswa;
     public $selectedSiswa = [];
     //Rules Validation
     protected $rules = [
@@ -117,13 +117,16 @@ class TabelRombel extends Component
                     }
                 }
                 $allow = true;
-                $addSiswa = Siswa::whereNotIn('id', $this->listSiswa)->where('nama', 'like', '%' . $this->search2 . '%')->where('status', 'aktif')->orderBy('created_at')->paginate(5);
+                $addSiswa = Siswa::whereNotIn('id', $this->listSiswa)->where('nama', 'like', '%' . $this->search2 . '%')->where('status', 'belum lulus')->orderBy('created_at')->paginate(5);
             } else {
                 $addSiswa = null;
                 $allow = false;
             }
             if ($this->filterKelas !== '') {
-                $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(5);
+                $data = Kelas::where('id', $this->filterKelas)->first()->siswas()->where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc');
+
+                $this->setSiswa = $data->select('siswa_id')->get()->all();
+                $siswa = $data->paginate(5);
             } else {
                 $siswa = [];
             }
@@ -131,7 +134,9 @@ class TabelRombel extends Component
             $siswa = [];
             $allow = false;
             $addSiswa = null;
+            $this->setSiswa = $siswa;
         }
+
 
         return view('livewire.tabel-rombel', [
             'siswa' => $siswa,
@@ -141,7 +146,22 @@ class TabelRombel extends Component
         ]);
     }
 
+    public function setLulus()
+    {
+        foreach ($this->setSiswa as $s) {
+            Siswa::where('id', $s['siswa_id'])->update(['status' => 'lulus']);
+        }
+
+        session()->flash('message', 'Siswa berhasil diubah statusnya menjadi lulus');
+        $this->dispatchBrowserEvent('close-modal-lulus');
+    }
+
     public function updatingFilterTahunAkademik()
+    {
+        $this->resetPage();
+    }
+
+    public function pageReset()
     {
         $this->resetPage();
     }

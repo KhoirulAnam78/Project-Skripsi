@@ -41,8 +41,8 @@
                             <label for="status" class="form-label">Status</label>
                             <select name="status" wire:model.defer="status" id="status" class="form-select">
                                 <option value="">Status</option>
-                                <option value="aktif">Aktif</option>
-                                <option value="tidak aktif">Tidak Aktif</option>
+                                <option value="belum lulus">Belum Lulus</option>
+                                <option value="lulus">Lulus</option>
                             </select>
                             @error('status')
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
@@ -139,8 +139,8 @@
                             <label for="status" class="form-label">Status</label>
                             <select name="status" wire:model.defer="status" id="status" class="form-select">
                                 <option value="">Status</option>
-                                <option value="aktif">Aktif</option>
-                                <option value="tidak aktif">Tidak Aktif</option>
+                                <option value="belum lulus">Belum Lulus</option>
+                                <option value="lulus">Lulus</option>
                             </select>
                             @error('status')
                                 <span class="error" style="font-size:12px; font-style:italic">*

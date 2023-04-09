@@ -50,7 +50,7 @@
                             @enderror
                         </div>
                     </div>
-                    <span style="font-size:12px; font-style:italic">Nore : Apabila status diisi aktif maka tahun
+                    <span style="font-size:12px; font-style:italic">Note : Apabila status diisi aktif maka tahun
                         akademik yang aktif saat ini akan dinonaktifkan !</span>
                 </div>
                 <div class="modal-footer">

@@ -81,12 +81,9 @@
                             <td>{{ $g->nama }}</td>
                             <td>{{ $g->no_telp }}</td>
                             <td>
-                                @if ($g->status === 'aktif')
-                                    <span class="badge bg-label-info me-1">Aktif</span>
-                                @else
-                                    <span class="badge bg-label-danger me-1">Tidak Aktif</span>
-                                @endif
-                                @can('admin')
+                                <span class="badge bg-label-info me-1">{{ $g->status }}</span>
+                            </td>
+                            @can('admin')
                                 <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -97,7 +94,8 @@
                                             <a class="dropdown-item" wire:click="editSiswa({{ $g->id }})"><i
                                                     class="bx bx-edit-alt me-1"></i>
                                                 Edit</a>
-                                            <a class="dropdown-item" wire:click="deleteConfirmation({{ $g->id }})"><i
+                                            <a class="dropdown-item"
+                                                wire:click="deleteConfirmation({{ $g->id }})"><i
                                                     class="bx bx-trash me-1"></i>
                                                 Delete</a>
                                         </div>
