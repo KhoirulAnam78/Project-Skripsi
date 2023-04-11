@@ -14,14 +14,14 @@ class Kelas extends Model
         return $this->belongsTo(TahunAkademik::class);
     }
 
+    public function angkatan()
+    {
+        return $this->belongsTo(Angkatan::class);
+    }
+
     public function siswas()
     {
         return $this->belongsToMany(Siswa::class);
-    }
-
-    public function waliAsramas()
-    {
-        return $this->hasMany(WaliAsrama::class);
     }
 
     public function jadwalPelajarans()

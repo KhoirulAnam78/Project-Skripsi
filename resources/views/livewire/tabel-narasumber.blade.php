@@ -27,15 +27,6 @@
             </div>
         </div>
     @endif
-    @if (session()->has('errorDuplikasi'))
-        <div class="mb-2 mx-3">
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('errorDuplikasi') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
-    @endif
-
 
     @if (session()->has('importError'))
         <div class="mb-2 mx-3">
@@ -47,20 +38,14 @@
             </div>
         </div>
     @endif
-    <div class="row justify-content-between">
-        <div class="col-lg-4 col-md-4 mb-3 mx-3">
-            <label for="search" class="form-label">Pencarian</label>
-            <input type="text" wire:model="search" id="search" class="form-control"
-                placeholder="Cari berdasarkan nama siswa" />
-        </div>
+    <div class="col-lg-4 col-md-4 mb-3 mx-3">
+        <input type="text" wire:model="search" id="no_telp" class="form-control"
+            placeholder="Cari berdasarkan nama narasumber" />
     </div>
-    <div class="row">
-        <div class="col-lg-2 col-md-2 mx-3">
-            <div wire:loading.delay
-                class="z-50 static flex fixed left-0 top-0 bottom-0 w-full bg-gray-400 bg-opacity-50">
-                <img src="https://paladins-draft.com/img/circle_loading.gif" width="50" height="50"
-                    class="m-auto mt-1/4"> <span>Loading ...</span>
-            </div>
+    <div class="col-lg-2 col-md-2 mx-3">
+        <div wire:loading.delay class="z-50 static flex fixed left-0 top-0 bottom-0 w-full bg-gray-400 bg-opacity-50">
+            <img src="https://paladins-draft.com/img/circle_loading.gif" width="50" height="50"
+                class="m-auto mt-1/4"> <span>Loading ...</span>
         </div>
     </div>
     <div class="table-responsive text-nowrap mx-3 mb-3">
@@ -68,28 +53,26 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>NISN</th>
                     <th>Nama</th>
-                    <th>Status</th>
+                    <th>No Telp</th>
+                    <th>Instansi</th>
                     @can('admin')
                         <th>Aksi</th>
                     @endcan
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-                @if (count($siswa) === 0)
+                @if (count($narasumber) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
                     </tr>
                 @else
-                    @foreach ($siswa as $g)
+                    @foreach ($narasumber as $n)
                         <tr>
-                            <td>{{ ($siswa->currentpage() - 1) * $siswa->perpage() + $loop->index + 1 }}</td>
-                            <td>{{ $g->nisn }}</td>
-                            <td>{{ $g->nama }}</td>
-                            <td>
-                                <span class="badge bg-label-info me-1">{{ $g->status }}</span>
-                            </td>
+                            <td>{{ ($narasumber->currentpage() - 1) * $narasumber->perpage() + $loop->index + 1 }}</td>
+                            <td>{{ $n->nama }}</td>
+                            <td>{{ $n->no_telp }}</td>
+                            <td>{{ $n->instansi }}</td>
                             @can('admin')
                                 <td>
                                     <div class="dropdown">
@@ -98,11 +81,10 @@
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" wire:click="editSiswa({{ $g->id }})"><i
+                                            <a class="dropdown-item" wire:click="editNarasumber({{ $n->id }})"><i
                                                     class="bx bx-edit-alt me-1"></i>
                                                 Edit</a>
-                                            <a class="dropdown-item"
-                                                wire:click="deleteConfirmation({{ $g->id }})"><i
+                                            <a class="dropdown-item" wire:click="deleteConfirmation({{ $n->id }})"><i
                                                     class="bx bx-trash me-1"></i>
                                                 Delete</a>
                                         </div>
@@ -116,11 +98,10 @@
             </tbody>
 
         </table>
-        @if (count($siswa) !== 0)
-            {{ $siswa->links() }}
-        @endif
+
+        {{ $narasumber->links() }}
     </div>
-    @include('livewire.modals.modal-siswa')
+    @include('livewire.modals.modal-narasumber')
     <script>
         window.addEventListener('close-modal', event => {
             $('#inputModal').modal('hide');

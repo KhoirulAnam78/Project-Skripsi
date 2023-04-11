@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Kelas;
 use Livewire\Component;
+use App\Models\Angkatan;
 use App\Exports\ExportKelas;
 use App\Imports\KelasImport;
 use Livewire\WithPagination;
@@ -18,6 +19,7 @@ class TabelKelas extends Component
     protected $paginationTheme = 'bootstrap';
     //Inisialisasi Variable
     public $nama, $tahun_akademik_id, $kelas_edit_id, $kelas_delete_id, $search = '', $compositeUnique;
+    public $angkatan_id;
     public $file, $filter = '';
     //Rules Validation
 
@@ -34,6 +36,7 @@ class TabelKelas extends Component
                 [
                     'file' => 'required|mimes:xlsx,xls',
                     'nama' => 'required|unique:kelas,nama,' . $this->kelas_edit_id . ',id,tahun_akademik_id,' . $this->tahun_akademik_id,
+                    'angkatan_id' => 'required'
                     // 'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
                 ];
         } else {
@@ -41,6 +44,7 @@ class TabelKelas extends Component
                 [
                     'file' => 'required|mimes:xlsx,xls',
                     'nama' => 'required|unique:kelas,nama,NULL,id,tahun_akademik_id,' . $this->tahun_akademik_id,
+                    'angkatan_id' => 'required'
                     // 'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
                 ];
         }
@@ -52,6 +56,7 @@ class TabelKelas extends Component
     {
         $this->nama = null;
         $this->file = null;
+        $this->angkatan_id = null;
         $this->kelas_delete_id = null;
         $this->resetErrorBag();
         $this->resetValidation();
@@ -60,6 +65,7 @@ class TabelKelas extends Component
     //Custom Errror messages for validation
     protected $messages = [
         'nama.required' => 'Nama kelas wajib diisi !',
+        'angkatan_id.required' => 'Angkatan wajib diisi !',
         'nama.unique' => 'Nama kelas pada tahun akademik ini sudah ada !',
         // 'tahun_akademik_id.required' => 'Tahun akademik wajib diisi !',
         // 'tahun_akademik_id.unique' => '',
@@ -78,11 +84,13 @@ class TabelKelas extends Component
     {
         $this->validate([
             'nama' => 'required|unique:kelas,nama,NULL,id,tahun_akademik_id,' . $this->tahun_akademik_id,
+            'angkatan_id' => 'required',
             // 'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,NULL,id,nama,' . $this->nama
         ]);
         Kelas::create([
             'nama' => $this->nama,
             'tahun_akademik_id' => $this->tahun_akademik_id,
+            'angkatan_id' => $this->angkatan_id
         ]);
         session()->flash('message', 'Data berhasil ditambahkan !');
         $this->empty();
@@ -96,6 +104,7 @@ class TabelKelas extends Component
         $this->tahun_akademik_id = $kelas->tahun_akademik_id;
         // dd($this->tahun_akademik_id);
         $this->nama = $kelas->nama;
+        $this->angkatan_id = $kelas->angkatan_id;
         $this->kelas_edit_id = $id;
         $this->dispatchBrowserEvent('show-edit-modal');
     }
@@ -105,11 +114,13 @@ class TabelKelas extends Component
     {
         $this->validate([
             'nama' => 'required|unique:kelas,nama,' . $this->kelas_edit_id . ',id,tahun_akademik_id,' . $this->tahun_akademik_id,
+            'angkatan_id' => 'required',
             // 'tahun_akademik_id' => 'required|unique:kelas,tahun_akademik_id,' . $this->kelas_edit_id . ',id,nama,' . $this->nama
         ]);
         Kelas::where('id', $this->kelas_edit_id)->update([
             'nama' => $this->nama,
             'tahun_akademik_id' => $this->tahun_akademik_id,
+            'angkatan_id' => $this->angkatan_id
         ]);
         session()->flash('message', 'Data berhasil diedit !');
         $this->empty();
@@ -153,7 +164,9 @@ class TabelKelas extends Component
     {
         return view('livewire.tabel-kelas', [
             'kelas' => Kelas::where('nama', 'like', '%' . $this->search . '%')->where('tahun_akademik_id', $this->filter)->latest()->paginate(5),
-            'tahun_akademik' => TahunAkademik::latest()->get()->all()
+            'tahun_akademik' => TahunAkademik::latest()->get()->all(),
+            'angkatan' => Angkatan::where('status', 'belum lulus')->get()->all()
+
         ]);
     }
 

@@ -21,7 +21,8 @@ class GuruSeeder extends Seeder
             'nama' => 'Khoirul Anam',
             'no_telp' => '0857887872427',
             'status' => 'aktif',
-            'user_id' => 1
+            'pimpinan' => true,
+            'user_id' => 2
         ]);
     }
 }

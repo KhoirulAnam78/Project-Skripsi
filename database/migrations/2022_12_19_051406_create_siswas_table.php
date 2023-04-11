@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->char('nisn', 10);
             $table->string('nama', 50);
-            $table->char('no_telp', 14);
             $table->enum('status', ['belum lulus', 'lulus']);
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();

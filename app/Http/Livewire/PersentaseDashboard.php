@@ -32,8 +32,10 @@ class PersentaseDashboard extends Component
         // dd($start->modify('first monday')->format('d-m-Y'));
         $end      = new DateTime($akademikAktif->tgl_berakhir);
 
-        $interval = DateInterval::createFromDateString('1 month');
+        // $interval = DateInterval::createFromDateString('1 month');
+        $interval = new DateInterval('P1M');
         $period   = new DatePeriod($start, $interval, $end);
+        // dd($period);
 
         foreach ($period as $dt) {
             $carbon = \Carbon\Carbon::createFromFormat('d-m-Y', $dt->format('d-m-Y'));
@@ -43,6 +45,13 @@ class PersentaseDashboard extends Component
 
             array_push($this->bulan, ['bulan' => $bulan, 'tanggal' => $tanggal,]);
         }
+        $carbon = \Carbon\Carbon::createFromFormat('d-m-Y', $end->format('d-m-Y'));
+        // $bulan = strftime('%B %Y', strtotime($dt->format('d-m-Y')));
+        $bulan = $carbon->translatedFormat('F Y');
+        $tanggal = $dt->format('d-m-Y');
+
+        array_push($this->bulan, ['bulan' => $bulan, 'tanggal' => $tanggal,]);
+
         //Ambil Bulan Tahun dan jumlah Pembelajaran tidak terlaksana
         foreach ($this->bulan as $b) {
             $carbon = \Carbon\Carbon::createFromFormat('d-m-Y', $b['tanggal']);

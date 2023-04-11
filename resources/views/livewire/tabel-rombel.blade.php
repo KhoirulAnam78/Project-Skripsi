@@ -85,21 +85,6 @@
         <input type="text" wire:model="search" id="search" class="form-control"
             placeholder="Cari berdasarkan nama siswa" />
     </div>
-    <div class="mx-3 my-3">
-
-        @can('admin')
-            @if ($allow !== false)
-                <a href="" class="btn btn-info active mb-2 {{ $allow === false ? 'disabled' : '' }}"
-                    wire:click="pageReset()" data-bs-toggle="modal" data-bs-target="#modalLulus"><i
-                        class='bx bxs-graduation'></i>
-                    Set Lulus</a>
-            @else
-                <a href="" class="btn btn-info active mb-2 disabled" data-bs-toggle="modal"
-                    data-bs-target="#modalLulus"><i class='bx bxs-graduation'></i>
-                    Set Lulus</a>
-            @endif
-        @endcan
-    </div>
     <div class="table-responsive text-nowrap mx-3 mb-3">
         <table class="table table-striped" id="examplei">
             <thead>

@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Siswa;
+use App\Models\Narasumber;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
-class ExportSiswa extends DefaultValueBinder implements FromCollection, WithMapping, WithHeadings, WithColumnFormatting, WithCustomValueBinder
+class NarasumberExport extends DefaultValueBinder implements FromCollection, WithMapping, WithHeadings, WithColumnFormatting, WithCustomValueBinder
 {
     public function columnFormats(): array
     {
@@ -38,21 +38,21 @@ class ExportSiswa extends DefaultValueBinder implements FromCollection, WithMapp
 
     public function collection()
     {
-        return Siswa::all();
+        return Narasumber::all();
     }
 
-    public function map($siswa): array
+    public function map($narasumber): array
     {
         return [
             //data yang dari kolom tabel database yang akan diambil
-            $siswa->nisn,
-            $siswa->nama,
-            $siswa->status,
+            $narasumber->nama,
+            $narasumber->no_telp,
+            $narasumber->instansi,
         ];
     }
 
     public function headings(): array
     {
-        return ['NISN', 'Nama Siswa', 'Status'];
+        return ['Nama', 'Nomor Telepon', 'Instansi'];
     }
 }

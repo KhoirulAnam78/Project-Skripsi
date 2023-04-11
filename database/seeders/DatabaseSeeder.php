@@ -24,24 +24,25 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         User::create([
-            'username' => 'guru',
-            'password' => bcrypt('1234'),
-            'role' => 'guru'
-        ]);
-        User::create([
-            'username' => 'siswa',
-            'password' => bcrypt('1234'),
-            'role' => 'siswa'
-        ]);
-        User::create([
             'username' => 'admin',
             'password' => bcrypt('monitoring2023'),
             'role' => 'admin'
+        ]);
+        User::create([
+            'username' => '123456789876543212',
+            'password' => bcrypt('123456789876543212'),
+            'role' => 'guru'
+        ]);
+        User::create([
+            'username' => '2052994922',
+            'password' => bcrypt('2052994922'),
+            'role' => 'siswa'
         ]);
         $this->call([
             GuruSeeder::class,
             SiswaSeeder::class,
             TahunAkademikSeeder::class,
+            AngkatanSeeder::class,
             KelasSeeder::class,
             MataPelajaranSeeder::class,
             JadwalPelajaranSeeder::class

@@ -18,7 +18,7 @@ class TabelSiswa extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     //Inisialisasi Variable
-    public $nisn, $nama, $status, $no_telp, $username, $password;
+    public $nisn, $nama, $status, $username, $password;
     public $siswa_edit_id, $siswa_delete_id;
     public $file, $search = '', $checkbox, $checkboxUname;
     // public $filter_kelas = '', $filter_tahun_akademik = '';
@@ -27,7 +27,6 @@ class TabelSiswa extends Component
         'file' => 'required|mimes:xlsx,xls',
         'nisn' => 'required|numeric|min_digits:10|max_digits:10|unique:siswas',
         'nama' => 'required',
-        'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
         'status' => 'required',
         'username' => 'required|unique:users',
         'password' => 'required|min:8'
@@ -40,7 +39,6 @@ class TabelSiswa extends Component
         $this->file = null;
         $this->nama = null;
         $this->status = null;
-        $this->no_telp = null;
         $this->username = null;
         $this->siswa_edit_id = null;
         $this->password = null;
@@ -58,9 +56,6 @@ class TabelSiswa extends Component
         'nisn.numeric' => 'NISN harus merupakan angka !',
         'nisn.unique' => 'NISN telah digunakan !',
         'nama.required' => 'Nama wajib diisi !',
-        'no_telp.required' => 'No Telp wajib diisi !',
-        'no_telp.max' => 'No Telp maksimal 14 karakter angka (numeric) !',
-        'no_telp.regex' => 'No Telp merupakan angka dan boleh menggunakan karakter + !',
         'status.required' => 'Status wajib diisi !',
         'username.required' => 'Username wajib diisi !',
         'username.unique' => 'Username telah digunakan !',
@@ -77,7 +72,6 @@ class TabelSiswa extends Component
             $this->rules = [
                 'nisn' => 'required|min_digits:10|max_digits:10|unique:siswas,nisn,' . $this->siswa_edit_id,
                 'nama' => 'required',
-                'no_telp' => 'required|max:14',
                 'status' => 'required',
                 'username' => 'required|unique:users',
                 // 'kelas_id' => 'required',
@@ -101,7 +95,6 @@ class TabelSiswa extends Component
         $this->validate([
             'nisn' => 'required|numeric|min_digits:10|max_digits:10|unique:siswas',
             'nama' => 'required',
-            'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             'status' => 'required',
             'username' => 'required|unique:users',
             'password' => 'required|min:8',
@@ -116,7 +109,6 @@ class TabelSiswa extends Component
             'nisn' => $this->nisn,
             'nama' => $this->nama,
             'status' => $this->status,
-            'no_telp' => $this->no_telp,
             'user_id' => $user->id,
         ]);
         // Rombel::create([
@@ -136,7 +128,6 @@ class TabelSiswa extends Component
         $this->nisn = $siswa->nisn;
         $this->nama = $siswa->nama;
         $this->status = $siswa->status;
-        $this->no_telp = $siswa->no_telp;
         // $this->username = $siswa->user->username;
         // $this->password = '';
         $this->dispatchBrowserEvent('show-edit-modal');
@@ -148,7 +139,6 @@ class TabelSiswa extends Component
         $this->validate([
             'nisn' => 'required|numeric|min_digits:10|max_digits:10|unique:siswas,nisn,' . $this->siswa_edit_id,
             'nama' => 'required',
-            'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             'status' => 'required',
         ]);
 
@@ -156,7 +146,6 @@ class TabelSiswa extends Component
             'nisn' => $this->nisn,
             'nama' => $this->nama,
             'status' => $this->status,
-            'no_telp' => $this->no_telp,
         ]);
 
         session()->flash('message', 'Data berhasil diedit !');
@@ -204,6 +193,9 @@ class TabelSiswa extends Component
             $failures = $e->failures();
             session()->flash('importError', $failures);
             $this->file = '';
+            $this->dispatchBrowserEvent('close-modal-import');
+        } catch (\Illuminate\Database\QueryException $ex) {
+            session()->flash('errorDuplikasi', 'Terdapat nisn yang sama pada file excel. Periksa kembali !');
             $this->dispatchBrowserEvent('close-modal-import');
         }
     }

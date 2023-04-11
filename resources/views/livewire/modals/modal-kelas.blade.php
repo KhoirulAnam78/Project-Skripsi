@@ -10,12 +10,26 @@
             </div>
             <form wire:submit.prevent="save">
                 <div class="modal-body">
-                    <div class="row">
+                    <div class="row g-2">
                         <div class="col mb-3">
                             <label for="nama" class="form-label">Nama</label>
                             <input type="text" id="nama" class="form-control" placeholder="Kelas X IPA 1"
                                 wire:model="nama" />
                             @error('nama')
+                                <span class="error" style="font-size:12px; font-style:italic">*
+                                    {{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col mb-0">
+                            <label for="angkatan_id" class="form-label">Angkatan</label>
+                            <select name="angkatan_id" wire:model.defer="angkatan_id" id="angkatan_id"
+                                class="form-select">
+                                <option value="">Pilih</option>
+                                @foreach ($angkatan as $a)
+                                    <option value="{{ $a->id }}">{{ $a->nama }}</option>
+                                @endforeach
+                            </select>
+                            @error('angkatan_id')
                                 <span class="error" style="font-size:12px; font-style:italic">*
                                     {{ $message }}</span>
                             @enderror
@@ -46,12 +60,26 @@
             </div>
             <form wire:submit.prevent="update">
                 <div class="modal-body">
-                    <div class="row">
+                    <div class="row g-2">
                         <div class="col mb-3">
                             <label for="nama" class="form-label">Nama</label>
                             <input type="text" id="nama" class="form-control" placeholder="Kelas X IPA 1"
                                 wire:model="nama" />
                             @error('nama')
+                                <span class="error" style="font-size:12px; font-style:italic">*
+                                    {{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="col mb-0">
+                            <label for="angkatan_id" class="form-label">Angkatan</label>
+                            <select name="angkatan_id" wire:model.defer="angkatan_id" id="angkatan_id"
+                                class="form-select">
+                                <option value="">Pilih</option>
+                                @foreach ($angkatan as $a)
+                                    <option value="{{ $a->id }}">{{ $a->nama }}</option>
+                                @endforeach
+                            </select>
+                            @error('angkatan_id')
                                 <span class="error" style="font-size:12px; font-style:italic">*
                                     {{ $message }}</span>
                             @enderror
@@ -87,7 +115,8 @@
                     untuk mempertahankan history data!</p>
             </div>
             <div class="modal-footer">
-                <button type="button" wire:click="empty()" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                <button type="button" wire:click="empty()" class="btn btn-outline-secondary"
+                    data-bs-dismiss="modal">
                     Close
                 </button>
                 <button type="submit" class="btn btn-danger" wire:click="deleteKelasData()">Delete</button>

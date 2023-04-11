@@ -34,7 +34,7 @@
         <!-- Layouts -->
         @can('admin')
             <li
-                class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran') ? 'active open' : '' }}">
+                class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran' or $title === 'Data Narasumber' or $title === 'Data Angkatan') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     {{-- <i class="menu-icon tf-icons bx bx-layout"></i> --}}
                     <i class='menu-icon tf-icons bx bx-data'></i>
@@ -52,6 +52,11 @@
                             <div data-i18n="Tahun Akademik">Tahun Akademik</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ $title === 'Data Angkatan' ? 'active' : '' }}">
+                        <a href="/data-angkatan" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Data Angkatan</div>
+                        </a>
+                    </li>
                     <li class="menu-item {{ $title === 'Data Kelas' ? 'active' : '' }}">
                         <a href="/kelas" class="menu-link">
                             <div data-i18n="Data Kelas">Data Kelas</div>
@@ -65,6 +70,21 @@
                     <li class="menu-item {{ $title === 'Mata Pelajaran' ? 'active' : '' }}">
                         <a href="/mata-pelajaran" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Mata Pelajaran</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Data Kegiatan' ? 'active' : '' }}">
+                        <a href="/data-kegiatan" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Data Kegiatan</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Data Wali Asrama' ? 'active' : '' }}">
+                        <a href="/data-wali-asrama" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Data Wali Asrama</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Data Narasumber' ? 'active' : '' }}">
+                        <a href="/data-narasumber" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Data Narasumber</div>
                         </a>
                     </li>
                 </ul>
@@ -165,7 +185,7 @@
 
         @can('pimpinan')
             <li
-                class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran') ? 'active open' : '' }}">
+                class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran' or $title === 'Data Narasumber' or $title === 'Data Angkatan') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     {{-- <i class="menu-icon tf-icons bx bx-layout"></i> --}}
                     <i class='menu-icon tf-icons bx bx-data'></i>
@@ -183,6 +203,12 @@
                             <div data-i18n="Tahun Akademik">Tahun Akademik</div>
                         </a>
                     </li>
+
+                    <li class="menu-item {{ $title === 'Data Angkatan' ? 'active' : '' }}">
+                        <a href="/data-angkatan" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Data Angkatan</div>
+                        </a>
+                    </li>
                     <li class="menu-item {{ $title === 'Data Kelas' ? 'active' : '' }}">
                         <a href="/kelas" class="menu-link">
                             <div data-i18n="Data Kelas">Data Kelas</div>
@@ -198,6 +224,22 @@
                             <div data-i18n="Mata Pelajaran">Mata Pelajaran</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ $title === 'Data Kegiatan' ? 'active' : '' }}">
+                        <a href="/data-kegiatan" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Data Kegiatan</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Data Wali Asrama' ? 'active' : '' }}">
+                        <a href="/data-wali-asrama" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Data Wali Asrama</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Data Narasumber' ? 'active' : '' }}">
+                        <a href="/data-narasumber" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Data Narasumber</div>
+                        </a>
+                    </li>
+
                 </ul>
             </li>
             <li class="menu-header small text-uppercase">

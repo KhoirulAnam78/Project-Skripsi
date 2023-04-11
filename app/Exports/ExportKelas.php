@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Kelas;
+use App\Models\Angkatan;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -25,6 +26,7 @@ class ExportKelas extends DefaultValueBinder implements FromCollection, WithMapp
     {
         return [
             'A' => NumberFormat::FORMAT_TEXT,
+            'B' => NumberFormat::FORMAT_TEXT,
         ];
     }
     public function bindValue(Cell $cell, $value)
@@ -50,14 +52,16 @@ class ExportKelas extends DefaultValueBinder implements FromCollection, WithMapp
 
     public function map($kelas): array
     {
+        $angkatan = Angkatan::where('id', $kelas->angkatan_id)->first()->nama;
         return [
             //data yang dari kolom tabel database yang akan diambil
             $kelas->nama,
+            $angkatan
         ];
     }
 
     public function headings(): array
     {
-        return ['Nama Kelas'];
+        return ['Nama Kelas', 'Angkatan'];
     }
 }

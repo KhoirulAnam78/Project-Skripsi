@@ -16,9 +16,9 @@ class TahunAkademikSeeder extends Seeder
     public function run()
     {
         TahunAkademik::create([
-            'nama' => 'Tahun Ajaran 2022/2023',
-            'tgl_mulai' => '2022-01-07',
-            'tgl_berakhir' => '2022-06-07',
+            'nama' => '2022/2023',
+            'tgl_mulai' => '2022-06-07',
+            'tgl_berakhir' => '2023-06-07',
             'status' => 'aktif'
         ]);
     }

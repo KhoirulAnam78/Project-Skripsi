@@ -4,21 +4,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title text-white" id="exampleModalLabel1">Tambah Data Siswa</h5>
+                <h5 class="modal-title text-white" id="exampleModalLabel1">Tambah Data Narasumber</h5>
                 <button type="button" class="btn-close" wire:click="empty()" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
             <form wire:submit.prevent="save">
                 <div class="modal-body">
-                    <div class="row g-2">
-                        <div class="col mb-0">
-                            <label for="nisn" class="form-label">NISN</label>
-                            <input type="text" wire:model="nisn" id="nisn" class="form-control"
-                                placeholder="1234567890" />
-                            @error('nisn')
-                                <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
-                            @enderror
-                        </div>
+                    <div class="row g-2 mb-3">
                         <div class="col mb-3">
                             <label for="nama" class="form-label">Nama</label>
                             <input type="text" id="nama" class="form-control" placeholder="Khoirul Anam"
@@ -27,48 +19,23 @@
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
-                    <div class="row g-2 mb-3">
                         <div class="col mb-0">
-                            <label for="status" class="form-label">Status</label>
-                            <select name="status" wire:model.defer="status" id="status" class="form-select">
-                                <option value="">Status</option>
-                                <option value="belum lulus">Belum Lulus</option>
-                                <option value="lulus">Lulus</option>
-                            </select>
-                            @error('status')
+                            <label for="no_telp" class="form-label">No Telp</label>
+                            <input type="text" wire:model="no_telp" id="no_telp" class="form-control"
+                                placeholder="08 atau +628" />
+                            @error('no_telp')
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
                             @enderror
                         </div>
+
                     </div>
-                    <div class="row g-2">
-                        <div class="col mb-0">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" wire:model="username" id="username" class="form-control"
-                                placeholder="khoirul1234" value="{{ $nisn }}" />
-                            <input class="form-check-input" type="checkbox" id='checkbox'
-                                {{ $checkboxUname === true ? 'checked' : '' }} wire:click="defaultUname()">
-                            <span style="font-size: 12px">Username Default</span>
-                            @error('username')
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="instansi" class="form-label">Instansi</label>
+                            <input type="text" id="instansi" class="form-control" placeholder=""
+                                wire:model="instansi" />
+                            @error('instansi')
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="col mb-0 form-password-toggle">
-                            <div class="d-flex justify-content-between">
-                                <label class="form-label" for="password">Password</label>
-                            </div>
-                            <div class="input-group input-group-merge">
-                                <input type="password" wire:model="password" class="form-control"
-                                    placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                    aria-describedby="password" />
-                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                            </div>
-                            <input class="form-check-input" type="checkbox" id='checkbox'
-                                {{ $checkbox === true ? 'checked' : '' }} wire:click="defaultPw()">
-                            <span style="font-size: 12px">Password Default</span>
-                            @error('password')
-                                <span class="error" style="font-size:12px; font-style:italic">*
-                                    {{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -97,35 +64,31 @@
             </div>
             <form wire:submit.prevent="update">
                 <div class="modal-body">
-                    <div class="row g-2">
-                        <div class="col mb-0">
-                            <label for="nisn" class="form-label">NISN</label>
-                            <input type="text" wire:model="nisn" id="nisn" class="form-control"
-                                placeholder="1234567890" />
-                            @error('nisn')
-                                <span class="error" style="font-size:12px; font-style:italic">*
-                                    {{ $message }}</span>
-                            @enderror
-                        </div>
+                    <div class="row g-2 mb-3">
                         <div class="col mb-3">
                             <label for="nama" class="form-label">Nama</label>
                             <input type="text" id="nama" class="form-control" placeholder="Khoirul Anam"
                                 wire:model="nama" />
                             @error('nama')
-                                <span class="error" style="font-size:12px; font-style:italic">*
-                                    {{ $message }}</span>
+                                <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
-                    <div class="row g-2 mb-3">
                         <div class="col mb-0">
-                            <label for="status" class="form-label">Status</label>
-                            <select name="status" wire:model.defer="status" id="status" class="form-select">
-                                <option value="">Status</option>
-                                <option value="belum lulus">Belum Lulus</option>
-                                <option value="lulus">Lulus</option>
-                            </select>
-                            @error('status')
+                            <label for="no_telp" class="form-label">No Telp</label>
+                            <input type="text" wire:model="no_telp" id="no_telp" class="form-control"
+                                placeholder="08 atau +628" />
+                            @error('no_telp')
+                                <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
+                            @enderror
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="instansi" class="form-label">Instansi</label>
+                            <input type="text" id="instansi" class="form-control" placeholder=""
+                                wire:model="instansi" />
+                            @error('instansi')
                                 <span class="error" style="font-size:12px; font-style:italic">*
                                     {{ $message }}</span>
                             @enderror
@@ -165,7 +128,7 @@
                     data-bs-dismiss="modal">
                     Close
                 </button>
-                <button type="submit" class="btn btn-danger" wire:click="deleteSiswaData()">Delete</button>
+                <button type="submit" class="btn btn-danger" wire:click="deleteNarasumberData()">Delete</button>
             </div>
         </div>
     </div>
@@ -203,8 +166,9 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <a href="/download-template-siswa"class="btn btn-primary"><i
-                                    class='bx bxs-download'></i>Download Template</a>
+                            <a href="/download-template-narasumber" class="btn btn-primary"><i
+                                    class='bx bxs-download'></i>Download
+                                Template</a>
                         </div>
                     </div>
                 </div>

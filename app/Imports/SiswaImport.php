@@ -26,10 +26,9 @@ class SiswaImport implements ToCollection, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            'nisn' => 'required|numeric|min_digits:10|max_digits:10|unique:siswas',
+            'nisn' => 'required|numeric|min_digits:10|max_digits:10|unique:siswas,nisn',
             'nama_siswa' => 'required',
-            'nomor_telepon' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
-            'status' => 'in:aktif,tidak aktif',
+            'status' => 'in:lulus,belum lulus',
         ];
     }
 
@@ -42,10 +41,7 @@ class SiswaImport implements ToCollection, WithHeadingRow, WithValidation
             'nisn.numeric' => 'NISN harus merupakan angka !',
             'nisn.unique' => 'NISN telah digunakan !',
             'nama_siswa.required' => 'Nama wajib diisi !',
-            'nomor_telepon.required' => 'No Telp wajib diisi !',
-            'nomor_telepon.max' => 'No Telp maksimal 14 karakter angka (numeric) !',
-            'nomor_telepon.regex' => 'No Telp merupakan angka dan boleh menggunakan karakter + !',
-            'status.in' => 'Status tidak diketahui (Harap isi dengan aktif/tidak aktif) !',
+            'status.in' => 'Status tidak diketahui (Harap isi dengan lulus/belum lulus) !',
         ];
     }
 
@@ -60,7 +56,6 @@ class SiswaImport implements ToCollection, WithHeadingRow, WithValidation
             Siswa::create([
                 'nisn' => $row['nisn'],
                 'nama' => $row['nama_siswa'],
-                'no_telp' => $row['nomor_telepon'],
                 'status' => $row['status'],
                 'user_id' => $user->id
             ]);

@@ -16,11 +16,10 @@ class SiswaSeeder extends Seeder
     public function run()
     {
         Siswa::create([
-            'nisn' => '1234567898',
+            'nisn' => '2052994922',
             'nama' => 'Anugrah Mukti',
-            'no_telp' => '085788787427',
-            'status' => 'aktif',
-            'user_id' => 2
+            'status' => 'belum lulus',
+            'user_id' => 3
         ]);
     }
 }

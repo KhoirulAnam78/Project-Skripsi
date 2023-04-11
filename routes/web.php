@@ -1,18 +1,20 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AngkatanController;
 use Illuminate\Support\Facades\Route;
+use App\Models\MonitoringPembelajaran;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\RombelController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NarasumberController;
+use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\TahunAkademikController;
 use App\Http\Controllers\JadwalGuruPiketController;
 use App\Http\Controllers\JadwalPelajaranController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\MonitoringPembelajaranController;
-use App\Http\Controllers\RombelController;
-use App\Models\MonitoringPembelajaran;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,14 +50,25 @@ Route::get('/logout', function () {
 //GURU
 Route::get('/data-guru', [GuruController::class, 'index'])->middleware('auth');
 Route::get('/download-template-guru', [GuruController::class, 'download'])->middleware('auth');
+
 //TAHUN AKADEMIK
 Route::get('/tahun-akademik', [TahunAkademikController::class, 'index'])->middleware('auth');
+
 //Data Kelas
 Route::get('/kelas', [KelasController::class, 'index'])->middleware('auth');
 Route::get('/download-template-kelas', [KelasController::class, 'download'])->middleware('auth');
+
+//Data Kelas
+Route::get('/data-angkatan', [AngkatanController::class, 'index'])->middleware('auth');
+
 //Data Siswa
 Route::get('/siswa', [SiswaController::class, 'index'])->middleware('auth');
 Route::get('/download-template-siswa', [SiswaController::class, 'download'])->middleware('auth');
+
+//Narasumber
+Route::get('/data-narasumber', [NarasumberController::class, 'index'])->middleware('auth');
+Route::get('/download-template-narasumber', [NarasumberController::class, 'download'])->middleware('auth');
+
 //DATA ROMBEL
 Route::get('/rombongan-belajar', [RombelController::class, 'index'])->middleware('auth');
 

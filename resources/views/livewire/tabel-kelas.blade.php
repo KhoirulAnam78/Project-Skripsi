@@ -69,6 +69,7 @@
                     <th>No</th>
                     <th>Nama Kelas</th>
                     <th>Tahun Akademik</th>
+                    <th>Angkatan</th>
                     <th>Status</th>
                     @can('admin')
                         <th>Aksi</th>
@@ -86,6 +87,7 @@
                             <td>{{ ($kelas->currentpage() - 1) * $kelas->perpage() + $loop->index + 1 }}</td>
                             <td>{{ $ta->nama }}</td>
                             <td>{{ $ta->tahunAkademik->nama }}</td>
+                            <td>{{ $ta->angkatan->nama }}</td>
                             <td>
                                 @if ($ta->tahunAkademik->status === 'aktif')
                                     <span class="badge bg-label-info me-1">Aktif</span>

@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Kelas;
+use App\Models\Angkatan;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class KelasSeeder extends Seeder
+class AngkatanSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,10 +15,9 @@ class KelasSeeder extends Seeder
      */
     public function run()
     {
-        Kelas::create([
-            'nama' => 'Kelas VII IPA 1',
-            'tahun_akademik_id' => 1,
-            'angkatan_id' => 1
+        Angkatan::create([
+            'nama' => '20',
+            'status' => 'belum lulus'
         ]);
     }
 }

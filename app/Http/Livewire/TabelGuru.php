@@ -209,6 +209,9 @@ class TabelGuru extends Component
             session()->flash('importError', $failures);
             $this->file = '';
             $this->dispatchBrowserEvent('close-modal-import');
+        } catch (\Illuminate\Database\QueryException $ex) {
+            session()->flash('error', 'Terdapat nip yang sama pada file excel. Periksa kembali !');
+            $this->dispatchBrowserEvent('close-modal-import');
         }
     }
 

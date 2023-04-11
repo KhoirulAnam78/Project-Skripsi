@@ -1,15 +1,9 @@
 <div>
     <div class="mx-3">
         @can('admin')
-            <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "
-                style="background-color : #1052BA;border-color: #1052BA"><i class='bx bx-add-to-queue'></i> Tambah</a>
-            <a href="" class="btn btn-success active mb-2" data-bs-toggle="modal" data-bs-target="#importModal"
-                style="background-color: #5CB85C;border-color: #5CB85C"><i class='bx bxs-file-import'></i>
-                Import</a>
+            <a href="" data-bs-toggle="modal" style="background-color : #1052BA;border-color: #1052BA"
+                data-bs-target="#inputModal" class="btn btn-primary active mb-2 "><i class='bx bx-add-to-queue'></i> Tambah</a>
         @endcan
-        <a class="btn btn-info mb-2 text-white" wire:click="export()"
-            style="background-color: #F0AD4E;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
-            Export</a>
     </div>
     @if (session()->has('message'))
         <div class="mb-2 mx-3">
@@ -27,16 +21,6 @@
             </div>
         </div>
     @endif
-    @if (session()->has('errorDuplikasi'))
-        <div class="mb-2 mx-3">
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('errorDuplikasi') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
-    @endif
-
-
     @if (session()->has('importError'))
         <div class="mb-2 mx-3">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -47,13 +31,6 @@
             </div>
         </div>
     @endif
-    <div class="row justify-content-between">
-        <div class="col-lg-4 col-md-4 mb-3 mx-3">
-            <label for="search" class="form-label">Pencarian</label>
-            <input type="text" wire:model="search" id="search" class="form-control"
-                placeholder="Cari berdasarkan nama siswa" />
-        </div>
-    </div>
     <div class="row">
         <div class="col-lg-2 col-md-2 mx-3">
             <div wire:loading.delay
@@ -63,13 +40,13 @@
             </div>
         </div>
     </div>
+
     <div class="table-responsive text-nowrap mx-3 mb-3">
         <table class="table table-striped" id="examplei">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>NISN</th>
-                    <th>Nama</th>
+                    <th>Angkatan Ke-</th>
                     <th>Status</th>
                     @can('admin')
                         <th>Aksi</th>
@@ -77,19 +54,19 @@
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-                @if (count($siswa) === 0)
+                @if (count($angkatan) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
                     </tr>
                 @else
-                    @foreach ($siswa as $g)
+                    @foreach ($angkatan as $a)
                         <tr>
-                            <td>{{ ($siswa->currentpage() - 1) * $siswa->perpage() + $loop->index + 1 }}</td>
-                            <td>{{ $g->nisn }}</td>
-                            <td>{{ $g->nama }}</td>
+                            <td>{{ ($angkatan->currentpage() - 1) * $angkatan->perpage() + $loop->index + 1 }}</td>
+                            <td>{{ $a->nama }}</td>
                             <td>
-                                <span class="badge bg-label-info me-1">{{ $g->status }}</span>
+                                <span class="badge bg-label-info me-1">{{ $a->status }}</span>
                             </td>
+
                             @can('admin')
                                 <td>
                                     <div class="dropdown">
@@ -98,13 +75,13 @@
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" wire:click="editSiswa({{ $g->id }})"><i
+                                            <a class="dropdown-item" wire:click="edit({{ $a->id }})"><i
                                                     class="bx bx-edit-alt me-1"></i>
                                                 Edit</a>
-                                            <a class="dropdown-item"
-                                                wire:click="deleteConfirmation({{ $g->id }})"><i
+                                            <a class="dropdown-item" wire:click="deleteConfirmation({{ $a->id }})"><i
                                                     class="bx bx-trash me-1"></i>
                                                 Delete</a>
+
                                         </div>
                                     </div>
                                 </td>
@@ -116,21 +93,16 @@
             </tbody>
 
         </table>
-        @if (count($siswa) !== 0)
-            {{ $siswa->links() }}
-        @endif
+
+        {{-- {{ $angkatan->links() }} --}}
     </div>
-    @include('livewire.modals.modal-siswa')
+    @include('livewire.modals.modal-angkatan')
     <script>
         window.addEventListener('close-modal', event => {
             $('#inputModal').modal('hide');
         });
-
         window.addEventListener('close-edit-modal', event => {
             $('#editModal').modal('hide');
-        })
-        window.addEventListener('close-modal-import', event => {
-            $('#importModal').modal('hide')
         })
         window.addEventListener('close-modal-delete', event => {
             $('#deleteModal').modal('hide')
