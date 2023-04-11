@@ -6,6 +6,8 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use App\Models\JadwalGuruPiket;
+use App\Models\JadwalPelajaran;
+use App\Models\JadwalPengganti;
 use App\Http\Controllers\Controller;
 use App\Models\KehadiranPembelajaran;
 use App\Models\MonitoringPembelajaran;
@@ -65,6 +67,41 @@ class PresensiController extends Controller
         }
         return response()->json([
             'message' => 'Data berhasil diinputkan',
+        ]);
+    }
+
+    public function validasi()
+    {
+        $jadwalToday = JadwalGuruPiket::where('guru_id', auth('sanctum')->user()->guru->id)->where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->first();
+        if ($jadwalToday === null) {
+            $jadwal = [];
+            $jadwalPengganti = [];
+        } else {
+            //Mengambil jadwal hari ini
+            $jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->with(
+                [
+                    'kelas' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                    'mataPelajaran' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                ]
+            )->with(['monitoringPembelajarans' => function ($query) {
+                $query->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->get();
+            }])->get();
+
+            //Get Jadwal Pengganti
+            $jadwalPengganti = JadwalPengganti::where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->with(['jadwalPelajaran' => function ($query) {
+                $query->with(['monitoringPembelajarans' => function ($query) {
+                    $query->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->get();
+                }])->select('id');
+            }])->get();
+        }
+        return response()->json([
+            'message' => 'Fetch data berhasil!',
+            'validasi-jadwal' => $jadwal,
+            'validasi-pengganti' => $jadwalPengganti
         ]);
     }
 }
