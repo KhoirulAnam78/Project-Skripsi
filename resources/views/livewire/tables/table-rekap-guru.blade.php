@@ -41,8 +41,14 @@
                         @php
                             $diff = 0;
                             foreach ($b as $j) {
-                                $perbedaan = (float) substr($j->waktu_berakhir, 0, -3) - (float) substr($j->waktu_mulai, 0, -3);
+                                $datetime1 = strtotime($j->waktu_mulai);
+                                $datetime2 = strtotime($j->waktu_berakhir);
+                                $interval = abs($datetime2 - $datetime1);
+                                $minutes = round($interval / 60);
+                                // dd($minutes);
+                                $perbedaan = floor($minutes / 35);
                                 $diff = $diff + $perbedaan;
+                                // dd(floor($diff));
                             }
                         @endphp
                         <td align="center">{{ $diff }}</td>
@@ -55,9 +61,16 @@
                                     foreach ($j->monitoringPembelajarans as $m) {
                                         array_push($keterangan, $m->keterangan);
                                         if ($m->status_validasi === 'tidak valid') {
-                                            $date1 = (float) substr($m->waktu_mulai, 0, -3);
-                                            $date2 = (float) substr($m->waktu_berakhir, 0, -3);
-                                            $jml = $jml + ($date2 - $date1);
+                                            $datetime1 = strtotime($j->waktu_mulai);
+                                            $datetime2 = strtotime($j->waktu_berakhir);
+                                            $interval = abs($datetime2 - $datetime1);
+                                            $minutes = round($interval / 60);
+                                            // dd($minutes);
+                                            $perbedaan = floor($minutes / 35);
+                            
+                                            // $date1 = (float) substr($m->waktu_mulai, 0, -3);
+                                            // $date2 = (float) substr($m->waktu_berakhir, 0, -3);
+                                            $jml = $jml + $perbedaan;
                                         }
                                     }
                                 }
@@ -92,9 +105,12 @@
                             @php
                                 $diff = 0;
                                 foreach ($b as $j) {
-                                    $date1 = new DateTime(substr($j->waktu_mulai, 0, -3));
-                                    $date2 = new DateTime(substr($j->waktu_berakhir, 0, -3));
-                                    $perbedaan = (float) substr($j->waktu_berakhir, 0, -3) - (float) substr($j->waktu_mulai, 0, -3);
+                                    $datetime1 = strtotime($j->waktu_mulai);
+                                    $datetime2 = strtotime($j->waktu_berakhir);
+                                    $interval = abs($datetime2 - $datetime1);
+                                    $minutes = round($interval / 60);
+                                    // dd($minutes);
+                                    $perbedaan = floor($minutes / 35);
                                     $diff = $diff + $perbedaan;
                                 }
                             @endphp

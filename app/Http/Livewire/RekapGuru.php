@@ -48,6 +48,7 @@ class RekapGuru extends Component
                 }]);
             }])->paginate(10);
         }
+        // dd($data);
         return view('livewire.rekap-guru', [
             'guru' => $data
         ]);
