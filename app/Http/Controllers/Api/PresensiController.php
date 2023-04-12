@@ -78,8 +78,11 @@ class PresensiController extends Controller
             $jadwalPengganti = [];
         } else {
             //Mengambil jadwal hari ini
-            $jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->with(
+            $jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'guru_id', 'mata_pelajaran_id')->where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->with(
                 [
+                    'guru' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
                     'kelas' => function ($query) {
                         $query->select('id', 'nama');
                     },
@@ -93,9 +96,20 @@ class PresensiController extends Controller
 
             //Get Jadwal Pengganti
             $jadwalPengganti = JadwalPengganti::where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->with(['jadwalPelajaran' => function ($query) {
-                $query->with(['monitoringPembelajarans' => function ($query) {
-                    $query->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->get();
-                }])->select('id');
+                $query->with([
+                    'guru' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                    'kelas' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                    'mataPelajaran' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                    'monitoringPembelajarans' => function ($query) {
+                        $query->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->get();
+                    }
+                ])->select('id', 'guru_id', 'kelas_id', 'mata_pelajaran_id');
             }])->get();
         }
         return response()->json([
