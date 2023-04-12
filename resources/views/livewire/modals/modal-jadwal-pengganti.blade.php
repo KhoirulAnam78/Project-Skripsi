@@ -120,7 +120,9 @@
                             <select wire:model="japel_id" id="japel_id" class="form-select">
                                 @if (count($mapel) !== 0)
                                     @foreach ($mapel as $m)
-                                        <option value="{{ $m->id }}">{{ $m->mataPelajaran->nama }}</option>
+                                        <option value="{{ $m->id }}">
+                                            {{ $m->hari . ' => ' . $m->mataPelajaran->nama }}
+                                        </option>
                                     @endforeach
                                 @else
                                     <option selected>Tidak ada jadwal pelajaran</option>
