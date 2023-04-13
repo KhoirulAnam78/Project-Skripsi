@@ -131,11 +131,23 @@ class PresensiController extends Controller
         ]);
     }
 
-    public function tidakValid()
+    public function tidakValid(Request $request)
     {
+        $presensi = json_decode($request->presensi);
+
+        $monitoring = MonitoringPembelajaran::where('id', $request->monitoring_id)->update([
+            'keterangan' => $request->keterangan,
+            'topik' => $request->topik,
+            'status_validasi' => 'tidak valid',
+        ]);
+        foreach ($presensi as $key => $value) {
+            KehadiranPembelajaran::where('monitoring_pembelajaran_id', $request->monitoring_id)->where('siswa_id', $key)->update([
+                'status' => $value,
+            ]);
+        }
         return response()->json([
             'message' => 'Validasi berhasil!',
-            // 'monitoring' => $monitoring
+            'monitoring' => $monitoring
         ]);
     }
 }
