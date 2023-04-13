@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AngkatanController;
 use Illuminate\Support\Facades\Route;
 use App\Models\MonitoringPembelajaran;
 use App\Http\Controllers\GuruController;
@@ -8,8 +7,10 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\RombelController;
+use App\Http\Controllers\AngkatanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NarasumberController;
+use App\Http\Controllers\WaliAsramaController;
 use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\TahunAkademikController;
 use App\Http\Controllers\JadwalGuruPiketController;
@@ -68,6 +69,10 @@ Route::get('/download-template-siswa', [SiswaController::class, 'download'])->mi
 //Narasumber
 Route::get('/data-narasumber', [NarasumberController::class, 'index'])->middleware('auth');
 Route::get('/download-template-narasumber', [NarasumberController::class, 'download'])->middleware('auth');
+
+//Wali Asrama
+Route::get('/data-wali-asrama', [WaliAsramaController::class, 'index'])->middleware('auth');
+Route::get('/download-template-wali-asrama', [WaliAsramaController::class, 'download'])->middleware('auth');
 
 //DATA ROMBEL
 Route::get('/rombongan-belajar', [RombelController::class, 'index'])->middleware('auth');

@@ -29,4 +29,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/get-siswa', [PresensiController::class, 'getSiswa']);
     Route::post('/presensi-pembelajaran', [PresensiController::class, 'presensiPembelajaran']);
     Route::get('/validasi', [PresensiController::class, 'validasi']);
+    Route::post('/validasi/valid', [Presensicontroller::class, 'valid']);
+    Route::post('/validasi/tidak-valid', [Presensicontroller::class, 'tidakValid']);
 });

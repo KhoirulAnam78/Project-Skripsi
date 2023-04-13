@@ -118,4 +118,24 @@ class PresensiController extends Controller
             'validasi-pengganti' => $jadwalPengganti
         ]);
     }
+
+    public function valid(Request $request)
+    {
+        $monitoring = MonitoringPembelajaran::where('id', $request->monitoring_id)->update([
+            'status_validasi' => 'valid',
+            'keterangan' => ''
+        ]);
+        return response()->json([
+            'message' => 'Validasi berhasil!',
+            'monitoring' => $monitoring
+        ]);
+    }
+
+    public function tidakValid()
+    {
+        return response()->json([
+            'message' => 'Validasi berhasil!',
+            // 'monitoring' => $monitoring
+        ]);
+    }
 }

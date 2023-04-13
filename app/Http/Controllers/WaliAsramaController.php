@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\WaliAsrama;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use App\Http\Requests\StoreWaliAsramaRequest;
 use App\Http\Requests\UpdateWaliAsramaRequest;
 
@@ -15,72 +17,25 @@ class WaliAsramaController extends Controller
      */
     public function index()
     {
-        //
+        if (Auth::user()->role === 'siswa') {
+            return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
+        }
+        $this->authorize('adpim');
+        return view('pages.admin.wali-asrama', [
+            'title' => 'Data Wali Asrama'
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function download()
     {
-        //
-    }
+        if (Auth::user()->role === 'siswa') {
+            return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
+        }
+        $file = public_path() . '/assets/template-excel/Data Guru.xlsx';
+        $headers = array(
+            'Content-Type: application/xlsx',
+        );
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreWaliAsramaRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreWaliAsramaRequest $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\WaliAsrama  $waliAsrama
-     * @return \Illuminate\Http\Response
-     */
-    public function show(WaliAsrama $waliAsrama)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\WaliAsrama  $waliAsrama
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(WaliAsrama $waliAsrama)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateWaliAsramaRequest  $request
-     * @param  \App\Models\WaliAsrama  $waliAsrama
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateWaliAsramaRequest $request, WaliAsrama $waliAsrama)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\WaliAsrama  $waliAsrama
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(WaliAsrama $waliAsrama)
-    {
-        //
+        return Response::download($file, 'Template Import Data Guru.xlsx', $headers);
     }
 }
