@@ -175,7 +175,6 @@ class PresensiController extends Controller
         }
         return response()->json([
             'message' => 'Validasi berhasil!',
-            'monitoring' => $presensi
         ]);
     }
 }
