@@ -151,11 +151,15 @@ class PresensiController extends Controller
                 ]);
             }
         } else {
+            $jadwal = JadwalPelajaran::where('id', $request->jadwal_id)->first();
+            $waktu_mulai = $jadwal->waktu_mulai;
+            $waktu_berakhir = $jadwal->waktu_berakhir;
+
             $monitoring = MonitoringPembelajaran::create([
                 'tanggal' => \Carbon\Carbon::now()->translatedFormat('Y-m-d'),
                 'topik' => $request->topik,
-                'waktu_mulai' => $request->waktu_mulai,
-                'waktu_berakhir' => $request->waktu_berakhir,
+                'waktu_mulai' => $waktu_mulai,
+                'waktu_berakhir' => $waktu_berakhir,
                 'status_validasi' => 'tidak valid',
                 'jadwal_pelajaran_id' => $request->jadwal_id,
                 'guru_piket_id' => $guruPiketId,
@@ -168,18 +172,6 @@ class PresensiController extends Controller
                     'monitoring_pembelajaran_id' => $monitoring->id
                 ]);
             }
-        }
-
-
-        $monitoring = MonitoringPembelajaran::where('id', $request->monitoring_id)->update([
-            'keterangan' => $request->keterangan,
-            'topik' => $request->topik,
-            'status_validasi' => 'tidak valid',
-        ]);
-        foreach ($presensi as $key => $value) {
-            KehadiranPembelajaran::where('monitoring_pembelajaran_id', $request->monitoring_id)->where('siswa_id', $key)->update([
-                'status' => $value,
-            ]);
         }
         return response()->json([
             'message' => 'Validasi berhasil!',
