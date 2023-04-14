@@ -145,9 +145,9 @@ class PresensiController extends Controller
                 'status_validasi' => 'tidak valid',
                 'guru_piket_id' => $guruPiketId
             ]);
-            foreach ($presensi as $key => $value) {
-                KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->where('siswa_id', $key)->update([
-                    'status' => $value,
+            foreach ($presensi as $value) {
+                KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->where('siswa_id', $value->siswaID)->update([
+                    'status' => $value->status,
                 ]);
             }
         } else {
@@ -165,10 +165,10 @@ class PresensiController extends Controller
                 'guru_piket_id' => $guruPiketId,
                 'keterangan' => $request->keterangan
             ]);
-            foreach ($presensi as $key => $value) {
+            foreach ($presensi as $value) {
                 KehadiranPembelajaran::create([
-                    'siswa_id' => $key,
-                    'status' => $value,
+                    'siswa_id' => $value->siswaID,
+                    'status' => $value->status,
                     'monitoring_pembelajaran_id' => $monitoring->id
                 ]);
             }
