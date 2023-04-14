@@ -135,47 +135,47 @@ class PresensiController extends Controller
     {
         $presensi = json_decode($request->presensi);
 
-        // $guruPiketId = auth('sanctum')->user()->guru->id;
+        $guruPiketId = auth('sanctum')->user()->guru->id;
 
-        // if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $request->jadwal_id)->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->first()) {
-        //     // MonitoringPembelajaran::where('id', $this->editPresensi)
-        //     $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $request->jadwal_id)->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->update([
-        //         'keterangan' => $request->keterangan,
-        //         'topik' => $request->topik,
-        //         'status_validasi' => 'tidak valid',
-        //         'guru_piket_id' => $guruPiketId
-        //     ]);
-        //     foreach ($presensi as $key => $value) {
-        //         KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->where('siswa_id', $key)->update([
-        //             'status' => $value,
-        //         ]);
-        //     }
-        // } else {
-        //     $jadwal = JadwalPelajaran::where('id', $request->jadwal_id)->first();
-        //     $waktu_mulai = $jadwal->waktu_mulai;
-        //     $waktu_berakhir = $jadwal->waktu_berakhir;
+        if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $request->jadwal_id)->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->first()) {
+            // MonitoringPembelajaran::where('id', $this->editPresensi)
+            $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $request->jadwal_id)->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->update([
+                'keterangan' => $request->keterangan,
+                'topik' => $request->topik,
+                'status_validasi' => 'tidak valid',
+                'guru_piket_id' => $guruPiketId
+            ]);
+            foreach ($presensi as $key => $value) {
+                KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->where('siswa_id', $key)->update([
+                    'status' => $value,
+                ]);
+            }
+        } else {
+            $jadwal = JadwalPelajaran::where('id', $request->jadwal_id)->first();
+            $waktu_mulai = $jadwal->waktu_mulai;
+            $waktu_berakhir = $jadwal->waktu_berakhir;
 
-        //     $monitoring = MonitoringPembelajaran::create([
-        //         'tanggal' => \Carbon\Carbon::now()->translatedFormat('Y-m-d'),
-        //         'topik' => $request->topik,
-        //         'waktu_mulai' => $waktu_mulai,
-        //         'waktu_berakhir' => $waktu_berakhir,
-        //         'status_validasi' => 'tidak valid',
-        //         'jadwal_pelajaran_id' => $request->jadwal_id,
-        //         'guru_piket_id' => $guruPiketId,
-        //         'keterangan' => $request->keterangan
-        //     ]);
-        //     foreach ($presensi as $key => $value) {
-        //         KehadiranPembelajaran::create([
-        //             'siswa_id' => $key,
-        //             'status' => $value,
-        //             'monitoring_pembelajaran_id' => $monitoring->id
-        //         ]);
-        //     }
-        // }
+            $monitoring = MonitoringPembelajaran::create([
+                'tanggal' => \Carbon\Carbon::now()->translatedFormat('Y-m-d'),
+                'topik' => $request->topik,
+                'waktu_mulai' => $waktu_mulai,
+                'waktu_berakhir' => $waktu_berakhir,
+                'status_validasi' => 'tidak valid',
+                'jadwal_pelajaran_id' => $request->jadwal_id,
+                'guru_piket_id' => $guruPiketId,
+                'keterangan' => $request->keterangan
+            ]);
+            foreach ($presensi as $key => $value) {
+                KehadiranPembelajaran::create([
+                    'siswa_id' => $key,
+                    'status' => $value,
+                    'monitoring_pembelajaran_id' => $monitoring->id
+                ]);
+            }
+        }
         return response()->json([
             'message' => 'Validasi berhasil!',
-            'monitoring' => $request
+            'monitoring' => $monitoring
         ]);
     }
 }
