@@ -31,11 +31,11 @@ class WaliAsramaController extends Controller
         if (Auth::user()->role === 'siswa') {
             return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
         }
-        $file = public_path() . '/assets/template-excel/Data Guru.xlsx';
+        $file = public_path() . '/assets/template-excel/Data Wali Asrama.xlsx';
         $headers = array(
             'Content-Type: application/xlsx',
         );
 
-        return Response::download($file, 'Template Import Data Guru.xlsx', $headers);
+        return Response::download($file, 'Template Import Data Wali Asrama.xlsx', $headers);
     }
 }

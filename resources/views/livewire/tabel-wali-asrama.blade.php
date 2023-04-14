@@ -40,7 +40,7 @@
     @endif
     <div class="col-lg-3 col-md-3 mb-3 mx-3">
         <input type="text" wire:model="search" id="no_telp" class="form-control"
-            placeholder="Cari berdasarkan nama guru" />
+            placeholder="Cari berdasarkan nama wali_asrama" />
     </div>
     <div class="col-lg-2 col-md-2 mx-3">
         <div wire:loading.delay class="z-50 static flex fixed left-0 top-0 bottom-0 w-full bg-gray-400 bg-opacity-50">
@@ -61,17 +61,16 @@
                     @endcan
                 </tr>
             </thead>
-            {{-- <tbody class="table-border-bottom-0">
-                @if (count($guru) === 0)
+            <tbody class="table-border-bottom-0">
+                @if (count($wali_asrama) === 0)
                     <tr>
                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
                     </tr>
                 @else
-                    @foreach ($guru as $g)
+                    @foreach ($wali_asrama as $g)
                         <tr>
-                            <td>{{ ($guru->currentpage() - 1) * $guru->perpage() + $loop->index + 1 }}</td>
-                            <td>{{ $g->nip }}</td>
-                            <td>{{ $g->kode_guru }}</td>
+                            <td>{{ ($wali_asrama->currentpage() - 1) * $wali_asrama->perpage() + $loop->index + 1 }}
+                            </td>
                             <td>{{ $g->nama }}</td>
                             <td>{{ $g->no_telp }}</td>
                             <td>
@@ -79,13 +78,6 @@
                                     <span class="badge bg-label-info me-1">Aktif</span>
                                 @else
                                     <span class="badge bg-label-danger me-1">Tidak Aktif</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if ($g->pimpinan == 0)
-                                    Tidak
-                                @else
-                                    Ya
                                 @endif
                             </td>
                             @can('admin')
@@ -96,22 +88,12 @@
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" wire:click="editGuru({{ $g->id }})"><i
+                                            <a class="dropdown-item" wire:click="editWali({{ $g->id }})"><i
                                                     class="bx bx-edit-alt me-1"></i>
                                                 Edit</a>
-                                            <a class="dropdown-item"
-                                                wire:click="deleteConfirmation({{ $g->id }})"><i
+                                            <a class="dropdown-item" wire:click="deleteConfirmation({{ $g->id }})"><i
                                                     class="bx bx-trash me-1"></i>
                                                 Delete</a>
-                                            @if ($g->pimpinan == 0)
-                                                <a class="dropdown-item" wire:click="setPimpinan({{ $g->id }})"><i
-                                                        class="bx bxs-user-check"></i>
-                                                    Set Pimpinan</a>
-                                            @else
-                                                <a class="dropdown-item" wire:click="setPimpinan({{ $g->id }})"><i
-                                                        class="bx bxs-user-x"></i>
-                                                    Unset Pimpinan</a>
-                                            @endif
                                         </div>
                                     </div>
                                 </td>
@@ -120,13 +102,13 @@
                     @endforeach
                 @endif
 
-            </tbody> --}}
+            </tbody>
 
         </table>
 
-        {{-- {{ $guru->links() }} --}}
+        {{ $wali_asrama->links() }}
     </div>
-    {{-- @include('livewire.modals.modal-guru') --}}
+    @include('livewire.modals.modal-wali-asrama')
     <script>
         window.addEventListener('close-modal', event => {
             $('#inputModal').modal('hide');

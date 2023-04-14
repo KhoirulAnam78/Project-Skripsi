@@ -2,14 +2,15 @@
 
 namespace App\Imports;
 
-use App\Models\Guru;
 use App\Models\User;
+use App\Models\WaliAsrama;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class GuruImport implements ToCollection, WithHeadingRow, WithValidation
+class WaliAsramaImport implements ToCollection, WithHeadingRow, WithValidation
 {
     /**
      * @param array $row
@@ -24,28 +25,19 @@ class GuruImport implements ToCollection, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            'nip' => 'required|min:18|unique:gurus',
             'nama' => 'required',
             'nomor_telepon' => 'required|max:14',
             'status' => 'in:aktif,tidak aktif',
-            'kode_guru' => 'required|min:2|max:2|unique:gurus',
         ];
     }
 
     public function customValidationMessages()
     {
         return [
-            'nip.required' => 'NIP wajib diisi !',
-            'nip.min' => 'NIP harus berisi 18 karakter !',
-            'nip.unique' => 'NIP telah digunakan !',
             'nama.required' => 'Nama wajib diisi !',
             'nomor_telepon.required' => 'No Telp wajib diisi !',
             'nomor_telepon.max' => 'No Telp maksimal 14 karakter number !',
             'status.in' => 'Status tidak diketahui (Harap isi dengan aktif/tidak aktif) !',
-            'kode_guru.required' => 'Kode Guru wajib diisi !',
-            'kode_guru.min' => 'Kode Guru harus berisi 2 karakter !',
-            'kode_guru.max' => 'Kode Guru harus berisi 2 karakter !',
-            'kode_guru.unique' => 'Kode Guru telah digunakan !',
         ];
     }
 
@@ -53,13 +45,11 @@ class GuruImport implements ToCollection, WithHeadingRow, WithValidation
     {
         foreach ($rows as $row) {
             $user = User::create([
-                'username' => $row['nip'],
-                'password' => bcrypt($row['nip']),
-                'role' => 'guru'
+                'username' => Str::slug($row['nama']),
+                'password' => bcrypt('monitoring2023'),
+                'role' => 'wali_asrama'
             ]);
-            Guru::create([
-                'nip' => $row['nip'],
-                'kode_guru' => $row['kode_guru'],
+            WaliAsrama::create([
                 'nama' => $row['nama'],
                 'no_telp' => $row['nomor_telepon'],
                 'status' => $row['status'],
