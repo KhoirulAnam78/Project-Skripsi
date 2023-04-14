@@ -135,6 +135,42 @@ class PresensiController extends Controller
     {
         $presensi = json_decode($request->presensi);
 
+        $guruPiketId = auth('sanctum')->user()->guru->id;
+
+        if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $request->jadwal_id)->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->first()) {
+            // MonitoringPembelajaran::where('id', $this->editPresensi)
+            $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $request->jadwal_id)->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->update([
+                'keterangan' => $request->keterangan,
+                'topik' => $request->topik,
+                'status_validasi' => 'tidak valid',
+                'guru_piket_id' => $guruPiketId
+            ]);
+            foreach ($presensi as $key => $value) {
+                KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->where('siswa_id', $key)->update([
+                    'status' => $value,
+                ]);
+            }
+        } else {
+            $monitoring = MonitoringPembelajaran::create([
+                'tanggal' => \Carbon\Carbon::now()->translatedFormat('Y-m-d'),
+                'topik' => $request->topik,
+                'waktu_mulai' => $request->waktu_mulai,
+                'waktu_berakhir' => $request->waktu_berakhir,
+                'status_validasi' => 'tidak valid',
+                'jadwal_pelajaran_id' => $request->jadwal_id,
+                'guru_piket_id' => $guruPiketId,
+                'keterangan' => $request->keterangan
+            ]);
+            foreach ($presensi as $key => $value) {
+                KehadiranPembelajaran::create([
+                    'siswa_id' => $key,
+                    'status' => $value,
+                    'monitoring_pembelajaran_id' => $monitoring->id
+                ]);
+            }
+        }
+
+
         $monitoring = MonitoringPembelajaran::where('id', $request->monitoring_id)->update([
             'keterangan' => $request->keterangan,
             'topik' => $request->topik,
