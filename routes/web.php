@@ -8,6 +8,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\RombelController;
 use App\Http\Controllers\AngkatanController;
+use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NarasumberController;
 use App\Http\Controllers\WaliAsramaController;
@@ -65,6 +66,9 @@ Route::get('/data-angkatan', [AngkatanController::class, 'index'])->middleware('
 //Data Siswa
 Route::get('/siswa', [SiswaController::class, 'index'])->middleware('auth');
 Route::get('/download-template-siswa', [SiswaController::class, 'download'])->middleware('auth');
+
+//Data Kegiatan
+Route::get('/data-kegiatan', [KegiatanController::class, 'index'])->middleware('auth');
 
 //Narasumber
 Route::get('/data-narasumber', [NarasumberController::class, 'index'])->middleware('auth');
