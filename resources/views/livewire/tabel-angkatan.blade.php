@@ -31,22 +31,13 @@
             </div>
         </div>
     @endif
-    <div class="row">
-        <div class="col-lg-2 col-md-2 mx-3">
-            <div wire:loading.delay
-                class="z-50 static flex fixed left-0 top-0 bottom-0 w-full bg-gray-400 bg-opacity-50">
-                <img src="https://paladins-draft.com/img/circle_loading.gif" width="50" height="50"
-                    class="m-auto mt-1/4"> <span>Loading ...</span>
-            </div>
-        </div>
-    </div>
-
     <div class="table-responsive text-nowrap mx-3 mb-3">
-        <table class="table table-striped" id="examplei">
+        <table class="table table-striped" id="example">
             <thead>
                 <tr>
                     <th>No</th>
                     <th>Angkatan Ke-</th>
+                    <th>Wali Asrama</th>
                     <th>Status</th>
                     @can('admin')
                         <th>Aksi</th>
@@ -63,6 +54,13 @@
                         <tr>
                             <td>{{ ($angkatan->currentpage() - 1) * $angkatan->perpage() + $loop->index + 1 }}</td>
                             <td>{{ $a->nama }}</td>
+                            <td>
+                                <ul>
+                                    @foreach ($a->waliAsramas as $w)
+                                        <li>{{ $w->nama }}</li>
+                                    @endforeach
+                                </ul>
+                            </td>
                             <td>
                                 <span class="badge bg-label-info me-1">{{ $a->status }}</span>
                             </td>
@@ -81,7 +79,6 @@
                                             <a class="dropdown-item" wire:click="deleteConfirmation({{ $a->id }})"><i
                                                     class="bx bx-trash me-1"></i>
                                                 Delete</a>
-
                                         </div>
                                     </div>
                                 </td>
@@ -94,7 +91,7 @@
 
         </table>
 
-        {{-- {{ $angkatan->links() }} --}}
+        {{ $angkatan->links() }}
     </div>
     @include('livewire.modals.modal-angkatan')
     <script>

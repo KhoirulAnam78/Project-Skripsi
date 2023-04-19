@@ -33,7 +33,51 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="col-lg-12 col-md-12 mb-2">
+                        <label for="search" class="form-label">Pencarian</label>
+                        <input type="text" wire:model="search2" id="search" class="form-control"
+                            placeholder="Cari berdasarkan nama wali asrama" />
+                    </div>
+                    @error('waliAsrama')
+                        <span class="error" style="font-size:12px; font-style:italic">*
+                            {{ $message }}</span>
+                    @enderror
+                    <div class="table-responsive text-nowrap mb-3">
+                        <table class="table table-striped" id="examplei">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Tambah</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @php
+                                    $i = 0;
+                                @endphp
+                                @if ($wali === null)
+                                    <tr>
+                                        <td colspan='7' align="center"><span>Tidak ada data</span></td>
+                                    </tr>
+                                @else
+                                    @foreach ($wali as $g)
+                                        <tr>
+                                            <td>{{ ++$i }}</td>
+                                            <td>{{ $g->nama }}</td>
+                                            <td align="center"><input type="checkbox" wire:model="waliAsrama"
+                                                    wire:key="myUniqueWireKey-{{ $g->id }}"
+                                                    value="{{ $g->id }}"></td>
+                                        </tr>
+                                    @endforeach
+                                @endif
 
+                            </tbody>
+
+                        </table>
+                        @if ($wali !== null)
+                            {{ $wali->links() }}
+                        @endif
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" wire:click="empty()"
@@ -81,6 +125,53 @@
                                     {{ $message }}</span>
                             @enderror
                         </div>
+                    </div>
+                    {{-- @dump($waliAsrama) --}}
+                    <div class="col-lg-12 col-md-12 mb-2">
+                        <label for="search" class="form-label">Pencarian</label>
+                        <input type="text" wire:model="search2" id="search" class="form-control"
+                            placeholder="Cari berdasarkan nama wali asrama" />
+                    </div>
+                    @error('waliAsrama')
+                        <span class="error" style="font-size:12px; font-style:italic">*
+                            {{ $message }}</span>
+                    @enderror
+
+                    <div class="table-responsive text-nowrap mb-3">
+                        <table class="table table-striped" id="examplei">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Tambah</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @php
+                                    $i = 0;
+                                @endphp
+                                @if ($wali === null)
+                                    <tr>
+                                        <td colspan='7' align="center"><span>Tidak ada data</span></td>
+                                    </tr>
+                                @else
+                                    @foreach ($wali as $g)
+                                        <tr>
+                                            <td>{{ ++$i }}</td>
+                                            <td>{{ $g->nama }}</td>
+                                            <td align="center"><input type="checkbox" wire:model="waliAsrama"
+                                                    wire:key="myUniqueWireKey-{{ $g->id }}"
+                                                    value="{{ $g->id }}"></td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+
+                            </tbody>
+
+                        </table>
+                        @if ($wali !== null)
+                            {{ $wali->links() }}
+                        @endif
                     </div>
                 </div>
                 <div class="modal-footer">

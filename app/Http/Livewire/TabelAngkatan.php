@@ -3,6 +3,8 @@
 namespace App\Http\Livewire;
 
 use App\Models\Angkatan;
+use App\Models\AngkatanWaliAsrama;
+use App\Models\WaliAsrama;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,12 +23,14 @@ class TabelAngkatan extends Component
                 [
                     'nama' => 'required|unique:angkatans,nama,' . $this->angkatan_edit_id,
                     'status' => 'required',
+                    'waliAsrama' => 'required'
                 ];
         } else {
             return
                 [
                     'nama' => 'required|unique:angkatans,nama,NULL,id',
                     'status' => 'required',
+                    'waliAsrama' => 'required'
                 ];
         }
     }
@@ -37,6 +41,7 @@ class TabelAngkatan extends Component
     {
         $this->nama = '';
         $this->status = '';
+        $this->waliAsrama = [];
         $this->angkatan_delete_id = null;
         $this->resetErrorBag();
         $this->resetValidation();
@@ -47,6 +52,7 @@ class TabelAngkatan extends Component
         'nama.required' => 'Nama angkatan wajib diisi !',
         'status.required' => 'Status angkatan wajib diisi !',
         'nama.unique' => 'Nama angkatan sudah ada !',
+        'waliAsrama.required' => 'Wajib memilih wali asrama terlebih dahulu !'
     ];
 
     //Reatime Validation
@@ -60,15 +66,25 @@ class TabelAngkatan extends Component
     {
         $this->validate([
             'nama' => 'required|unique:angkatans,nama,NULL,id',
-            'status' => 'required'
+            'status' => 'required',
+            'waliAsrama' => 'required'
         ]);
-        Angkatan::create([
+
+        $angkatan = Angkatan::create([
             'nama' => $this->nama,
             'status' => $this->status
         ]);
+
+        foreach ($this->waliAsrama as $w) {
+            AngkatanWaliAsrama::create([
+                'angkatan_id' => $angkatan->id,
+                'wali_asrama_id' => $w
+            ]);
+        }
+
         session()->flash('message', 'Data berhasil ditambahkan !');
-        $this->empty();
         $this->dispatchBrowserEvent('close-modal');
+        $this->empty();
     }
 
     //show modal edit
@@ -77,6 +93,11 @@ class TabelAngkatan extends Component
         $angkatan = Angkatan::find($id);
         $this->nama = $angkatan->nama;
         $this->status = $angkatan->status;
+        $wali = $angkatan->waliAsramas()->select('wali_asrama_id')->get();
+        foreach ($wali as $w) {
+            array_push($this->waliAsrama, $w->wali_asrama_id);
+        }
+        // dd($this->waliAsrama);
         $this->angkatan_edit_id = $id;
         $this->dispatchBrowserEvent('show-edit-modal');
     }
@@ -86,15 +107,59 @@ class TabelAngkatan extends Component
     {
         $this->validate([
             'nama' => 'required|unique:angkatans,nama,' . $this->angkatan_edit_id,
-            'status' => 'required'
+            'status' => 'required',
+            'waliAsrama' => 'required'
         ]);
-        Angkatan::where('id', $this->angkatan_edit_id)->update([
-            'nama' => $this->nama,
-            'status' => $this->status
-        ]);
+        if ($this->status === 'belum lulus') {
+
+            Angkatan::where('id', $this->angkatan_edit_id)->update([
+                'nama' => $this->nama,
+                'status' => $this->status
+            ]);
+            $kelas = Angkatan::find($this->angkatan_edit_id)->kelas->all();
+
+            foreach ($kelas as $k) {
+                $siswa = $k->siswas;
+                foreach ($siswa as $s) {
+                    $s->update(['status' => 'belum lulus']);
+                }
+            }
+
+            AngkatanWaliAsrama::where('angkatan_id', $this->angkatan_edit_id)->delete();
+
+            // dd($this->waliAsrama);
+            foreach ($this->waliAsrama as $w) {
+                AngkatanWaliAsrama::create([
+                    'angkatan_id' => $this->angkatan_edit_id,
+                    'wali_asrama_id' => $w
+                ]);
+            }
+        } else {
+            Angkatan::where('id', $this->angkatan_edit_id)->update([
+                'nama' => $this->nama,
+                'status' => $this->status
+            ]);
+            $kelas = Angkatan::find($this->angkatan_edit_id)->kelas->all();
+            foreach ($kelas as $k) {
+                $siswa = $k->siswas;
+                foreach ($siswa as $s) {
+                    $s->update(['status' => 'lulus']);
+                }
+            }
+
+            AngkatanWaliAsrama::where('angkatan_id', $this->angkatan_edit_id)->delete();
+
+            // dd($this->waliAsrama);
+            foreach ($this->waliAsrama as $w) {
+                AngkatanWaliAsrama::create([
+                    'angkatan_id' => $this->angkatan_edit_id,
+                    'wali_asrama_id' => $w
+                ]);
+            }
+        }
         session()->flash('message', 'Data berhasil diedit !');
-        $this->empty();
         $this->dispatchBrowserEvent('close-edit-modal');
+        $this->empty();
     }
 
     //Show modal delete confirmation
@@ -111,6 +176,7 @@ class TabelAngkatan extends Component
         $angkatan = Angkatan::where('id', $this->angkatan_delete_id)->first();
         try {
             $angkatan->delete();
+
             session()->flash('message', 'Data berhasil dihapus');
         } catch (\Throwable $th) {
             session()->flash('error', 'Data gagal dihapus karena digunakan di dalam sistem');
@@ -134,6 +200,7 @@ class TabelAngkatan extends Component
     {
         return view('livewire.tabel-angkatan', [
             'angkatan' => Angkatan::latest()->paginate(5),
+            'wali' => WaliAsrama::where('status', 'aktif')->paginate(5)
         ]);
     }
 }
