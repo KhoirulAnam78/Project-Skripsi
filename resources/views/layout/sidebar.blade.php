@@ -1,3 +1,7 @@
+@php
+    use App\Models\Kegiatan;
+    $kegiatan = Kegiatan::all();
+@endphp
 <!-- Menu -->
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
@@ -100,7 +104,7 @@
                 </a>
             </li>
             <li
-                class="menu-item {{ ($title === 'Jadwal Pelajaran' or $title === 'Jadwal Guru Piket' or $title === 'Jadwal Pengganti') ? 'active open' : '' }}">
+                class="menu-item {{ ($title === 'Jadwal Pelajaran' or $title === 'Jadwal Guru Piket' or $title === 'Jadwal Pengganti' or $title === 'Jadwal Kegiatan') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-dock-top"></i>
                     <div data-i18n="Account Settings">Penjadwalan</div>
@@ -121,9 +125,20 @@
                             <div data-i18n="Jadwal Guru Piket">Jadwal Guru Piket</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ $title === 'Jadwal Kegiatan' ? 'active' : '' }}">
+                        <a href="/jadwal-kegiatan" class="menu-link">
+                            <div data-i18n="Jadwal Kegiatan">Jadwal Kegiatan</div>
+                        </a>
+                    </li>
                 </ul>
             </li>
-            <li class="menu-item {{ $title === 'Presensi Pembelajaran' ? 'active open' : '' }}">
+            <li
+                class="menu-item {{ $title === 'Presensi Pembelajaran' ? 'active open' : '' }} @php
+foreach ($kegiatan as $k) {
+                    if ($k->nama === $title) {
+                        echo 'active open';
+                    }   
+                } @endphp">
                 {{-- <a href="javascript:void(0);" class="menu-link menu-toggle"> --}}
                 {{-- <i class="menu-icon tf-icons bx bx-lock-open-alt"></i> --}}
                 {{-- <i class='menu-icons tf-icons bx bxs-file-export'></i> --}}
@@ -141,6 +156,13 @@
                             <div data-i18n="Presensi Pembelajaran">Presensi Pembelajaran</div>
                         </a>
                     </li>
+                    @foreach ($kegiatan as $k)
+                        <li class="menu-item {{ $title === $k->nama ? 'active' : '' }}">
+                            <a href="/presensi-kegiatan/{{ $k->slug }}" class="menu-link">
+                                <div data-i18n="Presensi Pembelajaran">Presensi {{ $k->nama }}</div>
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
             </li>
         @endcan
@@ -253,7 +275,7 @@
                 </a>
             </li>
             <li
-                class="menu-item {{ ($title === 'Jadwal Pelajaran' or $title === 'Jadwal Guru Piket' or $title === 'Jadwal Pengganti') ? 'active open' : '' }}">
+                class="menu-item {{ ($title === 'Jadwal Pelajaran' or $title === 'Jadwal Guru Piket' or $title === 'Jadwal Pengganti' or $title === 'Jadwal Kegiatan') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-dock-top"></i>
                     <div data-i18n="Account Settings">Penjadwalan</div>
@@ -272,6 +294,11 @@
                     <li class="menu-item {{ $title === 'Jadwal Guru Piket' ? 'active' : '' }}">
                         <a href="/jadwal-guru-piket" class="menu-link">
                             <div data-i18n="Jadwal Guru Piket">Jadwal Guru Piket</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ $title === 'Jadwal Kegiatan' ? 'active' : '' }}">
+                        <a href="/jadwal-kegiatan" class="menu-link">
+                            <div data-i18n="Jadwal Kegiatan">Jadwal Kegiatan</div>
                         </a>
                     </li>
                 </ul>

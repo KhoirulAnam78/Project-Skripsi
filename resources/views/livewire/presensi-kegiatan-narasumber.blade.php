@@ -29,28 +29,16 @@
             </select>
         </div>
         <div class="col-lg-4 col-md-4">
-            <label for="filterMapel" class="form-label">Mata Pelajaran</label>
-            <select wire:model="filterMapel" id="filterMapel" class="form-select">
-                @if (count($mapel) !== 0)
-                    @foreach ($mapel as $m)
-                        <option value="{{ $m->id }}">{{ $m->mataPelajaran->nama }}</option>
-                    @endforeach
-                @endif
-                @if (count($jadwal_pengganti) !== 0)
-                    @foreach ($jadwal_pengganti as $j)
-                        <option value="{{ $j->jadwal_pelajaran_id }}">{{ $j->jadwalPelajaran->mataPelajaran->nama }}
-                            (pengganti)
-                        </option>
-                    @endforeach
-                @endif
-                @if (count($mapel) === 0 and count($jadwal_pengganti) === 0)
-                    <option value="" selected>Tidak ada jadwal pelajaran</option>
-                @endif
-
-            </select>
+            <label for="tanggal" class="form-label">Jadwal Kegiatan</label>
+            <input disabled type="text" value="{{ $hari }}" name="hari" id="hari"
+                class="form-control" />
+            @error('hari')
+                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                    {{ $message }}</span>
+            @enderror
         </div>
         <div class="col-lg-4 col-md-4">
-            <label for="tanggal" class="form-label">Tanggal</label>
+            <label for="tanggal" class="form-label">Tanggal Hari Ini</label>
             <input disabled type="date" value="{{ $tanggal }}" name="tanggal" id="tanggal"
                 class="form-control" />
             @error('tanggal')
@@ -78,7 +66,7 @@
             @enderror
         </div>
         <div class="col-lg-4 col-md-4">
-            <label for="topik" class="form-label">Topik/Agenda Pembelajaran</label>
+            <label for="topik" class="form-label">Topik/Agenda Kegiatan</label>
             <textarea required name="topik" wire:model="topik" id="topik" class="form-control"></textarea>
             @error('topik')
                 <span class="error" style="color:red; font-size:12px; font-style:italic">*
@@ -109,28 +97,23 @@
                                 <td>{{ $s->nisn }}</td>
                                 <td>{{ $s->nama }}</td>
                                 <td>
-                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
-                                        id="presensihadir" name="presensi.{{ $s->id }}" value='hadir'
-                                        wire:model="presensi.{{ $s->id }}">
+                                    <input type="radio" id="presensihadir" name="presensi.{{ $s->id }}"
+                                        value='hadir' wire:model="presensi.{{ $s->id }}">
                                     H <span class="mx-1"></span>
-                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio" id="presensiIzin"
-                                        name="presensi.{{ $s->id }}" value='izin'
-                                        wire:model="presensi.{{ $s->id }}">
+                                    <input type="radio" id="presensiIzin" name="presensi.{{ $s->id }}"
+                                        value='izin' wire:model="presensi.{{ $s->id }}">
                                     I <span class="mx-1"></span>
-                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
-                                        id="presensiSakit" name="presensi.{{ $s->id }}" value='sakit'
-                                        wire:model="presensi.{{ $s->id }}">
+                                    <input type="radio" id="presensiSakit" name="presensi.{{ $s->id }}"
+                                        value='sakit' wire:model="presensi.{{ $s->id }}">
                                     S <span class="mx-1"></span>
-                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio" id="presensiAlfa"
-                                        name="presensi.{{ $s->id }}" value='alfa'
-                                        wire:model="presensi.{{ $s->id }}">
+                                    <input type="radio" id="presensiAlfa" name="presensi.{{ $s->id }}"
+                                        value='alfa' wire:model="presensi.{{ $s->id }}">
                                     A <span class="mx-1"></span>
-                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
-                                        id="presensiDinasDalam" name="presensi.{{ $s->id }}"
-                                        value='dinas dalam' wire:model="presensi.{{ $s->id }}">
+                                    <input type="radio" id="presensiDinasDalam"
+                                        name="presensi.{{ $s->id }}" value='dinas dalam'
+                                        wire:model="presensi.{{ $s->id }}">
                                     DD <span class="mx-1"></span>
-                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
-                                        id="presensiDinasLuar" name="presensi.{{ $s->id }}"
+                                    <input type="radio" id="presensiDinasLuar" name="presensi.{{ $s->id }}"
                                         value='dinas luar' wire:model="presensi.{{ $s->id }}">
                                     DL <span class="mx-1"></span>
                                 </td>
@@ -150,15 +133,14 @@
         <div class="col-2">
             @can('admin')
                 @if ($update === false)
-                    <button class="btn btn-primary" {{ $filterMapel === '' ? 'disabled' : '' }}
-                        wire:click="save()">Simpan</button>
+                    <button class="btn btn-primary" wire:click="save()">Simpan</button>
                 @else
                     <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
-                        {{ $filterMapel === '' ? 'disabled' : '' }} wire:click="update()">Update</button>
+                        wire:click="update()">Update</button>
                 @endif
 
             @endcan
-            @can('guru')
+            {{-- @can('guru')
                 @if ($update === false)
                     <button class="btn btn-primary"
                         @php
@@ -185,7 +167,7 @@ if($filterMapel === ''){
                                                 echo 'wire:click="update()"';
                                             } @endphp>Update</button>
                 @endif
-            @endcan
+            @endcan --}}
         </div>
     </div>
 </div>

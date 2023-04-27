@@ -9,4 +9,9 @@ class Kegiatan extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    public function jadwalKegiatans()
+    {
+        return $this->hasMany(JadwalKegiatan::class);
+    }
 }

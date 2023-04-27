@@ -30,7 +30,7 @@ class DashboardController extends Controller
                 'title' => 'Dashboard',
                 'siswaAktif' => Siswa::where('status', 'belum lulus')->select('id')->count(),
                 'guruAktif' => Guru::where('status', 'aktif')->select('id')->count(),
-                'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count()
+                'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count(),
             ]);
         } else if (Auth::user()->role === 'guru') {
             $kelasAktif = [];
@@ -60,7 +60,7 @@ class DashboardController extends Controller
                 'title' => 'Dashboard',
                 'siswaAktif' => Siswa::where('status', 'belum lulus')->select('id')->count(),
                 'guruAktif' => Guru::where('status', 'aktif')->select('id')->count(),
-                'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count()
+                'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count(),
             ]);
         } else {
             return abort(403, 'Anda tidak memiliki akses kehalaman ini.');

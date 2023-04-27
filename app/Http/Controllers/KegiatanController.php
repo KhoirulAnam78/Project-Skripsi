@@ -24,4 +24,21 @@ class KegiatanController extends Controller
             'title' => 'Data Kegiatan'
         ]);
     }
+
+    public function show($slug)
+    {
+        $this->authorize('admin');
+        $kegiatan = Kegiatan::where('slug', $slug)->first();
+        if ($kegiatan->narasumber == true) {
+            return view('pages.admin.kegiatan_nara', [
+                'title' => $kegiatan->nama,
+                'kegiatan' => $kegiatan
+            ]);
+        } else {
+            return view('pages.admin.kegiatan_tanpa_nara', [
+                'title' => $kegiatan->nama,
+                'kegiatan' => $kegiatan
+            ]);
+        }
+    }
 }

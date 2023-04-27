@@ -14,6 +14,7 @@ use App\Http\Controllers\NarasumberController;
 use App\Http\Controllers\WaliAsramaController;
 use App\Http\Controllers\MataPelajaranController;
 use App\Http\Controllers\TahunAkademikController;
+use App\Http\Controllers\JadwalKegiatanController;
 use App\Http\Controllers\JadwalGuruPiketController;
 use App\Http\Controllers\JadwalPelajaranController;
 use App\Http\Controllers\MonitoringPembelajaranController;
@@ -92,8 +93,15 @@ Route::get('/download-template-jadwal-guru-piket', [JadwalGuruPiketController::c
 Route::get('/jadwal-pelajaran', [JadwalPelajaranController::class, 'index'])->middleware('auth');
 Route::get('/download-template-jadwal-pelajaran', [JadwalPelajaranController::class, 'download'])->middleware('auth');
 
+//Jadwal Kegiatan
+Route::get('/jadwal-kegiatan', [JadwalKegiatanController::class, 'index'])->middleware('auth');
+
 //PRESENSI PEMBELAJARAN
 Route::get('/presensi-pembelajaran', [MonitoringPembelajaranController::class, 'index'])->middleware('auth');
+
+//PRESENSI KEGIATAN
+Route::get('/presensi-kegiatan/{slug}', [KegiatanController::class, 'show'])->middleware('auth');
+
 
 //Daftar Pertemuan
 Route::get('/daftar-pertemuan', [MonitoringPembelajaranController::class, 'daftarPertemuan'])->middleware('auth');

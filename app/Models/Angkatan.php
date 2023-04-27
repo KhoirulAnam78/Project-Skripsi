@@ -18,4 +18,9 @@ class Angkatan extends Model
     {
         return $this->belongsToMany(WaliAsrama::class);
     }
+
+    public function jadwalKegiatans()
+    {
+        return $this->hasMany(JadwalKegiatan::class);
+    }
 }
