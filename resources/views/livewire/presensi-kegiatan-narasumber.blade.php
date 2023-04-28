@@ -50,6 +50,23 @@
 
     <div class="row mx-2 mb-3">
         <div class="col-lg-4 col-md-4">
+            <label for="narasumber_id" class="form-label">Narasumber</label>
+            <select wire:model="narasumber_id" id="narasumber_id" name="narasumber_id" class="form-select">
+                @if (count($narasumber) !== 0)
+                    <option value="">Pilih</option>
+                    @foreach ($narasumber as $n)
+                        <option value="{{ $n->id }}">{{ $n->nama }}</option>
+                    @endforeach
+                @else
+                    <option>Tidak ada narasumber</option>
+                @endif
+            </select>
+            @error('narasumber_id')
+                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                    {{ $message }}</span>
+            @enderror
+        </div>
+        <div class="col-lg-4 col-md-4">
             <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
             <input disabled type="time" id="waktu_mulai" class="form-control" value="{{ $waktu_mulai }}" />
             @error('waktu_mulai')
@@ -65,6 +82,8 @@
                     {{ $message }}</span>
             @enderror
         </div>
+    </div>
+    <div class="row mx-2 mb-3">
         <div class="col-lg-4 col-md-4">
             <label for="topik" class="form-label">Topik/Agenda Kegiatan</label>
             <textarea required name="topik" wire:model="topik" id="topik" class="form-control"></textarea>
