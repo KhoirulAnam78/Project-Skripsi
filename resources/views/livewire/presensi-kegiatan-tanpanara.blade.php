@@ -50,23 +50,6 @@
 
     <div class="row mx-2 mb-3">
         <div class="col-lg-4 col-md-4">
-            <label for="narasumber_id" class="form-label">Narasumber</label>
-            <select wire:model="narasumber_id" id="narasumber_id" name="narasumber_id" class="form-select">
-                @if (count($narasumber) !== 0)
-                    <option value="">Pilih</option>
-                    @foreach ($narasumber as $n)
-                        <option value="{{ $n->id }}">{{ $n->nama }}</option>
-                    @endforeach
-                @else
-                    <option>Tidak ada narasumber</option>
-                @endif
-            </select>
-            @error('narasumber_id')
-                <span class="error" style="color:red; font-size:12px; font-style:italic">*
-                    {{ $message }}</span>
-            @enderror
-        </div>
-        <div class="col-lg-4 col-md-4">
             <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
             <input disabled type="time" id="waktu_mulai" class="form-control" value="{{ $waktu_mulai }}" />
             @error('waktu_mulai')
@@ -78,17 +61,6 @@
             <label for="waktu_berakhir" class="form-label">Waktu Berakhir</label>
             <input disabled type="time" value="{{ $waktu_berakhir }}" id="waktu_berakhir" class="form-control" />
             @error('waktu_berakhir')
-                <span class="error" style="color:red; font-size:12px; font-style:italic">*
-                    {{ $message }}</span>
-            @enderror
-        </div>
-    </div>
-    <div class="row mx-2 mb-3">
-        <div class="col-lg-4 col-md-4">
-            <label for="topik" class="form-label">Topik/Agenda Kegiatan</label>
-            <textarea {{ $allow === false ? 'disabled' : '' }} required name="topik" wire:model="topik" id="topik"
-                class="form-control"></textarea>
-            @error('topik')
                 <span class="error" style="color:red; font-size:12px; font-style:italic">*
                     {{ $message }}</span>
             @enderror
@@ -134,12 +106,12 @@
                                         wire:model="presensi.{{ $s->id }}">
                                     A <span class="mx-1"></span>
                                     <input {{ $allow === false ? 'disabled' : '' }} type="radio"
-                                        id="presensiDinasDalam" name="presensi.{{ $s->id }}"
-                                        value='dinas dalam' wire:model="presensi.{{ $s->id }}">
+                                        id="presensiDinasDalam" name="presensi.{{ $s->id }}" value='dinas dalam'
+                                        wire:model="presensi.{{ $s->id }}">
                                     DD <span class="mx-1"></span>
                                     <input {{ $allow === false ? 'disabled' : '' }} type="radio"
-                                        id="presensiDinasLuar" name="presensi.{{ $s->id }}"
-                                        value='dinas luar' wire:model="presensi.{{ $s->id }}">
+                                        id="presensiDinasLuar" name="presensi.{{ $s->id }}" value='dinas luar'
+                                        wire:model="presensi.{{ $s->id }}">
                                     DL <span class="mx-1"></span>
                                 </td>
                             </tr>
@@ -164,7 +136,6 @@
                     <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
                         {{ $allow === false ? 'disabled' : '' }} wire:click="update()">Update</button>
                 @endif
-
             @endcan
             {{-- @can('guru')
                 @if ($update === false)

@@ -7,11 +7,11 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\TahunAkademik;
 use App\Models\JadwalKegiatan;
-use App\Models\KehadiranKegnas;
-use App\Models\MonitoringKegnas;
+use App\Models\KehadiranKegiatan;
+use App\Models\MonitoringKegiatan;
 use App\Models\Narasumber;
 
-class PresensiKegiatanNarasumber extends Component
+class PresensiKegiatanTanpanara extends Component
 {
     //pagination
     use WithPagination;
@@ -28,7 +28,7 @@ class PresensiKegiatanNarasumber extends Component
     //menampung jadwal pelajaran dan jadwal pengganti
     public $jadwal;
     //atribut inputan
-    public $tanggal, $waktu_mulai, $waktu_berakhir, $topik, $narasumber_id;
+    public $tanggal, $waktu_mulai, $waktu_berakhir;
     //menampung kehadiran siswa
     public $presensi = [];
     public $kegiatan, $allow;
@@ -57,6 +57,7 @@ class PresensiKegiatanNarasumber extends Component
 
         $angkatan_id = Kelas::find($this->filterKelas)->angkatan_id;
         $this->jadwal = JadwalKegiatan::where('kegiatan_id', $kegiatan->id)->where('angkatan_id', $angkatan_id)->first();
+
         if ($this->jadwal) {
             $this->hari = $this->jadwal->hari;
             if ($this->hari !== 'Setiap Hari') {
@@ -73,32 +74,29 @@ class PresensiKegiatanNarasumber extends Component
             $this->update = false;
 
             //Cek apakah jadwal sudah diinputkan
-            if (MonitoringKegnas::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first()) {
+            if (MonitoringKegiatan::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first()) {
                 //ambil data
-                $monitoring = MonitoringKegnas::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first();
+                $monitoring = MonitoringKegiatan::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first();
 
                 //set data berdasarkan data yang sudah diinputkan
                 $this->editPresensi = $monitoring->id;
                 $this->tanggal = $monitoring->tanggal;
-                $this->narasumber_id = $monitoring->narasumber_id;
                 $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
                 $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
-                $this->topik = $monitoring->topik;
 
                 //set update true, berarti data akan diupdate
                 $this->update = true;
 
                 //ambil data kehadiran siswa yang sudah diinputkan
-                $kehadiran = KehadiranKegnas::where('monitoring_kegna_id', $monitoring->id)->get()->all();
+                $kehadiran = KehadiranKegiatan::where('monitoring_kegiatan_id', $monitoring->id)->get()->all();
                 foreach ($kehadiran as $k) {
                     $this->presensi[$k->siswa_id] = $k->status;
                 }
             }
         } else {
-            $this->hari = '';
             $this->allow = false;
+            $this->hari = '';
             $this->waktu_mulai = '';
-            $this->narasumber_id = '';
             $this->waktu_berakhir = '';
         }
     }
@@ -108,8 +106,6 @@ class PresensiKegiatanNarasumber extends Component
     {
         return [
             'tanggal' => 'required|date',
-            'topik' => 'required',
-            'narasumber_id' => 'required',
             'waktu_mulai' => 'required|date_format:H:i',
             'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
         ];
@@ -118,23 +114,19 @@ class PresensiKegiatanNarasumber extends Component
     //Custom Errror messages for validation
     protected $messages = [
         'tanggal.required' => 'Tanggal wajib diisi !',
-        'narasumber_id.required' => 'Narasumber wajib diisi !',
         'waktu_mulai.required' => 'Waktu mulai wajib diisi !',
         'waktu_mulai.date_format' => 'Waktu mulai hanya diperbolehkan format waktu !',
         'waktu_berakhir.required' => 'Waktu berakhir wajib diisi !',
         'waktu_berakhir.date_format' => 'Waktu berakhir hanya diperbolehkan format waktu !',
         'waktu_berakhir.after' => 'Waktu berakhir harus lebih besar dari waktu mulai !',
-        'topik.required' => 'Topik/Agenda wajib diisi !',
     ];
 
     //mengosongkan inputan
     public function empty()
     {
-        $this->topik = null;
         $this->waktu_mulai = null;
         $this->waktu_berakhir = null;
         $this->editPresensi = null;
-        $this->narasumber_id = null;
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -166,31 +158,28 @@ class PresensiKegiatanNarasumber extends Component
             $this->update = false;
 
             //Cek apakah jadwal sudah diinputkan
-            if (MonitoringKegnas::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first()) {
+            if (MonitoringKegiatan::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first()) {
                 //ambil data
-                $monitoring = MonitoringKegnas::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first();
+                $monitoring = MonitoringKegiatan::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first();
                 //set data berdasarkan data yang sudah diinputkan
                 $this->editPresensi = $monitoring->id;
                 $this->tanggal = $monitoring->tanggal;
-                $this->narasumber_id = $monitoring->narasumber_id;
                 $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
                 $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
-                $this->topik = $monitoring->topik;
 
                 //set update true, berarti data akan diupdate
                 $this->update = true;
 
                 //ambil data kehadiran siswa yang sudah diinputkan
-                $kehadiran = KehadiranKegnas::where('monitoring_kegna_id', $monitoring->id)->get()->all();
+                $kehadiran = KehadiranKegiatan::where('monitoring_kegiatan_id', $monitoring->id)->get()->all();
                 foreach ($kehadiran as $k) {
                     $this->presensi[$k->siswa_id] = $k->status;
                 }
             }
         } else {
-            $this->hari = '';
             $this->allow = false;
+            $this->hari = '';
             $this->waktu_mulai = '';
-            $this->narasumber_id = '';
             $this->waktu_berakhir = '';
         }
 
@@ -208,19 +197,17 @@ class PresensiKegiatanNarasumber extends Component
     public function save()
     {
         $this->validate();
-        $monitoring = MonitoringKegnas::create([
+        $monitoring = MonitoringKegiatan::create([
             'tanggal' => $this->tanggal,
-            'topik' => $this->topik,
             'waktu_mulai' => $this->waktu_mulai,
             'waktu_berakhir' => $this->waktu_berakhir,
-            'narasumber_id' => $this->narasumber_id,
             'jadwal_kegiatan_id' => $this->jadwal->id,
         ]);
         foreach ($this->presensi as $key => $value) {
-            KehadiranKegnas::create([
+            KehadiranKegiatan::create([
                 'siswa_id' => $key,
                 'status' => $value,
-                'monitoring_kegna_id' => $monitoring->id
+                'monitoring_kegiatan_id' => $monitoring->id
             ]);
         }
         $this->update = true;
@@ -231,12 +218,8 @@ class PresensiKegiatanNarasumber extends Component
     public function update()
     {
         $this->validate();
-        MonitoringKegnas::where('id', $this->editPresensi)->update([
-            'topik' => $this->topik,
-            'narasumber_id' => $this->narasumber_id
-        ]);
         foreach ($this->presensi as $key => $value) {
-            KehadiranKegnas::where('monitoring_kegna_id', $this->editPresensi)->where('siswa_id', $key)->update([
+            KehadiranKegiatan::where('monitoring_kegiatan_id', $this->editPresensi)->where('siswa_id', $key)->update([
                 'status' => $value,
             ]);
         }
@@ -245,10 +228,9 @@ class PresensiKegiatanNarasumber extends Component
 
     public function render()
     {
-        return view('livewire.presensi-kegiatan-narasumber', [
+        return view('livewire.presensi-kegiatan-tanpanara', [
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->paginate(10),
-            'narasumber' => Narasumber::all()
         ]);
     }
 }

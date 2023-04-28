@@ -7,7 +7,7 @@
                 <div class="card">
                     <h5 class="card-header px-3">Input presensi siswa
                     </h5>
-                    {{-- <livewire:presensi-kegiatan-narasumber :kegiatan="$kegiatan" /> --}}
+                    <livewire:presensi-kegiatan-tanpanara :kegiatan="$kegiatan" />
                 </div>
             </div>
         </div>

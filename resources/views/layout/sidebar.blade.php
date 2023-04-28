@@ -51,6 +51,11 @@
                             <div data-i18n="Data Guru">Data Guru</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ $title === 'Data Wali Asrama' ? 'active' : '' }}">
+                        <a href="/data-wali-asrama" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Data Wali Asrama</div>
+                        </a>
+                    </li>
                     <li class="menu-item {{ $title === 'Tahun Akademik' ? 'active' : '' }}">
                         <a href="tahun-akademik" class="menu-link">
                             <div data-i18n="Tahun Akademik">Tahun Akademik</div>
@@ -79,11 +84,6 @@
                     <li class="menu-item {{ $title === 'Data Kegiatan' ? 'active' : '' }}">
                         <a href="/data-kegiatan" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Data Kegiatan</div>
-                        </a>
-                    </li>
-                    <li class="menu-item {{ $title === 'Data Wali Asrama' ? 'active' : '' }}">
-                        <a href="/data-wali-asrama" class="menu-link">
-                            <div data-i18n="Mata Pelajaran">Data Wali Asrama</div>
                         </a>
                     </li>
                     <li class="menu-item {{ $title === 'Data Narasumber' ? 'active' : '' }}">
@@ -220,6 +220,11 @@ foreach ($kegiatan as $k) {
                             <div data-i18n="Data Guru">Data Guru</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ $title === 'Data Wali Asrama' ? 'active' : '' }}">
+                        <a href="/data-wali-asrama" class="menu-link">
+                            <div data-i18n="Mata Pelajaran">Data Wali Asrama</div>
+                        </a>
+                    </li>
                     <li class="menu-item {{ $title === 'Tahun Akademik' ? 'active' : '' }}">
                         <a href="tahun-akademik" class="menu-link">
                             <div data-i18n="Tahun Akademik">Tahun Akademik</div>
@@ -249,11 +254,6 @@ foreach ($kegiatan as $k) {
                     <li class="menu-item {{ $title === 'Data Kegiatan' ? 'active' : '' }}">
                         <a href="/data-kegiatan" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Data Kegiatan</div>
-                        </a>
-                    </li>
-                    <li class="menu-item {{ $title === 'Data Wali Asrama' ? 'active' : '' }}">
-                        <a href="/data-wali-asrama" class="menu-link">
-                            <div data-i18n="Mata Pelajaran">Data Wali Asrama</div>
                         </a>
                     </li>
                     <li class="menu-item {{ $title === 'Data Narasumber' ? 'active' : '' }}">

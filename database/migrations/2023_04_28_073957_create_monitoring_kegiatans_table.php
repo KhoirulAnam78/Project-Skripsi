@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('monitoring_kegiatans', function (Blueprint $table) {
             $table->id();
+            $table->date('tanggal');
+            $table->time('waktu_mulai');
+            $table->time('waktu_berakhir');
+            $table->foreignId('jadwal_kegiatan_id')->constrained('jadwal_kegiatans');
             $table->timestamps();
         });
     }

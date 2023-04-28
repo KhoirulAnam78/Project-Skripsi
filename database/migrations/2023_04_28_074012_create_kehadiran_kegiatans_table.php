@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('kehadiran_kegiatans', function (Blueprint $table) {
             $table->id();
+            $table->enum('status', ['hadir', 'sakit', 'alfa', 'izin', 'dinas luar', 'dinas dalam']);
+            $table->foreignId('siswa_id')->constrained('siswas');
+            $table->foreignId('monitoring_kegiatan_id')->constrained('monitoring_kegiatans');
             $table->timestamps();
         });
     }

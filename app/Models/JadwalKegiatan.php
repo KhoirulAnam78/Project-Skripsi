@@ -19,8 +19,14 @@ class JadwalKegiatan extends Model
     {
         return $this->belongsTo(Kegiatan::class);
     }
+
     public function monitoringKegnas()
     {
         return $this->hasMany(MonitoringKegnas::class);
+    }
+
+    public function monitoringKegiatan()
+    {
+        return $this->hasMany(MonitoringKegiatan::class);
     }
 }
