@@ -224,6 +224,29 @@ foreach ($kegiatan as $k) {
                     </li>
                 </ul>
             </li>
+
+            <li
+                class="menu-item @php
+foreach ($kegiatan as $k) {
+                    if ('Rekapitulasi '.$k->nama === $title) {
+                        echo 'active open';
+                    }   
+                } @endphp">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    {{-- <i class="menu-icon tf-icons bx bx-dock-top"></i> --}}
+                    <i class='menu-icon tf-icons bx bx-list-ul'></i>
+                    <div data-i18n="Account Settings">Kegiatan</div>
+                </a>
+                <ul class="menu-sub">
+                    @foreach ($kegiatan as $k)
+                        <li class="menu-item {{ $title === 'Rekapitulasi ' . $k->nama ? 'active' : '' }}">
+                            <a href="/rekapitulasi-kegiatan/{{ $k->slug }}" class="menu-link">
+                                <div data-i18n="Presensi Pembelajaran">{{ $k->nama }}</div>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </li>
         @endcan
 
         @can('pimpinan')
