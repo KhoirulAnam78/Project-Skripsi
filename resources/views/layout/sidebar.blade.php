@@ -139,12 +139,6 @@ foreach ($kegiatan as $k) {
                         echo 'active open';
                     }   
                 } @endphp">
-                {{-- <a href="javascript:void(0);" class="menu-link menu-toggle"> --}}
-                {{-- <i class="menu-icon tf-icons bx bx-lock-open-alt"></i> --}}
-                {{-- <i class='menu-icons tf-icons bx bxs-file-export'></i> --}}
-                {{-- <i class='menu-icons bx bx-log-in-circle'></i> --}}
-                {{-- <div data-i18n="Input Presensi">Input Presensi</div> --}}
-                {{-- </a> --}}
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     {{-- <i class="menu-icon tf-icons bx bx-dock-top"></i> --}}
                     <i class='menu-icon tf-icons bx bx-log-in-circle'></i>
@@ -177,13 +171,40 @@ foreach ($kegiatan as $k) {
             <!-- Components -->
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
             <!-- Data Rekapitulasi -->
-            <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
+            {{-- <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
                 <a href="/daftar-pertemuan" class="menu-link">
-                    {{-- <i class="menu-icon tf-icons bx bx-collection"></i> --}}
                     <i class='menu-icon tf-icons bx bx-list-ul'></i>
                     <div data-i18n="Validasi Pembelajaran">Daftar Pertemuan</div>
                 </a>
+            </li> --}}
+            <li
+                class="menu-item {{ $title === 'Daftar Pembelajaran' ? 'active open' : '' }} @php
+foreach ($kegiatan as $k) {
+                    if ('Daftar '.$k->nama === $title) {
+                        echo 'active open';
+                    }   
+                } @endphp">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    {{-- <i class="menu-icon tf-icons bx bx-dock-top"></i> --}}
+                    <i class='menu-icon tf-icons bx bx-list-ul'></i>
+                    <div data-i18n="Account Settings">Daftar Pertemuan</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ $title === 'Daftar Pembelajaran' ? 'active' : '' }}">
+                        <a href="/daftar-pertemuan" class="menu-link">
+                            <div data-i18n="Pembelajaran">Pembelajaran</div>
+                        </a>
+                    </li>
+                    @foreach ($kegiatan as $k)
+                        <li class="menu-item {{ $title === 'Daftar ' . $k->nama ? 'active' : '' }}">
+                            <a href="/daftar-kegiatan/{{ $k->slug }}" class="menu-link">
+                                <div data-i18n="Presensi Pembelajaran">{{ $k->nama }}</div>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
             </li>
+
             <li
                 class="menu-item {{ ($title === 'Rekapitulasi Siswa' or $title === 'Rekapitulasi Guru') ? 'active open' : '' }}">
                 <a href="javascript:void(0)" class="menu-link menu-toggle">
@@ -313,6 +334,7 @@ foreach ($kegiatan as $k) {
                     <div data-i18n="Validasi Pembelajaran">Daftar Pertemuan</div>
                 </a>
             </li>
+
             <li
                 class="menu-item {{ ($title === 'Rekapitulasi Siswa' or $title === 'Rekapitulasi Guru') ? 'active open' : '' }}">
                 <a href="javascript:void(0)" class="menu-link menu-toggle">

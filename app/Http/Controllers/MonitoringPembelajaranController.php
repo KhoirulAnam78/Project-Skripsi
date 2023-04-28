@@ -27,7 +27,7 @@ class MonitoringPembelajaranController extends Controller
             return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
         }
         return view('pages.admin.daftar_pertemuan', [
-            'title' => 'Daftar Pertemuan'
+            'title' => 'Daftar Pembelajaran'
         ]);
     }
 
