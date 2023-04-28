@@ -38,7 +38,7 @@
         <!-- Layouts -->
         @can('admin')
             <li
-                class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran' or $title === 'Data Narasumber' or $title === 'Data Angkatan' or $title === 'Data Wali Asrama') ? 'active open' : '' }}">
+                class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran' or $title === 'Data Narasumber' or $title === 'Data Angkatan' or $title === 'Data Wali Asrama' or $title === 'Data Kegiatan') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     {{-- <i class="menu-icon tf-icons bx bx-layout"></i> --}}
                     <i class='menu-icon tf-icons bx bx-data'></i>
@@ -207,7 +207,7 @@ foreach ($kegiatan as $k) {
 
         @can('pimpinan')
             <li
-                class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran' or $title === 'Data Narasumber' or $title === 'Data Angkatan' or $title === 'Data Wali Asrama') ? 'active open' : '' }}">
+                class="menu-item {{ ($title === 'Data Guru' or $title === 'Tahun Akademik' or $title === 'Data Kelas' or $title === 'Data Siswa' or $title === 'Mata Pelajaran' or $title === 'Data Narasumber' or $title === 'Data Angkatan' or $title === 'Data Wali Asrama' or $title === 'Data Kegiatan') ? 'active open' : '' }}">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     {{-- <i class="menu-icon tf-icons bx bx-layout"></i> --}}
                     <i class='menu-icon tf-icons bx bx-data'></i>
