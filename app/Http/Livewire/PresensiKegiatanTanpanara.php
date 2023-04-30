@@ -3,13 +3,14 @@
 namespace App\Http\Livewire;
 
 use App\Models\Kelas;
+use App\Models\Siswa;
 use Livewire\Component;
+use App\Models\Narasumber;
 use Livewire\WithPagination;
 use App\Models\TahunAkademik;
 use App\Models\JadwalKegiatan;
 use App\Models\KehadiranKegiatan;
 use App\Models\MonitoringKegiatan;
-use App\Models\Narasumber;
 
 class PresensiKegiatanTanpanara extends Component
 {
@@ -141,6 +142,13 @@ class PresensiKegiatanTanpanara extends Component
         //kosongkan data
         $this->empty();
         $angkatan_id = Kelas::find($this->filterKelas)->angkatan_id;
+        $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas->first();
+        if ($siswa) {
+            $siswa_id = $siswa->id;
+        } else {
+            $siswa_id = '';
+        }
+        // dd($siswa_id);
         $this->jadwal = JadwalKegiatan::where('kegiatan_id', $this->kegiatan->id)->where('angkatan_id', $angkatan_id)->first();
         if ($this->jadwal) {
             $this->hari = $this->jadwal->hari;
@@ -168,12 +176,14 @@ class PresensiKegiatanTanpanara extends Component
                 $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
 
                 //set update true, berarti data akan diupdate
-                $this->update = true;
 
                 //ambil data kehadiran siswa yang sudah diinputkan
-                $kehadiran = KehadiranKegiatan::where('monitoring_kegiatan_id', $monitoring->id)->get()->all();
-                foreach ($kehadiran as $k) {
-                    $this->presensi[$k->siswa_id] = $k->status;
+                if (KehadiranKegiatan::where('monitoring_kegiatan_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
+                    $this->update = true;
+                    $kehadiran = KehadiranKegiatan::where('monitoring_kegiatan_id', $monitoring->id)->get()->all();
+                    foreach ($kehadiran as $k) {
+                        $this->presensi[$k->siswa_id] = $k->status;
+                    }
                 }
             }
         } else {
@@ -188,21 +198,26 @@ class PresensiKegiatanTanpanara extends Component
         // $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas->orderBy('nama', 'asc')->all();
 
         //set presensi menjadi hadir bagi setiap siswa
-        $this->presensi = [];
-        foreach ($this->student as $s) {
-            $this->presensi[$s->id] = 'hadir';
-        }
+        // $this->presensi = [];
+        // foreach ($this->student as $s) {
+        //     $this->presensi[$s->id] = 'hadir';
+        // }
     }
 
     public function save()
     {
         $this->validate();
-        $monitoring = MonitoringKegiatan::create([
-            'tanggal' => $this->tanggal,
-            'waktu_mulai' => $this->waktu_mulai,
-            'waktu_berakhir' => $this->waktu_berakhir,
-            'jadwal_kegiatan_id' => $this->jadwal->id,
-        ]);
+        if (MonitoringKegiatan::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first()) {
+            //ambil data
+            $monitoring = MonitoringKegiatan::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first();
+        } else {
+            $monitoring = MonitoringKegiatan::create([
+                'tanggal' => $this->tanggal,
+                'waktu_mulai' => $this->waktu_mulai,
+                'waktu_berakhir' => $this->waktu_berakhir,
+                'jadwal_kegiatan_id' => $this->jadwal->id,
+            ]);
+        }
         foreach ($this->presensi as $key => $value) {
             KehadiranKegiatan::create([
                 'siswa_id' => $key,
