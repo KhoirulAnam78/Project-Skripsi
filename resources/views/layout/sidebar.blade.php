@@ -180,7 +180,7 @@ foreach ($kegiatan as $k) {
             <li
                 class="menu-item {{ $title === 'Daftar Pembelajaran' ? 'active open' : '' }} @php
 foreach ($kegiatan as $k) {
-                    if ('Daftar '.$k->nama === $title) {
+                    if ('Daftar Kegiatan '.$k->nama === $title) {
                         echo 'active open';
                     }   
                 } @endphp">
@@ -196,7 +196,7 @@ foreach ($kegiatan as $k) {
                         </a>
                     </li>
                     @foreach ($kegiatan as $k)
-                        <li class="menu-item {{ $title === 'Daftar ' . $k->nama ? 'active' : '' }}">
+                        <li class="menu-item {{ $title === 'Daftar Kegiatan ' . $k->nama ? 'active' : '' }}">
                             <a href="/daftar-kegiatan/{{ $k->slug }}" class="menu-link">
                                 <div data-i18n="Presensi Pembelajaran">{{ $k->nama }}</div>
                             </a>

@@ -17,6 +17,7 @@ use App\Http\Controllers\TahunAkademikController;
 use App\Http\Controllers\JadwalKegiatanController;
 use App\Http\Controllers\JadwalGuruPiketController;
 use App\Http\Controllers\JadwalPelajaranController;
+use App\Http\Controllers\MonitoringKegiatanController;
 use App\Http\Controllers\MonitoringPembelajaranController;
 
 /*
@@ -105,6 +106,8 @@ Route::get('/presensi-kegiatan/{slug}', [KegiatanController::class, 'show'])->mi
 
 //Daftar Pertemuan
 Route::get('/daftar-pertemuan', [MonitoringPembelajaranController::class, 'daftarPertemuan'])->middleware('auth');
+Route::get('/daftar-kegiatan/{slug}', [MonitoringKegiatanController::class, 'daftarKegiatan'])->middleware('auth');
+
 
 //Jadwal Pengganti
 Route::get('/jadwal-pengganti', [JadwalPelajaranController::class, 'jadwalPengganti'])->middleware('auth');
