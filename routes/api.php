@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GuruApiController;
 use App\Http\Controllers\Api\PresensiController;
+use App\Http\Controllers\Api\SiswaApiController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,4 +32,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/validasi', [PresensiController::class, 'validasi']);
     Route::post('/validasi/valid', [Presensicontroller::class, 'valid']);
     Route::post('/validasi/tidak-valid', [Presensicontroller::class, 'tidakValid']);
+    Route::post('/get-jadwal-siswa', [SiswaApiController::class, 'getJadwal']);
 });
