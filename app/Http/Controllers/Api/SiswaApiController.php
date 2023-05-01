@@ -17,7 +17,7 @@ class SiswaApiController extends Controller
       }])->first();
       return response()->json([
         'message' => 'Fetch data success',
-        'jadwal-siswa' => $jadwal->kelas->first()->jadwalPelajarans()->where('hari', $request->hari)->with('mataPelajaran')->with(['monitoringPembelajarans' => function ($query) {
+        'jadwal-siswa' => $jadwal->kelas->first()->jadwalPelajarans()->where('hari', $request->hari)->with('mataPelajaran', 'guru')->with(['monitoringPembelajarans' => function ($query) {
           if ($query) {
             $query->with(['kehadiranPembelajarans' => function ($query) {
               $query->where('siswa_id', auth('sanctum')->user()->siswa->id);
