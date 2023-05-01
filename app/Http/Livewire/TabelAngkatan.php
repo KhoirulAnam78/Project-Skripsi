@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Angkatan;
-use App\Models\AngkatanWaliAsrama;
-use App\Models\WaliAsrama;
 use Livewire\Component;
+use App\Models\Angkatan;
+use App\Models\WaliAsrama;
 use Livewire\WithPagination;
+use App\Models\TahunAkademik;
+use App\Models\AngkatanWaliAsrama;
 
 class TabelAngkatan extends Component
 {
@@ -116,8 +117,9 @@ class TabelAngkatan extends Component
                 'nama' => $this->nama,
                 'status' => $this->status
             ]);
-            $kelas = Angkatan::find($this->angkatan_edit_id)->kelas->all();
-
+            $akademik = TahunAkademik::where('status', 'aktif')->first()->id;
+            $kelas = Angkatan::find($this->angkatan_edit_id)->kelas->where('tahun_akademik_id', $akademik)->all();
+            // dd($kelas);
             foreach ($kelas as $k) {
                 $siswa = $k->siswas;
                 foreach ($siswa as $s) {
