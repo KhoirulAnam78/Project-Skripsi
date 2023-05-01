@@ -93,6 +93,15 @@ class PresensiKegiatanTanpanara extends Component
                 foreach ($kehadiran as $k) {
                     $this->presensi[$k->siswa_id] = $k->status;
                 }
+            } else {
+                //ambil data siswa kelas yang dipilih
+                $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+
+                //set presensi menjadi hadir bagi setiap siswa
+                $this->presensi = [];
+                foreach ($this->student as $s) {
+                    $this->presensi[$s->id] = 'hadir';
+                }
             }
         } else {
             $this->allow = false;
@@ -194,6 +203,15 @@ class PresensiKegiatanTanpanara extends Component
                     foreach ($this->student as $s) {
                         $this->presensi[$s->id] = 'hadir';
                     }
+                }
+            } else {
+                //ambil data siswa kelas yang dipilih
+                $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+
+                //set presensi menjadi hadir bagi setiap siswa
+                $this->presensi = [];
+                foreach ($this->student as $s) {
+                    $this->presensi[$s->id] = 'hadir';
                 }
             }
         } else {

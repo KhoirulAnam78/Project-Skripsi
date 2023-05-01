@@ -102,6 +102,11 @@ class DaftarKegiatanTanpanara extends Component
         ]);
     }
 
+    public function empty()
+    {
+        $this->detail = [];
+    }
+
     public function updatingFilterAngkatan()
     {
         $this->resetPage();

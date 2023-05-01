@@ -89,9 +89,18 @@ class PresensiKegiatanNarasumber extends Component
                 $this->update = true;
 
                 //ambil data kehadiran siswa yang sudah diinputkan
-                $kehadiran = KehadiranKegnas::where('monitoring_kegna_id', $monitoring->id)->get()->all();
+                $kehadiran = KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->get()->all();
                 foreach ($kehadiran as $k) {
                     $this->presensi[$k->siswa_id] = $k->status;
+                }
+            } else {
+                //ambil data siswa kelas yang dipilih
+                $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+
+                //set presensi menjadi hadir bagi setiap siswa
+                $this->presensi = [];
+                foreach ($this->student as $s) {
+                    $this->presensi[$s->id] = 'hadir';
                 }
             }
         } else {
@@ -183,9 +192,9 @@ class PresensiKegiatanNarasumber extends Component
                 $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
                 $this->topik = $monitoring->topik;
 
-                if (KehadiranKegnas::where('monitoring_kegna_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
+                if (KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
                     $this->update = true;
-                    $kehadiran = KehadiranKegnas::where('monitoring_kegna_id', $monitoring->id)->get()->all();
+                    $kehadiran = KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->get()->all();
                     foreach ($kehadiran as $k) {
                         $this->presensi[$k->siswa_id] = $k->status;
                     }
@@ -204,10 +213,19 @@ class PresensiKegiatanNarasumber extends Component
                 // $this->update = true;
 
                 //ambil data kehadiran siswa yang sudah diinputkan
-                // $kehadiran = KehadiranKegnas::where('monitoring_kegna_id', $monitoring->id)->get()->all();
+                // $kehadiran = KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->get()->all();
                 // foreach ($kehadiran as $k) {
                 //     $this->presensi[$k->siswa_id] = $k->status;
                 // }
+            } else {
+                //ambil data siswa kelas yang dipilih
+                $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+
+                //set presensi menjadi hadir bagi setiap siswa
+                $this->presensi = [];
+                foreach ($this->student as $s) {
+                    $this->presensi[$s->id] = 'hadir';
+                }
             }
         } else {
             $this->hari = '';
@@ -257,7 +275,7 @@ class PresensiKegiatanNarasumber extends Component
             KehadiranKegnas::create([
                 'siswa_id' => $key,
                 'status' => $value,
-                'monitoring_kegna_id' => $monitoring->id
+                'monitoring_kegnas_id' => $monitoring->id
             ]);
         }
         $this->update = true;
@@ -273,7 +291,7 @@ class PresensiKegiatanNarasumber extends Component
             'narasumber_id' => $this->narasumber_id
         ]);
         foreach ($this->presensi as $key => $value) {
-            KehadiranKegnas::where('monitoring_kegna_id', $this->editPresensi)->where('siswa_id', $key)->update([
+            KehadiranKegnas::where('monitoring_kegnas_id', $this->editPresensi)->where('siswa_id', $key)->update([
                 'status' => $value,
             ]);
         }

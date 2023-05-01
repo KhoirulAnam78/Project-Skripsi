@@ -13,6 +13,12 @@ class MonitoringKegnas extends Model
     {
         return $this->belongsTo(JadwalKegiatan::class);
     }
+
+    public function narasumber()
+    {
+        return $this->belongsTo(Narasumber::class);
+    }
+
     public function kehadiranKegnas()
     {
         return $this->hasMany(KehadiranKegnas::class);

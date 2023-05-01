@@ -9,4 +9,8 @@ class Narasumber extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+    public function monitoringKegnas()
+    {
+        return $this->hasMany(MonitoringKegnas::class);
+    }
 }
