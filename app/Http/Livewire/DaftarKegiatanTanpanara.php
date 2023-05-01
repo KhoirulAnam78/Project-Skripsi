@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\KehadiranPembelajaran;
 use App\Exports\DaftarPertemuanExport;
+use App\Models\KehadiranKegiatan;
 use App\Models\MonitoringPembelajaran;
 
 class DaftarKegiatanTanpanara extends Component
@@ -26,12 +27,18 @@ class DaftarKegiatanTanpanara extends Component
     public $kelas;
     public $kegiatan;
     public $filterAngkatan = '';
-    public $presensi = [];
+    public $detail = [];
     public $jml_siswa;
+    public $monitoring;
     public $keterangan;
+    public $tanggalAwal;
+    public $tanggalAkhir;
+
 
     public function mount($kegiatan)
     {
+        $this->tanggalAkhir = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
+        $this->tanggalAwal =  \Carbon\Carbon::now()->subDays(6)->translatedFormat('Y-m-d');
         $this->kegiatan = $kegiatan;
         $this->filterAngkatan = Angkatan::select('id')->first()->id;
         $this->jml_siswa = 0;
@@ -43,19 +50,16 @@ class DaftarKegiatanTanpanara extends Component
         // $this->filterKelas = $this->kelas->first()->id;
     }
 
-    // public function detail($id)
-    // {
-    //     //ambil data
-    //     $monitoring = MonitoringPembelajaran::find($id);
-    //     $this->keterangan = $monitoring->keterangan;
-
-    //     //ambil data kehadiran siswa yang sudah diinputkan
-    //     $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
-    //     foreach ($kehadiran as $k) {
-    //         $this->presensi[$k->siswa_id] = $k->status;
-    //     }
-    //     $this->dispatchBrowserEvent('show-detail-modal');
-    // }
+    public function detail($id)
+    {
+        // dd('Masuk Sini');
+        //ambil data
+        // $this->monitoring = $id);
+        //ambil data kehadiran siswa yang sudah diinputkan
+        $this->detail = KehadiranKegiatan::where('monitoring_kegiatan_id', $id)->where('status', '!=', 'hadir')->get()->all();
+        // dd($this->detail);
+        $this->dispatchBrowserEvent('show-detail-modal');
+    }
 
     // public function export()
     // {
@@ -90,18 +94,15 @@ class DaftarKegiatanTanpanara extends Component
     {
         return view('livewire.daftar-kegiatan-tanpanara', [
             'angkatan' => Angkatan::latest()->get()->all(),
-            'pertemuan' => MonitoringKegiatan::with('kehadiranKegiatan')->whereRelation('jadwalKegiatan', 'angkatan_id', $this->filterAngkatan)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan->id)->paginate(10),
-
+            'pertemuan' => MonitoringKegiatan::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('kehadiranKegiatan')->whereRelation('jadwalKegiatan', 'angkatan_id', $this->filterAngkatan)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan->id)->paginate(10),
             'jml_siswa' => $this->jml_siswa,
+            'detail' => $this->detail,
+            'akademik_id' => TahunAkademik::where('status', 'aktif')->first()->id
             // 'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10)
         ]);
     }
-    public function updatingMapel()
-    {
-        $this->resetPage();
-    }
 
-    public function updatingFilterKelas()
+    public function updatingFilterAngkatan()
     {
         $this->resetPage();
     }

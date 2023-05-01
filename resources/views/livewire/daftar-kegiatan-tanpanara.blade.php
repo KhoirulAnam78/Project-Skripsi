@@ -15,15 +15,8 @@
             </div>
         </div>
     @endif
-    <div class="row mx-2 mb-3 justify-content-start">
-        <div class="col-lg-2">
-            <a class="btn btn-info mb-2 text-white" {{-- wire:click="export({{ $filterKelas }},{{ $filterMapel }})" --}}
-                style="background-color:#F0AD4E ;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
-                Export</a>
-        </div>
-    </div>
-    <div class="row mx-2 mb-3">
-        <div class="col-lg-4 col-md-4 mb-3 mx-3">
+    <div class="row mx-2 mb-2">
+        <div class="col-lg-3 col-md-3 mb-3 mx-2">
             <label for="tahun_akademik_id" class="form-label">Angkatan</label>
             <select wire:model="filterAngkatan" id="filterAngkatan" name="filterAngkatan" class="form-select">
                 @foreach ($angkatan as $a)
@@ -31,18 +24,31 @@
                 @endforeach
             </select>
         </div>
-        {{-- <div class="col-lg-3 col-md-3 mb-3 mx-3">
-            <label for="kelas_id" class="form-label">Kelas</label>
-            <select wire:model="filterKelas" id="kelas_id" class="form-select">
-                @if ($kelas !== null)
-                    @foreach ($kelas as $k)
-                        <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                    @endforeach
-                @else
-                    <option>Pilih tahun akademik</option>
-                @endif
-            </select>
-        </div> --}}
+        <div class="col-lg-4 col-md-4">
+            <label for="tanggalAwal" class="form-label">Tanggal Awal</label>
+            <input type="date" wire:model="tanggalAwal" name="tanggalAwal" id="tanggalAwal" class="form-control" />
+            @error('tanggalAwal')
+                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                    {{ $message }}</span>
+            @enderror
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <label for="tanggalAkhir" class="form-label">Tanggal Akhir</label>
+            <input type="date" wire:model="tanggalAkhir" name="tanggalAkhir" id="tanggalAkhir"
+                class="form-control" />
+            @error('tanggalAkhir')
+                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                    {{ $message }}</span>
+            @enderror
+        </div>
+    </div>
+
+    <div class="row mx-3 mb-3 justify-content-start">
+        <div class="col-lg-2">
+            <a class="btn btn-info mb-2 text-white" {{-- wire:click="export({{ $filterKelas }},{{ $filterMapel }})" --}}
+                style="background-color:#F0AD4E ;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
+                Export</a>
+        </div>
     </div>
     <div class="row mx-3">
         <div class="table-responsive text-nowrap mb-3">
@@ -103,7 +109,7 @@
             @endif --}}
         </div>
     </div>
-    {{-- @include('livewire.modals.modal-detail') --}}
+    @include('livewire.modals.modal-detail-kegiatan')
     <script>
         window.addEventListener('show-detail-modal', event => {
             $('#showModal').modal('show');

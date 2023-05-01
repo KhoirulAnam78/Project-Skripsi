@@ -149,6 +149,12 @@ class PresensiKegiatanNarasumber extends Component
         //kosongkan data
         $this->empty();
         $angkatan_id = Kelas::find($this->filterKelas)->angkatan_id;
+        $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas->first();
+        if ($siswa) {
+            $siswa_id = $siswa->id;
+        } else {
+            $siswa_id = '';
+        }
         $this->jadwal = JadwalKegiatan::where('kegiatan_id', $this->kegiatan->id)->where('angkatan_id', $angkatan_id)->first();
         if ($this->jadwal) {
             $this->hari = $this->jadwal->hari;
@@ -177,14 +183,31 @@ class PresensiKegiatanNarasumber extends Component
                 $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
                 $this->topik = $monitoring->topik;
 
+                if (KehadiranKegnas::where('monitoring_kegna_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
+                    $this->update = true;
+                    $kehadiran = KehadiranKegnas::where('monitoring_kegna_id', $monitoring->id)->get()->all();
+                    foreach ($kehadiran as $k) {
+                        $this->presensi[$k->siswa_id] = $k->status;
+                    }
+                } else {
+
+                    //ambil data siswa kelas yang dipilih
+                    $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+
+                    //set presensi menjadi hadir bagi setiap siswa
+                    $this->presensi = [];
+                    foreach ($this->student as $s) {
+                        $this->presensi[$s->id] = 'hadir';
+                    }
+                }
                 //set update true, berarti data akan diupdate
-                $this->update = true;
+                // $this->update = true;
 
                 //ambil data kehadiran siswa yang sudah diinputkan
-                $kehadiran = KehadiranKegnas::where('monitoring_kegna_id', $monitoring->id)->get()->all();
-                foreach ($kehadiran as $k) {
-                    $this->presensi[$k->siswa_id] = $k->status;
-                }
+                // $kehadiran = KehadiranKegnas::where('monitoring_kegna_id', $monitoring->id)->get()->all();
+                // foreach ($kehadiran as $k) {
+                //     $this->presensi[$k->siswa_id] = $k->status;
+                // }
             }
         } else {
             $this->hari = '';
@@ -192,6 +215,15 @@ class PresensiKegiatanNarasumber extends Component
             $this->waktu_mulai = '';
             $this->narasumber_id = '';
             $this->waktu_berakhir = '';
+
+            //ambil data siswa kelas yang dipilih
+            $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+
+            //set presensi menjadi hadir bagi setiap siswa
+            $this->presensi = [];
+            foreach ($this->student as $s) {
+                $this->presensi[$s->id] = 'hadir';
+            }
         }
 
         //ambil data siswa kelas yang dipilih
@@ -208,14 +240,19 @@ class PresensiKegiatanNarasumber extends Component
     public function save()
     {
         $this->validate();
-        $monitoring = MonitoringKegnas::create([
-            'tanggal' => $this->tanggal,
-            'topik' => $this->topik,
-            'waktu_mulai' => $this->waktu_mulai,
-            'waktu_berakhir' => $this->waktu_berakhir,
-            'narasumber_id' => $this->narasumber_id,
-            'jadwal_kegiatan_id' => $this->jadwal->id,
-        ]);
+        if (MonitoringKegnas::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first()) {
+            //ambil data
+            $monitoring = MonitoringKegnas::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first();
+        } else {
+            $monitoring = MonitoringKegnas::create([
+                'tanggal' => $this->tanggal,
+                'topik' => $this->topik,
+                'waktu_mulai' => $this->waktu_mulai,
+                'waktu_berakhir' => $this->waktu_berakhir,
+                'narasumber_id' => $this->narasumber_id,
+                'jadwal_kegiatan_id' => $this->jadwal->id,
+            ]);
+        }
         foreach ($this->presensi as $key => $value) {
             KehadiranKegnas::create([
                 'siswa_id' => $key,
