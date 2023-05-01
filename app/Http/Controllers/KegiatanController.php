@@ -41,4 +41,20 @@ class KegiatanController extends Controller
             ]);
         }
     }
+    public function rekapitulasi($slug)
+    {
+        $this->authorize('admin');
+        $kegiatan = Kegiatan::where('slug', $slug)->first();
+        if ($kegiatan->narasumber == true) {
+            return view('pages.admin.rekap_kegiatan_nara', [
+                'title' => 'Rekapitulasi ' . $kegiatan->nama,
+                'kegiatan' => $kegiatan
+            ]);
+        } else {
+            return view('pages.admin.rekap_kegiatan_tanpanara', [
+                'title' => 'Rekapitulasi ' . $kegiatan->nama,
+                'kegiatan' => $kegiatan
+            ]);
+        }
+    }
 }

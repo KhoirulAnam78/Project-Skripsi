@@ -118,6 +118,7 @@ Route::get('/validasi-pembelajaran', [MonitoringPembelajaranController::class, '
 //Rekapitulasi Pembelajaran
 Route::get('/rekapitulasi-siswa', [MonitoringPembelajaranController::class, 'rekapSiswa'])->middleware('auth');
 Route::get('/rekapitulasi-guru', [MonitoringPembelajaranController::class, 'rekapGuru'])->middleware('auth');
+Route::get('/rekapitulasi-kegiatan/{slug}', [KegiatanController::class, 'rekapitulasi'])->middleware('auth');
 
 
 //HALAMAN WALI MURID

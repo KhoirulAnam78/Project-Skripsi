@@ -109,7 +109,7 @@ class DaftarKegiatanNara extends Component
     {
         // dd(MonitoringKegnas::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('kehadiranKegnas')->get());
         return view('livewire.daftar-kegiatan-nara', [
-            'angkatan' => Angkatan::latest()->get()->all(),
+            'angkatan' => Angkatan::all(),
             'pertemuan' => MonitoringKegnas::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('kehadiranKegnas')->whereRelation('jadwalKegiatan', 'angkatan_id', $this->filterAngkatan)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan->id)->paginate(10),
             'jml_siswa' => $this->jml_siswa,
             'detail' => $this->detail,

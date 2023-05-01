@@ -93,7 +93,7 @@ class DaftarKegiatanTanpanara extends Component
     public function render()
     {
         return view('livewire.daftar-kegiatan-tanpanara', [
-            'angkatan' => Angkatan::latest()->get()->all(),
+            'angkatan' => Angkatan::all(),
             'pertemuan' => MonitoringKegiatan::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('kehadiranKegiatan')->whereRelation('jadwalKegiatan', 'angkatan_id', $this->filterAngkatan)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan->id)->paginate(10),
             'jml_siswa' => $this->jml_siswa,
             'detail' => $this->detail,

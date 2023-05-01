@@ -28,4 +28,8 @@ class Siswa extends Model
     {
         return $this->hasMany(KehadiranKegnas::class);
     }
+    public function kehadiranKegiatan()
+    {
+        return $this->hasMany(KehadiranKegiatan::class);
+    }
 }
