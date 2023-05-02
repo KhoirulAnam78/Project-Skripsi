@@ -20,7 +20,13 @@ class SiswaApiController extends Controller
 
       $jadwalPengganti = JadwalPengganti::where('tanggal', $request->tanggal)->with(['jadwalPelajaran' => function ($query) {
         // $query->with()->get();
-        $query->where('kelas_id', $this->jadwal->kelas->first()->id)->with('guru')->with('monitoringPembelajarans')->with(['kelas' => function ($query) {
+        $query->where('kelas_id', $this->jadwal->kelas->first()->id)->with('guru')->with(['monitoringPembelajarans' => function ($query) {
+          if ($query) {
+            $query->with(['kehadiranPembelajarans' => function ($query) {
+              $query->where('siswa_id', auth('sanctum')->user()->siswa->id);
+            }]);
+          };
+        }])->with(['kelas' => function ($query) {
           $query->select('id', 'nama');
         }])->with(['mataPelajaran' => function ($query) {
           $query->select('id', 'nama');
