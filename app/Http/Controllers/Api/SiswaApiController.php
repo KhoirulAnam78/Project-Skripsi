@@ -13,7 +13,7 @@ class SiswaApiController extends Controller
   public $jadwal;
   public function getJadwal(Request $request)
   {
-    if ($request->hari) {
+    if ($request->hari and $request->tanggal) {
       $this->jadwal = Siswa::where('user_id', auth('sanctum')->user()->id)->select('id', 'user_id')->with(['kelas' => function ($query) {
         $query->whereRelation('tahunAkademik', 'status', 'aktif')->with('jadwalPelajarans');
       }])->first();
@@ -36,7 +36,6 @@ class SiswaApiController extends Controller
             }]);
           };
         }])->get(),
-
         'jadwal-pengganti' => $jadwalPengganti
       ]);
     } else {
