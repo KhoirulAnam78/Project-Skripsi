@@ -12,9 +12,11 @@ use App\Http\Controllers\Controller;
 class GuruApiController extends Controller
 {
   public $kelasAktif = [];
+  public $tanggal;
 
   public function getJadwal(Request $request)
   {
+    $this->tanggal = $request->tanggal;
     if ($request->hari && $request->tanggal) {
       $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->all();
       foreach ($data as $d) {
@@ -24,6 +26,10 @@ class GuruApiController extends Controller
         $query->select('id', 'nama');
       }])->with(['mataPelajaran' => function ($query) {
         $query->select('id', 'nama');
+      }])->with(['monitoringPembelajarans' => function ($query) {
+        if ($query) {
+          $query->where('tanggal', $this->tanggal);
+        };
       }])->select('id', 'hari', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->get();
 
       $jadwalPengganti = JadwalPengganti::where('tanggal', $request->tanggal)->whereRelation('jadwalPelajaran', 'guru_id', auth('sanctum')->user()->guru->id)->with(['jadwalPelajaran' => function ($query) {
@@ -32,6 +38,10 @@ class GuruApiController extends Controller
           $query->select('id', 'nama');
         }])->with(['mataPelajaran' => function ($query) {
           $query->select('id', 'nama');
+        }])->with(['monitoringPembelajarans' => function ($query) {
+          if ($query) {
+            $query->where('tanggal', $this->tanggal);
+          };
         }])->get();
       }])->get();
 
