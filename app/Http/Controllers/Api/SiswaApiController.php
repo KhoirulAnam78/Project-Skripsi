@@ -65,7 +65,7 @@ class SiswaApiController extends Controller
           $query->with(['jadwalKegiatans' => function ($query) {
             $query->with('kegiatan')->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $this->hari)->with(['monitoringKegnas' => function ($query) {
               if ($query) {
-                $query->where('tanggal', $this->tanggal)->with(['kehadiranKegnas' => function ($query) {
+                $query->with('narasumber')->where('tanggal', $this->tanggal)->with(['kehadiranKegnas' => function ($query) {
                   if ($query) {
                     $query->where('siswa_id', auth('sanctum')->user()->siswa->id);
                   } else {
