@@ -248,7 +248,8 @@ class PresensiKegiatanTanpanara extends Component
             KehadiranKegiatan::create([
                 'siswa_id' => $key,
                 'status' => $value,
-                'monitoring_kegiatan_id' => $monitoring->id
+                'monitoring_kegiatan_id' => $monitoring->id,
+                'kegiatan_id' => $this->kegiatan->id
             ]);
         }
         $this->update = true;

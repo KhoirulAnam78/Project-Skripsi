@@ -19,4 +19,8 @@ class KehadiranKegiatan extends Model
     {
         return $this->belongsTo(Siswa::class);
     }
+    public function kegiatan()
+    {
+        return $this->belongsTo(Kegiatan::class);
+    }
 }

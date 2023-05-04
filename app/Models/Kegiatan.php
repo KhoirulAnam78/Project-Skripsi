@@ -14,4 +14,14 @@ class Kegiatan extends Model
     {
         return $this->hasMany(JadwalKegiatan::class);
     }
+
+    public function kehadiranKegiatans()
+    {
+        return $this->hasMany(KehadiranKegiatan::class);
+    }
+
+    public function kehadiranKegnas()
+    {
+        return $this->hasMany(KehadiranKegnas::class);
+    }
 }

@@ -275,7 +275,8 @@ class PresensiKegiatanNarasumber extends Component
             KehadiranKegnas::create([
                 'siswa_id' => $key,
                 'status' => $value,
-                'monitoring_kegnas_id' => $monitoring->id
+                'monitoring_kegnas_id' => $monitoring->id,
+                'kegiatan_id' => $this->kegiatan->id
             ]);
         }
         $this->update = true;
