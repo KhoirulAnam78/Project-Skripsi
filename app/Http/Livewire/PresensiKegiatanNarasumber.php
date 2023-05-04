@@ -4,12 +4,13 @@ namespace App\Http\Livewire;
 
 use App\Models\Kelas;
 use Livewire\Component;
+use App\Models\Narasumber;
 use Livewire\WithPagination;
 use App\Models\TahunAkademik;
 use App\Models\JadwalKegiatan;
 use App\Models\KehadiranKegnas;
 use App\Models\MonitoringKegnas;
-use App\Models\Narasumber;
+use App\Models\KehadiranKegiatan;
 
 class PresensiKegiatanNarasumber extends Component
 {
@@ -176,14 +177,17 @@ class PresensiKegiatanNarasumber extends Component
             } else {
                 $this->allow = true;
             }
+
             $this->waktu_mulai = substr($this->jadwal->waktu_mulai, 0, -3);
             $this->waktu_berakhir = substr($this->jadwal->waktu_berakhir, 0, -3);
             $this->update = false;
 
             //Cek apakah jadwal sudah diinputkan
             if (MonitoringKegnas::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first()) {
+
                 //ambil data
                 $monitoring = MonitoringKegnas::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first();
+
                 //set data berdasarkan data yang sudah diinputkan
                 $this->editPresensi = $monitoring->id;
                 $this->tanggal = $monitoring->tanggal;
@@ -191,15 +195,16 @@ class PresensiKegiatanNarasumber extends Component
                 $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
                 $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
                 $this->topik = $monitoring->topik;
-
+                // dd('aman');
                 if (KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
                     $this->update = true;
                     $kehadiran = KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->get()->all();
                     foreach ($kehadiran as $k) {
                         $this->presensi[$k->siswa_id] = $k->status;
                     }
+                    // dd("Masuk sini ada");
                 } else {
-
+                    // dd('Tidak ada Presensi');
                     //ambil data siswa kelas yang dipilih
                     $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
 
@@ -242,16 +247,6 @@ class PresensiKegiatanNarasumber extends Component
             foreach ($this->student as $s) {
                 $this->presensi[$s->id] = 'hadir';
             }
-        }
-
-        //ambil data siswa kelas yang dipilih
-        $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
-        // $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas->orderBy('nama', 'asc')->all();
-
-        //set presensi menjadi hadir bagi setiap siswa
-        $this->presensi = [];
-        foreach ($this->student as $s) {
-            $this->presensi[$s->id] = 'hadir';
         }
     }
 

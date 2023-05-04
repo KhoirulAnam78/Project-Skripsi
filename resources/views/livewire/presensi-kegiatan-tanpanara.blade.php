@@ -130,7 +130,7 @@
         <div class="col-2">
             @can('admin')
                 @if ($update === false)
-                    <button class="btn btn-primary" {{ $allow === false ? 'disabled' : '' }}
+                    <button class="btn btn-primary" {{ ($allow === false or $siswa->first() === null) ? 'disabled' : '' }}
                         wire:click="save()">Simpan</button>
                 @else
                     <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
