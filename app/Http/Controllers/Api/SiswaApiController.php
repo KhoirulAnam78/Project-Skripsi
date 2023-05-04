@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 class SiswaApiController extends Controller
 {
   public $jadwal;
+  public $hari;
   public $tanggal;
   public function getJadwal(Request $request)
   {
@@ -44,6 +45,56 @@ class SiswaApiController extends Controller
           };
         }])->get(),
         'jadwal-pengganti' => $jadwalPengganti
+      ]);
+    } else {
+      return response()->json([
+        'message' => 'Fetch data failed',
+        'request' => 'Hari is required !',
+      ]);
+    }
+  }
+
+  public function getNonAkademik(Request $request)
+  {
+    if ($request->hari and $request->tanggal) {
+      $this->tanggal = $request->tanggal;
+      $this->hari = $request->hari;
+
+      $data = Siswa::where('user_id', auth('sanctum')->user()->id)->select('id', 'user_id')->with(['kelas' => function ($query) {
+        $query->with(['angkatan' => function ($query) {
+          $query->with(['jadwalKegiatans' => function ($query) {
+            $query->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $this->hari)->with(['monitoringKegnas' => function ($query) {
+              if ($query) {
+                $query->where('tanggal', $this->tanggal)->with(['kehadiranKegnas' => function ($query) {
+                  if ($query) {
+                    $query->where('siswa_id', auth('sanctum')->user()->siswa->id);
+                  } else {
+                    $query;
+                  }
+                }]);
+              } else {
+                $query;
+              }
+            }])->with(['monitoringKegiatan' => function ($query) {
+              if ($query) {
+                $query->where('tanggal', $this->tanggal)->with(['kehadiranKegiatan' => function ($query) {
+                  if ($query) {
+                    $query->where('siswa_id', auth('sanctum')->user()->siswa->id);
+                  } else {
+                    $query;
+                  }
+                }]);
+              } else {
+                $query;
+              }
+            }]);;
+          }]);
+        }]);
+      }])->get();
+      // dd($data[0]->kelas->first()->angkatan->jadwalKegiatans);
+      return response()->json([
+        'message' => 'Fetch data success',
+        'jadwal-kegiatan' => $data[0]->kelas->first()->angkatan->jadwalKegiatans
       ]);
     } else {
       return response()->json([

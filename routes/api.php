@@ -33,4 +33,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/validasi/valid', [Presensicontroller::class, 'valid']);
     Route::post('/validasi/tidak-valid', [Presensicontroller::class, 'tidakValid']);
     Route::post('/get-jadwal-siswa', [SiswaApiController::class, 'getJadwal']);
+    Route::post('/get-jadwal-non-akademik', [SiswaApiController::class, 'getNonAkademik']);
 });
