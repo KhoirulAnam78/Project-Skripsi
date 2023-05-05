@@ -96,6 +96,7 @@ Route::get('/download-template-jadwal-pelajaran', [JadwalPelajaranController::cl
 
 //Jadwal Kegiatan
 Route::get('/jadwal-kegiatan', [JadwalKegiatanController::class, 'index'])->middleware('auth');
+Route::get('/download-template-jadwal-kegiatan', [JadwalKegiatanController::class, 'download'])->middleware('auth');
 
 //PRESENSI PEMBELAJARAN
 Route::get('/presensi-pembelajaran', [MonitoringPembelajaranController::class, 'index'])->middleware('auth');

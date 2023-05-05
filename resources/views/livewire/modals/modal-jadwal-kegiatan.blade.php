@@ -208,7 +208,7 @@
 </div>
 
 {{-- IMPORT DATA --}}
-{{-- <div class="modal fade" id="importModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<div class="modal fade" id="importModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-hidden="true" wire:ignore.self>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -239,7 +239,7 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <a href="/download-template-jadwal-pelajaran" class="btn btn-primary"><i
+                            <a href="/download-template-jadwal-kegiatan" class="btn btn-primary"><i
                                     class='bx bxs-download'></i>Download Template</a>
                         </div>
                     </div>
@@ -254,4 +254,4 @@
             </form>
         </div>
     </div>
-</div> --}}
+</div>

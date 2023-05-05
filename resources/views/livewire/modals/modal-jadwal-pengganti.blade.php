@@ -10,7 +10,7 @@
             </div>
             <form wire:submit.prevent="save">
                 <div class="modal-body">
-                    <div class="row mb-3">
+                    <div class="row mb-3 g-2">
                         <div class="col mb-0">
                             <label for="tanggal" class="form-label">Tanggal</label>
                             <input type="date" wire:model="tanggal" id="tanggal" class="form-control" />
@@ -18,8 +18,6 @@
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
                             @enderror
                         </div>
-                    </div>
-                    <div class="row g-2">
                         <div class="col mb-3">
                             <label for="kelas_id" class="form-label">Kelas</label>
                             <select wire:model="filterKelas" id="kelas_id" class="form-select">
@@ -32,14 +30,16 @@
                                 @endif
                             </select>
                         </div>
+
+                    </div>
+                    <div class="row">
                         <div class="col mb-3">
                             <label for="japel_id" class="form-label">Jadwal Mata Pelajaran</label>
                             <select wire:model="japel_id" id="japel_id" class="form-select">
                                 @if (count($mapel) !== 0)
-
                                     @foreach ($mapel as $m)
                                         <option value="{{ $m->id }}">
-                                            {{ $m->hari . ' => ' . $m->mataPelajaran->nama }}
+                                            {{ $m->hari . ' : ' . '(' . $m->guru->nama . ') ' . $m->mataPelajaran->nama }}
                                         </option>
                                     @endforeach
                                 @else

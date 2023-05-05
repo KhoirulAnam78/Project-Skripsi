@@ -2,19 +2,15 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Guru;
-use App\Models\Kelas;
 use Livewire\Component;
 use App\Models\Angkatan;
 use App\Models\Kegiatan;
 use Livewire\WithPagination;
-use App\Models\MataPelajaran;
-use App\Models\TahunAkademik;
 use Livewire\WithFileUploads;
 use App\Models\JadwalKegiatan;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\JadwalPelajaranExport;
-use App\Imports\JadwalPelajaranImport;
+use App\Exports\JadwalKegiatanExport;
+use App\Imports\JadwalKegiatanImport;
 
 class TabelJadwalKegiatan extends Component
 {
@@ -161,42 +157,41 @@ class TabelJadwalKegiatan extends Component
     }
 
 
-    // public function updatingFilterHari()
-    // {
-    //     $this->resetPage();
-    // }
+    public function updatingFilterHari()
+    {
+        $this->resetPage();
+    }
 
-    // public function updatedFile()
-    // {
-    //     $this->validate([
-    //         'file' => 'required|mimes:xlsx,xls',
-    //     ]);
-    // }
+    public function updatedFile()
+    {
+        $this->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+    }
 
-    // public function import()
-    // {
-    //     $this->validate([
-    //         'file' => 'required|mimes:xlsx,xls'
-    //     ]);
+    public function import()
+    {
+        $this->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
 
-    //     try {
-    //         Excel::import(new JadwalPelajaranImport($this->filterAngkatan), $this->file);
-    //         session()->flash('message', 'Data berhasil diimport');
-    //         $this->file = '';
-    //         $this->dispatchBrowserEvent('close-modal-import');
-    //     } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-    //         $failures = $e->failures();
-    //         session()->flash('importError', $failures);
-    //         $this->file = '';
-    //         $this->dispatchBrowserEvent('close-modal-import');
-    //     }
-    // }
+        try {
+            Excel::import(new JadwalKegiatanImport(), $this->file);
+            session()->flash('message', 'Data berhasil diimport');
+            $this->file = '';
+            $this->dispatchBrowserEvent('close-modal-import');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            session()->flash('importError', $failures);
+            $this->file = '';
+            $this->dispatchBrowserEvent('close-modal-import');
+        }
+    }
 
-    // public function export()
-    // {
-    //     $namaKelas = Kelas::where('id', $this->filterAngkatan)->first()->nama;
-    //     return Excel::download(new JadwalPelajaranExport($this->filterAngkatan), 'Jadwal Pelajaran ' . $namaKelas . '.xlsx');
-    // }
+    public function export()
+    {
+        return Excel::download(new JadwalKegiatanExport(), 'Jadwal Kegiatan SMAN Titian Teras' . '.xlsx');
+    }
 
     public function render()
     {
