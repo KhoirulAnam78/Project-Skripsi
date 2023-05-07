@@ -9,12 +9,13 @@ use Livewire\WithPagination;
 use App\Models\MataPelajaran;
 use App\Models\TahunAkademik;
 use App\Models\JadwalPelajaran;
+use App\Models\KehadiranKegnas;
 use App\Models\MonitoringKegnas;
+use App\Exports\DaftarKegnasExport;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\KehadiranPembelajaran;
 use App\Exports\DaftarPertemuanExport;
-use App\Models\KehadiranKegnas;
 use App\Models\MonitoringPembelajaran;
 
 class DaftarKegiatanNara extends Component
@@ -40,7 +41,12 @@ class DaftarKegiatanNara extends Component
         $this->tanggalAkhir = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
         $this->tanggalAwal =  \Carbon\Carbon::now()->subDays(6)->translatedFormat('Y-m-d');
         $this->kegiatan = $kegiatan;
-        $this->filterAngkatan = Angkatan::select('id')->first()->id;
+        if (Auth::user()->role === 'wali_asrama') {
+            $this->filterAngkatan = Auth::user()->waliAsrama->angkatans->first()->id;
+            // dd($this->filterAngkatan);
+        } else {
+            $this->filterAngkatan = Angkatan::select('id')->first()->id;
+        }
         $this->jml_siswa = 0;
         $kelas = Kelas::where('angkatan_id', $this->filterAngkatan)->select('id')->get()->all();
         foreach ($kelas as $k) {
@@ -76,13 +82,12 @@ class DaftarKegiatanNara extends Component
         $this->detail = [];
     }
 
-    // public function export()
-    // {
-    //     $namaKelas = Kelas::find($this->filterKelas)->nama;
-    //     $namaMapel = MataPelajaran::find($this->filterTahunAkademik)->nama;
-    //     $jml_siswa = Kelas::select('id')->find($this->filterKelas)->siswas->count();
-    //     return Excel::download(new DaftarPertemuanExport($this->filterKelas, $this->filterTahunAkademik, $jml_siswa), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . '.xlsx');
-    // }
+    public function export()
+    {
+        $kegiatan = $this->kegiatan->nama;
+        $angkatan = Angkatan::find($this->filterAngkatan)->nama;
+        return Excel::download(new DaftarKegnasExport($this->filterAngkatan, $this->jml_siswa, $this->tanggalAwal, $this->tanggalAkhir, $this->kegiatan->id), 'Daftar Pertemuan Kegiatan ' . $kegiatan . ' Angkatan ' . $angkatan . ' ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
+    }
 
     // public function updatedFilterKelas()
     // {

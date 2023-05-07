@@ -5,9 +5,8 @@ namespace App\Imports;
 use App\Models\Guru;
 use App\Models\Angkatan;
 use App\Models\Kegiatan;
-use App\Models\MataPelajaran;
 use App\Models\JadwalKegiatan;
-use App\Models\JadwalPelajaran;
+use App\Models\TahunAkademik;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -24,6 +23,7 @@ class JadwalKegiatanImport implements ToCollection, WithHeadingRow, WithValidati
     public $kegiatan_id;
     public $waktu_mulai;
     public $angkatan_id;
+    public $tahunAkademikId;
 
     public function prepareForValidation(array $row)
     {
@@ -43,6 +43,8 @@ class JadwalKegiatanImport implements ToCollection, WithHeadingRow, WithValidati
             $row['angkatan_id'] = $this->angkatan_id;
         }
         $this->waktu_mulai = $row['waktu_mulai'];
+
+        $this->tahunAkademikId = TahunAkademik::where('status', 'aktif')->first()->id;
         return $row;
     }
 
@@ -53,7 +55,7 @@ class JadwalKegiatanImport implements ToCollection, WithHeadingRow, WithValidati
             'kegiatan_id' => 'required|exists:kegiatans,id',
             'waktu_mulai' => 'required|date_format:H:i',
             'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Setiap Hari|unique:jadwal_kegiatans,hari,NULL,id,angkatan_id,' . $this->angkatan_id . ',kegiatan_id,' . $this->kegiatan_id
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Setiap Hari|unique:jadwal_kegiatans,hari,NULL,id,angkatan_id,' . $this->angkatan_id . ',kegiatan_id,' . $this->kegiatan_id . ',tahun_akademik_id,' . $this->tahunAkademikId
         ];
     }
 
@@ -62,8 +64,8 @@ class JadwalKegiatanImport implements ToCollection, WithHeadingRow, WithValidati
         return [
             'angkatan_id.required' => 'Field Angkatan wajib diisi !',
             'angkatan_id.exists' => 'Angkatan tidak ditemukan disistem !',
-            'kegiatan_id.required' => 'Field guru wajib diisi !',
-            'kegiatan_id.exists' => 'Kode guru tidak terdaftar !',
+            'kegiatan_id.required' => 'Field kegiatan wajib diisi !',
+            'kegiatan_id.exists' => 'Kegiatan tidak terdaftar !',
             'waktu_mulai.required' => 'Waktu mulai wajib diisi !',
             'waktu_mulai.date_format' => 'Waktu mulai hanya diperbolehkan format waktu !',
             'waktu_berakhir.required' => 'Waktu berakhir wajib diisi !',
@@ -83,7 +85,8 @@ class JadwalKegiatanImport implements ToCollection, WithHeadingRow, WithValidati
                 'kegiatan_id' => $this->kegiatan_id,
                 'hari' => $row['hari'],
                 'waktu_mulai' => $row['waktu_mulai'],
-                'waktu_berakhir' => $row['waktu_berakhir']
+                'waktu_berakhir' => $row['waktu_berakhir'],
+                'tahun_akademik_id' => $this->tahunAkademikId
             ]);
         }
     }

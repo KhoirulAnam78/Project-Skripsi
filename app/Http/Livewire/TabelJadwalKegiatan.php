@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Angkatan;
 use App\Models\Kegiatan;
 use Livewire\WithPagination;
+use App\Models\TahunAkademik;
 use Livewire\WithFileUploads;
 use App\Models\JadwalKegiatan;
 use Maatwebsite\Excel\Facades\Excel;
@@ -18,16 +19,17 @@ class TabelJadwalKegiatan extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $file;
+    public $tahun_akademik_id;
 
     public $filterAngkatan = '';
     public $hari, $waktu_mulai, $waktu_berakhir, $angkatan_id, $kegiatan_id;
     public $jadwal_edit_id, $jadwal_delete_id;
 
-    // public function mount()
-    // {
-    //     $this->filterAngkatan =;
-    //     // dd($this->filterAngkatan);
-    // }
+    public function mount()
+    {
+        $this->tahun_akademik_id = TahunAkademik::where('status', 'aktif')->first()->id;
+        $this->filterAngkatan = Angkatan::where('status', 'belum lulus')->first()->id;
+    }
 
     public function rules()
     {
@@ -45,7 +47,7 @@ class TabelJadwalKegiatan extends Component
                 'angkatan_id' => 'required',
                 'waktu_mulai' => 'required|date_format:H:i',
                 'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Setiap Hari|unique:jadwal_kegiatans,hari,NULL,id,angkatan_id,' . $this->angkatan_id . ',kegiatan_id,' . $this->kegiatan_id
+                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Setiap Hari|unique:jadwal_kegiatans,hari,NULL,id,angkatan_id,' . $this->angkatan_id . ',kegiatan_id,' . $this->kegiatan_id . ',tahun_akademik_id,' . $this->tahun_akademik_id
             ];
         }
     }
@@ -92,6 +94,7 @@ class TabelJadwalKegiatan extends Component
             'waktu_mulai' => $this->waktu_mulai,
             'waktu_berakhir' => $this->waktu_berakhir,
             'kegiatan_id' => $this->kegiatan_id,
+            'tahun_akademik_id' => $this->tahun_akademik_id
         ]);
         session()->flash('message', 'Data berhasil ditambahkan !');
         $this->empty();
@@ -195,10 +198,18 @@ class TabelJadwalKegiatan extends Component
 
     public function render()
     {
+        $statusTahunAkademik = TahunAkademik::find($this->tahun_akademik_id)->status;
+        if ($statusTahunAkademik === 'aktif') {
+            $allow = true;
+        } else {
+            $allow = false;
+        }
         return view('livewire.tabel-jadwal-kegiatan', [
-            'jadwalKegiatan' => JadwalKegiatan::where('angkatan_id', 'like', '%' . $this->filterAngkatan . '%')->latest()->paginate(5),
+            'jadwalKegiatan' => JadwalKegiatan::where('angkatan_id', 'like', '%' . $this->filterAngkatan . '%')->where('tahun_akademik_id', $this->tahun_akademik_id)->latest()->paginate(5),
+            'allow' => $allow,
             'angkatan' => Angkatan::where('status', 'belum lulus')->get()->all(),
-            'kegiatan' => Kegiatan::all()
+            'kegiatan' => Kegiatan::all(),
+            'tahunAkademik' => TahunAkademik::all()
         ]);
     }
 }

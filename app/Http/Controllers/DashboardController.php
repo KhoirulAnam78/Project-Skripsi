@@ -68,8 +68,9 @@ class DashboardController extends Controller
 
             $hari = \Carbon\Carbon::now()->translatedFormat('l');
             $angkatan = WaliAsrama::where('user_id', Auth::user()->id)->first()->angkatans->where('status', 'belum lulus')->first();
-            $jadwal = JadwalKegiatan::where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $hari)->where('angkatan_id', $angkatan->id)->with('kegiatan')->with('monitoringKegnas')->with('monitoringKegiatan')->get();
+            $jadwal = JadwalKegiatan::where('angkatan_id', $angkatan->id)->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $hari)->with('kegiatan')->with('monitoringKegnas')->with('monitoringKegiatan')->get();
             // dd($angkatan);
+            // dd($jadwal);
             return view('pages.wali_asrama.dashboard', [
                 'title' => 'Dashboard',
                 'angkatan' => $angkatan->nama,

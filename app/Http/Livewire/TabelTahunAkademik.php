@@ -73,9 +73,10 @@ class TabelTahunAkademik extends Component
             'tgl_berakhir' => $this->tgl_berakhir,
             'status' => $this->status,
         ]);
-
-        foreach ($akademik_aktif as $a) {
-            TahunAkademik::where('id', $a->id)->update(['status' => 'tidak aktif']);
+        if ($this->status === 'aktif') {
+            foreach ($akademik_aktif as $a) {
+                TahunAkademik::where('id', $a->id)->update(['status' => 'tidak aktif']);
+            }
         }
         session()->flash('message', 'Data berhasil ditambahkan !');
         $this->empty();

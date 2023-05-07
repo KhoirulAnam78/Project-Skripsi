@@ -28,25 +28,51 @@
     @endif
     <div class="mx-3 my-2">
         @can('admin')
+            @if ($allow !== false)
+                <a href="" data-bs-toggle="modal" data-bs-target="#inputModal"
+                    class="btn btn-primary active mb-2 {{ $allow === false ? 'disabled' : '' }}"
+                    style="background-color : #1052BA;border-color: #1052BA"><i class='bx bx-add-to-queue'></i> Tambah</a>
+                <a href="" class="btn btn-success active mb-2 {{ $allow === false ? 'disabled' : '' }}"
+                    data-bs-toggle="modal" data-bs-target="#importModal"
+                    style="background-color: #5CB85C;border-color: #5CB85C"><i class='bx bxs-file-import'></i>
+                    Import</a>
+            @else
+                <a href="" class="btn btn-primary active mb-2 disabled"><i class='bx bx-add-to-queue'></i> Tambah</a>
+                <a href="" class="btn btn-success active mb-2 disabled"
+                    style="background-color: #5CB85C;border-color: #5CB85C"><i class='bx bxs-file-import'></i>
+                    Import</a>
+            @endif
+        @endcan
+        {{--         
+        @can('admin')
             <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" class="btn btn-primary active mb-2 "
                 style="background-color : #1052BA;border-color: #1052BA"><i class='bx bx-add-to-queue'></i> Tambah</a>
             <a href="" class="btn btn-success active mb-2" data-bs-toggle="modal" data-bs-target="#importModal"
                 style="background-color: #5CB85C;border-color: #5CB85C"><i class='bx bxs-file-import'></i>
                 Import</a>
-        @endcan
+        @endcan --}}
 
         <a class="btn btn-info mb-2 text-white" wire:click="export()"
             style="background-color: #F0AD4E;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
             Export</a>
     </div>
-    <div class="col-lg-2 col-md-3 mb-2 mx-3">
-        <label for="search" class="form-label">Angkatan</label>
-        <select wire:model="filterAngkatan" id="filterAngkatan" class="form-select">
-            <option value=''>Pilih</option>
-            @foreach ($angkatan as $a)
-                <option value="{{ $a->id }}">{{ $a->nama }}</option>
-            @endforeach
-        </select>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 mb-3 mx-3">
+            <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
+            <select wire:model="tahun_akademik_id" id="tahun_akademik_id" class="form-select">
+                @foreach ($tahunAkademik as $ta)
+                    <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-lg-2 col-md-3 mb-2 mx-3">
+            <label for="search" class="form-label">Angkatan</label>
+            <select wire:model="filterAngkatan" id="filterAngkatan" class="form-select">
+                @foreach ($angkatan as $a)
+                    <option value="{{ $a->id }}">{{ $a->nama }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
     <div class="table-responsive text-nowrap mx-3 mb-3">
         <table class="table table-striped" id="examplei">

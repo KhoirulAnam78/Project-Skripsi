@@ -1,15 +1,17 @@
 <div>
     <div class="row mb-3">
-        <div class="col-lg-4 col-md-4 mb-2 mx-3">
+        <div class="col-lg-3 col-md-3 mb-2 mx-3">
             <label for="search" class="form-label">Kegiatan</label>
             <select wire:model="filterKegiatan" id="filterKegiatan" class="form-select">
-                <option value="Pembelajaran">Pembelajaran Dikelas</option>
+                <option value="akademik">Akademik</option>
+                <option value="non-akademik">Non Akademik</option>
             </select>
         </div>
-        @if ($filterKegiatan === 'Pembelajaran')
+        @if ($filterKegiatan === 'akademik')
             <div class="col-lg-2 col-md-3 mb-2 mx-3">
                 <label for="search" class="form-label">Hari</label>
                 <select wire:model="filterHari" id="filterHari" class="form-select">
+                    <option value="">Pilih</option>
                     <option value="Senin">Senin</option>
                     <option value="Selasa">Selasa</option>
                     <option value="Rabu">Rabu</option>
@@ -20,7 +22,7 @@
             </div>
         @endif
     </div>
-    @if ($filterKegiatan === 'Pembelajaran')
+    @if ($filterKegiatan === 'akademik')
         <div class="table-responsive text-nowrap mx-3 mb-3">
             <table class="table table-striped" id="examplei">
                 <thead>

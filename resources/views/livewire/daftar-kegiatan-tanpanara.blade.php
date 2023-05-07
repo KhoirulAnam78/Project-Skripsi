@@ -16,14 +16,16 @@
         </div>
     @endif
     <div class="row mx-2 mb-2">
-        <div class="col-lg-3 col-md-3 mb-3 mx-2">
-            <label for="tahun_akademik_id" class="form-label">Angkatan</label>
-            <select wire:model="filterAngkatan" id="filterAngkatan" name="filterAngkatan" class="form-select">
-                @foreach ($angkatan as $a)
-                    <option value="{{ $a->id }}">{{ $a->nama }}</option>
-                @endforeach
-            </select>
-        </div>
+        @can('admin')
+            <div class="col-lg-3 col-md-3 mb-3 mx-2">
+                <label for="tahun_akademik_id" class="form-label">Angkatan</label>
+                <select wire:model="filterAngkatan" id="filterAngkatan" name="filterAngkatan" class="form-select">
+                    @foreach ($angkatan as $a)
+                        <option value="{{ $a->id }}">{{ $a->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endcan
         <div class="col-lg-4 col-md-4">
             <label for="tanggalAwal" class="form-label">Tanggal Awal</label>
             <input type="date" wire:model="tanggalAwal" name="tanggalAwal" id="tanggalAwal" class="form-control" />
@@ -45,7 +47,7 @@
 
     <div class="row mx-3 mb-3 justify-content-start">
         <div class="col-lg-2">
-            <a class="btn btn-info mb-2 text-white" {{-- wire:click="export({{ $filterKelas }},{{ $filterMapel }})" --}}
+            <a class="btn btn-info mb-2 text-white" wire:click="export()"
                 style="background-color:#F0AD4E ;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
                 Export</a>
         </div>

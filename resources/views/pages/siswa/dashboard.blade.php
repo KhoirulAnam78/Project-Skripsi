@@ -41,6 +41,83 @@
                             <h5 class="card-header m-0 me-2 pb-3 d-inline-block">Jadwal Kegiatan Siswa Hari
                                 Ini ({{ \Carbon\Carbon::now()->translatedFormat('l, d-m-Y') }})</h5>
                         </div>
+                        <div class="col-md-12">
+                            <h6 class="card-header m-0 me-2 pb-3 d-inline-block">Jadwal Kegiatan Non Akademik</h6>
+                        </div>
+                        <div class="table-responsive text-nowrap">
+                            <table class="table">
+                                <thead>
+                                    <tr class="table-primary">
+                                        <th>Jam</th>
+                                        <th>Kegiatan</th>
+                                        <th>Kehadiran</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                    @if (count($jadwal) === 0)
+                                        <tr>
+                                            <td colspan='6' align="center"><span>Tidak ada kegiatan</span></td>
+                                        </tr>
+                                    @endif
+                                    @foreach ($jadwal as $j)
+                                        <tr class="table-default">
+                                            <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}
+                                            </td>
+                                            <td>{{ $j->kegiatan->nama }}</td>
+                                            @php
+                                                if ($j->kegiatan->narasumber === true) {
+                                                    if (count($j->monitoringKegnas->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0) {
+                                                        if (\Carbon\Carbon::now()->translatedFormat('H.i') > $j->waktu_berakhir) {
+                                                            $status = 'Telah Berakhir';
+                                                        } elseif (\Carbon\Carbon::now()->translatedFormat('H.i') < $j->waktu_mulai) {
+                                                            $status = 'Belum Dimulai';
+                                                        } else {
+                                                            $status = 'Sedang Berlangsung';
+                                                        }
+                                                    } else {
+                                                        $status = 'Tidak Terlaksana';
+                                                    }
+                                                } else {
+                                                    if (count($j->monitoringKegiatan->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0) {
+                                                        if (\Carbon\Carbon::now()->translatedFormat('H.i') > $j->waktu_berakhir) {
+                                                            $status = 'Telah Berakhir';
+                                                        } elseif (\Carbon\Carbon::now()->translatedFormat('H.i') < $j->waktu_mulai) {
+                                                            $status = 'Belum Dimulai';
+                                                        } else {
+                                                            $status = 'Sedang Berlangsung';
+                                                        }
+                                                    } else {
+                                                        $status = 'Tidak Terlaksana';
+                                                    }
+                                                }
+                                                // dd();
+                                            @endphp
+                                            <td>
+                                                <span
+                                                    class="
+                                                @php
+if ($status == 'Telah Berakhir'){
+                                                        echo 'badge bg-label-info my-1';
+                                                    } else if($status == 'Belum Dimulai'){
+                                                    echo 'badge bg-label-warning my-1';
+                                                    }else if ($status == 'Sedang Berlangsung'){
+                                                        echo'badge bg-label-success my-1';
+                                                    } else {
+                                                        echo'badge bg-label-danger my-1';
+                                                    } @endphp">{{ $status }}</span>
+                                            </td>
+
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {{-- <hr> --}}
+                        <div class="col-md-12">
+                            <h6 class="card-header m-0 mb-2 pb-3 d-inline-block">Jadwal Kegiatan Akademik</h6>
+                        </div>
                         <div class="table-responsive text-nowrap">
                             <table class="table">
                                 <thead>
@@ -54,6 +131,11 @@
                                     </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
+                                    @if (count($jadwal) === 0)
+                                        <tr>
+                                            <td colspan='6' align="center"><span>Tidak ada pembelajaran</span></td>
+                                        </tr>
+                                    @endif
                                     @foreach ($jadwal as $j)
                                         <tr class="table-default">
                                             <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}

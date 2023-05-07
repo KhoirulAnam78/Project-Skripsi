@@ -20,6 +20,11 @@ class JadwalKegiatan extends Model
         return $this->belongsTo(Kegiatan::class);
     }
 
+    public function tahunAkademik()
+    {
+        return $this->belongsTo(TahunAkademik::class);
+    }
+
     public function monitoringKegnas()
     {
         return $this->hasMany(MonitoringKegnas::class);

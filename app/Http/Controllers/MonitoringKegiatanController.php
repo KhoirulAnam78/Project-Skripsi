@@ -16,7 +16,7 @@ class MonitoringKegiatanController extends Controller
      */
     public function daftarKegiatan($slug)
     {
-        $this->authorize('adpim');
+        $this->authorize('adwalpim');
         $kegiatan = Kegiatan::where('slug', $slug)->first();
         if ($kegiatan->narasumber == true) {
             return view('pages.admin.daftar_kegiatan_nara', [

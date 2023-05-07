@@ -464,11 +464,6 @@ foreach ($kegiatan as $k) {
                     <div data-i18n="Account Settings">Daftar Pertemuan</div>
                 </a>
                 <ul class="menu-sub">
-                    <li class="menu-item {{ $title === 'Daftar Pembelajaran' ? 'active' : '' }}">
-                        <a href="/daftar-pertemuan" class="menu-link">
-                            <div data-i18n="Pembelajaran">Pembelajaran</div>
-                        </a>
-                    </li>
                     @foreach ($kegiatan as $k)
                         <li class="menu-item {{ $title === 'Daftar Kegiatan ' . $k->nama ? 'active' : '' }}">
                             <a href="/daftar-kegiatan/{{ $k->slug }}" class="menu-link">

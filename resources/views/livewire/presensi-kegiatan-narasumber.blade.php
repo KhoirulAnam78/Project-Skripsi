@@ -170,7 +170,7 @@
                 @if ($update === false)
                     <button class="btn btn-primary"
                         @php
-if(count($siswa) === 0){
+if(count($siswa) === 0 or $allow === false){
                             echo 'disabled';
                             // dd('Filter Mapel');
                         } else if(\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai){
@@ -183,7 +183,7 @@ if(count($siswa) === 0){
                 @else
                     <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
                         @php
-if(count($siswa) === 0){
+if(count($siswa) === 0 or $allow===false){
                                                 echo 'disabled';
                                             } else if(\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai){
                                                 echo 'disabled';
