@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\WaliAsrama;
+use App\Models\JadwalKegiatan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests\StoreWaliAsramaRequest;
@@ -37,5 +38,17 @@ class WaliAsramaController extends Controller
         );
 
         return Response::download($file, 'Template Import Data Wali Asrama.xlsx', $headers);
+    }
+
+    public function jadwal()
+    {
+        $angkatan = WaliAsrama::where('user_id', Auth::user()->id)->first()->angkatans->where('status', 'belum lulus')->first();
+        $jadwal = JadwalKegiatan::where('angkatan_id', $angkatan->id)->with('kegiatan')->get();
+        // dd($angkatan);
+        return view('pages.wali_asrama.jadwal', [
+            'title' => 'Jadwal Kegiatan',
+            'angkatan' => $angkatan->nama,
+            'jadwal' => $jadwal
+        ]);
     }
 }

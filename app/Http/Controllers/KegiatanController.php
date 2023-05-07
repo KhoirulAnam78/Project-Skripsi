@@ -27,7 +27,7 @@ class KegiatanController extends Controller
 
     public function show($slug)
     {
-        $this->authorize('admin');
+        $this->authorize('adwal');
         $kegiatan = Kegiatan::where('slug', $slug)->first();
         if ($kegiatan->narasumber == true) {
             return view('pages.admin.kegiatan_nara', [

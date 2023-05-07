@@ -6,11 +6,13 @@ use App\Models\Kelas;
 use App\Models\Siswa;
 use Livewire\Component;
 use App\Models\Narasumber;
+use App\Models\WaliAsrama;
 use Livewire\WithPagination;
 use App\Models\TahunAkademik;
 use App\Models\JadwalKegiatan;
 use App\Models\KehadiranKegiatan;
 use App\Models\MonitoringKegiatan;
+use Illuminate\Support\Facades\Auth;
 
 class PresensiKegiatanTanpanara extends Component
 {
@@ -33,12 +35,17 @@ class PresensiKegiatanTanpanara extends Component
     //menampung kehadiran siswa
     public $presensi = [];
     public $kegiatan, $allow;
+    public $angkatan_id;
 
     public function mount($kegiatan)
     {
         //Set default kelas pada tahun akademik yang aktif 
-        $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
-
+        if (Auth::user()->role === 'wali_asrama') {
+            $this->angkatan_id = WaliAsrama::where('user_id', Auth::user()->id)->first()->angkatans->where('status', 'belum lulus')->first()->id;
+            $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->where('angkatan_id', $this->angkatan_id)->first()->id;
+        } else {
+            $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
+        }
         //mengambil semua data siswa berdasarkan kelas default
         $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
         // $this->student = Kelas::select('id')->where('id', $this->filterKelas)->first()->siswas->orderBy('nama', 'asc')->all();
@@ -270,8 +277,13 @@ class PresensiKegiatanTanpanara extends Component
 
     public function render()
     {
+        if (Auth::user()->role === 'wali_asrama') {
+            $kelas = TahunAkademik::where('status', 'aktif')->first()->kelas->where('angkatan_id', $this->angkatan_id);
+        } else {
+            $kelas = TahunAkademik::where('status', 'aktif')->first()->kelas;
+        }
         return view('livewire.presensi-kegiatan-tanpanara', [
-            'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
+            'kelas' => $kelas,
             'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->paginate(10),
         ]);
     }

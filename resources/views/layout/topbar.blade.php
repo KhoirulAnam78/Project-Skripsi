@@ -25,7 +25,7 @@
                             } elseif (Auth::user()->role == 'pimpinan') {
                                 echo Auth::user()->guru->nama;
                             } else {
-                                echo 'User';
+                                echo Auth::user()->waliasrama->nama;
                             }
                         @endphp
                     </span>

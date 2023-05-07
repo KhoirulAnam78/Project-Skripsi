@@ -132,6 +132,9 @@ Route::get('/jadwal-mengajar', [GuruController::class, 'jadwal'])->middleware('a
 //HALAMAN PROFILE
 Route::get('/profile', [DashboardController::class, 'profile'])->middleware('auth');
 
+//Halaman Wali Asrama
+Route::get('/jadwal-kegiatan-angkatan', [WaliAsramaController::class, 'jadwal'])->middleware('auth');
+
 //LOGIN PIMPINAN + GURU
 Route::get('/login-guru', [LoginController::class, 'loginGuru'])->middleware('auth');
 Route::get('/login-pimpinan', [LoginController::class, 'loginPimpinan'])->middleware('auth');

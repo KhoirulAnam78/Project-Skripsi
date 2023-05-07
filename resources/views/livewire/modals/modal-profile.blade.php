@@ -20,7 +20,7 @@
                         </div>
                     </div>
 
-                    @if (Auth::user()->role !== 'admin')
+                    @if (Auth::user()->role !== 'admin' and Auth::user()->role !== 'siswa')
                         <div class="row">
                             <div class="col mb-3">
                                 <label for="no_telp" class="form-label">Nomor Telepon</label>

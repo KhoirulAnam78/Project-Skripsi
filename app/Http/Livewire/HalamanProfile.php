@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Guru;
 use App\Models\User;
 use App\Models\Siswa;
+use App\Models\WaliAsrama;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,11 +37,16 @@ class HalamanProfile extends Component
                 'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             ];
         }
-        if ($this->user->role === 'siswa') {
-            $this->no_telp = $this->user->siswa->no_telp;
+        if ($this->user->role === 'wali_asrama') {
+            $this->no_telp = $this->user->waliAsrama->no_telp;
             $this->validation = [
                 'username' => 'required|unique:users,username,' . $this->user->id,
                 'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
+            ];
+        }
+        if ($this->user->role === 'siswa') {
+            $this->validation = [
+                'username' => 'required|unique:users,username,' . $this->user->id,
             ];
         }
         if ($this->user->role === 'admin') {
@@ -76,8 +82,8 @@ class HalamanProfile extends Component
         if ($this->user->role === 'pimpinan') {
             Guru::where('user_id', $this->user->id)->update(['no_telp' => $this->no_telp]);
         }
-        if ($this->user->role === 'siswa') {
-            Siswa::where('user_id', $this->user->id)->update(['no_telp' => $this->no_telp]);
+        if ($this->user->role === 'wali_asrama') {
+            WaliAsrama::where('user_id', $this->user->id)->update(['no_telp' => $this->no_telp]);
         }
 
 
@@ -91,25 +97,24 @@ class HalamanProfile extends Component
     {
         $this->user = User::find(Auth::user()->id);
         $this->username = $this->user->username;
-        if ($this->user->role === 'guru') {
+        if ($this->user->role === 'guru' or $this->user->role === 'pimpinan') {
             $this->no_telp = $this->user->guru->no_telp;
             $this->validation = [
                 'username' => 'required|unique:users,username,' . $this->user->id,
                 'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             ];
         }
-        if ($this->user->role === 'pimpinan') {
-            $this->no_telp = $this->user->guru->no_telp;
+
+        if ($this->user->role === 'wali_asrama') {
+            $this->no_telp = $this->user->waliAsrama->no_telp;
             $this->validation = [
                 'username' => 'required|unique:users,username,' . $this->user->id,
                 'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             ];
         }
         if ($this->user->role === 'siswa') {
-            $this->no_telp = $this->user->siswa->no_telp;
             $this->validation = [
                 'username' => 'required|unique:users,username,' . $this->user->id,
-                'no_telp' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             ];
         }
         if ($this->user->role === 'admin') {

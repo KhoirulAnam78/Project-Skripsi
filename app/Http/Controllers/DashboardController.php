@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Guru;
 use App\Models\Siswa;
+use App\Models\WaliAsrama;
 use App\Models\TahunAkademik;
+use App\Models\JadwalKegiatan;
 use App\Models\JadwalGuruPiket;
 use App\Models\JadwalPelajaran;
 use Illuminate\Support\Facades\Auth;
@@ -61,6 +63,17 @@ class DashboardController extends Controller
                 'siswaAktif' => Siswa::where('status', 'belum lulus')->select('id')->count(),
                 'guruAktif' => Guru::where('status', 'aktif')->select('id')->count(),
                 'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count(),
+            ]);
+        } else if (Auth::user()->role === 'wali_asrama') {
+
+            $hari = \Carbon\Carbon::now()->translatedFormat('l');
+            $angkatan = WaliAsrama::where('user_id', Auth::user()->id)->first()->angkatans->where('status', 'belum lulus')->first();
+            $jadwal = JadwalKegiatan::where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $hari)->where('angkatan_id', $angkatan->id)->with('kegiatan')->with('monitoringKegnas')->with('monitoringKegiatan')->get();
+            // dd($angkatan);
+            return view('pages.wali_asrama.dashboard', [
+                'title' => 'Dashboard',
+                'angkatan' => $angkatan->nama,
+                'jadwal' => $jadwal
             ]);
         } else {
             return abort(403, 'Anda tidak memiliki akses kehalaman ini.');

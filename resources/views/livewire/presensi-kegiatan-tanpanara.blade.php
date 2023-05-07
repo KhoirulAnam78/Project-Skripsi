@@ -137,11 +137,11 @@
                         {{ $allow === false ? 'disabled' : '' }} wire:click="update()">Update</button>
                 @endif
             @endcan
-            {{-- @can('guru')
+            @can('waliAsrama')
                 @if ($update === false)
                     <button class="btn btn-primary"
                         @php
-if($filterMapel === ''){
+if(count($siswa) === 0){
                             echo 'disabled';
                             // dd('Filter Mapel');
                         } else if(\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai){
@@ -154,7 +154,7 @@ if($filterMapel === ''){
                 @else
                     <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
                         @php
-if($filterMapel === ''){
+if(count($siswa) === 0){
                                                 echo 'disabled';
                                             } else if(\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai){
                                                 echo 'disabled';
@@ -164,7 +164,7 @@ if($filterMapel === ''){
                                                 echo 'wire:click="update()"';
                                             } @endphp>Update</button>
                 @endif
-            @endcan --}}
+            @endcan
         </div>
     </div>
 </div>

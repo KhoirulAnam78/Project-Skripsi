@@ -166,6 +166,34 @@
                 @endif
 
             @endcan
+            @can('waliAsrama')
+                @if ($update === false)
+                    <button class="btn btn-primary"
+                        @php
+if(count($siswa) === 0){
+                            echo 'disabled';
+                            // dd('Filter Mapel');
+                        } else if(\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai){
+                            echo 'disabled';
+                        } else if(\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir){
+                            echo 'disabled';
+                        } else{
+                            echo 'wire:click="save()"';
+                        } @endphp>Simpan</button>
+                @else
+                    <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
+                        @php
+if(count($siswa) === 0){
+                                                echo 'disabled';
+                                            } else if(\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai){
+                                                echo 'disabled';
+                                            } else if(\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir){
+                                                echo 'disabled';
+                                            } else {
+                                                echo 'wire:click="update()"';
+                                            } @endphp>Update</button>
+                @endif
+            @endcan
         </div>
     </div>
 </div>

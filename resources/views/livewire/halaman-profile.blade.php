@@ -69,6 +69,22 @@
                                                 <td>: {{ $user->siswa->no_telp }}</td>
                                             </tr>
                                         @endif
+                                        @if ($user->role === 'wali_asrama')
+                                            <tr>
+                                                <td>Username</td>
+                                                <td>: {{ $user->username }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nama</td>
+                                                <td>
+                                                    : {{ $user->waliAsrama->nama }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nomor Telepon</td>
+                                                <td>: {{ $user->waliAsrama->no_telp }}</td>
+                                            </tr>
+                                        @endif
                                         @if ($user->role === 'admin')
                                             <tr>
                                                 <td>Username</td>
