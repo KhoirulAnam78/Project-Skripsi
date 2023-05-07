@@ -36,7 +36,7 @@ class PresensiKegiatanNarasumber extends Component
     public $presensi = [];
     public $kegiatan, $allow;
     public $angkatan_id;
-
+    public $tahun_akademik_id;
     public function mount($kegiatan)
     {
         //Set default kelas pada tahun akademik yang aktif 
@@ -63,9 +63,10 @@ class PresensiKegiatanNarasumber extends Component
         $this->tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
 
         $this->kegiatan = $kegiatan;
-
         $angkatan_id = Kelas::find($this->filterKelas)->angkatan_id;
-        $this->jadwal = JadwalKegiatan::where('kegiatan_id', $kegiatan->id)->where('angkatan_id', $angkatan_id)->first();
+        $this->tahun_akademik_id = TahunAkademik::where('status', 'aktif')->first()->id;
+        $this->jadwal = JadwalKegiatan::where('kegiatan_id', $kegiatan->id)->where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $this->tahun_akademik_id)->first();
+
         if ($this->jadwal) {
             $this->hari = $this->jadwal->hari;
             if ($this->hari !== 'Setiap Hari') {
@@ -173,7 +174,8 @@ class PresensiKegiatanNarasumber extends Component
         } else {
             $siswa_id = '';
         }
-        $this->jadwal = JadwalKegiatan::where('kegiatan_id', $this->kegiatan->id)->where('angkatan_id', $angkatan_id)->first();
+
+        $this->jadwal = JadwalKegiatan::where('kegiatan_id', $this->kegiatan->id)->where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $this->tahun_akademik_id)->first();
         if ($this->jadwal) {
             $this->hari = $this->jadwal->hari;
             if ($this->hari !== 'Setiap Hari') {
@@ -279,7 +281,6 @@ class PresensiKegiatanNarasumber extends Component
                 'siswa_id' => $key,
                 'status' => $value,
                 'monitoring_kegnas_id' => $monitoring->id,
-                'kegiatan_id' => $this->kegiatan->id
             ]);
         }
         $this->update = true;

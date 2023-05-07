@@ -33,7 +33,7 @@
                                         <tr>
                                             <td>{{ ++$a }}
                                             </td>
-                                            <td>{{ $s->siswa->kelas->where('tahun_akademik_id', $akademik_id)->first()->nama }}
+                                            <td>{{ $s->siswa->kelas->where('tahun_akademik_id', $filterTahunAkademik)->first()->nama }}
                                             </td>
                                             <td>{{ $s->siswa->nisn }}</td>
                                             <td>{{ $s->siswa->nama }}</td>

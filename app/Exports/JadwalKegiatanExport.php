@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Cell\DefaultValueBinder;
 
 class JadwalKegiatanExport extends DefaultValueBinder implements FromCollection, WithMapping, WithHeadings, WithColumnFormatting, WithCustomValueBinder
 {
+    public $tahun_akademik_id, $angkatan_id;
     public function columnFormats(): array
     {
         return [
@@ -24,6 +25,12 @@ class JadwalKegiatanExport extends DefaultValueBinder implements FromCollection,
             'D' => NumberFormat::FORMAT_TEXT,
             'E' => NumberFormat::FORMAT_TEXT
         ];
+    }
+
+    public function __construct($tahun_akademik_id, $angkatan_id)
+    {
+        $this->tahun_akademik_id = $tahun_akademik_id;
+        $this->angkatan_id = $angkatan_id;
     }
 
     public function bindValue(Cell $cell, $value)
@@ -40,7 +47,8 @@ class JadwalKegiatanExport extends DefaultValueBinder implements FromCollection,
 
     public function collection()
     {
-        return JadwalKegiatan::with('angkatan')->with('kegiatan')->get();
+        return JadwalKegiatan::where('angkatan_id', 'like', '%' . $this->angkatan_id . '%')->where('tahun_akademik_id', $this->tahun_akademik_id)->latest()->get();
+        // JadwalKegiatan::with('angkatan')->with('kegiatan')->get();
     }
 
     public function map($jadwal): array

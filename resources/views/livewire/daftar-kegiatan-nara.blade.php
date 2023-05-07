@@ -18,7 +18,16 @@
     <div class="row mx-2 mb-2">
         @can('adpim')
             <div class="col-lg-3 col-md-3 mb-3 mx-2">
-                <label for="tahun_akademik_id" class="form-label">Angkatan</label>
+                <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
+                <select wire:model="filterTahunAkademik" id="filterTahunAkademik" class="form-select">
+                    @foreach ($tahunAkademik as $ta)
+                        <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="col-lg-3 col-md-3 mb-3 mx-2">
+                <label for="filterAngkatan" class="form-label">Angkatan</label>
                 <select wire:model="filterAngkatan" id="filterAngkatan" name="filterAngkatan" class="form-select">
                     @foreach ($angkatan as $a)
                         <option value="{{ $a->id }}">{{ $a->nama }}</option>
@@ -26,7 +35,7 @@
                 </select>
             </div>
         @endcan
-        <div class="col-lg-4 col-md-4">
+        <div class="col-lg-3 col-md-3 mx-2">
             <label for="tanggalAwal" class="form-label">Tanggal Awal</label>
             <input type="date" wire:model="tanggalAwal" name="tanggalAwal" id="tanggalAwal" class="form-control" />
             @error('tanggalAwal')
@@ -34,7 +43,7 @@
                     {{ $message }}</span>
             @enderror
         </div>
-        <div class="col-lg-4 col-md-4">
+        <div class="col-lg-3 col-md-3 mx-2">
             <label for="tanggalAkhir" class="form-label">Tanggal Akhir</label>
             <input type="date" wire:model="tanggalAkhir" name="tanggalAkhir" id="tanggalAkhir"
                 class="form-control" />
@@ -45,7 +54,7 @@
         </div>
     </div>
 
-    <div class="row mx-3 mb-3 justify-content-start">
+    <div class="row mx-3 mb-3 mt-3 justify-content-start">
         <div class="col-lg-2">
             <a class="btn btn-info mb-2 text-white" wire:click="export()"
                 style="background-color:#F0AD4E ;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>

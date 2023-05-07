@@ -193,7 +193,7 @@ class TabelJadwalKegiatan extends Component
 
     public function export()
     {
-        return Excel::download(new JadwalKegiatanExport(), 'Jadwal Kegiatan SMAN Titian Teras' . '.xlsx');
+        return Excel::download(new JadwalKegiatanExport($this->tahun_akademik_id, $this->filterAngkatan), 'Jadwal Kegiatan SMAN Titian Teras' . '.xlsx');
     }
 
     public function render()
@@ -201,13 +201,15 @@ class TabelJadwalKegiatan extends Component
         $statusTahunAkademik = TahunAkademik::find($this->tahun_akademik_id)->status;
         if ($statusTahunAkademik === 'aktif') {
             $allow = true;
+            $angkatan = Angkatan::where('status', 'belum lulus')->get()->all();
         } else {
             $allow = false;
+            $angkatan = Angkatan::get()->all();
         }
         return view('livewire.tabel-jadwal-kegiatan', [
             'jadwalKegiatan' => JadwalKegiatan::where('angkatan_id', 'like', '%' . $this->filterAngkatan . '%')->where('tahun_akademik_id', $this->tahun_akademik_id)->latest()->paginate(5),
             'allow' => $allow,
-            'angkatan' => Angkatan::where('status', 'belum lulus')->get()->all(),
+            'angkatan' => $angkatan,
             'kegiatan' => Kegiatan::all(),
             'tahunAkademik' => TahunAkademik::all()
         ]);

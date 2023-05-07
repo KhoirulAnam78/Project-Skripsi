@@ -26,7 +26,8 @@ class DaftarKegiatanExport extends DefaultValueBinder implements FromCollection,
     public $tglAkhir;
     public $jml_siswa;
     public $kegiatan_id;
-    public function __construct($filterAngkatan, $jml_siswa, $tglAwal, $tglAkhir, $kegiatan_id)
+    public $tahun_akademik_id;
+    public function __construct($filterAngkatan, $jml_siswa, $tglAwal, $tglAkhir, $kegiatan_id, $tahun_akademik_id)
     {
         $this->filterAngkatan = $filterAngkatan;
         $this->tglAwal = $tglAwal;
@@ -63,7 +64,7 @@ class DaftarKegiatanExport extends DefaultValueBinder implements FromCollection,
 
     public function collection()
     {
-        $daftar =  MonitoringKegiatan::where('tanggal', '>=', $this->tglAwal)->where('tanggal', '<=', $this->tglAkhir)->with('kehadiranKegiatan')->whereRelation('jadwalKegiatan', 'angkatan_id', $this->filterAngkatan)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan_id)->get();
+        $daftar =  MonitoringKegiatan::where('tanggal', '>=', $this->tglAwal)->where('tanggal', '<=', $this->tglAkhir)->with('kehadiranKegiatan')->whereRelation('jadwalKegiatan', 'angkatan_id', $this->filterAngkatan)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan_id)->whereRelation('jadwalKegiatan', 'tahun_akademik_id', $this->tahun_akademik_id)->get();
         return $daftar->sortBy('tanggal');
     }
 

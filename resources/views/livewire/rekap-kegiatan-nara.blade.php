@@ -23,7 +23,15 @@
         </div>
     </div>
     <div class="row mx-2 mb-3">
-        <div class="col-lg-4 col-md-4">
+        <div class="col-lg-3 col-md-3 mb-3 mx-2">
+            <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
+            <select wire:model="filterTahunAkademik" id="filterTahunAkademik" class="form-select">
+                @foreach ($tahunAkademik as $ta)
+                    <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-lg-3 col-md-3 mx-2">
             <label for="kelas_id" class="form-label">Kelas</label>
             <select wire:model="filterKelas" id="kelas_id" class="form-select">
                 @if ($kelas !== null)
@@ -35,7 +43,7 @@
                 @endif
             </select>
         </div>
-        <div class="col-lg-4 col-md-4">
+        <div class="col-lg-3 col-md-3 mx-2">
             <label for="tanggalAwal" class="form-label">Tanggal Awal</label>
             <input type="date" wire:model="tanggalAwal" name="tanggalAwal" id="tanggalAwal" class="form-control" />
             @error('tanggalAwal')
@@ -43,7 +51,7 @@
                     {{ $message }}</span>
             @enderror
         </div>
-        <div class="col-lg-4 col-md-4">
+        <div class="col-lg-3 col-md-3 mx-2">
             <label for="tanggalAkhir" class="form-label">Tanggal Akhir</label>
             <input type="date" wire:model="tanggalAkhir" name="tanggalAkhir" id="tanggalAkhir"
                 class="form-control" />
@@ -53,7 +61,7 @@
             @enderror
         </div>
     </div>
-    <div class="row mx-2 mb-3">
+    <div class="row mx-3 mb-3">
         <div class="col-lg-4 col-md-4 mb-0">
             <label for="search" class="form-label">Pencarian</label>
             <input type="text" wire:model="search" id="search" class="form-control"

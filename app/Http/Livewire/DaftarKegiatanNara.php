@@ -34,10 +34,14 @@ class DaftarKegiatanNara extends Component
     public $keterangan;
     public $tanggalAwal;
     public $tanggalAkhir;
+    public $filterTahunAkademik;
+    public $angkatan;
 
 
     public function mount($kegiatan)
     {
+        $this->filterTahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
+        $this->angkatan = Angkatan::where('status', 'belum lulus')->get();
         $this->tanggalAkhir = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
         $this->tanggalAwal =  \Carbon\Carbon::now()->subDays(6)->translatedFormat('Y-m-d');
         $this->kegiatan = $kegiatan;
@@ -86,36 +90,27 @@ class DaftarKegiatanNara extends Component
     {
         $kegiatan = $this->kegiatan->nama;
         $angkatan = Angkatan::find($this->filterAngkatan)->nama;
-        return Excel::download(new DaftarKegnasExport($this->filterAngkatan, $this->jml_siswa, $this->tanggalAwal, $this->tanggalAkhir, $this->kegiatan->id), 'Daftar Pertemuan Kegiatan ' . $kegiatan . ' Angkatan ' . $angkatan . ' ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
+        return Excel::download(new DaftarKegnasExport($this->filterAngkatan, $this->jml_siswa, $this->tanggalAwal, $this->tanggalAkhir, $this->kegiatan->id, $this->filterTahunAkademik), 'Daftar Pertemuan Kegiatan ' . $kegiatan . ' Angkatan ' . $angkatan . ' ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
     }
 
-    // public function updatedFilterKelas()
-    // {
-    //     $this->arrayMapel = [];
-    //     if (Auth::user()->role === 'guru') {
-    //         //Ambil Jadwal Guru
-    //         $jadwal = JadwalPelajaran::where('guru_id', Auth::user()->guru->id)->where('kelas_id', $this->filterKelas)->with(['mataPelajaran' => function ($query) {
-    //             $query->select('id');
-    //         }])->select('id', 'guru_id', 'mata_pelajaran_id')->get();
-
-    //         //Ambil Id Mata Pelajaran dari setiap jadwal
-    //         foreach ($jadwal as $d) {
-    //             array_push($this->arrayMapel, $d->mataPelajaran->id);
-    //         }
-    //         $this->mapel = MataPelajaran::whereIn('id', $this->arrayMapel)->select('id', 'nama')->get();
-    //         $this->filterTahunAkademik = $this->mapel->first()->id;
-    //     } else {
-    //         $this->mapel = MataPelajaran::all();
-    //         $this->filterTahunAkademik = $this->mapel->first()->id;
-    //     }
-    // }
+    public function updatedFilterTahunAkademik()
+    {
+        $statusTahunAkademik = TahunAkademik::find($this->filterTahunAkademik)->status;
+        if ($statusTahunAkademik === 'aktif') {
+            $this->angkatan = Angkatan::where('status', 'belum lulus')->get();
+            $this->filterAngkatan = $this->angkatan->first()->id;
+        } else {
+            $this->angkatan = Angkatan::get();
+            $this->filterAngkatan = $this->angkatan->first()->id;
+        }
+    }
 
     public function render()
     {
-        // dd(MonitoringKegnas::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('kehadiranKegnas')->get());
         return view('livewire.daftar-kegiatan-nara', [
-            'angkatan' => Angkatan::all(),
-            'pertemuan' => MonitoringKegnas::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('kehadiranKegnas')->whereRelation('jadwalKegiatan', 'angkatan_id', $this->filterAngkatan)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan->id)->paginate(10),
+            'tahunAkademik' => TahunAkademik::all(),
+            'angkatan' => $this->angkatan,
+            'pertemuan' => MonitoringKegnas::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('kehadiranKegnas')->whereRelation('jadwalKegiatan', 'angkatan_id', $this->filterAngkatan)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan->id)->whereRelation('jadwalKegiatan', 'tahun_akademik_id', $this->filterTahunAkademik)->paginate(10),
             'jml_siswa' => $this->jml_siswa,
             'detail' => $this->detail,
             'akademik_id' => TahunAkademik::where('status', 'aktif')->first()->id

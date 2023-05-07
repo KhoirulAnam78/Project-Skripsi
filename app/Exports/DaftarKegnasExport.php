@@ -25,8 +25,10 @@ class DaftarKegnasExport extends DefaultValueBinder implements FromCollection, W
     public $tglAkhir;
     public $jml_siswa;
     public $kegiatan_id;
-    public function __construct($filterAngkatan, $jml_siswa, $tglAwal, $tglAkhir, $kegiatan_id)
+    public $tahun_akademik_id;
+    public function __construct($filterAngkatan, $jml_siswa, $tglAwal, $tglAkhir, $kegiatan_id, $tahun_akademik_id)
     {
+        $this->tahun_akademik_id = $tahun_akademik_id;
         $this->filterAngkatan = $filterAngkatan;
         $this->tglAwal = $tglAwal;
         $this->tglAkhir = $tglAkhir;
@@ -64,7 +66,7 @@ class DaftarKegnasExport extends DefaultValueBinder implements FromCollection, W
 
     public function collection()
     {
-        $daftar =  MonitoringKegnas::where('tanggal', '>=', $this->tglAwal)->where('tanggal', '<=', $this->tglAkhir)->with('kehadiranKegnas')->whereRelation('jadwalKegiatan', 'angkatan_id', $this->filterAngkatan)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan_id)->get();
+        $daftar =  MonitoringKegnas::where('tanggal', '>=', $this->tglAwal)->where('tanggal', '<=', $this->tglAkhir)->with('kehadiranKegnas')->whereRelation('jadwalKegiatan', 'angkatan_id', $this->filterAngkatan)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan_id)->whereRelation('jadwalKegiatan', 'tahun_akademik_id', $this->tahun_akademik_id)->get();
         return $daftar->sortBy('tanggal');
     }
 

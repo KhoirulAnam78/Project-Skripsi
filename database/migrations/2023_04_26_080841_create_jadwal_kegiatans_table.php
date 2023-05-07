@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('kegiatan_id')->constrained('kegiatans');
             $table->foreignId('angkatan_id')->constrained('angkatans');
             $table->foreignId('tahun_akademik_id')->constrained('tahun_akademiks');
-            $table->unique(['hari', 'kegiatan_id', 'angkatan_id']);
+            $table->unique(['hari', 'kegiatan_id', 'angkatan_id', 'tahun_akademik_id']);
             $table->timestamps();
         });
     }
