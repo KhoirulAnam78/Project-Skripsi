@@ -66,6 +66,15 @@ class AuthController extends Controller
                 'mapel' => $mapel,
                 'jadwalPiket' => $jadwalPiket
             ]);
+        } else if ($user->role === 'wali_asrama') {
+            return response()->json([
+                'message' => 'Login success',
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+                'role' => auth('sanctum')->user()->role,
+                'nama' => $user->waliAsrama->nama,
+                'angkatan' => $user->waliAsrama->angkatans->where('status', 'belum lulus')->first()->nama
+            ]);
         } else {
             return response()->json([
                 'message' => 'Login success',
