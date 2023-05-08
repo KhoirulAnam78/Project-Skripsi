@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Imports\MapelImport;
 use Livewire\WithPagination;
 use App\Models\MataPelajaran;
 use Livewire\WithFileUploads;
@@ -131,27 +132,26 @@ class TabelMapel extends Component
     public function render()
     {
         return view('livewire.tabel-mapel', [
-            'mapel' => MataPelajaran::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5),
+            'mapel' => MataPelajaran::where('nama', 'like', '%' . $this->search . '%')->orderBy('created_at', 'desc')->paginate(5),
         ]);
     }
 
-    // public function import()
-    // {
-    //     // dd($this->file);
-    //     $this->validate([
-    //         'file' => 'required|mimes:xlsx,xls'
-    //     ]);
+    public function import()
+    {
+        $this->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
 
-    //     try {
-    //         Excel::import(new KelasImport, $this->file);
-    //         session()->flash('message', 'Data berhasil diimport');
-    //         $this->file = '';
-    //         $this->dispatchBrowserEvent('close-modal-import');
-    //     } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-    //         $failures = $e->failures();
-    //         session()->flash('importError', $failures);
-    //         $this->file = '';
-    //         $this->dispatchBrowserEvent('close-modal-import');
-    //     }
-    // }
+        try {
+            Excel::import(new MapelImport, $this->file);
+            session()->flash('message', 'Data berhasil diimport');
+            $this->file = '';
+            $this->dispatchBrowserEvent('close-modal-import');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            session()->flash('importError', $failures);
+            $this->file = '';
+            $this->dispatchBrowserEvent('close-modal-import');
+        }
+    }
 }

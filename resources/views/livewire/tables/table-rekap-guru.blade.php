@@ -11,9 +11,6 @@
             <th>Keterangan</th>
         </tr>
     </thead>
-    {{-- @php
-          dd($guru);
-      @endphp --}}
     <tbody class="table-border-bottom-0">
         @if (count($guru) === 0)
             <tr>

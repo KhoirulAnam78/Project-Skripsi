@@ -5,9 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\User;
 use Livewire\Component;
 use App\Models\WaliAsrama;
-use App\Exports\ExportGuru;
 use App\Exports\WaliAsramaExport;
-use App\Imports\GuruImport;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -219,8 +217,7 @@ class TabelWaliAsrama extends Component
     public function render()
     {
         return view('livewire.tabel-wali-asrama', [
-            'wali_asrama' => WaliAsrama::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5),
-            'show' => true
+            'wali_asrama' => WaliAsrama::where('nama', 'like', '%' . $this->search . '%')->orderBy('created_at', 'desc')->paginate(5),
         ]);
     }
 

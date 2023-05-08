@@ -260,7 +260,7 @@ class TabelGuru extends Component
     public function render()
     {
         return view('livewire.guru', [
-            'guru' => Guru::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5),
+            'guru' => Guru::where('nama', 'like', '%' . $this->search . '%')->orderBy('created_at', 'desc')->paginate(5),
             'show' => true
         ]);
     }

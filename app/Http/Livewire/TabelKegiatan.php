@@ -7,7 +7,6 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
-use Maatwebsite\Excel\Facades\Excel;
 
 class TabelKegiatan extends Component
 {
@@ -127,7 +126,7 @@ class TabelKegiatan extends Component
     public function render()
     {
         return view('livewire.tabel-kegiatan', [
-            'kegiatan' => Kegiatan::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5),
+            'kegiatan' => Kegiatan::where('nama', 'like', '%' . $this->search . '%')->orderBy('created_at', 'desc')->paginate(5),
         ]);
     }
 

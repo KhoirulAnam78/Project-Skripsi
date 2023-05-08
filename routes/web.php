@@ -85,6 +85,7 @@ Route::get('/rombongan-belajar', [RombelController::class, 'index'])->middleware
 
 //DATA MAPEL
 Route::get('/mata-pelajaran', [MataPelajaranController::class, 'index'])->middleware('auth');
+Route::get('/download-template-mapel', [MataPelajaranController::class, 'download'])->middleware('auth');
 
 //Jadwal Piket Guru
 Route::get('/jadwal-guru-piket', [JadwalGuruPiketController::class, 'index'])->middleware('auth');

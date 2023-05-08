@@ -6,8 +6,6 @@ use App\Models\Narasumber;
 use Livewire\Component;
 use App\Exports\NarasumberExport;
 use App\Imports\ImportNarasumber;
-use App\Imports\NarasumberImport;
-use Illuminate\Support\Str;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -158,7 +156,7 @@ class TabelNarasumber extends Component
     public function render()
     {
         return view('livewire.tabel-narasumber', [
-            'narasumber' => Narasumber::where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(5),
+            'narasumber' => Narasumber::where('nama', 'like', '%' . $this->search . '%')->orderBy('created_at', 'desc')->paginate(5),
         ]);
     }
 

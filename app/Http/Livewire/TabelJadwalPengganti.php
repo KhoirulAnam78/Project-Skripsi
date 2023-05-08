@@ -21,7 +21,11 @@ class TabelJadwalPengganti extends Component
         $this->filterKelas = TahunAkademik::where('status', 'aktif')->first()->kelas->first()->id;
         $this->mapel = JadwalPelajaran::with('mataPelajaran')->with('guru')->where('kelas_id', $this->filterKelas)->orderBy('hari', 'asc')->get()->all();
         // dd($this->mapel);
-        $this->japel_id = $this->mapel[0]->id;
+        if ($this->mapel) {
+            $this->japel_id = $this->mapel[0]->id;
+        } else {
+            $this->japel_id = null;
+        }
     }
     public function rules()
     {

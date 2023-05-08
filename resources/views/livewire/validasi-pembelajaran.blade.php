@@ -56,7 +56,7 @@
                                 <td style="white-space: normal">
                                     {{ count($j->monitoringPembelajarans) === 0 ? '' : $j->monitoringPembelajarans->first()->topik }}
                                 </td>
-                                <td>{{ count($j->monitoringPembelajarans) === 0 ? '' : $j->monitoringPembelajarans->first()->status_validasi }}
+                                <td>{{ count($j->monitoringPembelajarans) === 0 ? '' : ucfirst($j->monitoringPembelajarans->first()->status_validasi) }}
                                 </td>
                                 <td><button {{ count($j->monitoringPembelajarans) === 0 ? 'disabled' : '' }}
                                         wire:click="showId({{ $j->id }})" class="btn btn-primary"><i
@@ -86,7 +86,7 @@
                                 <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
                                 <td>{{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? '' : $j->jadwalPelajaran->monitoringPembelajarans->first()->topik }}
                                 </td>
-                                <td>{{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? '' : $j->jadwalPelajaran->monitoringPembelajarans->first()->status_validasi }}
+                                <td>{{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? '' : ucfirst($j->jadwalPelajaran->monitoringPembelajarans->first())->status_validasi }}
                                 </td>
                                 <td><button
                                         {{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? 'disabled' : '' }}

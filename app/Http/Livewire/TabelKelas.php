@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Kelas;
 use Livewire\Component;
 use App\Models\Angkatan;
+use Illuminate\Support\Str;
 use App\Exports\ExportKelas;
 use App\Imports\KelasImport;
 use Livewire\WithPagination;
@@ -162,11 +163,17 @@ class TabelKelas extends Component
 
     public function render()
     {
+        $status = TahunAkademik::find($this->filter)->status;
+        if ($status === 'aktif') {
+            $allow = true;
+        } else {
+            $allow = false;
+        }
         return view('livewire.tabel-kelas', [
-            'kelas' => Kelas::where('nama', 'like', '%' . $this->search . '%')->where('tahun_akademik_id', $this->filter)->latest()->paginate(5),
+            'kelas' => Kelas::where('nama', 'like', '%' . $this->search . '%')->where('tahun_akademik_id', $this->filter)->orderBy('created_at', 'asc')->paginate(5),
             'tahun_akademik' => TahunAkademik::latest()->get()->all(),
-            'angkatan' => Angkatan::where('status', 'belum lulus')->get()->all()
-
+            'angkatan' => Angkatan::where('status', 'belum lulus')->get()->all(),
+            'allow' => $allow
         ]);
     }
 
@@ -191,7 +198,8 @@ class TabelKelas extends Component
 
     public function export()
     {
-        $id = $this->filter;
-        return Excel::download(new ExportKelas($id), 'Data Kelas SMAN Titian Teras.xlsx');
+        $akademik = TahunAkademik::find($this->filter)->nama;
+        $nama = Str::slug($akademik, '-', null, ['/' => '-']);
+        return Excel::download(new ExportKelas($this->filter), 'Data Kelas ' . $nama . ' SMAN Titian Teras.xlsx');
     }
 }
