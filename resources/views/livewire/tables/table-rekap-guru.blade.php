@@ -23,20 +23,27 @@
                         $b = $g->jadwalPelajarans->groupBy('mata_pelajaran_id')->first();
                         $rowCount = count($g->jadwalPelajarans->groupBy('mata_pelajaran_id'));
                     @endphp
-                    <tr>
-                        <td
-                            {{ count($g->jadwalPelajarans->groupBy('mata_pelajaran_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
-                            {{ ($guru->currentpage() - 1) * $guru->perpage() + $loop->index + 1 }}
-                        </td>
-                        <td
-                            {{ count($g->jadwalPelajarans->groupBy('mata_pelajaran_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
-                            {{ $g->nama }}</td>
-                        <td
-                            {{ count($g->jadwalPelajarans->groupBy('mata_pelajaran_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
-                            {{ $g->kode_guru }}</td>
-                        <td>{{ $b->first()->mataPelajaran->nama }}</td>
-                        @php
-                            $diff = 0;
+                @else
+                    @php
+                        $b = null;
+                        $rowCount = 1;
+                    @endphp
+                @endif
+                <tr>
+                    <td
+                        {{ count($g->jadwalPelajarans->groupBy('mata_pelajaran_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
+                        {{ ($guru->currentpage() - 1) * $guru->perpage() + $loop->index + 1 }}
+                    </td>
+                    <td
+                        {{ count($g->jadwalPelajarans->groupBy('mata_pelajaran_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
+                        {{ $g->nama }}</td>
+                    <td
+                        {{ count($g->jadwalPelajarans->groupBy('mata_pelajaran_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
+                        {{ $g->kode_guru }}</td>
+                    <td>{{ $b !== null ? $b->first()->mataPelajaran->nama : '' }}</td>
+                    @php
+                        $diff = 0;
+                        if ($b !== null) {
                             foreach ($b as $j) {
                                 $datetime1 = strtotime($j->waktu_mulai);
                                 $datetime2 = strtotime($j->waktu_berakhir);
@@ -47,12 +54,14 @@
                                 $diff = $diff + $perbedaan;
                                 // dd(floor($diff));
                             }
-                        @endphp
-                        <td align="center">{{ $diff }}</td>
+                        }
+                    @endphp
+                    <td align="center">{{ $diff }}</td>
 
-                        @php
-                            $jml = 0;
-                            $keterangan = [];
+                    @php
+                        $jml = 0;
+                        $keterangan = [];
+                        if ($b !== null) {
                             foreach ($b as $j) {
                                 if (count($j->monitoringPembelajarans) !== 0) {
                                     foreach ($j->monitoringPembelajarans as $m) {
@@ -64,7 +73,7 @@
                                             $minutes = round($interval / 60);
                                             // dd($minutes);
                                             $perbedaan = floor($minutes / 35);
-                            
+                        
                                             // $date1 = (float) substr($m->waktu_mulai, 0, -3);
                                             // $date2 = (float) substr($m->waktu_berakhir, 0, -3);
                                             $jml = $jml + $perbedaan;
@@ -72,9 +81,70 @@
                                     }
                                 }
                             }
+                        }
+                    @endphp
+                    <td align="center">{{ $jml === 0 ? '0' : $jml }}
+                    </td>
+                    <td align="center">
+                        @if ($jml === 0)
+                            {{ '100%' }}
+                        @else
+                            @php
+                                $data1 = $jml;
+                                $data2 = $diff;
+                                $total = round((($data2 - $data1) / $data2) * 100);
+                            @endphp
+                            {{ $total . '%' }}
+                        @endif
+                    </td>
+                    <td>
+                        @foreach ($keterangan as $k)
+                            {{ $k }}
+                        @endforeach
+                    </td>
+                </tr>
+                @foreach ($g->jadwalPelajarans->groupBy('mata_pelajaran_id') as $key => $b)
+                    @if ($loop->first)
+                        @continue
+                    @endif
+                    <tr>
+                        <td>{{ $b !== null ? $b->first()->mataPelajaran->nama : '' }}</td>
+                        @php
+                            $diff = 0;
+                            if ($b !== null) {
+                                foreach ($b as $j) {
+                                    $datetime1 = strtotime($j->waktu_mulai);
+                                    $datetime2 = strtotime($j->waktu_berakhir);
+                                    $interval = abs($datetime2 - $datetime1);
+                                    $minutes = round($interval / 60);
+                                    // dd($minutes);
+                                    $perbedaan = floor($minutes / 35);
+                                    $diff = $diff + $perbedaan;
+                                }
+                            }
                         @endphp
-                        <td align="center">{{ $jml === 0 ? '0' : $jml }}
-                        </td>
+                        <td align="center">{{ $diff }}</td>
+
+                        @php
+                            $jml = 0;
+                            $keterangan = [];
+                            if ($b !== null) {
+                                foreach ($b as $j) {
+                                    if (count($j->monitoringPembelajarans) !== 0) {
+                                        foreach ($j->monitoringPembelajarans as $m) {
+                                            array_push($keterangan, $m->keterangan);
+                                            if ($m->status_validasi === 'tidak valid') {
+                                                $date1 = (float) substr($m->waktu_mulai, 0, -3);
+                                                $date2 = (float) substr($m->waktu_berakhir, 0, -3);
+                                                $jml = $jml + ($date2 - $date1);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        @endphp
+                        <td align="center">
+                            {{ $jml === 0 ? '0' : $jml }}</td>
                         <td align="center">
                             @if ($jml === 0)
                                 {{ '100%' }}
@@ -93,64 +163,7 @@
                             @endforeach
                         </td>
                     </tr>
-                    @foreach ($g->jadwalPelajarans->groupBy('mata_pelajaran_id') as $key => $b)
-                        @if ($loop->first)
-                            @continue
-                        @endif
-                        <tr>
-                            <td>{{ $b->first()->mataPelajaran->nama }}</td>
-                            @php
-                                $diff = 0;
-                                foreach ($b as $j) {
-                                    $datetime1 = strtotime($j->waktu_mulai);
-                                    $datetime2 = strtotime($j->waktu_berakhir);
-                                    $interval = abs($datetime2 - $datetime1);
-                                    $minutes = round($interval / 60);
-                                    // dd($minutes);
-                                    $perbedaan = floor($minutes / 35);
-                                    $diff = $diff + $perbedaan;
-                                }
-                            @endphp
-                            <td align="center">{{ $diff }}</td>
-
-                            @php
-                                $jml = 0;
-                                $keterangan = [];
-                                foreach ($b as $j) {
-                                    if (count($j->monitoringPembelajarans) !== 0) {
-                                        foreach ($j->monitoringPembelajarans as $m) {
-                                            array_push($keterangan, $m->keterangan);
-                                            if ($m->status_validasi === 'tidak valid') {
-                                                $date1 = (float) substr($m->waktu_mulai, 0, -3);
-                                                $date2 = (float) substr($m->waktu_berakhir, 0, -3);
-                                                $jml = $jml + ($date2 - $date1);
-                                            }
-                                        }
-                                    }
-                                }
-                            @endphp
-                            <td align="center">
-                                {{ $jml === 0 ? '0' : $jml }}</td>
-                            <td align="center">
-                                @if ($jml === 0)
-                                    {{ '100%' }}
-                                @else
-                                    @php
-                                        $data1 = $jml;
-                                        $data2 = $diff;
-                                        $total = round((($data2 - $data1) / $data2) * 100);
-                                    @endphp
-                                    {{ $total . '%' }}
-                                @endif
-                            </td>
-                            <td>
-                                @foreach ($keterangan as $k)
-                                    {{ $k }}
-                                @endforeach
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
+                @endforeach
             @endforeach
         @endif
 
