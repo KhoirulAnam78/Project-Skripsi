@@ -231,7 +231,7 @@ class TabelSiswa extends Component
     {
 
         return view('livewire.tabel-siswa', [
-            'siswa' => Siswa::where('nama', 'like', '%' . $this->search . '%')->orderBy('created_at', 'desc')->paginate(5),
+            'siswa' => Siswa::where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(5),
         ]);
     }
 

@@ -132,7 +132,7 @@ class TabelMapel extends Component
     public function render()
     {
         return view('livewire.tabel-mapel', [
-            'mapel' => MataPelajaran::where('nama', 'like', '%' . $this->search . '%')->orderBy('created_at', 'desc')->paginate(5),
+            'mapel' => MataPelajaran::where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(5),
         ]);
     }
 
