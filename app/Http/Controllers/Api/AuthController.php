@@ -73,7 +73,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
                 'nama' => $user->waliAsrama->nama,
-                'angkatan' => $user->waliAsrama->angkatans->where('status', 'belum lulus')
+                'angkatan' => $user->waliAsrama->angkatans->where('status', 'belum lulus')->first()
             ]);
         } else {
             return response()->json([
