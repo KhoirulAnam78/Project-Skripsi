@@ -38,7 +38,7 @@ class RekapGuru extends Component
                 }])->with(['mataPelajaran' => function ($query) {
                     $query->select('id', 'nama');
                 }]);
-            }])->paginate(10);
+            }])->orderBy('nama', 'asc')->paginate(10);
         } else {
             $data = Guru::select('id', 'nama', 'kode_guru')->where('nama', 'like', '%' . $this->search . '%')->with(['jadwalPelajarans' => function ($query) {
                 $query->select('id', 'waktu_mulai', 'waktu_berakhir', 'guru_id', 'mata_pelajaran_id')->whereIn('kelas_id', $this->kelasAktif)->with(['monitoringPembelajarans' => function ($query) {
@@ -46,7 +46,7 @@ class RekapGuru extends Component
                 }])->with(['mataPelajaran' => function ($query) {
                     $query->select('id', 'nama');
                 }]);
-            }])->paginate(10);
+            }])->orderBy('nama', 'asc')->paginate(10);
         }
         // dd($data);
         return view('livewire.rekap-guru', [
