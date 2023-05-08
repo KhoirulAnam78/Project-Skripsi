@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use App\Models\TahunAkademik;
 use App\Models\JadwalPengganti;
 use App\Http\Controllers\Controller;
 
@@ -54,16 +55,19 @@ class SiswaApiController extends Controller
     }
   }
 
+  public $tahunAkademik;
+
   public function getNonAkademik(Request $request)
   {
     if ($request->hari and $request->tanggal) {
       $this->tanggal = $request->tanggal;
       $this->hari = $request->hari;
+      $this->tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
 
       $data = Siswa::where('user_id', auth('sanctum')->user()->id)->select('id', 'user_id')->with(['kelas' => function ($query) {
-        $query->with(['angkatan' => function ($query) {
+        $query->whereRelation('tahunAkademik', 'status', 'aktif')->with(['angkatan' => function ($query) {
           $query->with(['jadwalKegiatans' => function ($query) {
-            $query->with('kegiatan')->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $this->hari)->with(['monitoringKegnas' => function ($query) {
+            $query->where('tahun_akademik_id', $this->tahunAkademik)->with('kegiatan')->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $this->hari)->with(['monitoringKegnas' => function ($query) {
               if ($query) {
                 $query->with('narasumber')->where('tanggal', $this->tanggal)->with(['kehadiranKegnas' => function ($query) {
                   if ($query) {
