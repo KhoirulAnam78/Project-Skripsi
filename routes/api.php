@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GuruApiController;
 use App\Http\Controllers\Api\PresensiController;
 use App\Http\Controllers\Api\SiswaApiController;
+use App\Http\Controllers\Api\WaliAsramaApiController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -34,4 +36,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/validasi/tidak-valid', [Presensicontroller::class, 'tidakValid']);
     Route::post('/get-jadwal-siswa', [SiswaApiController::class, 'getJadwal']);
     Route::post('/get-jadwal-non-akademik', [SiswaApiController::class, 'getNonAkademik']);
+    Route::get('/get-jadwal-waliasrama', [WaliAsramaApiController::class, 'getJadwal']);
 });
