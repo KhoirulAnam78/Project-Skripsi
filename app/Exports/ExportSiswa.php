@@ -38,7 +38,7 @@ class ExportSiswa extends DefaultValueBinder implements FromCollection, WithMapp
 
     public function collection()
     {
-        return Siswa::all();
+        return Siswa::orderBy('nama', 'asc')->get();
     }
 
     public function map($siswa): array

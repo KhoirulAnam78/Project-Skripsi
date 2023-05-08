@@ -40,7 +40,7 @@ class ExportGuru extends DefaultValueBinder implements FromCollection, WithMappi
 
     public function collection()
     {
-        return Guru::all();
+        return Guru::orderBy('nama', 'asc')->get();
     }
 
     public function map($guru): array

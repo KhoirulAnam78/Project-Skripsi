@@ -44,9 +44,9 @@ class ExportKelas extends DefaultValueBinder implements FromCollection, WithMapp
     public function collection()
     {
         if ($this->id === '') {
-            return Kelas::all();
+            return Kelas::orderBy('nama', 'asc')->get();
         } else {
-            return Kelas::where('tahun_akademik_id', $this->id)->get();
+            return Kelas::where('tahun_akademik_id', $this->id)->orderBy('nama', 'asc')->get();
         }
     }
 

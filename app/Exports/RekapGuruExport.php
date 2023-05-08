@@ -25,7 +25,7 @@ class RekapGuruExport implements FromView
                 }])->with(['mataPelajaran' => function ($query) {
                     $query->select('id', 'nama');
                 }]);
-            }])->paginate();
+            }])->orderBy('nama', 'asc')->paginate();
         } else {
             $data = Guru::select('id', 'nama', 'kode_guru')->with(['jadwalPelajarans' => function ($query) {
                 $query->select('id', 'waktu_mulai', 'waktu_berakhir', 'guru_id', 'mata_pelajaran_id')->whereIn('kelas_id', $this->kelasAktif)->with(['monitoringPembelajarans' => function ($query) {
@@ -33,7 +33,7 @@ class RekapGuruExport implements FromView
                 }])->with(['mataPelajaran' => function ($query) {
                     $query->select('id', 'nama');
                 }]);
-            }])->paginate();
+            }])->orderBy('nama', 'asc')->paginate();
         }
         return view('livewire.tables.table-rekap-guru', [
             'guru' => $data

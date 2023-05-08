@@ -38,7 +38,7 @@ class WaliAsramaExport extends DefaultValueBinder implements FromCollection, Wit
 
     public function collection()
     {
-        return WaliAsrama::all();
+        return WaliAsrama::orderBy('nama', 'asc')->get();
     }
 
     public function map($wali_asrama): array

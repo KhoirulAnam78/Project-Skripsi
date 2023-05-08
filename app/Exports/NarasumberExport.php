@@ -38,7 +38,7 @@ class NarasumberExport extends DefaultValueBinder implements FromCollection, Wit
 
     public function collection()
     {
-        return Narasumber::all();
+        return Narasumber::orderBy('nama', 'asc')->get();
     }
 
     public function map($narasumber): array
