@@ -65,35 +65,39 @@ class SiswaApiController extends Controller
       $this->tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
 
       $data = Siswa::where('user_id', auth('sanctum')->user()->id)->select('id', 'user_id')->with(['kelas' => function ($query) {
-        $query->whereRelation('tahunAkademik', 'status', 'aktif')->with(['angkatan' => function ($query) {
-          $query->with(['jadwalKegiatans' => function ($query) {
-            $query->where('tahun_akademik_id', $this->tahunAkademik)->with('kegiatan')->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $this->hari)->with(['monitoringKegnas' => function ($query) {
-              if ($query) {
-                $query->with('narasumber')->where('tanggal', $this->tanggal)->with(['kehadiranKegnas' => function ($query) {
-                  if ($query) {
-                    $query->where('siswa_id', auth('sanctum')->user()->siswa->id);
-                  } else {
-                    $query;
-                  }
-                }]);
-              } else {
-                $query;
-              }
-            }])->with(['monitoringKegiatan' => function ($query) {
-              if ($query) {
-                $query->where('tanggal', $this->tanggal)->with(['kehadiranKegiatan' => function ($query) {
-                  if ($query) {
-                    $query->where('siswa_id', auth('sanctum')->user()->siswa->id);
-                  } else {
-                    $query;
-                  }
-                }]);
-              } else {
-                $query;
-              }
-            }]);;
+        if ($query) {
+          $query->whereRelation('tahunAkademik', 'status', 'aktif')->with(['angkatan' => function ($query) {
+            $query->with(['jadwalKegiatans' => function ($query) {
+              $query->where('tahun_akademik_id', $this->tahunAkademik)->with('kegiatan')->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $this->hari)->with(['monitoringKegnas' => function ($query) {
+                if ($query) {
+                  $query->with('narasumber')->where('tanggal', $this->tanggal)->with(['kehadiranKegnas' => function ($query) {
+                    if ($query) {
+                      $query->where('siswa_id', auth('sanctum')->user()->siswa->id);
+                    } else {
+                      $query;
+                    }
+                  }]);
+                } else {
+                  $query;
+                }
+              }])->with(['monitoringKegiatan' => function ($query) {
+                if ($query) {
+                  $query->where('tanggal', $this->tanggal)->with(['kehadiranKegiatan' => function ($query) {
+                    if ($query) {
+                      $query->where('siswa_id', auth('sanctum')->user()->siswa->id);
+                    } else {
+                      $query;
+                    }
+                  }]);
+                } else {
+                  $query;
+                }
+              }]);;
+            }]);
           }]);
-        }]);
+        } else {
+          $query;
+        }
       }])->get();
       // dd($data[0]->kelas->first()->angkatan->jadwalKegiatans);
       return response()->json([
