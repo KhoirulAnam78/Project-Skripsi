@@ -177,6 +177,9 @@ class TabelAngkatan extends Component
     {
         $angkatan = Angkatan::where('id', $this->angkatan_delete_id)->first();
         try {
+            foreach ($this->waliAsrama as $w) {
+                AngkatanWaliAsrama::where('angkatan_id', $angkatan->id)->where('wali_asrama_id', $w->id)->first()->delete();
+            }
             $angkatan->delete();
 
             session()->flash('message', 'Data berhasil dihapus');
