@@ -34,6 +34,7 @@ class DaftarKegiatanExport extends DefaultValueBinder implements FromCollection,
         $this->tglAkhir = $tglAkhir;
         $this->jml_siswa = $jml_siswa;
         $this->kegiatan_id = $kegiatan_id;
+        $this->tahun_akademik_id = $tahun_akademik_id;
     }
     public function columnFormats(): array
     {

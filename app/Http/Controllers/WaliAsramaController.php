@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\WaliAsrama;
+use App\Models\TahunAkademik;
 use App\Models\JadwalKegiatan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -42,8 +43,9 @@ class WaliAsramaController extends Controller
 
     public function jadwal()
     {
+        $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
         $angkatan = WaliAsrama::where('user_id', Auth::user()->id)->first()->angkatans->where('status', 'belum lulus')->first();
-        $jadwal = JadwalKegiatan::where('angkatan_id', $angkatan->id)->with('kegiatan')->get();
+        $jadwal = JadwalKegiatan::where('angkatan_id', $angkatan->id)->where('tahun_akademik_id', $tahunAkademik)->with('kegiatan')->orderBy('waktu_mulai', 'asc')->get();
         // dd($angkatan);
         return view('pages.wali_asrama.jadwal', [
             'title' => 'Jadwal Kegiatan',
