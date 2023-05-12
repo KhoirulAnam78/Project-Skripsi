@@ -403,7 +403,7 @@ foreach ($kegiatan as $k) {
             <!-- Components -->
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
 
-            <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
+            <li class="menu-item {{ $title === 'Daftar Pembelajaran' ? 'active' : '' }}">
                 <a href="/daftar-pertemuan" class="menu-link">
                     {{-- <i class="menu-icon tf-icons bx bx-collection"></i> --}}
                     <i class='menu-icon tf-icons bx bx-list-ul'></i>

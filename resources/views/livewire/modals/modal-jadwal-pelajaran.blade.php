@@ -91,7 +91,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title text-white" id="exampleModalLabel1">Edit Jadwal Piket</h5>
+                <h5 class="modal-title text-white" id="exampleModalLabel1">Edit Jadwal Pelajaran</h5>
                 <button type="button" class="btn-close" wire:click="empty()" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
