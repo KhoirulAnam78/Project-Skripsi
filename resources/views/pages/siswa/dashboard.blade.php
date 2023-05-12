@@ -34,7 +34,7 @@
                 </div>
             </div>
             <!-- Total Revenue -->
-            <div class="col-12 col-lg-12 order-2 order-md-3 order-lg-2 mb-4">
+            <div class="col-12 col-lg-12 order-2 order-md-3 order-lg-2 mb-5">
                 <div class="card">
                     <div class="row row-bordered g-0">
                         <div class="col-md-12">
@@ -42,7 +42,8 @@
                                 Ini ({{ \Carbon\Carbon::now()->translatedFormat('l, d-m-Y') }})</h5>
                         </div>
                         <div class="col-md-12">
-                            <h6 class="card-header m-0 me-2 pb-3 d-inline-block">Jadwal Kegiatan Non Akademik</h6>
+                            <h6 class="card-header m-0 me-2 pb-3 d-inline-block" style="font-weight: bold">Jadwal Kegiatan
+                                Non Akademik</h6>
                         </div>
                         <div class="table-responsive text-nowrap">
                             <table class="table">
@@ -55,19 +56,21 @@
                                     </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                    @if (count($jadwal) === 0)
+                                    @if (count($jadwalKegiatan) === 0)
                                         <tr>
                                             <td colspan='6' align="center"><span>Tidak ada kegiatan</span></td>
                                         </tr>
                                     @endif
-                                    @foreach ($jadwal as $j)
+                                    @foreach ($jadwalKegiatan as $j)
                                         <tr class="table-default">
                                             <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}
                                             </td>
                                             <td>{{ $j->kegiatan->nama }}</td>
                                             @php
                                                 if ($j->kegiatan->narasumber === true) {
-                                                    if (count($j->monitoringKegnas->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0) {
+                                                    $monitoring = $j->monitoringKegnas->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
+                                                    if (count($monitoring) !== 0) {
+                                                        $presensi = $monitoring->first()->kehadiranKegnas->first()->status;
                                                         if (\Carbon\Carbon::now()->translatedFormat('H.i') > $j->waktu_berakhir) {
                                                             $status = 'Telah Berakhir';
                                                         } elseif (\Carbon\Carbon::now()->translatedFormat('H.i') < $j->waktu_mulai) {
@@ -76,10 +79,13 @@
                                                             $status = 'Sedang Berlangsung';
                                                         }
                                                     } else {
+                                                        $presensi = 'Presensi Belum Diinputkan!';
                                                         $status = 'Tidak Terlaksana';
                                                     }
                                                 } else {
-                                                    if (count($j->monitoringKegiatan->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0) {
+                                                    $monitoring = $j->monitoringKegiatan->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
+                                                    if (count($monitoring) !== 0) {
+                                                        $presensi = $monitoring->first()->kehadiranKegiatan->first()->status;
                                                         if (\Carbon\Carbon::now()->translatedFormat('H.i') > $j->waktu_berakhir) {
                                                             $status = 'Telah Berakhir';
                                                         } elseif (\Carbon\Carbon::now()->translatedFormat('H.i') < $j->waktu_mulai) {
@@ -88,11 +94,13 @@
                                                             $status = 'Sedang Berlangsung';
                                                         }
                                                     } else {
+                                                        $presensi = 'Presensi Belum Diinputkan!';
                                                         $status = 'Tidak Terlaksana';
                                                     }
                                                 }
                                                 // dd();
                                             @endphp
+                                            <td>{{ ucwords($presensi) }}</td>
                                             <td>
                                                 <span
                                                     class="
@@ -113,12 +121,14 @@ if ($status == 'Telah Berakhir'){
                                 </tbody>
                             </table>
                         </div>
-
                         {{-- <hr> --}}
-                        <div class="col-md-12">
-                            <h6 class="card-header m-0 mb-2 pb-3 d-inline-block">Jadwal Kegiatan Akademik</h6>
+                        <hr>
+                        <div class="col-md-12 mt-2">
+                            <h6 class="card-header justify-content-center m-0 mb-2 pb-3 d-inline-block"
+                                style="font-weight: bold;">Jadwal Kegiatan
+                                Akademik</h6>
                         </div>
-                        <div class="table-responsive text-nowrap">
+                        <div class="table-responsive text-nowrap mb-5">
                             <table class="table">
                                 <thead>
                                     <tr class="table-primary">

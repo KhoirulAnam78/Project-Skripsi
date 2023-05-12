@@ -13,19 +13,57 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    public $tanggal, $hari, $tahunAkademik, $siswaId;
     public function index()
     {
+        $this->hari = \Carbon\Carbon::now()->translatedFormat('l');
+        $this->tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
+        $this->tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
         if (Auth::user()->role === 'siswa') {
-            $data = Auth::user()->siswa->id;
-            $jadwal = Siswa::where('id', $data)->select('id',)->with(['kelas' => function ($query) {
+            $this->siswaId = Auth::user()->siswa->id;
+            // $data = Auth::user()->siswa->id;
+            $jadwal = Siswa::where('id', $this->siswaId)->select('id',)->with(['kelas' => function ($query) {
                 $query->whereRelation('tahunAkademik', 'status', 'aktif')->with(['jadwalPelajarans' => function ($sql) {
-                    $hari = \Carbon\Carbon::now()->translatedFormat('l');
-                    $sql->where('hari', $hari)->get();
+                    $sql->where('hari', $this->hari)->get();
                 }])->get();
             }])->first();
+
+            $data = Siswa::where('user_id', auth('sanctum')->user()->id)->select('id', 'user_id')->with(['kelas' => function ($query) {
+                $query->whereRelation('tahunAkademik', 'status', 'aktif')->with(['angkatan' => function ($query) {
+                    $query->with(['jadwalKegiatans' => function ($query) {
+                        $query->where('tahun_akademik_id', $this->tahunAkademik)->with('kegiatan')->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $this->hari)->with(['monitoringKegnas' => function ($query) {
+                            if ($query) {
+                                $query->with('narasumber')->where('tanggal', $this->tanggal)->with(['kehadiranKegnas' => function ($query) {
+                                    if ($query) {
+                                        $query->where('siswa_id', $this->siswaId);
+                                    } else {
+                                        $query;
+                                    }
+                                }]);
+                            } else {
+                                $query;
+                            }
+                        }])->with(['monitoringKegiatan' => function ($query) {
+                            if ($query) {
+                                $query->where('tanggal', $this->tanggal)->with(['kehadiranKegiatan' => function ($query) {
+                                    if ($query) {
+                                        $query->where('siswa_id', $this->siswaId);
+                                    } else {
+                                        $query;
+                                    }
+                                }]);
+                            } else {
+                                $query;
+                            }
+                        }]);;
+                    }]);
+                }]);
+            }])->get();
+            // dd($data[0]->kelas->first()->angkatan->jadwalKegiatans);
             return view('pages.siswa.dashboard', [
                 'title' => 'Dashboard',
-                'jadwal' => $jadwal->kelas->first()->jadwalPelajarans
+                'jadwal' => $jadwal->kelas->first()->jadwalPelajarans,
+                'jadwalKegiatan' => $data[0]->kelas->first()->angkatan->jadwalKegiatans
             ]);
         } else if (Auth::user()->role === 'admin') {
             return view('pages.admin.dashboard', [
