@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kegiatan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
@@ -45,6 +46,15 @@ class SiswaController extends Controller
         $this->authorize('siswa');
         return view('pages.siswa.rekap-pembelajaran', [
             'title' => 'Rekap Pembelajaran Siswa'
+        ]);
+    }
+    public function rekapKegiatan($slug)
+    {
+        $this->authorize('siswa');
+        $kegiatan = Kegiatan::where('slug', $slug)->first();
+        return view('pages.siswa.rekap-kegiatan', [
+            'title' => 'Rekapitulasi ' . $kegiatan->nama,
+            'kegiatan' => $kegiatan
         ]);
     }
 }

@@ -43,7 +43,7 @@ class KegiatanController extends Controller
     }
     public function rekapitulasi($slug)
     {
-        $this->authorize('admin');
+        $this->authorize('adpim');
         $kegiatan = Kegiatan::where('slug', $slug)->first();
         if ($kegiatan->narasumber == true) {
             return view('pages.admin.rekap_kegiatan_nara', [

@@ -126,6 +126,8 @@ Route::get('/rekapitulasi-kegiatan/{slug}', [KegiatanController::class, 'rekapit
 //HALAMAN WALI MURID
 Route::get('/jadwal-siswa', [SiswaController::class, 'jadwal'])->middleware('auth');
 Route::get('/rekap-pembelajaran-siswa', [SiswaController::class, 'rekapPembelajaran'])->middleware('auth');
+Route::get('/rekap-kegiatan-siswa/{slug}', [SiswaController::class, 'rekapKegiatan'])->middleware('auth');
+
 
 //HALAMAN GURU
 Route::get('/jadwal-mengajar', [GuruController::class, 'jadwal'])->middleware('auth');

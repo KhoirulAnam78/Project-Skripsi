@@ -64,10 +64,6 @@
                                                     : {{ $user->siswa->nisn }}
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>Nomor Telepon</td>
-                                                <td>: {{ $user->siswa->no_telp }}</td>
-                                            </tr>
                                         @endif
                                         @if ($user->role === 'wali_asrama')
                                             <tr>
