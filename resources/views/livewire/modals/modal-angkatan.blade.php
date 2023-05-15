@@ -128,7 +128,7 @@
                     </div>
                     {{-- @dump($waliAsrama) --}}
                     <div class="col-lg-12 col-md-12 mb-2">
-                        <label for="search" class="form-label">Pencarian</label>
+                        <label for="search" class="form-label">Wali Asrama</label>
                         <input type="text" wire:model="search2" id="search" class="form-control"
                             placeholder="Cari berdasarkan nama wali asrama" />
                     </div>
