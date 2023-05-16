@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Exports\ExportSiswa;
 use Illuminate\Http\Request;
 use App\Models\TahunAkademik;
 use App\Models\JadwalPelajaran;
 use App\Models\JadwalPengganti;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Response;
 
 class GuruApiController extends Controller
 {
@@ -57,5 +60,15 @@ class GuruApiController extends Controller
         'request' => 'Hari and tanggal is required !',
       ]);
     }
+  }
+  public function getRekap()
+  {
+    // $file = public_path() . '/assets/template-excel/Data Guru.xlsx';
+    // $headers = array(
+    //   'Content-Type: application/xlsx',
+    // );
+
+    // return Response::download($file, 'Template Import Data Guru.xlsx', $headers);
+    return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
   }
 }

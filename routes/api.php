@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/get-user', [AuthController::class, 'getUser']);
     Route::post('/get-jadwal', [GuruApiController::class, 'getJadwal']);
+    Route::get('/get-rekap-guru', [GuruApiController::class, 'getRekap']);
     Route::post('/get-siswa', [PresensiController::class, 'getSiswa']);
     Route::post('/presensi-pembelajaran', [PresensiController::class, 'presensiPembelajaran']);
     Route::get('/validasi', [PresensiController::class, 'validasi']);
