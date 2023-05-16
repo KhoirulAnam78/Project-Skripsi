@@ -61,14 +61,21 @@ class GuruApiController extends Controller
       ]);
     }
   }
-  public function getRekap()
-  {
-    // $file = public_path() . '/assets/template-excel/Data Guru.xlsx';
-    // $headers = array(
-    //   'Content-Type: application/xlsx',
-    // );
 
-    // return Response::download($file, 'Template Import Data Guru.xlsx', $headers);
-    return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
+
+  public function getRekap(Request $request)
+  {
+    if ($request->jenis_rekap) {
+      if ($request->jenis_rekap === 'Daftar Pertemuan') {
+        return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
+      } else {
+        return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
+      }
+    } else {
+      return response()->json([
+        'message' => 'Fetch data failed',
+        'request' => 'Jenis rekap is required !',
+      ]);
+    }
   }
 }
