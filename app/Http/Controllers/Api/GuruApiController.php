@@ -63,19 +63,12 @@ class GuruApiController extends Controller
   }
 
 
-  public function getRekap(Request $request)
+  public function getRekap($data)
   {
-    if ($request->jenis_rekap) {
-      if ($request->jenis_rekap === 'Daftar Pertemuan') {
-        return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
-      } else {
-        return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
-      }
+    if ($data === 'daftar-pertemuan') {
+      return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
     } else {
-      return response()->json([
-        'message' => 'Fetch data failed',
-        'request' => 'Jenis rekap is required !',
-      ]);
+      return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
     }
   }
 }
