@@ -65,10 +65,14 @@ class GuruApiController extends Controller
 
   public function getRekap($data)
   {
-    if ($data === 'daftar-pertemuan') {
-      return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
-    } else {
-      return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
-    }
+    return response()->json([
+      'message' => 'Fetch data failed',
+      'request' => $data,
+    ]);
+    // if ($data === 'daftar-pertemuan') {
+    //   return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
+    // } else {
+    //   return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
+    // }
   }
 }
