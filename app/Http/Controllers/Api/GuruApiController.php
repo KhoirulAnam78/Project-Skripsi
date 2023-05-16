@@ -63,11 +63,12 @@ class GuruApiController extends Controller
   }
 
 
-  public function getRekap($data)
+  public function getRekap($data, $bulan)
   {
     return response()->json([
       'message' => 'Fetch data failed',
-      'request' => $data,
+      'jenisRekap' => $data,
+      'bulan' => $bulan
     ]);
     // if ($data === 'daftar-pertemuan') {
     //   return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
