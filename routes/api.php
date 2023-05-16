@@ -24,9 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('login', [AuthController::class, 'login']);
-Route::get('/get-rekap-guru', [GuruApiController::class, 'getRekap']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/get-rekap-guru', [GuruApiController::class, 'getRekap']);
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/get-user', [AuthController::class, 'getUser']);
     Route::post('/get-jadwal', [GuruApiController::class, 'getJadwal']);
