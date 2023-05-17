@@ -43,7 +43,7 @@
                         <option value="{{ $m->id }}">{{ $m->nama }}</option>
                     @endforeach
                 @else
-                    <option selected>Tidak ada jadwal pelajaran</option>
+                    <option selected value="">Tidak ada jadwal pelajaran</option>
                 @endif
             </select>
         </div>
