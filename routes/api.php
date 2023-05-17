@@ -26,16 +26,30 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/get-rekap-guru/{data}/{bulan}', [GuruApiController::class, 'getRekap']);
+    //Logout
     Route::get('/logout', [AuthController::class, 'logout']);
-    Route::get('/get-user', [AuthController::class, 'getUser']);
+    //Get Jadwal Guru
     Route::post('/get-jadwal', [GuruApiController::class, 'getJadwal']);
+    //Get List Siswa Untuk Presensi
     Route::post('/get-siswa', [PresensiController::class, 'getSiswa']);
+    //Input presensi
     Route::post('/presensi-pembelajaran', [PresensiController::class, 'presensiPembelajaran']);
+    //get data yang perlu divalidasi
     Route::get('/validasi', [PresensiController::class, 'validasi']);
+    //aksi validasi pembelajaran menjadi valid
     Route::post('/validasi/valid', [Presensicontroller::class, 'valid']);
+    //aksi validasi menjadi tidak valid
     Route::post('/validasi/tidak-valid', [Presensicontroller::class, 'tidakValid']);
+    //ambil jadwal siswa
     Route::post('/get-jadwal-siswa', [SiswaApiController::class, 'getJadwal']);
     Route::post('/get-jadwal-non-akademik', [SiswaApiController::class, 'getNonAkademik']);
+    //ambil jadwal wali asrama
     Route::get('/get-jadwal-waliasrama', [WaliAsramaApiController::class, 'getJadwal']);
+
+    //##AMBIL REKAP GURU##
+    //ambil kelas aktif
+    Route::get('/get-kelas', [GuruApiController::class, 'getKelas']);
+    //ambil mata pelajaran berdasarkan kelas yang dipilih
+    Route::get('/get-mapel/{kelas_id}', [GuruApiController::class, 'getMapel']);
+    Route::get('/get-rekap-guru/{data}/{kelas_id}/{mapel_id}', [GuruApiController::class, 'getRekap']);
 });

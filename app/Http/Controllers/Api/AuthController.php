@@ -93,12 +93,4 @@ class AuthController extends Controller
             'message' => 'Logout Success'
         ]);
     }
-
-    public function getUser()
-    {
-        $data = User::all();
-        return response()->json([
-            'data' => $data
-        ]);
-    }
 }
