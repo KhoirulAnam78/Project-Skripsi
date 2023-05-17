@@ -42,10 +42,14 @@ class DaftarPertemuan extends Component
                 array_push($this->arrayMapel, $d->mataPelajaran->id);
             }
             $this->mapel = MataPelajaran::whereIn('id', $this->arrayMapel)->select('id', 'nama')->get();
-            $this->filterMapel = $this->mapel->first()->id;
+            if ($this->mapel) {
+                $this->filterMapel = $this->mapel->first()->id;
+            }
         } else {
             $this->mapel = MataPelajaran::all();
-            $this->filterMapel = $this->mapel->first()->id;
+            if ($this->mapel) {
+                $this->filterMapel = $this->mapel->first()->id;
+            }
         }
     }
 
@@ -85,10 +89,18 @@ class DaftarPertemuan extends Component
                 array_push($this->arrayMapel, $d->mataPelajaran->id);
             }
             $this->mapel = MataPelajaran::whereIn('id', $this->arrayMapel)->select('id', 'nama')->get();
-            $this->filterMapel = $this->mapel->first()->id;
+            if ($this->mapel) {
+                $this->filterMapel = $this->mapel->first()->id;
+            } else {
+                $this->filterMapel = null;
+            }
         } else {
             $this->mapel = MataPelajaran::all();
-            $this->filterMapel = $this->mapel->first()->id;
+            if ($this->mapel) {
+                $this->filterMapel = $this->mapel->first()->id;
+            } else {
+                $this->filterMapel = null;
+            }
         }
     }
 
