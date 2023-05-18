@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="row mx-3">
-        @if ($kegiatan->narasumber === 1)
+        @if ($kegiatan->narasumber == 1)
             <div class="table-responsive text-nowrap mb-3">
                 <table class="table table-striped align-top" id="example">
                     <thead>
