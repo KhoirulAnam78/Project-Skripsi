@@ -3,6 +3,7 @@
         <div class="col-lg-2 col-md-3 mb-2 mx-3">
             <label for="search" class="form-label">Hari</label>
             <select wire:model="filterHari" id="filterHari" class="form-select">
+                <option value="">Pilih</option>
                 <option value="Senin">Senin</option>
                 <option value="Selasa">Selasa</option>
                 <option value="Rabu">Rabu</option>

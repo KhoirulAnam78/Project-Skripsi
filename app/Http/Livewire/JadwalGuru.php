@@ -18,7 +18,7 @@ class JadwalGuru extends Component
 
     public function mount()
     {
-        $this->filterHari = 'Senin';
+        $this->filterHari = '';
         $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->all();
         foreach ($data as $d) {
             array_push($this->kelasAktif, $d->id);
@@ -33,7 +33,7 @@ class JadwalGuru extends Component
         //     }]);
         // }])->get();
 
-        $jadwal = JadwalPelajaran::where('guru_id', Auth::user()->guru->id)->whereIn('kelas_id', $this->kelasAktif)->where('hari', $this->filterHari)->with(['kelas' => function ($query) {
+        $jadwal = JadwalPelajaran::where('guru_id', Auth::user()->guru->id)->whereIn('kelas_id', $this->kelasAktif)->where('hari', 'like', '%' . $this->filterHari . '%')->with(['kelas' => function ($query) {
             $query->select('id', 'nama');
         }])->with(['mataPelajaran' => function ($query) {
             $query->select('id', 'nama');
