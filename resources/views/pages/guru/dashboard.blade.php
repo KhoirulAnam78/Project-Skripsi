@@ -68,7 +68,7 @@
                                             <td>{{ $j->kelas->nama }}</td>
                                             @php
                                                 // dd();
-                                                if (count($j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0) {
+                                                if (count($j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) != 0) {
                                                     if (\Carbon\Carbon::now()->translatedFormat('H.i') > $j->waktu_berakhir) {
                                                         $status = 'Telah Berakhir';
                                                     } elseif (\Carbon\Carbon::now()->translatedFormat('H.i') < $j->waktu_mulai) {
@@ -83,11 +83,11 @@
                                             <td
                                                 class="
                                                 @php
-if ($status === 'Telah Berakhir'){
+if ($status == 'Telah Berakhir'){
                                                         echo 'badge bg-label-info my-1';
-                                                    } else if($status === 'Belum Dimulai'){
+                                                    } else if($status == 'Belum Dimulai'){
                                                     echo 'badge bg-label-warning my-1';
-                                                    }else if ($status === 'Sedang Berlangsung'){
+                                                    }else if ($status == 'Sedang Berlangsung'){
                                                         echo'badge bg-label-success my-1';
                                                     } else {
                                                         echo'badge bg-label-danger my-1';
