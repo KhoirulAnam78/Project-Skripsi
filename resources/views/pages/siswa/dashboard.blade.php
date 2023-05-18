@@ -71,9 +71,9 @@
                                                     $monitoring = $j->monitoringKegnas->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
                                                     if (count($monitoring) !== 0) {
                                                         $presensi = $monitoring->first()->kehadiranKegnas->first()->status;
-                                                        if (\Carbon\Carbon::now()->translatedFormat('H.i') > $j->waktu_berakhir) {
+                                                        if (\Carbon\Carbon::now()->translatedFormat('H:i') > substr($j->waktu_berakhir, 0, -3)) {
                                                             $status = 'Telah Berakhir';
-                                                        } elseif (\Carbon\Carbon::now()->translatedFormat('H.i') < $j->waktu_mulai) {
+                                                        } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
                                                             $status = 'Belum Dimulai';
                                                         } else {
                                                             $status = 'Sedang Berlangsung';
@@ -86,9 +86,9 @@
                                                     $monitoring = $j->monitoringKegiatan->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
                                                     if (count($monitoring) !== 0) {
                                                         $presensi = $monitoring->first()->kehadiranKegiatan->first()->status;
-                                                        if (\Carbon\Carbon::now()->translatedFormat('H.i') > $j->waktu_berakhir) {
+                                                        if (\Carbon\Carbon::now()->translatedFormat('H:i') > substr($j->waktu_berakhir, 0, -3)) {
                                                             $status = 'Telah Berakhir';
-                                                        } elseif (\Carbon\Carbon::now()->translatedFormat('H.i') < $j->waktu_mulai) {
+                                                        } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
                                                             $status = 'Belum Dimulai';
                                                         } else {
                                                             $status = 'Sedang Berlangsung';
@@ -173,9 +173,9 @@ if ($status == 'Telah Berakhir'){
                                             @php
                                                 // dd();
                                                 if (count($j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0) {
-                                                    if (\Carbon\Carbon::now()->translatedFormat('H.i') > $j->waktu_berakhir) {
+                                                    if (\Carbon\Carbon::now()->translatedFormat('H:i') > substr($j->waktu_berakhir, 0, -3)) {
                                                         $status = 'Telah Berakhir';
-                                                    } elseif (\Carbon\Carbon::now()->translatedFormat('H.i') < $j->waktu_mulai) {
+                                                    } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
                                                         $status = 'Belum Dimulai';
                                                     } else {
                                                         $status = 'Sedang Berlangsung';

@@ -46,12 +46,12 @@
                                     @php
                                         // dd();
                                         if (count($j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0) {
-                                            if (\Carbon\Carbon::now()->translatedFormat('H.i') > $j->waktu_berakhir) {
+                                            if (\Carbon\Carbon::now()->translatedFormat('H:i') > substr($j->waktu_berakhir, 0, -3)) {
                                                 $status = 'Telah Berakhir';
                                             } else {
                                                 $status = 'Sedang Berlangsung';
                                             }
-                                        } elseif (\Carbon\Carbon::now()->translatedFormat('H.i') < $j->waktu_mulai) {
+                                        } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
                                             $status = 'Belum Dimulai';
                                         } else {
                                             $status = 'Tidak Terlaksana';
@@ -114,12 +114,12 @@ if ($status === 'Telah Berakhir'){
                                     @php
                                         // dd();
                                         if (count($j->jadwalPelajaran->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0) {
-                                            if (\Carbon\Carbon::now()->translatedFormat('H.i') > $j->waktu_berakhir) {
+                                            if (\Carbon\Carbon::now()->translatedFormat('H:i') > substr($j->waktu_berakhir, 0, -3)) {
                                                 $status = 'Telah Berakhir';
                                             } else {
                                                 $status = 'Sedang Berlangsung';
                                             }
-                                        } elseif (\Carbon\Carbon::now()->translatedFormat('H.i') < $j->waktu_mulai) {
+                                        } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
                                             $status = 'Belum Dimulai';
                                         } else {
                                             $status = 'Tidak Terlaksana';
