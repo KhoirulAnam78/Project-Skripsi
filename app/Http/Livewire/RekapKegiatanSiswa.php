@@ -35,12 +35,9 @@ class RekapKegiatanSiswa extends Component
 
     public function export()
     {
-        // dd($this->kegiatan->narasumber);
         if ($this->kegiatan->narasumber !== '1') {
-            dd('Tanpa naras');
-            // return Excel::download(new ExportsRekapKegiatanSiswa($this->jadwalId, $this->tanggalAwal, $this->tanggalAkhir, Auth::user()->siswa->id), 'Rekapitulasi siswa kegiatan ' . $this->kegiatan->nama . ' ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
+            return Excel::download(new ExportsRekapKegiatanSiswa($this->jadwalId, $this->tanggalAwal, $this->tanggalAkhir, Auth::user()->siswa->id), 'Rekapitulasi siswa kegiatan ' . $this->kegiatan->nama . ' ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
         } else {
-            dd('dengan nara');
             return Excel::download(new RekapKegnasSiswa($this->jadwalId, $this->tanggalAwal, $this->tanggalAkhir, Auth::user()->siswa->id), 'Rekapitulasi siswa kegiatan ' . $this->kegiatan->nama . ' ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
         }
     }
