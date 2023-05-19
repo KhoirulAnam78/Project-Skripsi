@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire;
 
-use App\Exports\RekapKegiatanSiswa as ExportsRekapKegiatanSiswa;
+use App\Exports\ExportsRekapKegiatanSiswa;
 use App\Exports\RekapKegnasSiswa;
 use App\Models\Siswa;
 use Livewire\Component;
