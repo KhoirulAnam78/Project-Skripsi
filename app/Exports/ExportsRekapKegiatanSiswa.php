@@ -74,7 +74,7 @@ class ExportsRekapKegiatanSiswa extends DefaultValueBinder implements FromCollec
             //data yang dari kolom tabel database yang akan diambil
             $rekap->tanggal,
             substr($rekap->waktu_mulai, 0, -3) . '-' . substr($rekap->waktu_berakhir, 0, -3),
-            $rekap->kehadiranKegnas->first()->status
+            $rekap->kehadiranKegiatan->first()->status
         ];
     }
 
