@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\MonitoringPembelajaran;
 use App\Models\Siswa;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\MonitoringPembelajaran;
+use App\Exports\RekapPembelajaranSiswa;
 
 class PembelajaranSiswa extends Component
 {
@@ -22,6 +24,11 @@ class PembelajaranSiswa extends Component
         foreach ($jadwal->kelas->first()->jadwalPelajarans as $value) {
             array_push($this->jadwalId, $value->id);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new RekapPembelajaranSiswa($this->jadwalId, $this->tanggalAwal, $this->tanggalAkhir, Auth::user()->siswa->id), 'Rekapitulasi pembelajaran siswa ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
     }
 
     public function render()

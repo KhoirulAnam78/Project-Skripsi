@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire;
 
+use App\Exports\RekapKegiatanSiswa as ExportsRekapKegiatanSiswa;
+use App\Exports\RekapKegnasSiswa;
 use App\Models\Siswa;
 use Livewire\Component;
 use App\Models\TahunAkademik;
@@ -9,6 +11,7 @@ use App\Models\JadwalKegiatan;
 use App\Models\MonitoringKegnas;
 use App\Models\MonitoringKegiatan;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RekapKegiatanSiswa extends Component
 {
@@ -27,6 +30,15 @@ class RekapKegiatanSiswa extends Component
         $jadwal = JadwalKegiatan::where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $tahunAkademikId)->where('kegiatan_id', $this->kegiatan->id)->get();
         foreach ($jadwal as $value) {
             array_push($this->jadwalId, $value->id);
+        }
+    }
+
+    public function export()
+    {
+        if ($this->kegiatan->narasumber === 0) {
+            return Excel::download(new ExportsRekapKegiatanSiswa($this->jadwalId, $this->tanggalAwal, $this->tanggalAkhir, Auth::user()->siswa->id), 'Rekapitulasi siswa kegiatan ' . $this->kegiatan->nama . ' ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
+        } else {
+            return Excel::download(new RekapKegnasSiswa($this->jadwalId, $this->tanggalAwal, $this->tanggalAkhir, Auth::user()->siswa->id), 'Rekapitulasi siswa kegiatan ' . $this->kegiatan->nama . ' ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
         }
     }
     public function render()

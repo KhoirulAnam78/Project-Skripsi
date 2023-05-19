@@ -1,4 +1,11 @@
 <div>
+    <div class="row mx-2 mb-3 justify-content-start">
+        <div class="col-lg-2">
+            <a class="btn btn-info mb-2 text-white" wire:click="export()"
+                style="background-color:#F0AD4E ;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
+                Export</a>
+        </div>
+    </div>
     <div class="row mx-2 mb-3">
         <div class="col-lg-4 col-md-4">
             <label for="tanggalAwal" class="form-label">Tanggal Awal</label>

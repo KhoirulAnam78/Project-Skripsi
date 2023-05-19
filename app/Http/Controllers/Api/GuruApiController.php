@@ -10,6 +10,7 @@ use App\Models\MataPelajaran;
 use App\Models\TahunAkademik;
 use App\Models\JadwalPelajaran;
 use App\Models\JadwalPengganti;
+use App\Exports\RekapGuruExport;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DaftarPertemuanExport;
@@ -103,7 +104,12 @@ class GuruApiController extends Controller
       $jml_siswa = Kelas::select('id')->find($kelas_id)->siswas->count();
       return Excel::download(new DaftarPertemuanExport($kelas_id, $mapel_id, $jml_siswa), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . '.xlsx');
     } else {
-      return Excel::download(new ExportSiswa, 'Data Siswa SMAN Titian Teras.xlsx');
+      $kelasAktif = [];
+      $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->all();
+      foreach ($data as $d) {
+        array_push($kelasAktif, $d->id);
+      }
+      return Excel::download(new RekapGuruExport($kelasAktif, $kelas_id, $mapel_id), 'Rekap Guru ' . 'Tanggal ' . $kelas_id . ' Sampai ' . $mapel_id . '.xlsx');
     }
   }
 }
