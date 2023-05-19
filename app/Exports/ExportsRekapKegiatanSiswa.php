@@ -58,7 +58,7 @@ class ExportsRekapKegiatanSiswa extends DefaultValueBinder implements FromCollec
 
     public function collection()
     {
-        $rekap =  MonitoringKegiatan::whereIn('jadwal_kegiatan_id', $this->jadwalId)->where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('narasumber')->with(['kehadiranKegiatan' => function ($query) {
+        $rekap =  MonitoringKegiatan::whereIn('jadwal_kegiatan_id', $this->jadwalId)->where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with(['kehadiranKegiatan' => function ($query) {
             if ($query) {
                 $query->where('siswa_id', $this->siswaId);
             } else {
