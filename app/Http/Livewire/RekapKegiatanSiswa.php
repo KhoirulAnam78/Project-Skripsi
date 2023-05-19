@@ -35,7 +35,7 @@ class RekapKegiatanSiswa extends Component
 
     public function export()
     {
-        if ($this->kegiatan->narasumber === 0) {
+        if ($this->kegiatan->narasumber !== 1) {
             dd('Tanpa naras');
             // return Excel::download(new ExportsRekapKegiatanSiswa($this->jadwalId, $this->tanggalAwal, $this->tanggalAkhir, Auth::user()->siswa->id), 'Rekapitulasi siswa kegiatan ' . $this->kegiatan->nama . ' ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
         } else {
