@@ -17,7 +17,7 @@
             background-size: 100%; background-repeat: repeat;-webkit-background-clip: text;
             -webkit-text-fill-color: transparent; 
             -moz-background-clip: text;
-            -moz-text-fill-color: transparent;">Simonev</span>
+            -moz-text-fill-color: transparent;">Simobel</span>
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">

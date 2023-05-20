@@ -21,7 +21,7 @@
         -webkit-text-fill-color: transparent; 
         -moz-background-clip: text;
         -moz-text-fill-color: transparent;">
-                                Simonev</span>
+                                Simobel</span>
 
                         </div>
                         {{-- <h4 class="my-2" align='center'
