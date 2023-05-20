@@ -61,11 +61,15 @@
                     @php
                         $jml = 0;
                         $keterangan = [];
+                        $tgl = [];
+                        
                         if ($b !== null) {
                             foreach ($b as $j) {
                                 if (count($j->monitoringPembelajarans) !== 0) {
                                     foreach ($j->monitoringPembelajarans as $m) {
+                                        array_push($tgl, $m->tanggal);
                                         array_push($keterangan, $m->keterangan);
+                                        // dd($keterangan);
                                         if ($m->status_validasi === 'tidak valid') {
                                             $datetime1 = strtotime($j->waktu_mulai);
                                             $datetime2 = strtotime($j->waktu_berakhir);
@@ -98,8 +102,11 @@
                         @endif
                     </td>
                     <td>
-                        @foreach ($keterangan as $k)
-                            {{ $k }}
+                        @foreach ($keterangan as $key => $k)
+                            @if ($k !== null)
+                                {{ $tgl[$key] . ' : ' . $k }}
+                                <br>
+                            @endif
                         @endforeach
                     </td>
                 </tr>
@@ -128,11 +135,13 @@
                         @php
                             $jml = 0;
                             $keterangan = [];
+                            $tgl = [];
                             if ($b !== null) {
                                 foreach ($b as $j) {
                                     if (count($j->monitoringPembelajarans) !== 0) {
                                         foreach ($j->monitoringPembelajarans as $m) {
                                             array_push($keterangan, $m->keterangan);
+                                            array_push($tgl, $m->tanggal);
                                             if ($m->status_validasi === 'tidak valid') {
                                                 $date1 = (float) substr($m->waktu_mulai, 0, -3);
                                                 $date2 = (float) substr($m->waktu_berakhir, 0, -3);
@@ -158,8 +167,15 @@
                             @endif
                         </td>
                         <td>
-                            @foreach ($keterangan as $k)
+                            {{-- @foreach ($keterangan as $k)
                                 {{ $k }}
+                            @endforeach --}}
+
+                            @foreach ($keterangan as $key => $k)
+                                @if ($k !== null)
+                                    {{ $tgl[$key] . ' : ' . $k }}
+                                    <br>
+                                @endif
                             @endforeach
                         </td>
                     </tr>
