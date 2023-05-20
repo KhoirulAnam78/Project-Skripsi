@@ -233,12 +233,12 @@ class ValidasiPembelajaran extends Component
             // }
             MonitoringPembelajaran::where('id', $this->editPresensi)->update([
                 'status_validasi' => 'valid',
-                'keterangan' => ''
+                'keterangan' => null
             ]);
         } else {
             MonitoringPembelajaran::where('id', $this->editPresensi)->update([
                 'status_validasi' => 'valid',
-                'keterangan' => '',
+                'keterangan' => null,
                 'guru_piket_id' => null
             ]);
         }
