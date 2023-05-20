@@ -170,7 +170,9 @@
                             {{-- @foreach ($keterangan as $k)
                                 {{ $k }}
                             @endforeach --}}
-
+                            @php
+                                dd($keterangan);
+                            @endphp
                             @foreach ($keterangan as $key => $k)
                                 @if ($k !== null)
                                     {{ $tgl[$key] . ' : ' . $k }}
