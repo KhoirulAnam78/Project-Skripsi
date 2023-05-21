@@ -24,9 +24,9 @@
                         <input type="hidden" id="kehadiranPerbulan" value="{{ json_encode($grafikJmlTidakHadir) }}">
                         <input type="hidden" id="jmlPembelajaran" value="{{ $pembelajaran->count() }}">
                         <input type="hidden" id="terlaksana"
-                            value="{{ $pembelajaran->where('status_validasi', 'valid')->count() }}">
+                            value="{{ $pembelajaran->where('status_validasi', 'terlaksana')->count() }}">
                         <input type="hidden" id="tidakTerlaksana"
-                            value="{{ $pembelajaran->where('status_validasi', '!=', 'valid') }}">
+                            value="{{ $pembelajaran->where('status_validasi', '!=', 'terlaksana') }}">
                         <div class="col-lg-4 col-md-4">
                             <label for="filterBulan" class="form-label">Bulan</label>
                             <select wire:model="filterBulan" id="filterBulan" class="form-select">
@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="user-progress">
                                     <small
-                                        class="fw-semibold">{{ $pembelajaran->where('status_validasi', 'valid')->count() }}</small>
+                                        class="fw-semibold">{{ $pembelajaran->where('status_validasi', 'terlaksana')->count() }}</small>
                                 </div>
                             </div>
                         </li>
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="user-progress">
                                     <small
-                                        class="fw-semibold">{{ $pembelajaran->where('status_validasi', '!=', 'valid')->count() }}</small>
+                                        class="fw-semibold">{{ $pembelajaran->where('status_validasi', '!=', 'terlaksana')->count() }}</small>
                                 </div>
                             </div>
                         </li>

@@ -18,7 +18,11 @@ class DashboardController extends Controller
     {
         $this->hari = \Carbon\Carbon::now()->translatedFormat('l');
         $this->tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
-        $this->tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
+        if (TahunAkademik::where('status', 'aktif')->first()) {
+            $this->tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
+        } else {
+            $this->tahunAkademik = null;
+        }
         if (Auth::user()->role === 'siswa') {
             $this->siswaId = Auth::user()->siswa->id;
             // $data = Auth::user()->siswa->id;
@@ -66,11 +70,17 @@ class DashboardController extends Controller
                 'jadwalKegiatan' => $data[0]->kelas->first()->angkatan->jadwalKegiatans
             ]);
         } else if (Auth::user()->role === 'admin') {
+            $kelasAktif = TahunAkademik::where('status', 'aktif')->select('id')->first();
+            if ($kelasAktif) {
+                $kelas = $kelasAktif->kelas->count();
+            } else {
+                $kelas = 0;
+            }
             return view('pages.admin.dashboard', [
                 'title' => 'Dashboard',
                 'siswaAktif' => Siswa::where('status', 'belum lulus')->select('id')->count(),
                 'guruAktif' => Guru::where('status', 'aktif')->select('id')->count(),
-                'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count(),
+                'kelasAktif' => $kelas,
             ]);
         } else if (Auth::user()->role === 'guru') {
             $kelasAktif = [];

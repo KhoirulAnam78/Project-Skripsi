@@ -70,7 +70,7 @@
                                         array_push($tgl, $m->tanggal);
                                         array_push($keterangan, $m->keterangan);
                                         // dd($keterangan);
-                                        if ($m->status_validasi === 'tidak valid') {
+                                        if ($m->status_validasi === 'tidak terlaksana') {
                                             $datetime1 = strtotime($j->waktu_mulai);
                                             $datetime2 = strtotime($j->waktu_berakhir);
                                             $interval = abs($datetime2 - $datetime1);
@@ -142,7 +142,7 @@
                                         foreach ($j->monitoringPembelajarans as $m) {
                                             array_push($keterangan, $m->keterangan);
                                             array_push($tgl, $m->tanggal);
-                                            if ($m->status_validasi === 'tidak valid') {
+                                            if ($m->status_validasi === 'tidak terlaksana') {
                                                 $date1 = (float) substr($m->waktu_mulai, 0, -3);
                                                 $date2 = (float) substr($m->waktu_berakhir, 0, -3);
                                                 $jml = $jml + ($date2 - $date1);

@@ -63,7 +63,7 @@
                                             class='bx bx-show'></i>
                                     </button>
                                     <button {{ count($j->monitoringPembelajarans) === 0 ? 'disabled' : '' }}
-                                        @if (count($j->monitoringPembelajarans) !== 0) @if ($j->monitoringPembelajarans->first()->status_validasi === 'valid')
+                                        @if (count($j->monitoringPembelajarans) !== 0) @if ($j->monitoringPembelajarans->first()->status_validasi === 'terlaksana')
                                 {{ 'disabled' }} @endif
                                         @endif wire:click="showValid({{ $j->id }})"
                                         class="btn btn-success"><i class='bx bx-check'></i>
@@ -95,7 +95,7 @@
                                     </button>
                                     <button
                                         {{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? 'disabled' : '' }}
-                                        @if (count($j->jadwalPelajaran->monitoringPembelajarans) !== 0) @if ($j->jadwalPelajaran->monitoringPembelajarans->first()->status_validasi === 'valid')
+                                        @if (count($j->jadwalPelajaran->monitoringPembelajarans) !== 0) @if ($j->jadwalPelajaran->monitoringPembelajarans->first()->status_validasi === 'terlaksana')
                                         {{ 'disabled' }} @endif
                                         @endif
                                         class="btn btn-success"

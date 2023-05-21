@@ -98,8 +98,8 @@
                                     {{ count($s->kehadiranPembelajarans->where('status', 'dinas luar')) }}
                                 </td>
                                 <td>
-                                    @if ($s->status_validasi === 'valid')
-                                        <span class="badge bg-label-info me-1">Valid</span>
+                                    @if ($s->status_validasi === 'terlaksana')
+                                        <span class="badge bg-label-info me-1">Terlaksana</span>
                                     @else
                                         <span
                                             class="badge bg-label-danger me-1">{{ ucfirst($s->status_validasi) }}</span>

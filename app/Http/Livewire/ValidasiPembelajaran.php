@@ -223,21 +223,14 @@ class ValidasiPembelajaran extends Component
     public function valid()
     {
         if (Auth::user()->role === 'guru') {
-            // $jadwalToday = JadwalGuruPiket::where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->where(function ($query) {
-            //     $query->where('waktu_mulai', '<=', \Carbon\Carbon::now()->translatedFormat('h:i'))->orWhere('waktu_berakhir', '>=', \Carbon\Carbon::now()->translatedFormat('h:i'));
-            // })->first();
-            // if ($jadwalToday === null) {
-            //     $guruPiketId = null;
-            // } else {
-            //     $guruPiketId = $jadwalToday->guru_id;
-            // }
             MonitoringPembelajaran::where('id', $this->editPresensi)->update([
-                'status_validasi' => 'valid',
-                'keterangan' => null
+                'status_validasi' => 'terlaksana',
+                'keterangan' => null,
+                'guru_piket_id' => Auth::user()->guru->id
             ]);
         } else {
             MonitoringPembelajaran::where('id', $this->editPresensi)->update([
-                'status_validasi' => 'valid',
+                'status_validasi' => 'terlaksana',
                 'keterangan' => null,
                 'guru_piket_id' => null
             ]);
@@ -265,7 +258,7 @@ class ValidasiPembelajaran extends Component
             MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->jadwal_id)->where('tanggal', $this->tanggal)->update([
                 'keterangan' => $this->keterangan,
                 'topik' => $this->topik,
-                'status_validasi' => 'tidak valid',
+                'status_validasi' => 'tidak terlaksana',
                 'guru_piket_id' => $guruPiketId
             ]);
             foreach ($this->presensi as $key => $value) {
@@ -279,7 +272,7 @@ class ValidasiPembelajaran extends Component
                 'topik' => $this->topik,
                 'waktu_mulai' => $this->waktu_mulai,
                 'waktu_berakhir' => $this->waktu_berakhir,
-                'status_validasi' => 'tidak valid',
+                'status_validasi' => 'tidak terlaksana',
                 'jadwal_pelajaran_id' => $this->jadwal_id,
                 'guru_piket_id' => $guruPiketId,
                 'keterangan' => $this->keterangan

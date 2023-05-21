@@ -109,7 +109,8 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title text-white" id="exampleModalLabel1">Pembelajaran tidak valid / Guru tidak hadir
+                <h5 class="modal-title text-white" id="exampleModalLabel1">Pembelajaran tidak terlaksana / Guru tidak
+                    hadir
                 </h5>
                 <button type="button" class="btn-close" wire:click="empty()" data-bs-dismiss="modal"
                     aria-label="Close"></button>
@@ -138,7 +139,7 @@
                         <div class="col-6">
                             <label for="status" class="form-label">Status<span class="text-danger d-block"
                                     style="color:red; font-size:10px !important; font-style:italic">*
-                                    Status akan menjadi tidak valid</span></label>
+                                    Status akan menjadi tidak terlaksana</span></label>
                             <input class="form-control" disabled type="text" value="Tidak Valid">
                         </div>
                     </div>
@@ -226,7 +227,7 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h6>Status pembelajaran akan menjadi valid</h6>
+                <h6>Status pembelajaran akan menjadi terlaksana</h6>
                 <p style="font-style: italic">* keterangan guru tidak hadir akan dikosongkan (jika ada)</p>
             </div>
             <div class="modal-footer">
@@ -234,7 +235,7 @@
                     data-bs-dismiss="modal">
                     Close
                 </button>
-                <button type="submit" class="btn btn-primary" wire:click="valid()">Valid</button>
+                <button type="submit" class="btn btn-primary" wire:click="valid()">Terlaksana</button>
             </div>
         </div>
     </div>
