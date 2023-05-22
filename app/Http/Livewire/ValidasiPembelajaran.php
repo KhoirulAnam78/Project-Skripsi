@@ -108,6 +108,19 @@ class ValidasiPembelajaran extends Component
     public function empty()
     {
         $this->editPresensi = null;
+        $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+            [
+                'kelas' => function ($query) {
+                    $query->select('id', 'nama');
+                },
+                'mataPelajaran' => function ($query) {
+                    $query->select('id', 'nama');
+                },
+            ]
+        )->get();
+
+        //Get Jadwal Pengganti
+        $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -268,7 +281,6 @@ class ValidasiPembelajaran extends Component
         session()->flash('message', 'Presensi berhasil diperbarui !');
         $this->dispatchBrowserEvent('close-edit-modal');
         $this->empty();
-        $this->render();
     }
 
     public function render()
