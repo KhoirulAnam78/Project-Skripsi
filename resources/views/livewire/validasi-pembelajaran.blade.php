@@ -53,17 +53,20 @@
                                 <td>{{ $j->kelas->nama }}</td>
                                 <td>{{ $j->mataPelajaran->nama }}</td>
                                 <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
+                                @php
+                                    $data = $j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
+                                @endphp
                                 <td style="white-space: normal">
-                                    {{ count($j->monitoringPembelajarans) === 0 ? '' : $j->monitoringPembelajarans->first()->topik }}
+                                    {{ count($data) === 0 ? '' : $data->first()->topik }}
                                 </td>
-                                <td>{{ count($j->monitoringPembelajarans) === 0 ? '' : ucwords($j->monitoringPembelajarans->first()->status_validasi) }}
+                                <td>{{ count($data) === 0 ? '' : ucwords($data->first()->status_validasi) }}
                                 </td>
-                                <td><button {{ count($j->monitoringPembelajarans) === 0 ? 'disabled' : '' }}
+                                <td><button {{ count($data) === 0 ? 'disabled' : '' }}
                                         wire:click="showId({{ $j->id }})" class="btn btn-primary"><i
                                             class='bx bx-show'></i>
                                     </button>
-                                    <button {{ count($j->monitoringPembelajarans) === 0 ? 'disabled' : '' }}
-                                        @if (count($j->monitoringPembelajarans) !== 0) @if ($j->monitoringPembelajarans->first()->status_validasi === 'terlaksana')
+                                    <button {{ count($data) === 0 ? 'disabled' : '' }}
+                                        @if (count($data) !== 0) @if ($data->first()->status_validasi === 'terlaksana')
                                 {{ 'disabled' }} @endif
                                         @endif wire:click="showValid({{ $j->id }})"
                                         class="btn btn-success"><i class='bx bx-check'></i>

@@ -29,8 +29,8 @@
                     <div class="row mb-3">
                         <div class="col-6">
                             <label for="status" class="form-label">Status</label>
-                            <input class="form-control" disabled type="text" wire:model="status" id="status"
-                                name="status">
+                            <input class="form-control" disabled type="text" value="{{ ucwords($status) }}"
+                                id="status" name="status">
                         </div>
                     </div>
                     <div class="table-responsive text-nowrap mb-3">
@@ -112,8 +112,7 @@
                 <h5 class="modal-title text-white" id="exampleModalLabel1">Pembelajaran tidak terlaksana / Guru tidak
                     hadir
                 </h5>
-                <button type="button" class="btn-close" wire:click="empty()" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form wire:submit.prevent="tidakValid">
                 <div class="modal-body">
@@ -140,7 +139,7 @@
                             <label for="status" class="form-label">Status<span class="text-danger d-block"
                                     style="color:red; font-size:10px !important; font-style:italic">*
                                     Status akan menjadi tidak terlaksana</span></label>
-                            <input class="form-control" disabled type="text" value="Tidak Valid">
+                            <input class="form-control" disabled type="text" value="Tidak Terlaksana">
                         </div>
                     </div>
                     <div class="table-responsive text-nowrap mb-3">
