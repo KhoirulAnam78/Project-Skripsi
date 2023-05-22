@@ -306,7 +306,7 @@ class InputPresensi extends Component
             }
         } else {
             $guruPiketId = null;
-            $status = 'valid';
+            $status = 'terlaksana';
         }
         $monitoring = MonitoringPembelajaran::create([
             'tanggal' => $this->tanggal,
