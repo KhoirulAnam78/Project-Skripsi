@@ -84,6 +84,10 @@
                                 <td>{{ $j->jadwalPelajaran->kelas->nama }}</td>
                                 <td>{{ $j->jadwalPelajaran->mataPelajaran->nama }}</td>
                                 <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
+                                @php
+                                    $data = $j->jadwalPelajaran->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->first();
+                                    dd($data);
+                                @endphp
                                 <td>{{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? '' : $j->jadwalPelajaran->monitoringPembelajarans->first()->topik }}
                                 </td>
                                 <td>{{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? '' : ucwords($j->jadwalPelajaran->monitoringPembelajarans->first()->status_validasi) }}
