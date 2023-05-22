@@ -98,7 +98,11 @@ class DashboardController extends Controller
             }])->paginate(10);
 
             //Ambil Jadwal Piket
-            $jadwalPiket = JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()->hari;
+            if (JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)) {
+                $jadwalPiket = JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()->hari;
+            } else {
+                $jadwalPiket = '-';
+            }
 
             return view('pages.guru.dashboard', [
                 'title' => 'Dashboard',
