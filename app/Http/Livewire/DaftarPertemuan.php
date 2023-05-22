@@ -113,7 +113,7 @@ class DaftarPertemuan extends Component
         return view('livewire.daftar-pertemuan', [
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'mapel' => $this->mapel,
-            'pertemuan' => MonitoringPembelajaran::with('kehadiranPembelajarans')->whereRelation('jadwalPelajaran', 'mata_pelajaran_id', $this->filterMapel)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->paginate(10),
+            'pertemuan' => MonitoringPembelajaran::with('kehadiranPembelajarans')->whereRelation('jadwalPelajaran', 'mata_pelajaran_id', $this->filterMapel)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->orderBy('tanggal', 'asc')->paginate(10),
             'jml_siswa' => count(Kelas::where('id', $this->filterKelas)->first()->siswas),
             'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10)
         ]);
