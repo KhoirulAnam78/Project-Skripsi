@@ -55,29 +55,25 @@ class PersentaseDashboard extends Component
         //Ambil Bulan Tahun dan jumlah Pembelajaran tidak terlaksana
         foreach ($this->bulan as $b) {
             $carbon = \Carbon\Carbon::createFromFormat('d-m-Y', $b['tanggal']);
-            // $bulan = strftime('%B %Y', strtotime($dt->format('d-m-Y')));
-            // $tgl = new DateTime($b['tanggal']);
-            $monitoring = MonitoringPembelajaran::whereMonth('tanggal', $carbon->translatedFormat('m'))->whereYear('tanggal', '=', $carbon->translatedFormat('Y'))->select('id', 'tanggal')->where('status_validasi', 'tidak terlaksana')->get();
-            $jml = $monitoring->count();
+            $monitoring = MonitoringPembelajaran::whereMonth('tanggal', $carbon->translatedFormat('m'))->whereYear('tanggal', '=', $carbon->translatedFormat('Y'))->select('id', 'tanggal')->with('kehadiranPembelajarans')->get();
+            $jml = MonitoringPembelajaran::whereMonth('tanggal', $carbon->translatedFormat('m'))->whereYear('tanggal', '=', $carbon->translatedFormat('Y'))->select('id', 'tanggal')->where('status_validasi', 'tidak terlaksana')->count();
             array_push($this->grafikJmlPembelajaran, ['bulan' => $carbon->translatedFormat('F Y'), 'jml' => $jml]);
+
+
             $tidakHadir = 0;
             foreach ($monitoring as $m) {
-                $tidakHadir = $tidakHadir + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $m->id)->where('status', '!=', 'hadir')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
+                $tidakHadir = $tidakHadir + $m->kehadiranPembelajarans->where('status', '!=', 'hadir')->count();
             }
             array_push($this->grafikJmlTidakHadir, $tidakHadir);
         }
 
-        // dd($this->grafikJmlTidakHadir);
         $this->filterBulan = "02-" . \Carbon\Carbon::now()->translatedFormat('m-Y');
-
 
         //Ambil Jumlah Pembelajaran Terlaksana dan tidak terlaksana
 
         $tgl = new DateTime($this->filterBulan);
 
         $this->pembelajaran = MonitoringPembelajaran::whereMonth('tanggal', $tgl->format('m'))->whereYear('tanggal', '=', $tgl->format('Y'))->select('id', 'tanggal', 'status_validasi')->get();
-
-
 
         $hadir = 0;
         $izin = 0;
@@ -96,10 +92,6 @@ class PersentaseDashboard extends Component
         }
 
         array_push($this->presensi, ['hadir' => $hadir, 'izin' => $izin, 'sakit' => $sakit, 'alfa' => $alfa, 'dd' => $dinasDalam, 'dl' => $dinasLuar]);
-        // dd($this->presensi);
-        // dd($pembelajaran->count());
-        // dd($tgl->format('m'));
-        // dd($this->pembelajaran->where('status_validasi', '!=', 'valid'));
     }
 
     public function updatedFilterBulan()
