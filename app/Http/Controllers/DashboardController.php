@@ -98,7 +98,7 @@ class DashboardController extends Controller
             }])->paginate(10);
 
             //Ambil Jadwal Piket
-            if (JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)) {
+            if (JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()) {
                 $jadwalPiket = JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()->hari;
             } else {
                 $jadwalPiket = '-';
