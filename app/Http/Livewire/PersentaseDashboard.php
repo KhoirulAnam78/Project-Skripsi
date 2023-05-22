@@ -45,19 +45,19 @@ class PersentaseDashboard extends Component
 
             array_push($this->bulan, ['bulan' => $bulan, 'tanggal' => $tanggal,]);
         }
-        $carbon = \Carbon\Carbon::createFromFormat('d-m-Y', $end->format('d-m-Y'));
-        // $bulan = strftime('%B %Y', strtotime($dt->format('d-m-Y')));
-        $bulan = $carbon->translatedFormat('F Y');
-        $tanggal = $dt->format('d-m-Y');
+        // $carbon = \Carbon\Carbon::createFromFormat('d-m-Y', $end->format('d-m-Y'));
+        // // $bulan = strftime('%B %Y', strtotime($dt->format('d-m-Y')));
+        // $bulan = $carbon->translatedFormat('F Y');
+        // $tanggal = $dt->format('d-m-Y');
 
-        array_push($this->bulan, ['bulan' => $bulan, 'tanggal' => $tanggal,]);
+        // array_push($this->bulan, ['bulan' => $bulan, 'tanggal' => $tanggal,]);
 
         //Ambil Bulan Tahun dan jumlah Pembelajaran tidak terlaksana
         foreach ($this->bulan as $b) {
             $carbon = \Carbon\Carbon::createFromFormat('d-m-Y', $b['tanggal']);
             // $bulan = strftime('%B %Y', strtotime($dt->format('d-m-Y')));
             // $tgl = new DateTime($b['tanggal']);
-            $monitoring = MonitoringPembelajaran::whereMonth('tanggal', $carbon->translatedFormat('m'))->whereYear('tanggal', '=', $carbon->translatedFormat('Y'))->select('id', 'tanggal')->get();
+            $monitoring = MonitoringPembelajaran::whereMonth('tanggal', $carbon->translatedFormat('m'))->whereYear('tanggal', '=', $carbon->translatedFormat('Y'))->select('id', 'tanggal')->where('status_validasi', 'tidak terlaksana')->get();
             $jml = $monitoring->count();
             array_push($this->grafikJmlPembelajaran, ['bulan' => $carbon->translatedFormat('F Y'), 'jml' => $jml]);
             $tidakHadir = 0;
