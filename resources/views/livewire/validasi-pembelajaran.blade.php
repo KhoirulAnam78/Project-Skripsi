@@ -86,7 +86,7 @@
                                 <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
                                 @php
                                     $data = $j->jadwalPelajaran->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
-                                    dd(count($data));
+                                    dd($data->first()->topik);
                                 @endphp
                                 <td>{{ count($data) === 0 ? '' : $data->topik }}
                                 </td>
