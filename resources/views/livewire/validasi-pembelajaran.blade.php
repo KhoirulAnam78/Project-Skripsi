@@ -86,20 +86,16 @@
                                 <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
                                 @php
                                     $data = $j->jadwalPelajaran->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->first();
-                                    dd($data);
                                 @endphp
-                                <td>{{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? '' : $j->jadwalPelajaran->monitoringPembelajarans->first()->topik }}
+                                <td>{{ count($data) === 0 ? '' : $data->topik }}
                                 </td>
-                                <td>{{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? '' : ucwords($j->jadwalPelajaran->monitoringPembelajarans->first()->status_validasi) }}
+                                <td>{{ count($data) === 0 ? '' : ucwords($data->status_validasi) }}
                                 </td>
-                                <td><button
-                                        {{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? 'disabled' : '' }}
-                                        class="btn btn-primary" wire:click="showId({{ $j->jadwal_pelajaran_id }})"><i
-                                            class='bx bx-show'></i>
+                                <td><button {{ count($data) === 0 ? 'disabled' : '' }} class="btn btn-primary"
+                                        wire:click="showId({{ $j->jadwal_pelajaran_id }})"><i class='bx bx-show'></i>
                                     </button>
-                                    <button
-                                        {{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? 'disabled' : '' }}
-                                        @if (count($j->jadwalPelajaran->monitoringPembelajarans) !== 0) @if ($j->jadwalPelajaran->monitoringPembelajarans->first()->status_validasi === 'terlaksana')
+                                    <button {{ count($data) === 0 ? 'disabled' : '' }}
+                                        @if (count($j->jadwalPelajaran->monitoringPembelajarans) !== 0) @if ($data->status_validasi === 'terlaksana')
                                         {{ 'disabled' }} @endif
                                         @endif
                                         class="btn btn-success"
