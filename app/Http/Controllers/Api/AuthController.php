@@ -55,7 +55,11 @@ class AuthController extends Controller
             $user = ['nama' => $dataUser->nama];
 
             //Ambil Jadwal Piket
-            $jadwalPiket = JadwalGuruPiket::where('guru_id', $dataUser->id)->first();
+            if (JadwalGuruPiket::where('guru_id', $dataUser->id)->first()) {
+                $jadwalPiket = JadwalGuruPiket::where('guru_id', $dataUser->id)->first();
+            } else {
+                $jadwalPiket = '-';
+            }
 
             return response()->json([
                 'message' => 'Login success',
