@@ -104,9 +104,9 @@ class WaliAsramaApiController extends Controller
     $presensi = json_decode($request->presensi);
     $siswa_id = $presensi[0]->siswaID;
     $this->tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
-    if (MonitoringKegiatan::where('jadwal_kegiatan_id', $request->jadwal_id)->where('tanggal', $this->tanggal)->first()) {
+    if (MonitoringKegiatan::where('jadwal_kegiatan_id', $request->jadwalId)->where('tanggal', $this->tanggal)->first()) {
       //ambil data
-      $monitoring = MonitoringKegiatan::where('jadwal_kegiatan_id', $request->jadwal_id)->where('tanggal', $this->tanggal)->first();
+      $monitoring = MonitoringKegiatan::where('jadwal_kegiatan_id', $request->jadwalId)->where('tanggal', $this->tanggal)->first();
       if (KehadiranKegiatan::where('monitoring_kegiatan_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
         //update
         foreach ($presensi as $value) {
@@ -128,9 +128,9 @@ class WaliAsramaApiController extends Controller
     } else {
       $monitoring = MonitoringKegiatan::create([
         'tanggal' => $this->tanggal,
-        'waktu_mulai' => $request->waktu_mulai,
-        'waktu_berakhir' => $request->waktu_berakhir,
-        'jadwal_kegiatan_id' => $request->jadwal_id,
+        'waktu_mulai' => $request->jamDimulai,
+        'waktu_berakhir' => $request->jamBerakhir,
+        'jadwal_kegiatan_id' => $request->jadwalId,
       ]);
       //input presensinya
       foreach ($presensi as $value) {
