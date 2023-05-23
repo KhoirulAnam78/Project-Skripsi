@@ -102,7 +102,7 @@ class WaliAsramaApiController extends Controller
   public function presensi(Request $request)
   {
     $presensi = json_decode($request->presensi);
-    $siswa_id = $presensi[0]['siswaID'];
+    $siswa_id = $presensi[0];
 
     $tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
     //   if (MonitoringKegiatan::where('jadwal_kegiatan_id', $request->jadwal_id)->where('tanggal', $this->tanggal)->first()) {
