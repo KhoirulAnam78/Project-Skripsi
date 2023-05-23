@@ -27,7 +27,7 @@ class WaliAsramaApiController extends Controller
   public function getKelas()
   {
     $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
-    $kelas = WaliAsrama::where('user_id', auth('sanctum')->user()->id)->first()->angkatans->where('status', 'belum lulus')->first()->kelas->where('tahun_akademik_id', $tahunAkademik)->all();
+    $kelas = WaliAsrama::where('user_id', auth('sanctum')->user()->id)->first()->angkatans->where('status', 'belum lulus')->first()->kelas->where('tahun_akademik_id', $tahunAkademik);
     return response()->json([
       'message' => 'Fetch data success',
       'kelas' => $kelas,
