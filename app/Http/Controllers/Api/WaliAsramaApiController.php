@@ -93,7 +93,7 @@ class WaliAsramaApiController extends Controller
     // $kelas = Kelas::where('tahun_akademik_id', $tahunAkademik)->where('angkatan_id', $angkatan_id)->get();
     return response()->json([
       'message' => 'Fetch data success',
-      'siswa' => $this->student,
+      'siswa' => $narasumber,
       'presensi' => $this->presensi
     ]);
   }
