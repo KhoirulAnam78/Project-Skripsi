@@ -6,16 +6,17 @@ namespace App\Http\Controllers\Api;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Kegiatan;
+use App\Models\Narasumber;
 use App\Models\WaliAsrama;
 use Illuminate\Http\Request;
 use App\Models\TahunAkademik;
 use App\Models\JadwalKegiatan;
 use App\Models\JadwalPengganti;
+use App\Models\KehadiranKegnas;
+use App\Models\MonitoringKegnas;
 use App\Models\KehadiranKegiatan;
 use App\Models\MonitoringKegiatan;
 use App\Http\Controllers\Controller;
-use App\Models\KehadiranKegnas;
-use App\Models\MonitoringKegnas;
 
 class WaliAsramaApiController extends Controller
 {
@@ -243,6 +244,14 @@ class WaliAsramaApiController extends Controller
 
     return response()->json([
       'message' => 'Presensi success',
+    ]);
+  }
+
+  public function getNarasumber()
+  {
+    return response()->json([
+      'message' => 'Fetch data success',
+      'narasumber' => Narasumber::all(),
     ]);
   }
 }
