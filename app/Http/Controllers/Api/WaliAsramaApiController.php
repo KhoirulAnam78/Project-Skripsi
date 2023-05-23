@@ -59,7 +59,10 @@ class WaliAsramaApiController extends Controller
     }
 
     if ($narasumber == 0) {
-      $info = "Masuk Tanpa Narasumber";
+
+      //ambil data siswa kelas yang dipilih
+      $this->student = Kelas::where('id', $request->kelas_id)->first()->siswas()->orderBy('nama', 'asc')->get();
+
       if (MonitoringKegiatan::where('jadwal_kegiatan_id', $request->jadwal_id)->where('tanggal', $this->tanggal)->first()) {
         //ambil data
         //ambil data siswa kelas yang dipilih
@@ -74,10 +77,6 @@ class WaliAsramaApiController extends Controller
             $this->presensi[$k->siswa_id] = $k->status;
           }
         } else {
-
-          //ambil data siswa kelas yang dipilih
-          $this->student = Kelas::where('id', $request->kelas_id)->first()->siswas()->orderBy('nama', 'asc')->get();
-
           //set presensi menjadi hadir bagi setiap siswa
           $this->presensi = [];
           foreach ($this->student as $s) {
@@ -85,20 +84,21 @@ class WaliAsramaApiController extends Controller
           }
         }
       } else {
-        $this->student = [];
+        //set presensi menjadi hadir bagi setiap siswa
         $this->presensi = [];
+        foreach ($this->student as $s) {
+          $this->presensi[$s->id] = 'hadir';
+        }
       }
     } else {
-
-      $info = "Masuk Narasumber";
     }
     // $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
     // $angkatan_id = WaliAsrama::where('user_id', auth('sanctum')->user()->id)->first()->angkatans->where('status', 'belum lulus')->first()->id;
     // $kelas = Kelas::where('tahun_akademik_id', $tahunAkademik)->where('angkatan_id', $angkatan_id)->get();
     return response()->json([
       'message' => 'Fetch data success',
-      'siswa' => $narasumber,
-      'presensi' => $info
+      'siswa' => $this->student,
+      'presensi' => $this->presensi
     ]);
   }
 }
