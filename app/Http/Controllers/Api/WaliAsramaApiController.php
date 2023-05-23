@@ -58,7 +58,7 @@ class WaliAsramaApiController extends Controller
       $siswa_id = '';
     }
 
-    if ($narasumber === false) {
+    if ($narasumber == 0) {
       $info = "Masuk Tanpa Narasumber";
       if (MonitoringKegiatan::where('jadwal_kegiatan_id', $request->jadwal_id)->where('tanggal', $this->tanggal)->first()) {
         //ambil data
