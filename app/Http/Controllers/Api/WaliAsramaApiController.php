@@ -87,14 +87,14 @@ class WaliAsramaApiController extends Controller
         $this->student = [];
         $this->presensi = [];
       }
-      // $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
-      // $angkatan_id = WaliAsrama::where('user_id', auth('sanctum')->user()->id)->first()->angkatans->where('status', 'belum lulus')->first()->id;
-      // $kelas = Kelas::where('tahun_akademik_id', $tahunAkademik)->where('angkatan_id', $angkatan_id)->get();
-      return response()->json([
-        'message' => 'Fetch data success',
-        'siswa' => $this->student,
-        'presensi' => $this->presensi
-      ]);
     }
+    // $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
+    // $angkatan_id = WaliAsrama::where('user_id', auth('sanctum')->user()->id)->first()->angkatans->where('status', 'belum lulus')->first()->id;
+    // $kelas = Kelas::where('tahun_akademik_id', $tahunAkademik)->where('angkatan_id', $angkatan_id)->get();
+    return response()->json([
+      'message' => 'Fetch data success',
+      'siswa' => $this->student,
+      'presensi' => $this->presensi
+    ]);
   }
 }
