@@ -14,6 +14,8 @@ use App\Models\JadwalPengganti;
 use App\Models\KehadiranKegiatan;
 use App\Models\MonitoringKegiatan;
 use App\Http\Controllers\Controller;
+use App\Models\KehadiranKegnas;
+use App\Models\MonitoringKegnas;
 
 class WaliAsramaApiController extends Controller
 {
@@ -90,13 +92,54 @@ class WaliAsramaApiController extends Controller
           $this->presensi[$s->id] = 'hadir';
         }
       }
+      return response()->json([
+        'message' => 'Fetch data success',
+        'presensi' => $this->presensi,
+        'siswa' => $this->student,
+      ]);
     } else {
+      //ambil data siswa kelas yang dipilih
+      $this->student = Kelas::where('id', $request->kelas_id)->first()->siswas()->orderBy('nama', 'asc')->get();
+      $narasumber_id = '';
+      $topik = '';
+      if (MonitoringKegnas::where('jadwal_kegiatan_id', $request->jadwal_id)->where('tanggal', $this->tanggal)->first()) {
+        //ambil data
+        //ambil data siswa kelas yang dipilih
+        $this->student = Kelas::where('id', $request->kelas_id)->first()->siswas()->orderBy('nama', 'asc')->get();
+
+        $monitoring = MonitoringKegnas::where('jadwal_kegiatan_id', $request->jadwal_id)->where('tanggal', $this->tanggal)->first();
+        $narasumber_id = $monitoring->narasumber_id;
+        $topik = $monitoring->topik;
+
+        //ambil data kehadiran siswa yang sudah diinputkan
+        if (KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
+          $kehadiran = KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->get()->all();
+          foreach ($kehadiran as $k) {
+            $this->presensi[$k->siswa_id] = $k->status;
+          }
+        } else {
+          //set presensi menjadi hadir bagi setiap siswa
+          $this->presensi = [];
+          foreach ($this->student as $s) {
+            $this->presensi[$s->id] = 'hadir';
+          }
+        }
+      } else {
+        //set presensi menjadi hadir bagi setiap siswa
+        $this->presensi = [];
+        foreach ($this->student as $s) {
+          $this->presensi[$s->id] = 'hadir';
+        }
+      }
+
+      return response()->json([
+        'message' => 'Fetch data success',
+        'presensi' => $this->presensi,
+        'siswa' => $this->student,
+        'narasumber_id' => $narasumber_id,
+        'topik' => $topik
+      ]);
     }
-    return response()->json([
-      'message' => 'Fetch data success',
-      'presensi' => $this->presensi,
-      'siswa' => $this->student,
-    ]);
   }
 
   public function presensi(Request $request)
@@ -138,6 +181,62 @@ class WaliAsramaApiController extends Controller
           'siswa_id' => $value->siswaID,
           'status' => $value->status,
           'monitoring_kegiatan_id' => $monitoring->id
+        ]);
+      }
+    }
+
+    return response()->json([
+      'message' => 'Presensi success',
+    ]);
+  }
+
+  public function presensiNarasumber(Request $request)
+  {
+    $presensi = json_decode($request->presensi);
+    $siswa_id = $presensi[0]->siswaID;
+    $this->tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
+    if (MonitoringKegnas::where('jadwal_kegiatan_id', $request->jadwalId)->where('tanggal', $this->tanggal)->first()) {
+      //ambil data
+      $monitoring = MonitoringKegnas::where('jadwal_kegiatan_id', $request->jadwalId)->where('tanggal', $this->tanggal)->first();
+
+      $monitoring->update([
+        'topik' => $request->topik,
+        'narasumber_id' => $request->narasumberId
+      ]);
+
+      if (KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
+        //update
+        foreach ($presensi as $value) {
+          KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->where('siswa_id', $value->siswaID)->update([
+            'status' => $value->status,
+          ]);
+        }
+      } else {
+        //set presensi menjadi hadir bagi setiap siswa
+        //save presensi
+        foreach ($presensi as $value) {
+          KehadiranKegnas::create([
+            'siswa_id' => $value->siswaID,
+            'status' => $value->status,
+            'monitoring_kegnas_id' => $monitoring->id
+          ]);
+        }
+      }
+    } else {
+      $monitoring = MonitoringKegnas::create([
+        'tanggal' => $this->tanggal,
+        'waktu_mulai' => $request->jamDimulai,
+        'waktu_berakhir' => $request->jamBerakhir,
+        'jadwal_kegiatan_id' => $request->jadwalId,
+        'topik' => $request->topik,
+        'narasumber_id' => $request->narasumberId
+      ]);
+      //input presensinya
+      foreach ($presensi as $value) {
+        KehadiranKegnas::create([
+          'siswa_id' => $value->siswaID,
+          'status' => $value->status,
+          'monitoring_kegnas_id' => $monitoring->id
         ]);
       }
     }

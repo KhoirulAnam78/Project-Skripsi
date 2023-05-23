@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get-kelas-angkatan', [WaliAsramaApiController::class, 'getKelas']);
     Route::post('/get-presensi-siswa/', [WaliAsramaApiController::class, 'getPresensiSiswa']);
     Route::post('/input-presensi-kegiatan', [WaliAsramaApiController::class, 'presensi']);
+    Route::post('/input-presensi-kegiatan-narasumber', [WaliAsramaApiController::class, 'presensiNarasumber']);
     //##AMBIL REKAP GURU##
     //ambil kelas aktif
     Route::get('/get-kelas', [GuruApiController::class, 'getKelas']);
