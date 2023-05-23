@@ -59,6 +59,7 @@ class WaliAsramaApiController extends Controller
     }
 
     if ($narasumber === 0) {
+      $info = "Masuk Tanpa Narasumber";
       if (MonitoringKegiatan::where('jadwal_kegiatan_id', $request->jadwal_id)->where('tanggal', $this->tanggal)->first()) {
         //ambil data
         //ambil data siswa kelas yang dipilih
@@ -87,6 +88,9 @@ class WaliAsramaApiController extends Controller
         $this->student = [];
         $this->presensi = [];
       }
+    } else {
+
+      $info = "Masuk Narasumber";
     }
     // $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
     // $angkatan_id = WaliAsrama::where('user_id', auth('sanctum')->user()->id)->first()->angkatans->where('status', 'belum lulus')->first()->id;
@@ -94,7 +98,7 @@ class WaliAsramaApiController extends Controller
     return response()->json([
       'message' => 'Fetch data success',
       'siswa' => $narasumber,
-      'presensi' => $this->presensi
+      'presensi' => $info
     ]);
   }
 }
