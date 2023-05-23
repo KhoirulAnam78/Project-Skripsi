@@ -92,13 +92,40 @@ class WaliAsramaApiController extends Controller
       }
     } else {
     }
-    // $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
-    // $angkatan_id = WaliAsrama::where('user_id', auth('sanctum')->user()->id)->first()->angkatans->where('status', 'belum lulus')->first()->id;
-    // $kelas = Kelas::where('tahun_akademik_id', $tahunAkademik)->where('angkatan_id', $angkatan_id)->get();
     return response()->json([
       'message' => 'Fetch data success',
       'presensi' => $this->presensi,
       'siswa' => $this->student,
+    ]);
+  }
+
+  public function presensi(Request $request)
+  {
+    $presensi = json_decode($request->presensi);
+    $siswa_id = $presensi[0]['siswaID'];
+
+    $tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
+    //   if (MonitoringKegiatan::where('jadwal_kegiatan_id', $request->jadwal_id)->where('tanggal', $this->tanggal)->first()) {
+    //     //ambil data
+    //     $monitoring = MonitoringKegiatan::where('jadwal_kegiatan_id', $request->jadwal_id)->where('tanggal', $this->tanggal)->first();
+    //   } else {
+    //     $monitoring = MonitoringKegiatan::create([
+    //       'tanggal' => $tanggal,
+    //       'waktu_mulai' => $request->waktu_mulai,
+    //       'waktu_berakhir' => $request->waktu_berakhir,
+    //       'jadwal_kegiatan_id' => $request->jadwal_id,
+    //     ]);
+    //   }
+    //   foreach ($presensi as $value) {
+    //     KehadiranPembelajaran::create([
+    //         'siswa_id' => $value->siswaID,
+    //         'status' => $value->status,
+    //         'monitoring_pembelajaran_id' => $monitoring->id
+    //     ]);
+    // }
+    return response()->json([
+      'message' => 'Presensi success',
+      'siswa' => $siswa_id,
     ]);
   }
 }
