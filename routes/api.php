@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\GuruApiController;
 use App\Http\Controllers\Api\PresensiController;
 use App\Http\Controllers\Api\SiswaApiController;
 use App\Http\Controllers\Api\WaliAsramaApiController;
+use App\Http\Controllers\WaliAsramaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/get-jadwal-non-akademik', [SiswaApiController::class, 'getNonAkademik']);
     //ambil jadwal wali asrama
     Route::get('/get-jadwal-waliasrama', [WaliAsramaApiController::class, 'getJadwal']);
-
+    Route::get('/get-kelas-angkatan', [WaliAsramaApiController::class, 'getKelas']);
     //##AMBIL REKAP GURU##
     //ambil kelas aktif
     Route::get('/get-kelas', [GuruApiController::class, 'getKelas']);
