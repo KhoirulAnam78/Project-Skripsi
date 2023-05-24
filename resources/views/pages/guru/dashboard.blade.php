@@ -71,17 +71,18 @@
                                                 if (count($j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) != 0) {
                                                     if (\Carbon\Carbon::now()->translatedFormat('H:i') > substr($j->waktu_berakhir, 0, -3)) {
                                                         $status = 'Telah Berakhir';
-                                                    } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
-                                                        $status = 'Belum Dimulai';
                                                     } else {
                                                         $status = 'Sedang Berlangsung';
                                                     }
+                                                } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
+                                                    $status = 'Belum Dimulai';
                                                 } else {
                                                     $status = 'Tidak Terlaksana';
                                                 }
                                             @endphp
-                                            <td
-                                                class="
+                                            <td>
+                                                <span
+                                                    class="
                                                 @php
 if ($status == 'Telah Berakhir'){
                                                         echo 'badge bg-label-info my-1';
@@ -91,8 +92,8 @@ if ($status == 'Telah Berakhir'){
                                                         echo'badge bg-label-success my-1';
                                                     } else {
                                                         echo'badge bg-label-danger my-1';
-                                                    } @endphp">
-                                                {{ $status }}</td>
+                                                    } @endphp">{{ $status }}</span>
+                                            </td>
 
                                         </tr>
                                     @endforeach
