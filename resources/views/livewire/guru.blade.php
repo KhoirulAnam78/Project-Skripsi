@@ -39,7 +39,8 @@
         </div>
     @endif
     <div class="col-lg-3 col-md-3 mb-3 mx-3">
-        <input type="text" wire:model="search" id="no_telp" class="form-control"
+        <label for="pencarian" class="form-label">Pencarian</label>
+        <input type="text" wire:model="search" id="pencarian" class="form-control"
             placeholder="Cari berdasarkan nama guru" />
     </div>
     <div class="table-responsive text-nowrap mx-3 mb-3">

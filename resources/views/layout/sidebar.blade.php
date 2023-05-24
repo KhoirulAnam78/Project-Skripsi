@@ -51,21 +51,21 @@
                             <div data-i18n="Data Guru">Data Guru</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ $title === 'Data Wali Asrama' ? 'active' : '' }}">
+                    {{-- <li class="menu-item {{ $title === 'Data Wali Asrama' ? 'active' : '' }}">
                         <a href="/data-wali-asrama" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Data Wali Asrama</div>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="menu-item {{ $title === 'Tahun Akademik' ? 'active' : '' }}">
                         <a href="tahun-akademik" class="menu-link">
                             <div data-i18n="Tahun Akademik">Tahun Akademik</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ $title === 'Data Angkatan' ? 'active' : '' }}">
+                    {{-- <li class="menu-item {{ $title === 'Data Angkatan' ? 'active' : '' }}">
                         <a href="/data-angkatan" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Data Angkatan</div>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="menu-item {{ $title === 'Data Kelas' ? 'active' : '' }}">
                         <a href="/kelas" class="menu-link">
                             <div data-i18n="Data Kelas">Data Kelas</div>
@@ -81,7 +81,7 @@
                             <div data-i18n="Mata Pelajaran">Mata Pelajaran</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ $title === 'Data Kegiatan' ? 'active' : '' }}">
+                    {{-- <li class="menu-item {{ $title === 'Data Kegiatan' ? 'active' : '' }}">
                         <a href="/data-kegiatan" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Data Kegiatan</div>
                         </a>
@@ -90,7 +90,7 @@
                         <a href="/data-narasumber" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Data Narasumber</div>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
             <li class="menu-header small text-uppercase">
@@ -125,11 +125,11 @@
                             <div data-i18n="Jadwal Guru Piket">Jadwal Guru Piket</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ $title === 'Jadwal Kegiatan' ? 'active' : '' }}">
+                    {{-- <li class="menu-item {{ $title === 'Jadwal Kegiatan' ? 'active' : '' }}">
                         <a href="/jadwal-kegiatan" class="menu-link">
                             <div data-i18n="Jadwal Kegiatan">Jadwal Kegiatan</div>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
             <li
@@ -150,13 +150,13 @@ foreach ($kegiatan as $k) {
                             <div data-i18n="Presensi Pembelajaran">Presensi Pembelajaran</div>
                         </a>
                     </li>
-                    @foreach ($kegiatan as $k)
+                    {{-- @foreach ($kegiatan as $k)
                         <li class="menu-item {{ $title === $k->nama ? 'active' : '' }}">
                             <a href="/presensi-kegiatan/{{ $k->slug }}" class="menu-link">
                                 <div data-i18n="Presensi Pembelajaran">Presensi {{ $k->nama }}</div>
                             </a>
                         </li>
-                    @endforeach
+                    @endforeach --}}
                 </ul>
             </li>
         @endcan
@@ -195,13 +195,13 @@ foreach ($kegiatan as $k) {
                             <div data-i18n="Pembelajaran">Pembelajaran</div>
                         </a>
                     </li>
-                    @foreach ($kegiatan as $k)
+                    {{-- @foreach ($kegiatan as $k)
                         <li class="menu-item {{ $title === 'Daftar Kegiatan ' . $k->nama ? 'active' : '' }}">
                             <a href="/daftar-kegiatan/{{ $k->slug }}" class="menu-link">
                                 <div data-i18n="Presensi Pembelajaran">{{ $k->nama }}</div>
                             </a>
                         </li>
-                    @endforeach
+                    @endforeach --}}
                 </ul>
             </li>
 
@@ -224,7 +224,7 @@ foreach ($kegiatan as $k) {
                     </li>
                 </ul>
             </li>
-
+            {{-- 
             <li
                 class="menu-item @php
 foreach ($kegiatan as $k) {
@@ -233,7 +233,6 @@ foreach ($kegiatan as $k) {
                     }   
                 } @endphp">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    {{-- <i class="menu-icon tf-icons bx bx-dock-top"></i> --}}
                     <i class='menu-icon tf-icons bx bx-list-ul'></i>
                     <div data-i18n="Account Settings">Kegiatan</div>
                 </a>
@@ -246,7 +245,7 @@ foreach ($kegiatan as $k) {
                         </li>
                     @endforeach
                 </ul>
-            </li>
+            </li> --}}
         @endcan
 
         @can('pimpinan')
@@ -264,22 +263,22 @@ foreach ($kegiatan as $k) {
                             <div data-i18n="Data Guru">Data Guru</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ $title === 'Data Wali Asrama' ? 'active' : '' }}">
+                    {{-- <li class="menu-item {{ $title === 'Data Wali Asrama' ? 'active' : '' }}">
                         <a href="/data-wali-asrama" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Data Wali Asrama</div>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="menu-item {{ $title === 'Tahun Akademik' ? 'active' : '' }}">
                         <a href="tahun-akademik" class="menu-link">
                             <div data-i18n="Tahun Akademik">Tahun Akademik</div>
                         </a>
                     </li>
 
-                    <li class="menu-item {{ $title === 'Data Angkatan' ? 'active' : '' }}">
+                    {{-- <li class="menu-item {{ $title === 'Data Angkatan' ? 'active' : '' }}">
                         <a href="/data-angkatan" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Data Angkatan</div>
                         </a>
-                    </li>
+                    </li> --}}
                     <li class="menu-item {{ $title === 'Data Kelas' ? 'active' : '' }}">
                         <a href="/kelas" class="menu-link">
                             <div data-i18n="Data Kelas">Data Kelas</div>
@@ -295,7 +294,7 @@ foreach ($kegiatan as $k) {
                             <div data-i18n="Mata Pelajaran">Mata Pelajaran</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ $title === 'Data Kegiatan' ? 'active' : '' }}">
+                    {{-- <li class="menu-item {{ $title === 'Data Kegiatan' ? 'active' : '' }}">
                         <a href="/data-kegiatan" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Data Kegiatan</div>
                         </a>
@@ -304,7 +303,7 @@ foreach ($kegiatan as $k) {
                         <a href="/data-narasumber" class="menu-link">
                             <div data-i18n="Mata Pelajaran">Data Narasumber</div>
                         </a>
-                    </li>
+                    </li> --}}
 
                 </ul>
             </li>
@@ -340,11 +339,11 @@ foreach ($kegiatan as $k) {
                             <div data-i18n="Jadwal Guru Piket">Jadwal Guru Piket</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ $title === 'Jadwal Kegiatan' ? 'active' : '' }}">
+                    {{-- <li class="menu-item {{ $title === 'Jadwal Kegiatan' ? 'active' : '' }}">
                         <a href="/jadwal-kegiatan" class="menu-link">
                             <div data-i18n="Jadwal Kegiatan">Jadwal Kegiatan</div>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
             <!-- Components -->
@@ -368,13 +367,13 @@ foreach ($kegiatan as $k) {
                             <div data-i18n="Pembelajaran">Pembelajaran</div>
                         </a>
                     </li>
-                    @foreach ($kegiatan as $k)
+                    {{-- @foreach ($kegiatan as $k)
                         <li class="menu-item {{ $title === 'Daftar Kegiatan ' . $k->nama ? 'active' : '' }}">
                             <a href="/daftar-kegiatan/{{ $k->slug }}" class="menu-link">
                                 <div data-i18n="Presensi Pembelajaran">{{ $k->nama }}</div>
                             </a>
                         </li>
-                    @endforeach
+                    @endforeach --}}
                 </ul>
             </li>
 
@@ -397,7 +396,7 @@ foreach ($kegiatan as $k) {
                     </li>
                 </ul>
             </li>
-            <li
+            {{-- <li
                 class="menu-item @php
 foreach ($kegiatan as $k) {
                     if ('Rekapitulasi '.$k->nama === $title) {
@@ -405,7 +404,6 @@ foreach ($kegiatan as $k) {
                     }   
                 } @endphp">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    {{-- <i class="menu-icon tf-icons bx bx-dock-top"></i> --}}
                     <i class='menu-icon tf-icons bx bx-list-ul'></i>
                     <div data-i18n="Account Settings">Kegiatan</div>
                 </a>
@@ -418,7 +416,7 @@ foreach ($kegiatan as $k) {
                         </li>
                     @endforeach
                 </ul>
-            </li>
+            </li> --}}
         @endcan
 
         @can('guru')
@@ -532,7 +530,7 @@ foreach ($kegiatan as $k) {
                     <div data-i18n="Pembelajaran">Pembelajaran</div>
                 </a>
             </li>
-            <li
+            {{-- <li
                 class="menu-item @php
 foreach ($kegiatan as $k) {
                     if ('Rekapitulasi '.$k->nama === $title) {
@@ -540,7 +538,6 @@ foreach ($kegiatan as $k) {
                     }   
                 } @endphp">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
-                    {{-- <i class="menu-icon tf-icons bx bx-dock-top"></i> --}}
                     <i class='menu-icon tf-icons bx bx-list-ul'></i>
                     <div data-i18n="Account Settings">Kegiatan</div>
                 </a>
@@ -553,7 +550,7 @@ foreach ($kegiatan as $k) {
                         </li>
                     @endforeach
                 </ul>
-            </li>
+            </li> --}}
         @endcan
 
     </ul>

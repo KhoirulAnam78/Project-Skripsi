@@ -23,6 +23,7 @@
     @endif
 
     <div class="col-lg-4 col-md-4 mb-3 mx-3">
+        <label for="pencarian" class="form-label">Pencarian</label>
         <input type="text" wire:model="search" id="no_telp" class="form-control"
             placeholder="Cari berdasarkan nama tahun akademik" />
     </div>
