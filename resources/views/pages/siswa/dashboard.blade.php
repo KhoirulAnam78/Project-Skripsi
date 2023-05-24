@@ -165,7 +165,7 @@ if ($status == 'Telah Berakhir'){
                                                         $get = $j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->first()->kehadiranPembelajarans;
                                                         $kehadiran = $get->where('siswa_id', Auth::user()->siswa->id);
                                                     @endphp
-                                                    {{ $kehadiran->first()->status }}
+                                                    {{ ucwords($kehadiran->first()->status) }}
                                                 @else
                                                     {{ '' }}
                                                 @endif
