@@ -175,11 +175,11 @@ if ($status == 'Telah Berakhir'){
                                                 if (count($j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) !== 0) {
                                                     if (\Carbon\Carbon::now()->translatedFormat('H:i') > substr($j->waktu_berakhir, 0, -3)) {
                                                         $status = 'Telah Berakhir';
-                                                    } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
-                                                        $status = 'Belum Dimulai';
                                                     } else {
                                                         $status = 'Sedang Berlangsung';
                                                     }
+                                                } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
+                                                    $status = 'Belum Dimulai';
                                                 } else {
                                                     $status = 'Tidak Terlaksana';
                                                 }
