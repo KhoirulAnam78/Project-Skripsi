@@ -29,7 +29,11 @@ class TabelJadwalPelajaran extends Component
     {
         $this->filterTahunAkademik = TahunAkademik::select('id')->where('status', 'aktif')->first()->id;
         $this->kelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas;
-        $this->filterKelas = $this->kelas->first()->id;
+        if ($this->kelas->first()) {
+            $this->filterKelas = $this->kelas->first()->id;
+        } else {
+            $this->filterKelas = '';
+        }
         // dd($this->filterKelas);
     }
 
@@ -158,7 +162,11 @@ class TabelJadwalPelajaran extends Component
     public function updatedFilterTahunAkademik($tahunAkademik_id)
     {
         $this->kelas = TahunAkademik::where('id', $tahunAkademik_id)->first()->kelas;
-        $this->filterKelas = $this->kelas->first()->id;
+        if ($this->kelas->first()) {
+            $this->filterKelas = $this->kelas->first()->id;
+        } else {
+            $this->filterKelas = '';
+        }
     }
 
     public function updatingFilterTahunAkademik()
