@@ -171,12 +171,12 @@ foreach ($kegiatan as $k) {
             <!-- Components -->
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
             <!-- Data Rekapitulasi -->
-            <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
+            {{-- <li class="menu-item {{ $title === 'Daftar Pertemuan' ? 'active' : '' }}">
                 <a href="/daftar-pertemuan" class="menu-link">
                     <i class='menu-icon tf-icons bx bx-list-ul'></i>
                     <div data-i18n="Validasi Pembelajaran">Daftar Pertemuan</div>
                 </a>
-            </li>
+            </li> --}}
             <li
                 class="menu-item {{ $title === 'Daftar Pembelajaran' ? 'active open' : '' }} @php
 foreach ($kegiatan as $k) {
