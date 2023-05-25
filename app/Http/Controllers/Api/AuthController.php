@@ -31,7 +31,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
             ]);
-        } else if ($user->role === 'guru') {
+        } else if ($user->role === 'guru' or $user->role === 'pimpinan') {
             //Get Kelas AKtif Saat ini
             $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->all();
             foreach ($data as $d) {

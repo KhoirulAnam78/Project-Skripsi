@@ -24,12 +24,12 @@ class GuruApiController extends Controller
 
   public function updateRole(Request $request)
   {
-
+    User::where('id', auth('sanctum')->user()->id)->update(['role' => $request->role]);
     return response()->json([
       'message' => 'Update data succes',
       'status_guru' => $request->role
     ]);
-    // if (User::where('id', auth('sanctum')->user()->id)->update(['role' => $request->role])) {
+    // if () {
     // } else {
     //   return response()->json([
     //     'message' => 'Update gagal',
