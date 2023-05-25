@@ -66,6 +66,7 @@ class AuthController extends Controller
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
+                'pimpinan' => auth('sanctum')->user()->guru->pimpinan,
                 'user' => $user,
                 'mapel' => $mapel,
                 'jadwalPiket' => $jadwalPiket

@@ -27,6 +27,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    //Update Role Pimpinan/Guru
+    Route::post('/status-pimpinan', [GuruApiController::class, 'updateRole']);
     //Logout
     Route::get('/logout', [AuthController::class, 'logout']);
     //Get Jadwal Guru

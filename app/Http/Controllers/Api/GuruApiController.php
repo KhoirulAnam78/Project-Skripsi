@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Models\User;
 use App\Models\Kelas;
 use App\Exports\ExportSiswa;
 use Illuminate\Http\Request;
@@ -20,6 +21,15 @@ class GuruApiController extends Controller
 {
   public $kelasAktif = [];
   public $tanggal;
+
+  public function login(Request $request)
+  {
+    User::where('id', auth('sanctum')->user()->id)->update(['role' => $request->role]);
+    return response()->json([
+      'message' => 'Update data succes',
+      'status_guru' => $request->role
+    ]);
+  }
 
   public function getJadwal(Request $request)
   {
