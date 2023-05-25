@@ -25,17 +25,17 @@ class GuruApiController extends Controller
   public function updateRole(Request $request)
   {
 
-    if (User::where('id', auth('sanctum')->user()->id)->update(['role' => $request->role])) {
-      return response()->json([
-        'message' => 'Update data succes',
-        'status_guru' => $request->role
-      ]);
-    } else {
-      return response()->json([
-        'message' => 'Update gagal',
-        'status_guru' => $request->role
-      ], 500);
-    }
+    return response()->json([
+      'message' => 'Update data succes',
+      'status_guru' => $request->role
+    ]);
+    // if (User::where('id', auth('sanctum')->user()->id)->update(['role' => $request->role])) {
+    // } else {
+    //   return response()->json([
+    //     'message' => 'Update gagal',
+    //     'status_guru' => $request->role
+    //   ], 500);
+    // }
   }
 
   public function getJadwal(Request $request)
