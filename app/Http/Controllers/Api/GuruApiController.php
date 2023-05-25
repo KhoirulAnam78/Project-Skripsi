@@ -22,7 +22,7 @@ class GuruApiController extends Controller
   public $kelasAktif = [];
   public $tanggal;
 
-  public function login(Request $request)
+  public function updateRole(Request $request)
   {
     User::where('id', auth('sanctum')->user()->id)->update(['role' => $request->role]);
     return response()->json([
