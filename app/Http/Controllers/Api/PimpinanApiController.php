@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 use App\Models\TahunAkademik;
 use App\Models\JadwalPelajaran;
 use App\Models\JadwalPengganti;
 use App\Http\Controllers\Controller;
+use App\Models\KehadiranPembelajaran;
 
 class PimpinanApiController extends Controller
 {
@@ -179,12 +181,23 @@ class PimpinanApiController extends Controller
   {
     if ($request->waktu_mulai && $request->waktu_berakhir && $request->tanggal && $request->kelas_id && $request->hari) {
       $this->tanggal = $request->tanggal;
-      $jadwal = JadwalPelajaran::where('waktu_mulai', '>=', $request->waktu_mulai)->where('hari', $request->hari)->where('waktu_berakhir', '<=', $request->waktu_berakhir)->where('kelas_id', $request->kelas_id)->with(['monitoringPembelajarans' => function ($query) {
+      $jadwal = JadwalPelajaran::where('waktu_mulai', '>=', $request->waktu_mulai)->where('hari', $request->hari)->where('waktu_berakhir', '<=', $request->waktu_berakhir)->where('kelas_id', $request->kelas_id)->with(['guru' => function ($query) {
+        $query->select('id', 'nama');
+      }])->with(['mataPelajaran' => function ($query) {
+        $query->select('id', 'nama');
+      }])->with(['monitoringPembelajarans' => function ($query) {
         $query->where('tanggal', $this->tanggal);
-      }])->get();
+      }])->select('id', 'mata_pelajaran_id', 'guru_id', 'waktu_mulai', 'waktu_berakhir')->get();
+      $monitoring_id = $jadwal->first()->monitoringPembelajarans->first()->id;
+      $presensi = [];
+      $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
+      foreach ($siswa as $s) {
+        array_push($presensi, ['siswa' => $s->nama, 'presensi' => KehadiranPembelajaran::where('monitoring_id', $monitoring_id)->where('siswa_id', $s->id)->first()->status]);
+      }
       return response()->json([
         'message' => 'Fetch data success',
-        'jadwal' => $jadwal
+        'jadwal' => $jadwal,
+        'presensi' => $presensi
       ]);
     } else {
       return response()->json([
