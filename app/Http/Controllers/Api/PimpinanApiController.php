@@ -194,9 +194,9 @@ class PimpinanApiController extends Controller
         if ($jadwal->first()->monitoringPembelajarans->first()) {
           $monitoring_id = $jadwal->first()->monitoringPembelajarans->first()->id;
           $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
-          // foreach ($siswa as $s) {
-          //   array_push($presensi, ['siswa' => $s->nama, 'presensi' => $s->kehadiranPembelajarans->where('monitoring_id', $monitoring_id)->first()->status]);
-          // }
+          foreach ($siswa as $s) {
+            array_push($presensi, ['siswa' => $s->nama, 'presensi' => $s->kehadiranPembelajarans->where('monitoring_pembelajaran_id', $monitoring_id)->first()->status]);
+          }
         }
       }
       return response()->json([
