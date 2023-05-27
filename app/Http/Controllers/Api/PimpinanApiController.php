@@ -203,7 +203,6 @@ class PimpinanApiController extends Controller
         'message' => 'Fetch data success',
         'jadwal' => $jadwal,
         'monitoring_id' => $monitoring_id,
-        'siswa' => $siswa,
         'presensi' => $presensi
       ]);
     } else {
