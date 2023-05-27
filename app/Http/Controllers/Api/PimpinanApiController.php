@@ -165,4 +165,13 @@ class PimpinanApiController extends Controller
       ]);
     }
   }
+
+  public function getKelas()
+  {
+    $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->all();
+    return response()->json([
+      'message' => 'Fetch data success',
+      'kelas' => $data
+    ]);
+  }
 }
