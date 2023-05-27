@@ -168,7 +168,7 @@ class PimpinanApiController extends Controller
 
   public function getKelas()
   {
-    $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->select('id', 'nama');
+    $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas;
     return response()->json([
       'message' => 'Fetch data success',
       'kelas' => $data
