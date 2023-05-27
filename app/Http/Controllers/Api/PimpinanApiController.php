@@ -177,19 +177,19 @@ class PimpinanApiController extends Controller
 
   public function getDetail(Request $request)
   {
-    if ($request->waktu_mulai && $request->waktu_berakhir && $request->tanggal && $request->kelas_id) {
+    if ($request->waktu_mulai && $request->waktu_berakhir && $request->tanggal && $request->kelas_id && $request->hari) {
       $this->tanggal = $request->tanggal;
-      $jadwal = JadwalPelajaran::where('waktu_mulai', '>=', $request->waktu_mulai)->where('waktu_berakhir', '>=', $request->berakhir)->where('kelas_id', $request->kelas_id)->with(['monitoringPembelajarans' => function ($query) {
+      $jadwal = JadwalPelajaran::where('waktu_mulai', '>=', $request->waktu_mulai)->where('hari', $request->hari)->where('waktu_berakhir', '<=', $request->waktu_berakhir)->where('kelas_id', $request->kelas_id)->with(['monitoringPembelajarans' => function ($query) {
         $query->where('tanggal', $this->tanggal);
       }])->get();
       return response()->json([
         'message' => 'Fetch data success',
-        'pembelajaran' => $jadwal
+        'jadwal' => $jadwal
       ]);
     } else {
       return response()->json([
         'message' => 'Fetch data gagal',
-        'data' => 'waktu mulai, waktu berakhir, tanggal, dan kelas id wajib diisi'
+        'data' => 'Hari, waktu mulai, waktu berakhir, tanggal, dan kelas id wajib diisi'
       ]);
     }
   }
