@@ -188,11 +188,16 @@ class PimpinanApiController extends Controller
       }])->with(['monitoringPembelajarans' => function ($query) {
         $query->where('tanggal', $this->tanggal);
       }])->select('id', 'mata_pelajaran_id', 'guru_id', 'waktu_mulai', 'waktu_berakhir')->get();
-      $monitoring_id = $jadwal->first()->monitoringPembelajarans->first()->id;
+      $siswa = [];
       $presensi = [];
-      $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
-      foreach ($siswa as $s) {
-        array_push($presensi, ['siswa' => $s->nama]);
+      if ($jadwal->first()) {
+        if ($jadwal->first()->monitoringPembelajarans->first()) {
+          $monitoring_id = $jadwal->first()->monitoringPembelajarans->first()->id;
+          $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
+          foreach ($siswa as $s) {
+            array_push($presensi, ['siswa' => $s->nama, 'presensi' => $s->kehadiranPembelajarans->where('monitoring_id', $monitoring_id)->first()->status]);
+          }
+        }
       }
       return response()->json([
         'message' => 'Fetch data success',
