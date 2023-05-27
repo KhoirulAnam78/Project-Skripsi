@@ -79,4 +79,5 @@ Route::middleware('auth:sanctum')->group(function () {
     //get data pembelajaran selama satu minggu
     Route::post('/get-persentase', [PimpinanApiController::class, 'getPersentase']);
     Route::get('/get-kelas-monitoring', [PimpinanApiController::class, 'getKelas']);
+    Route::post('/detail-monitoring', [PimpinanApiController::class, 'getDetail']);
 });
