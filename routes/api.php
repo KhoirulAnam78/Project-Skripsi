@@ -81,5 +81,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/get-persentase-non-akademik', [PimpinanApiController::class, 'getNonAkademik']);
     Route::get('/get-kelas-monitoring', [PimpinanApiController::class, 'getKelas']);
     Route::post('/detail-monitoring', [PimpinanApiController::class, 'getDetail']);
+    Route::post('/get-kelas-monitoring-non-akademik', [PimpinanApiController::class, 'getKelasNonAkademik']);
     Route::post('/detail-monitoring-non-akademik', [PimpinanApiController::class, 'getDetailNonAkademik']);
 });

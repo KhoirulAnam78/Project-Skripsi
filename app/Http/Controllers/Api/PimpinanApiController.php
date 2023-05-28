@@ -273,6 +273,17 @@ class PimpinanApiController extends Controller
     }
   }
 
+  public function getKelasNonAkademik(Request $request)
+  {
+    $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
+
+    return response()->json([
+      'message' => 'Fetch data success',
+      'kelas' => '',
+      'angkatan' => $request->angkatan
+    ]);
+  }
+
   public function getDetailNonakademik(Request $request)
   {
     //ambil kegiatan_id, kelas_id, hari, tanggal
