@@ -280,7 +280,7 @@ class PimpinanApiController extends Controller
     return response()->json([
       'message' => 'Fetch data success',
       'kelas' => '',
-      'angkatan' => $request->angkatan
+      'angkatan' => $request->angkatan[0]
     ]);
   }
 
