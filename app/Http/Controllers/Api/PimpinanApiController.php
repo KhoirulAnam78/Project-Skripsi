@@ -303,7 +303,7 @@ class PimpinanApiController extends Controller
       //ambil monitoring id dan siswa
       $monitoring_id = '';
       $presensi = [];
-      if ($jadwal->kegiatan->narasumber === 0) {
+      if ($jadwal->kegiatan->narasumber == 0) {
         if ($jadwal->monitoringKegiatan->first()) {
           $monitoring_id = $jadwal->monitoringKegiatan->first()->id;
           $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
