@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Kelas;
+use App\Models\Kegiatan;
 use Illuminate\Http\Request;
 use App\Models\TahunAkademik;
+use App\Models\JadwalKegiatan;
 use App\Models\JadwalPelajaran;
 use App\Models\JadwalPengganti;
 use App\Http\Controllers\Controller;
@@ -181,7 +183,7 @@ class PimpinanApiController extends Controller
   {
     if ($request->waktu_mulai && $request->waktu_berakhir && $request->tanggal && $request->kelas_id && $request->hari) {
       $this->tanggal = $request->tanggal;
-      $jadwal = JadwalPelajaran::where('waktu_mulai', '>=', $request->waktu_mulai)->where('hari', $request->hari)->where('waktu_berakhir', '<=', $request->waktu_berakhir)->where('kelas_id', $request->kelas_id)->with(['guru' => function ($query) {
+      $jadwal = JadwalPelajaran::where('waktu_mulai', '<=', $request->waktu_mulai)->where('hari', $request->hari)->where('waktu_berakhir', '<=', $request->waktu_berakhir)->where('kelas_id', $request->kelas_id)->with(['guru' => function ($query) {
         $query->select('id', 'nama');
       }])->with(['mataPelajaran' => function ($query) {
         $query->select('id', 'nama');
@@ -196,6 +198,127 @@ class PimpinanApiController extends Controller
           $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
           foreach ($siswa as $s) {
             array_push($presensi, ['siswa' => $s->nama, 'presensi' => $s->kehadiranPembelajarans->where('monitoring_pembelajaran_id', $monitoring_id)->first()->status]);
+          }
+        }
+      }
+      return response()->json([
+        'message' => 'Fetch data success',
+        'jadwal' => $jadwal,
+        'monitoring_id' => $monitoring_id,
+        'presensi' => $presensi
+      ]);
+    } else {
+      return response()->json([
+        'message' => 'Fetch data gagal',
+        'data' => 'Hari, waktu mulai, waktu berakhir, tanggal, dan kelas id wajib diisi'
+      ]);
+    }
+  }
+
+  public $hari, $tahunAkademik;
+  public function getNonAkademik(Request $request)
+  {
+    if ($request->hari and $request->tanggal) {
+      $this->tanggal = $request->tanggal;
+      $this->hari = $request->hari;
+      $this->tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
+
+      $jadwal = JadwalKegiatan::where('tahun_akademik_id', $this->tahunAkademik)->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $this->hari)->with('kegiatan')->with(['monitoringKegnas' => function ($query) {
+        if ($query) {
+          $query->with('narasumber')->where('tanggal', $this->tanggal);
+        } else {
+          $query;
+        }
+      }])->with(['monitoringKegiatan' => function ($query) {
+        if ($query) {
+          $query->where('tanggal', $this->tanggal);
+        } else {
+          $query;
+        }
+      }])->get()->groupBy('kegiatan_id');
+
+      $persentase = [];
+      foreach ($jadwal as $key => $j) {
+        $terlaksana = 0;
+        $kegiatan = Kegiatan::find($key);
+        foreach ($j as $k) {
+          if ($k->kegiatan->narasumber == 0) {
+            if ($k->monitoringKegiatan->first()) {
+              $terlaksana++;
+            }
+          } else {
+            if ($k->monitoringKegnas->first()) {
+              $terlaksana++;
+            }
+          }
+        }
+        $total = count($j);
+        $persen = $terlaksana / $total;
+        array_push($persentase, ['kegiatan' => $kegiatan->nama, 'terlaksana' => $persen]);
+      }
+
+      // $jadwal = JadwalKegiatan::where('tahun_akademik_id', $this->tahunAkademik)
+      return response()->json([
+        'message' => 'Fetch data success',
+        'jadwal-kegiatan' => $persentase
+      ]);
+    } else {
+      return response()->json([
+        'message' => 'Fetch data failed',
+        'request' => 'Hari dan tanggal wajib diisi !',
+      ]);
+    }
+  }
+
+  public function getDetailNonakademik(Request $request)
+  {
+    //ambil kegiatan_id, kelas_id, hari, tanggal
+
+    //ambil jadwal kegiatan dimana kegiatan_id, angkatan_id, hari sesuai
+    //kirim dengan monitoringnya
+    if ($request->kegiatan_id && $request->tanggal && $request->kelas_id && $request->hari) {
+      $this->tanggal = $request->tanggal;
+      $this->tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
+      //ambil angkatan id
+      $angkatan_id = Kelas::find($request->kelas_id)->angkatan->id;
+
+      $jadwal = JadwalKegiatan::where('kegiatan_id', $request->kegiatan_id)
+        ->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $request->hari)
+        ->where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $this->tahunAkademik)->with('kegiatan')
+        ->with(['monitoringKegnas' => function ($query) {
+          if ($query) {
+            $query->with('narasumber')->where('tanggal', $this->tanggal);
+          } else {
+            $query;
+          }
+        }])->with(['monitoringKegiatan' => function ($query) {
+          if ($query) {
+            $query->where('tanggal', $this->tanggal);
+          } else {
+            $query;
+          }
+        }])
+        ->first();
+
+      //ambil monitoring id dan siswa
+      $monitoring_id = '';
+      $presensi = [];
+      if ($jadwal->kegiatan->narasumber === 0) {
+        if ($jadwal->monitoringKegiatan->first()) {
+          $monitoring_id = $jadwal->monitoringKegiatan->first()->id;
+          $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
+          foreach ($siswa as $s) {
+            array_push($presensi, [
+              'siswa' => $s->nama, 'presensi' => $s->kehadiranKegiatan->where('monitoring_kegiatan_id', $monitoring_id)->first()->status
+            ]);
+          }
+        }
+      } else {
+        if ($jadwal->monitoringKegnas->first()) {
+          $monitoring_id = $jadwal->monitoringKegnas->first()->id;
+          $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
+          foreach ($siswa as $s) {
+            array_push($presensi, ['siswa' => $s->nama, 'presensi' => $s->kehadiranKegnas->where('monitoring_kegnas_id', $monitoring_id)->first()->status]);
           }
         }
       }
