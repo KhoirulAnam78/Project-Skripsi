@@ -254,7 +254,7 @@ class PimpinanApiController extends Controller
         }
         $total = count($j);
         $persen = $terlaksana / $total;
-        array_push($persentase, ['kegiatan' => $kegiatan->nama, 'kegiatan_id' => $kegiatan->id, 'terlaksana' => $persen, 'waktu_mulai' => $j[0]->waktu_mulai, 'waktu_berakhir' => $j[0]->waktu_berakhir]);
+        array_push($persentase, ['kegiatan' => $kegiatan->nama, 'kegiatan_id' => $kegiatan->id, 'terlaksana' => $persen, 'waktu_mulai' => $j[0]->waktu_mulai, 'waktu_berakhir' => $j[0]->waktu_berakhir, 'angkatan_id' => $j[0]->angkatan_id]);
       }
 
       // $jadwal = JadwalKegiatan::where('tahun_akademik_id', $this->tahunAkademik)
