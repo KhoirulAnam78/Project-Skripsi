@@ -238,8 +238,8 @@ class PimpinanApiController extends Controller
       }])->get()->groupBy('kegiatan_id');
 
       $persentase = [];
-      $angkatan = [];
       foreach ($jadwal as $key => $j) {
+        $angkatan = [];
         $terlaksana = 0;
         $kegiatan = Kegiatan::find($key);
         foreach ($j as $k) {
