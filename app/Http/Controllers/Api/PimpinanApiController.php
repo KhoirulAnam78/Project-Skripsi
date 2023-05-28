@@ -238,10 +238,12 @@ class PimpinanApiController extends Controller
       }])->get()->groupBy('kegiatan_id');
 
       $persentase = [];
+      $angkatan = [];
       foreach ($jadwal as $key => $j) {
         $terlaksana = 0;
         $kegiatan = Kegiatan::find($key);
         foreach ($j as $k) {
+          array_push($angkatan, ['angkatan_id' => $k->angkatan_id]);
           if ($k->kegiatan->narasumber == 0) {
             if ($k->monitoringKegiatan->first()) {
               $terlaksana++;
@@ -254,13 +256,14 @@ class PimpinanApiController extends Controller
         }
         $total = count($j);
         $persen = $terlaksana / $total;
-        array_push($persentase, ['kegiatan' => $kegiatan->nama, 'kegiatan_id' => $kegiatan->id, 'terlaksana' => $persen, 'waktu_mulai' => $j[0]->waktu_mulai, 'waktu_berakhir' => $j[0]->waktu_berakhir, 'angkatan_id' => $j[0]->angkatan_id]);
+        array_push($persentase, ['kegiatan' => $kegiatan->nama, 'kegiatan_id' => $kegiatan->id, 'terlaksana' => $persen, 'waktu_mulai' => $j[0]->waktu_mulai, 'waktu_berakhir' => $j[0]->waktu_berakhir]);
       }
 
       // $jadwal = JadwalKegiatan::where('tahun_akademik_id', $this->tahunAkademik)
       return response()->json([
         'message' => 'Fetch data success',
-        'jadwal-kegiatan' => $persentase
+        'jadwal-kegiatan' => $persentase,
+        'angkatan' => $angkatan
       ]);
     } else {
       return response()->json([
