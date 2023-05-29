@@ -121,13 +121,13 @@ class PresensiController extends Controller
 
     public function valid(Request $request)
     {
-        $monitoring = MonitoringPembelajaran::where('id', $request->monitoring_id)->update([
-            'status_validasi' => 'valid',
-            'keterangan' => ''
-        ]);
+        // $monitoring = MonitoringPembelajaran::where('id', $request->monitoring_id)->update([
+        //     'status_validasi' => 'valid',
+        //     'keterangan' => ''
+        // ]);
         return response()->json([
             'message' => 'Validasi berhasil!',
-            'monitoring' => $monitoring
+            'monitoring' => $request->monitoring_id
         ]);
     }
 
