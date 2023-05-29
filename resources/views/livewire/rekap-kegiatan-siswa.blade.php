@@ -41,7 +41,7 @@
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                        @if (count($monitoring) === 0)
+                        @if (count($monitoring) == 0)
                             <tr>
                                 <td colspan='9' align="center"><span>Tidak ada data</span></td>
                             </tr>
@@ -55,7 +55,11 @@
                                     </td>
                                     <td>{{ $m->topik }}</td>
                                     <td style="white-space: normal">{{ $m->narasumber->nama }}</td>
-                                    <td>{{ ucwords($m->kehadiranKegnas->first()->status) }}</td>
+                                    @if ($m->kehadiranKegnas->first())
+                                        <td>{{ ucwords($m->kehadiranKegnas->first()->status) }}</td>
+                                    @else
+                                        <td>-</td>
+                                    @endif
                                 </tr>
                             @endforeach
                         @endif
