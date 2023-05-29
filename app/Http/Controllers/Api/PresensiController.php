@@ -121,13 +121,13 @@ class PresensiController extends Controller
 
     public function valid(Request $request)
     {
-        // $monitoring = MonitoringPembelajaran::where('id', $request->monitoring_id)->update([
-        //     'status_validasi' => 'valid',
-        //     'keterangan' => ''
-        // ]);
+        $monitoring = MonitoringPembelajaran::where('id', $request->monitoring_id)->update([
+            'status_validasi' => 'terlaksana',
+            'keterangan' => ''
+        ]);
         return response()->json([
             'message' => 'Validasi berhasil!',
-            'monitoring' => $request->monitoring_id
+            'monitoring' => $monitoring
         ]);
     }
 
@@ -142,7 +142,7 @@ class PresensiController extends Controller
             $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $request->jadwal_id)->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))->update([
                 'keterangan' => $request->keterangan,
                 'topik' => $request->topik,
-                'status_validasi' => 'tidak valid',
+                'status_validasi' => 'tidak terlaksana',
                 'guru_piket_id' => $guruPiketId
             ]);
             foreach ($presensi as $value) {
@@ -160,7 +160,7 @@ class PresensiController extends Controller
                 'topik' => $request->topik,
                 'waktu_mulai' => $waktu_mulai,
                 'waktu_berakhir' => $waktu_berakhir,
-                'status_validasi' => 'tidak valid',
+                'status_validasi' => 'tidak terlaksana',
                 'jadwal_pelajaran_id' => $request->jadwal_id,
                 'guru_piket_id' => $guruPiketId,
                 'keterangan' => $request->keterangan
