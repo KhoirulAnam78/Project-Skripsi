@@ -94,7 +94,11 @@
                                     <td>{{ $m->tanggal }}</td>
                                     <td>{{ substr($m->waktu_mulai, 0, -3) . '-' . substr($m->waktu_berakhir, 0, -3) }}
                                     </td>
-                                    <td>{{ ucwords($m->kehadiranKegiatan->first()->status) }}</td>
+                                    @if ($m->kehadiranKegiatan->first())
+                                        <td>{{ ucwords($m->kehadiranKegiatan->first()->status) }}</td>
+                                    @else
+                                        <td>-</td>
+                                    @endif
                                 </tr>
                             @endforeach
                         @endif
