@@ -84,6 +84,7 @@
                                                     }
                                                 } else {
                                                     $monitoring = $j->monitoringKegiatan->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
+                                                    $presensi = 'Presensi Belum Diinputkan!';
                                                     if (count($monitoring) !== 0) {
                                                         $presensi = $monitoring->first()->kehadiranKegiatan->first()->status;
                                                         if (\Carbon\Carbon::now()->translatedFormat('H:i') > substr($j->waktu_berakhir, 0, -3)) {
@@ -94,7 +95,6 @@
                                                     } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
                                                         $status = 'Belum Dimulai';
                                                     } else {
-                                                        $presensi = 'Presensi Belum Diinputkan!';
                                                         $status = 'Tidak Terlaksana';
                                                     }
                                                 }
