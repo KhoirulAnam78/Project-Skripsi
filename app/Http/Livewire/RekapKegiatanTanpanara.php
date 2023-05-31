@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class RekapKegiatanTanpanara extends Component
 {
     public $filterKelas;
-    public $tanggalAwal, $tanggalAkhir;
+    public $tanggalAwal, $tanggalAkhir, $kegiatan_id;
     public $search = '';
     public $siswa;
     use WithPagination;
@@ -28,7 +28,9 @@ class RekapKegiatanTanpanara extends Component
         $this->filterTahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
         $this->kelas = TahunAkademik::find($this->filterTahunAkademik)->kelas;
         $this->kegiatan = $kegiatan;
+        $this->kegiatan_id = $kegiatan->id;
         $this->angkatan_id = $this->kelas->first()->angkatan_id;
+        // dd($this->kelas);
         $this->tanggalAkhir = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
         $this->tanggalAwal =  \Carbon\Carbon::now()->subDays(6)->translatedFormat('Y-m-d');
         $this->filterKelas = $this->kelas->first()->id;
@@ -57,6 +59,7 @@ class RekapKegiatanTanpanara extends Component
     {
         //Ambil monitoring pada tahun akademik ini
         $monitoring = MonitoringKegiatan::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan->id)->whereRelation('jadwalKegiatan', 'angkatan_id', $this->angkatan_id)->whereRelation('jadwalKegiatan', 'tahun_akademik_id', $this->filterTahunAkademik)->get();
+
         $this->monitoringArray = [];
         if (count($monitoring) !== 0) {
             foreach ($monitoring as $m) {
@@ -79,6 +82,7 @@ class RekapKegiatanTanpanara extends Component
 
     public function updatingFilterKelas()
     {
+        $this->angkatan_id = Kelas::find($this->filterKelas)->angkatan_id;
         $this->resetPage();
     }
 }

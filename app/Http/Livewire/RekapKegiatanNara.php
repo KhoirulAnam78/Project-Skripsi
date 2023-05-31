@@ -27,6 +27,7 @@ class RekapKegiatanNara extends Component
         $this->filterTahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
         $this->kelas = TahunAkademik::find($this->filterTahunAkademik)->kelas;
         $this->kegiatan = $kegiatan;
+        $this->kegiatan_id = $kegiatan->id;
         $this->angkatan_id = $this->kelas->first()->angkatan_id;
         $this->tanggalAkhir = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
         $this->tanggalAwal =  \Carbon\Carbon::now()->subDays(6)->translatedFormat('Y-m-d');
@@ -56,13 +57,13 @@ class RekapKegiatanNara extends Component
     {
         //Ambil monitoring pada tahun akademik ini
         $monitoring = MonitoringKegnas::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan_id)->whereRelation('jadwalKegiatan', 'angkatan_id', $this->angkatan_id)->whereRelation('jadwalKegiatan', 'tahun_akademik_id', $this->filterTahunAkademik)->get();
+
         $this->monitoringArray = [];
         if (count($monitoring) !== 0) {
             foreach ($monitoring as $m) {
                 array_push($this->monitoringArray, $m->id);
             }
         }
-        // dd($monitoring);
         //kemudian ambil setiap siswa dengan kehadiran kegiatan dimana monitoring id nya terdaftar
         $presensi = Siswa::where('nama', 'like', '%' . $this->search . '%')->whereRelation('kelas', 'kelas_id', $this->filterKelas)->with(['kehadiranKegnas' => function ($query) {
             $query->whereIn('monitoring_kegnas_id', $this->monitoringArray);
