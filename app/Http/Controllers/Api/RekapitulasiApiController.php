@@ -117,7 +117,7 @@ class RekapitulasiApiController extends Controller
     }])->first();
     $jadwalId = [];
     foreach ($jadwal->kelas->first()->jadwalPelajarans as $value) {
-      array_push($tjadwalId, $value->id);
+      array_push($jadwalId, $value->id);
     }
     return Excel::download(new RekapPembelajaranSiswa($jadwalId, $tanggalAwal, $tanggalAkhir, auth('sanctum')->user()->siswa->id), 'Rekapitulasi pembelajaran siswa ' . $tanggalAwal . ' sampai ' . $tanggalAkhir . '.xlsx');
   }
