@@ -88,7 +88,7 @@ class RekapitulasiApiController extends Controller
     if ($kegiatan->narasumber == 1) {
       return Excel::download(new DaftarKegnasExport($angkatan_id, $jml_siswa, $tanggalAwal, $tanggalAkhir, $kegiatan_id, $tahunAkademik), 'Daftar Pertemuan Kegiatan ' . $namaKegiatan . ' Angkatan ' . $angkatan . ' ' . $tanggalAwal . ' sampai ' . $tanggalAkhir . '.xlsx');
     } else {
-      return Excel::download(new DaftarKegiatanExport($angkatan_id, $jml_siswa, $tanggalAwal, $tanggalAkhir, $kegiatan->id, $tahunAkademik), 'Daftar Pertemuan Kegiatan ' . $kegiatan . ' Angkatan ' . $angkatan . ' ' . $tanggalAwal . ' sampai ' . $tanggalAkhir . '.xlsx');
+      return Excel::download(new DaftarKegiatanExport($angkatan_id, $jml_siswa, $tanggalAwal, $tanggalAkhir, $kegiatan->id, $tahunAkademik), 'Daftar Pertemuan Kegiatan ' . $namaKegiatan . ' Angkatan ' . $angkatan . ' ' . $tanggalAwal . ' sampai ' . $tanggalAkhir . '.xlsx');
     }
   }
 
