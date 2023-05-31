@@ -83,7 +83,7 @@ class AuthController extends Controller
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
                 'nama' => $user->waliAsrama->nama,
-                'angkatan' => $angkatan->nama
+                'angkatan' => ['id' => $angkatan->id, 'nama' => $angkatan->nama]
             ]);
         } else {
             return response()->json([
