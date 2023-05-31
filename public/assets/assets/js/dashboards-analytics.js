@@ -214,7 +214,7 @@
         }
       ],
       chart: {
-        height: 215,
+        // height: 215,
         parentHeightOffset: 0,
         parentWidthOffset: 0,
         toolbar: {
@@ -314,7 +314,7 @@
         }
       ],
       chart: {
-        height: 215,
+        // height: 215,
         parentHeightOffset: 0,
         parentWidthOffset: 0,
         toolbar: {
