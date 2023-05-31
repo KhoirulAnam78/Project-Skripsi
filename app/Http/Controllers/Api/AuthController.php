@@ -72,13 +72,18 @@ class AuthController extends Controller
                 'jadwalPiket' => $jadwalPiket
             ]);
         } else if ($user->role === 'wali_asrama') {
+            if ($user->waliAsrama->angkatans->where('status', 'belum lulus')->first()) {
+                $angkatan = $user->waliAsrama->angkatans->where('status', 'belum lulus')->first();
+            } else {
+                $angkatan = null;
+            }
             return response()->json([
                 'message' => 'Login success',
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
                 'nama' => $user->waliAsrama->nama,
-                'angkatan' => $user->waliAsrama->angkatans->where('status', 'belum lulus')->first()->nama
+                'angkatan' => $angkatan->nama
             ]);
         } else {
             return response()->json([
