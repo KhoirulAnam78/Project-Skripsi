@@ -47,21 +47,23 @@ class RekapitulasiApiController extends Controller
     ]);
   }
 
-  public function getRekapGuru($data, $kelas_id, $mapel_id)
+  public function getDaftarPertemuanGuru()
   {
-    if ($data === 'Daftar Pertemuan') {
-      $namaKelas = Kelas::find($kelas_id)->nama;
-      $namaMapel = MataPelajaran::find($mapel_id)->nama;
-      $jml_siswa = Kelas::select('id')->find($kelas_id)->siswas->count();
-      return Excel::download(new DaftarPertemuanExport($kelas_id, $mapel_id, $jml_siswa), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . '.xlsx');
-    } else {
-      $kelasAktif = [];
-      $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->all();
-      foreach ($data as $d) {
-        array_push($kelasAktif, $d->id);
-      }
-      return Excel::download(new RekapGuruExport($kelasAktif, $kelas_id, $mapel_id), 'Rekap Guru ' . 'Tanggal ' . $kelas_id . ' Sampai ' . $mapel_id . '.xlsx');
+    // $namaKelas = Kelas::find($kelas_id)->nama;
+    // $namaMapel = MataPelajaran::find($mapel_id)->nama;
+    // $jml_siswa = Kelas::select('id')->find($kelas_id)->siswas->count();
+    // return Excel::download(new DaftarPertemuanExport($kelas_id, $mapel_id, $jml_siswa), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . '.xlsx');
+
+  }
+
+  public function getKeterlaksanaanGuru($tanggalAwal, $tanggalAkhir)
+  {
+    $kelasAktif = [];
+    $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->all();
+    foreach ($data as $d) {
+      array_push($kelasAktif, $d->id);
     }
+    return Excel::download(new RekapGuruExport($kelasAktif, $tanggalAwal, $tanggalAkhir), 'Rekap Guru ' . 'Tanggal ' . $tanggalAwal . ' Sampai ' . $tanggalAkhir . '.xlsx');
   }
 
   public function getDaftarKegiatan($kegiatan_id, $angkatan_id, $tanggalAwal, $tanggalAkhir)
