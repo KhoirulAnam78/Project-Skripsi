@@ -96,11 +96,13 @@ class RekapitulasiApiController extends Controller
   {
     $kegiatan = Kegiatan::find($kegiatan_id);
     $namaKelas = Kelas::select('nama')->where('id', $kelas_id)->first()->nama;
+
+    $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
     $namaKegiatan = $kegiatan->nama;
     if ($kegiatan->narasumber == 1) {
-      return Excel::download(new RekapKegnasExport($kelas_id, $tanggalAwal, $tanggalAkhir, $kegiatan_id), 'Rekap Kehadiran ' . $namaKegiatan . ' ' . $namaKelas . ' ' . $tanggalAwal . ' - ' . $tanggalAkhir . '.xlsx');
+      return Excel::download(new RekapKegnasExport($kelas_id, $tanggalAwal, $tanggalAkhir, $kegiatan_id, $tahunAkademik), 'Rekap Kehadiran ' . $namaKegiatan . ' ' . $namaKelas . ' ' . $tanggalAwal . ' - ' . $tanggalAkhir . '.xlsx');
     } else {
-      return Excel::download(new RekapKegiatanExport($kelas_id, $tanggalAwal, $tanggalAkhir, $kegiatan_id), 'Rekap Kehadiran ' . $namaKegiatan . ' ' . $namaKelas . ' ' . $tanggalAwal . ' - ' . $tanggalAkhir . '.xlsx');
+      return Excel::download(new RekapKegiatanExport($kelas_id, $tanggalAwal, $tanggalAkhir, $kegiatan_id, $tahunAkademik), 'Rekap Kehadiran ' . $namaKegiatan . ' ' . $namaKelas . ' ' . $tanggalAwal . ' - ' . $tanggalAkhir . '.xlsx');
     }
   }
 }

@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\MonitoringKegiatan;
 use App\Models\MonitoringPembelajaran;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -24,12 +25,14 @@ class RekapKegiatanExport extends DefaultValueBinder implements FromCollection, 
     public $tanggalAwal;
     public $tanggalAkhir;
     public $kegiatan_id;
-    public function __construct($kelas_id, $tanggalAwal, $tanggalAkhir, $kegiatan_id)
+    public $monitoringArray, $tahunAkademik;
+    public function __construct($kelas_id, $tanggalAwal, $tanggalAkhir, $kegiatan_id, $tahunAkademik)
     {
         $this->kelas_id = $kelas_id;
         $this->tanggalAwal = $tanggalAwal;
         $this->tanggalAkhir = $tanggalAkhir;
         $this->kegiatan_id = $kegiatan_id;
+        $this->tahunAkademik = $tahunAkademik;
     }
     public function columnFormats(): array
     {
@@ -59,10 +62,19 @@ class RekapKegiatanExport extends DefaultValueBinder implements FromCollection, 
 
     public function collection()
     {
-        $siswa =  Siswa::whereRelation('kelas', 'kelas_id', $this->kelas_id)->with(['kehadiranKegiatan' => function ($query) {
-            $query->where('kegiatan_id', $this->kegiatan_id)->whereRelation('monitoringKegiatan', 'tanggal', '>=', $this->tanggalAwal)->whereRelation('monitoringKegiatan', 'tanggal', '<=', $this->tanggalAkhir);
+        $angkatan_id = Kelas::find($this->kelas_id)->angkatan_id;
+
+        $monitoring = MonitoringKegiatan::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->whereRelation('jadwalKegiatan', 'kegiatan_id', $this->kegiatan_id)->whereRelation('jadwalKegiatan', 'angkatan_id', $angkatan_id)->whereRelation('jadwalKegiatan', 'tahun_akademik_id', $this->tahunAkademik)->get();
+        $this->monitoringArray = [];
+        if (count($monitoring) !== 0) {
+            foreach ($monitoring as $m) {
+                array_push($this->monitoringArray, $m->id);
+            }
+        }
+        $presensi = Siswa::whereRelation('kelas', 'kelas_id', $this->kelas_id)->with(['kehadiranKegiatan' => function ($query) {
+            $query->whereIn('monitoring_kegiatan_id', $this->monitoringArray);;
         }])->orderBy('nama', 'asc')->get();
-        return $siswa;
+        return $presensi;
     }
 
     public function map($siswa): array

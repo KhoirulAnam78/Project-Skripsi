@@ -37,7 +37,7 @@ class RekapKegiatanNara extends Component
     {
         // dd('Export');
         $namaKelas = Kelas::select('nama')->where('id', $this->filterKelas)->first()->nama;
-        return Excel::download(new RekapKegnasExport($this->filterKelas, $this->tanggalAwal, $this->tanggalAkhir, $this->kegiatan->id), 'Rekap Kehadiran ' . $this->kegiatan->nama . ' ' . $namaKelas . ' ' . $this->tanggalAwal . ' - ' . $this->tanggalAkhir . '.xlsx');
+        return Excel::download(new RekapKegnasExport($this->filterKelas, $this->tanggalAwal, $this->tanggalAkhir, $this->kegiatan->id, $this->filterTahunAkademik), 'Rekap Kehadiran ' . $this->kegiatan->nama . ' ' . $namaKelas . ' ' . $this->tanggalAwal . ' - ' . $this->tanggalAkhir . '.xlsx');
     }
 
     public function updatedFilterTahunAkademik()

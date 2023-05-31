@@ -38,7 +38,7 @@ class RekapKegiatanTanpanara extends Component
     {
         // dd('Export');
         $namaKelas = Kelas::select('nama')->where('id', $this->filterKelas)->first()->nama;
-        return Excel::download(new RekapKegiatanExport($this->filterKelas, $this->tanggalAwal, $this->tanggalAkhir, $this->kegiatan->id), 'Rekap Kehadiran ' . $this->kegiatan->nama . ' ' . $namaKelas . ' ' . $this->tanggalAwal . ' - ' . $this->tanggalAkhir . '.xlsx');
+        return Excel::download(new RekapKegiatanExport($this->filterKelas, $this->tanggalAwal, $this->tanggalAkhir, $this->kegiatan->id, $this->filterTahunAkademik), 'Rekap Kehadiran ' . $this->kegiatan->nama . ' ' . $namaKelas . ' ' . $this->tanggalAwal . ' - ' . $this->tanggalAkhir . '.xlsx');
     }
 
     public function updatedFilterTahunAkademik()
@@ -63,7 +63,6 @@ class RekapKegiatanTanpanara extends Component
                 array_push($this->monitoringArray, $m->id);
             }
         }
-
         $presensi = Siswa::where('nama', 'like', '%' . $this->search . '%')->whereRelation('kelas', 'kelas_id', $this->filterKelas)->with(['kehadiranKegiatan' => function ($query) {
             $query->whereIn('monitoring_kegiatan_id', $this->monitoringArray);;
         }])->orderBy('nama', 'asc')->paginate(10);
