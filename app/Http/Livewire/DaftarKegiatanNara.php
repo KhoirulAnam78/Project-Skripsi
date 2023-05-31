@@ -52,7 +52,7 @@ class DaftarKegiatanNara extends Component
             $this->filterAngkatan = Angkatan::select('id')->first()->id;
         }
         $this->jml_siswa = 0;
-        $kelas = Kelas::where('angkatan_id', $this->filterAngkatan)->select('id')->get()->all();
+        $kelas = Kelas::where('angkatan_id', $this->filterAngkatan)->where('tahun_akademik_id', $this->filterTahunAkademik)->select('id')->get();
         foreach ($kelas as $k) {
             $this->jml_siswa = $this->jml_siswa + $k->siswas->count();
         }
@@ -63,7 +63,7 @@ class DaftarKegiatanNara extends Component
     public function updatedFilterangkatan()
     {
         $this->jml_siswa = 0;
-        $kelas = Kelas::where('angkatan_id', $this->filterAngkatan)->select('id')->get()->all();
+        $kelas = Kelas::where('angkatan_id', $this->filterAngkatan)->where('tahun_akademik_id', $this->filterTahunAkademik)->select('id')->get();
         foreach ($kelas as $k) {
             $this->jml_siswa = $this->jml_siswa + $k->siswas->count();
         }

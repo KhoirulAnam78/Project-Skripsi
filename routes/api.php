@@ -90,5 +90,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get-angkatan', [RekapitulasiApiController::class, 'getAngkatan']);
     //Get Rekap Daftar Pertemuan dan Keterlaksanaan
     Route::get('/get-rekap-guru/{data}/{kelas_id}/{mapel_id}', [RekapitulasiApiController::class, 'getRekapGuru']);
-    //
+    //Rekap Daftar Pertemuan Kegiatan
+    Route::get('/get-daftar-kegiatan/{kegiatan_id}/{angkatan_id}/{tanggalAwal}/{tanggalAkhir}', [RekapitulasiApiController::class, 'getDaftarKegiatan']);
+    //Kehadiran Pembelajaran
+    Route::get('/get-rekap-kehadiran-pembelajaran/{kelas_id}/{tanggalAwal}/{tanggalAkhir}', [RekapitulasiApiController::class, 'getRekapKehadiranPembelajaran']);
 });

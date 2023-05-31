@@ -12,8 +12,11 @@ use App\Models\JadwalKegiatan;
 use App\Models\JadwalPelajaran;
 use App\Models\JadwalPengganti;
 use App\Exports\RekapGuruExport;
+use App\Exports\RekapSiswaExport;
+use App\Exports\DaftarKegnasExport;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DaftarKegiatanExport;
 use App\Models\KehadiranPembelajaran;
 use App\Exports\DaftarPertemuanExport;
 
@@ -58,6 +61,46 @@ class PimpinanApiController extends Controller
         array_push($kelasAktif, $d->id);
       }
       return Excel::download(new RekapGuruExport($kelasAktif, $kelas_id, $mapel_id), 'Rekap Guru ' . 'Tanggal ' . $kelas_id . ' Sampai ' . $mapel_id . '.xlsx');
+    }
+  }
+
+  public function getDaftarKegiatan($kegiatan_id, $angkatan_id, $tanggalAwal, $tanggalAkhir)
+  {
+    $kegiatan = Kegiatan::find($kegiatan_id);
+    $namaKegiatan = $kegiatan->nama;
+    $angkatan = Angkatan::find($angkatan_id)->nama;
+    $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
+    $jml_siswa = 0;
+    $kelas = Kelas::where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $tahunAkademik)->select('id')->get();
+    foreach ($kelas as $k) {
+      $jml_siswa = $jml_siswa + $k->siswas->count();
+    }
+    if ($kegiatan->narasumber == 1) {
+      return Excel::download(new DaftarKegnasExport($angkatan_id, $jml_siswa, $tanggalAwal, $tanggalAkhir, $kegiatan_id, $tahunAkademik), 'Daftar Pertemuan Kegiatan ' . $namaKegiatan . ' Angkatan ' . $angkatan . ' ' . $tanggalAwal . ' sampai ' . $tanggalAkhir . '.xlsx');
+    } else {
+      return Excel::download(new DaftarKegiatanExport($angkatan_id, $jml_siswa, $tanggalAwal, $tanggalAkhir, $kegiatan->id, $tahunAkademik), 'Daftar Pertemuan Kegiatan ' . $kegiatan . ' Angkatan ' . $angkatan . ' ' . $tanggalAwal . ' sampai ' . $tanggalAkhir . '.xlsx');
+    }
+  }
+
+  public function getRekapKehadiranPembelajaran($kelas_id, $tanggalAwal, $tanggalAkhir)
+  {
+    $namaKelas = Kelas::select('nama')->where('id', $kelas_id)->first()->nama;
+    return Excel::download(new RekapSiswaExport($kelas_id, $tanggalAwal, $tanggalAkhir), 'Rekap Kehadiran Siswa ' . $namaKelas . 'Tanggal ' . $tanggalAwal . ' Sampai ' . $tanggalAkhir . '.xlsx');
+  }
+
+  public function getRekapKehadiranKegiatan($kegiatan_id, $angkatan_id, $tanggalAwal, $tanggalAkhir)
+  {
+    $kegiatan = Kegiatan::find($kegiatan_id);
+    $namaKegiatan = $kegiatan->nama;
+    $angkatan = Angkatan::find($angkatan_id)->nama;
+    $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
+    $jml_siswa = 0;
+    $kelas = Kelas::where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $tahunAkademik)->select('id')->get();
+    foreach ($kelas as $k) {
+      $jml_siswa = $jml_siswa + $k->siswas->count();
+    }
+    if ($kegiatan->narasumber == 1) {
+    } else {
     }
   }
 }
