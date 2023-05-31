@@ -86,9 +86,15 @@ class GuruApiController extends Controller
   public function getMapel($kelas_id)
   {
     $arrayMapel = [];
-    $jadwal = JadwalPelajaran::where('guru_id', auth('sanctum')->user()->guru->id)->where('kelas_id', $kelas_id)->with(['mataPelajaran' => function ($query) {
-      $query->select('id');
-    }])->select('id', 'guru_id', 'mata_pelajaran_id')->get();
+    if (auth('sacntum')->user->role == 'guru') {
+      $jadwal = JadwalPelajaran::where('guru_id', auth('sanctum')->user()->guru->id)->where('kelas_id', $kelas_id)->with(['mataPelajaran' => function ($query) {
+        $query->select('id');
+      }])->select('id', 'guru_id', 'mata_pelajaran_id')->get();
+    } else {
+      $jadwal = JadwalPelajaran::where('kelas_id', $kelas_id)->with(['mataPelajaran' => function ($query) {
+        $query->select('id');
+      }])->select('id', 'guru_id', 'mata_pelajaran_id')->get();
+    }
     //Ambil Id Mata Pelajaran dari setiap jadwal
     foreach ($jadwal as $d) {
       array_push($arrayMapel, $d->mataPelajaran->id);

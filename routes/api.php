@@ -67,10 +67,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/input-presensi-kegiatan-narasumber', [WaliAsramaApiController::class, 'presensiNarasumber']);
     Route::get('/get-narasumber', [WaliAsramaApiController::class, 'getNarasumber']);
 
-    //##AMBIL REKAP GURU##
-    //ambil mata pelajaran berdasarkan kelas yang dipilih
-    Route::get('/get-mapel/{kelas_id}', [GuruApiController::class, 'getMapel']);
-
     #PIMPINAN
     //Dashboard pimpinan
     //get data pembelajaran selama satu minggu
@@ -92,6 +88,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get-keterlaksanaan-guru/{tanggalAwal}/{tanggalAkhir}', [RekapitulasiApiController::class, 'getKeterlaksanaanGuru']);
 
     Route::get('/get-daftar-pertemuan-guru/{kelas_id}/{mapel_id}/{tanggalAwal}/{tanggalAkhir}', [RekapitulasiApiController::class, 'getDaftarPertemuanGuru']);
+
+    //ambil mata pelajaran berdasarkan kelas yang dipilih
+    Route::get('/get-mapel/{kelas_id}', [GuruApiController::class, 'getMapel']);
+
 
 
     //Rekap Daftar Pertemuan Kegiatan
