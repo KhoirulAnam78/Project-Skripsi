@@ -38,7 +38,7 @@ class RekapitulasiApiController extends Controller
   {
     return response()->json([
       'message' => 'Fetch data succes',
-      'kegiatan' => Angkatan::where('status', 'belum lulus')->get()
+      'angkatan' => Angkatan::where('status', 'belum lulus')->get()
     ]);
   }
 
