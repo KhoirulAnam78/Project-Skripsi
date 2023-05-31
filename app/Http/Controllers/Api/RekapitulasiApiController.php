@@ -20,7 +20,7 @@ use App\Exports\DaftarKegiatanExport;
 use App\Models\KehadiranPembelajaran;
 use App\Exports\DaftarPertemuanExport;
 
-class PimpinanApiController extends Controller
+class RekapitulasiApiController extends Controller
 {
   public function getKegiatan()
   {
