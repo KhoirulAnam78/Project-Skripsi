@@ -214,7 +214,7 @@
         }
       ],
       chart: {
-        // height: 215,
+        height: 215,
         parentHeightOffset: 0,
         parentWidthOffset: 0,
         toolbar: {
@@ -295,7 +295,7 @@
           show: false
         },
         min: 0,
-        max: 20,
+        max: 60,
         tickAmount: 4
       }
     };
@@ -314,7 +314,7 @@
         }
       ],
       chart: {
-        // height: 215,
+        height: 215,
         parentHeightOffset: 0,
         parentWidthOffset: 0,
         toolbar: {
@@ -394,7 +394,7 @@
           show: false
         },
         min: 0,
-        max: 20,
+        max: 60,
         tickAmount: 4
       }
     };
