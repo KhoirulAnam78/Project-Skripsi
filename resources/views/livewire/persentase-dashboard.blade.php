@@ -52,7 +52,7 @@
     </div>
     <div class="row">
         <!-- Order Statistics -->
-        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8 order-0 mb-4">
+        <div class="col-sm-12 col-md-7 col-lg-7 col-xl-7 order-0 mb-4">
             <div class="card h-100">
                 <div class="card-header d-flex align-items-center justify-content-between pb-0">
                     <div class="card-title mb-0">
@@ -71,8 +71,7 @@
                     <ul class="p-0 m-0">
                         <li class="d-flex mb-2 pb-1">
                             <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-primary"><i
-                                        class="bx bx-mobile-alt"></i></span>
+                                <span class="avatar-initial rounded bg-label-success"><i class='bx bx-check'></i></span>
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                 <div class="me-2">
@@ -87,8 +86,7 @@
                         </li>
                         <li class="d-flex mb-2 pb-1">
                             <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-success"><i
-                                        class="bx bx-closet"></i></span>
+                                <span class="avatar-initial rounded bg-label-danger"><i class="bx bx-x"></i></span>
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                 <div class="me-2">
@@ -108,31 +106,16 @@
         <!--/ Order Statistics -->
 
         <!-- Transactions -->
-        <div class="col-sm-12 col-md-4 col-lg-4 order-2 mb-4">
+        <div class="col-sm-12 col-md-5 col-lg-5 order-2 mb-4">
             <div class="card h-100">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="card-title m-0 me-2">Jumlah Ketidakhadiran</h5>
+                    <h5 class="card-title m-0 me-2">Jumlah Ketidakhadiran Pembelajaran</h5>
                 </div>
                 <div class="card-body">
                     <ul class="p-0 m-0">
-                        {{-- <li class="d-flex mb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/paypal.png"
-                                    alt="User" class="rounded" />
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Hadir</h6>
-                                </div>
-                                <div class="user-progress d-flex align-items-center gap-1">
-                                    <h6 class="mb-0">{{ $presensi[0]['hadir'] }}</h6>
-                                </div>
-                            </div>
-                        </li> --}}
                         <li class="d-flex pb-2">
                             <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/wallet.png"
-                                    alt="User" class="rounded" />
+                                <span class="avatar-initial rounded bg-label-info"><i class='bx bx-group'></i></span>
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                 <div class="me-2">
@@ -145,8 +128,7 @@
                         </li>
                         <li class="d-flex pb-2">
                             <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/chart.png" alt="User"
-                                    class="rounded" />
+                                <span class="avatar-initial rounded bg-label-warning"><i class='bx bx-group'></i></span>
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                 <div class="me-2">
@@ -159,8 +141,7 @@
                         </li>
                         <li class="d-flex pb-2">
                             <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/cc-success.png"
-                                    alt="User" class="rounded" />
+                                <span class="avatar-initial rounded bg-label-danger"><i class='bx bx-group'></i></span>
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                 <div class="me-2">
@@ -173,8 +154,8 @@
                         </li>
                         <li class="d-flex pb-2">
                             <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/wallet.png"
-                                    alt="User" class="rounded" />
+                                <span class="avatar-initial rounded bg-label-success"><i
+                                        class='bx bx-group'></i></span>
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                 <div class="me-2">
@@ -187,8 +168,8 @@
                         </li>
                         <li class="d-flex pb-2">
                             <div class="avatar flex-shrink-0 me-3">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/cc-warning.png"
-                                    alt="User" class="rounded" />
+                                <span class="avatar-initial rounded bg-label-primary"><i
+                                        class='bx bx-group'></i></span>
                             </div>
                             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                 <div class="me-2">
@@ -204,6 +185,117 @@
             </div>
         </div>
         <!--/ Transactions -->
+
+
+        <!-- Transactions -->
+        <div class="col-sm-12 col-md-6 col-lg-6 order-2 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="card-title m-0 me-2">Jumlah Pelaksanaan Kegiatan</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="p-0 m-0">
+                        @foreach ($jumlahKegiatan as $j)
+                            <li class="d-flex pb-2">
+                                <div class="avatar flex-shrink-0 me-3">
+                                    <span class="avatar-initial rounded bg-label-primary"><i
+                                            class='bx bxs-time-five'></i></span>
+                                </div>
+                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                    <div class="me-2">
+                                        <h6 class="mb-0">{{ $j['kegiatan'] }}</h6>
+                                    </div>
+                                    <div class="user-progress d-flex align-items-center gap-1">
+                                        <h6 class="mb-0">{{ $j['jml'] }}</h6>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 order-2 mb-4">
+            <div class="card h-100">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="card-title m-0 me-2">Jumlah Ketidakhadiran Kegiatan</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="p-0 m-0">
+                        <li class="d-flex pb-2">
+                            <div class="avatar flex-shrink-0 me-3">
+                                <span class="avatar-initial rounded bg-label-info"><i class='bx bx-group'></i></span>
+                            </div>
+                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                <div class="me-2">
+                                    <h6 class="mb-0">Izin</h6>
+                                </div>
+                                <div class="user-progress d-flex align-items-center gap-1">
+                                    <h6 class="mb-0">{{ $presensiKegiatan[0]['izin'] }}</h6>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="d-flex pb-2">
+                            <div class="avatar flex-shrink-0 me-3">
+                                <span class="avatar-initial rounded bg-label-warning"><i
+                                        class='bx bx-group'></i></span>
+                            </div>
+                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                <div class="me-2">
+                                    <h6 class="mb-0">Sakit</h6>
+                                </div>
+                                <div class="user-progress d-flex align-items-center gap-1">
+                                    <h6 class="mb-0">{{ $presensiKegiatan[0]['sakit'] }}</h6>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="d-flex pb-2">
+                            <div class="avatar flex-shrink-0 me-3">
+                                <span class="avatar-initial rounded bg-label-danger"><i
+                                        class='bx bx-group'></i></span>
+                            </div>
+                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                <div class="me-2">
+                                    <h6 class="mb-0">Alfa</h6>
+                                </div>
+                                <div class="user-progress d-flex align-items-center gap-1">
+                                    <h6 class="mb-0">{{ $presensiKegiatan[0]['alfa'] }}</h6>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="d-flex pb-2">
+                            <div class="avatar flex-shrink-0 me-3">
+                                <span class="avatar-initial rounded bg-label-success"><i
+                                        class='bx bx-group'></i></span>
+                            </div>
+                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                <div class="me-2">
+                                    <h6 class="mb-0">Dinas Dalam</h6>
+                                </div>
+                                <div class="user-progress d-flex align-items-center gap-1">
+                                    <h6 class="mb-0">{{ $presensiKegiatan[0]['dd'] }}</h6>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="d-flex pb-2">
+                            <div class="avatar flex-shrink-0 me-3">
+                                <span class="avatar-initial rounded bg-label-primary"><i
+                                        class='bx bx-group'></i></span>
+                            </div>
+                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                <div class="me-2">
+                                    <h6 class="mb-0">Dinas Luar</h6>
+                                </div>
+                                <div class="user-progress d-flex align-items-center gap-1">
+                                    <h6 class="mb-0">{{ $presensiKegiatan[0]['dl'] }}</h6>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     {{-- <script>

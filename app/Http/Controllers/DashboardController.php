@@ -32,6 +32,7 @@ class DashboardController extends Controller
                 }])->get();
             }])->first();
 
+
             $data = Siswa::where('user_id', auth('sanctum')->user()->id)->select('id', 'user_id')->with(['kelas' => function ($query) {
                 $query->whereRelation('tahunAkademik', 'status', 'aktif')->with(['angkatan' => function ($query) {
                     $query->with(['jadwalKegiatans' => function ($query) {
@@ -64,10 +65,21 @@ class DashboardController extends Controller
                 }]);
             }])->get();
             // dd($data[0]->kelas->first()->angkatan->jadwalKegiatans);
+            if ($jadwal->kelas->first()) {
+                $jadwalPelajaran = $jadwal->kelas->first()->jadwalPelajarans;
+            } else {
+                $jadwalPelajaran = [];
+            }
+
+            if ($data[0]->kelas->first()) {
+                $jadwalKegiatan = $data[0]->kelas->first()->angkatan->jadwalKegiatans;
+            } else {
+                $jadwalKegiatan = [];
+            }
             return view('pages.siswa.dashboard', [
                 'title' => 'Dashboard',
-                'jadwal' => $jadwal->kelas->first()->jadwalPelajarans,
-                'jadwalKegiatan' => $data[0]->kelas->first()->angkatan->jadwalKegiatans
+                'jadwal' => $jadwalPelajaran,
+                'jadwalKegiatan' => $jadwalKegiatan
             ]);
         } else if (Auth::user()->role === 'admin') {
             $kelasAktif = TahunAkademik::where('status', 'aktif')->select('id')->first();
@@ -76,11 +88,13 @@ class DashboardController extends Controller
             } else {
                 $kelas = 0;
             }
+
             return view('pages.admin.dashboard', [
                 'title' => 'Dashboard',
                 'siswaAktif' => Siswa::where('status', 'belum lulus')->select('id')->count(),
                 'guruAktif' => Guru::where('status', 'aktif')->select('id')->count(),
                 'kelasAktif' => $kelas,
+                'waliAsrama' => WaliAsrama::where('status', 'aktif')->select('id')->count()
             ]);
         } else if (Auth::user()->role === 'guru') {
             $kelasAktif = [];

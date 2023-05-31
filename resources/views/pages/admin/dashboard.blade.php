@@ -47,8 +47,8 @@
                     <div class="card-body">
                         <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/chart-success.png"
-                                    alt="chart success" class="rounded" />
+                                <i class='bx bxs-chalkboard' style="font-size: 40px;"></i>
+                                {{-- <i class='bx bx-desktop' ></i> --}}
                             </div>
                         </div>
                         <span class="fw-semibold d-block mb-1">Guru Aktif</span>
@@ -61,8 +61,7 @@
                     <div class="card-body">
                         <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/wallet-info.png"
-                                    alt="Credit Card" class="rounded" />
+                                <i class='bx bxs-user' style="font-size: 40px;"></i>
                             </div>
                         </div>
                         <span class="fw-semibold d-block mb-2">Siswa Aktif</span>
@@ -75,12 +74,26 @@
                     <div class="card-body">
                         <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-                                <img src="{{ url('') }}/assets/assets/img/icons/unicons/paypal.png" alt="Credit Card"
-                                    class="rounded" />
+                                <i class='bx bxs-group' style="font-size:40px"></i>
                             </div>
                         </div>
                         <span class="fw-semibold d-block mb-2">Kelas Aktif</span>
                         <h3 class="card-title text-nowrap mb-2">{{ $kelasAktif }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title d-flex align-items-start justify-content-between">
+                            <div class="avatar flex-shrink-0">
+                                <i class='bx bxs-user-detail' style="font-size: 40px"></i>
+                            </div>
+                        </div>
+                        <span class="fw-semibold
+                                    d-block mb-2">Wali Asrama Aktif</span>
+                        <h3 class="card-title text-nowrap mb-2">{{ $waliAsrama }}</h3>
                     </div>
                 </div>
             </div>
@@ -219,7 +232,7 @@
                 <div class="card h-100">
                     <div class="card-header d-flex align-items-center justify-content-between pb-0">
                         <div class="card-title mb-0">
-                            <h5 class="m-0 me-2">Grafik Siswa Tidak Hadir</h5>
+                            <h5 class="m-0 me-2">Grafik Siswa Tidak Hadir Dalam Pembelajaran</h5>
                             <small class="text-muted">(Sakit,Izin,Alfa,Dinas Dalam, Dinas Luar)</small>
                         </div>
                     </div>
