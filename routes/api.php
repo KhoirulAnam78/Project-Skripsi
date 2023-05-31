@@ -92,7 +92,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //ambil mata pelajaran berdasarkan kelas yang dipilih
     Route::get('/get-mapel/{kelas_id}', [GuruApiController::class, 'getMapel']);
     //Kehadiran Pembelajaran
-    Route::get('/get-rekap-kehadiran-pembelajaran/{kelas_id}/{tanggalAwal}/{tanggalAkir}', [RekapitulasiApiController::class, 'getRekapKehadiranPembelajaran']);
+    Route::get('/get-rekap-kehadiran-pembelajaran/{kelas_id}/{tanggalAwal}/{tanggalAkhir}', [RekapitulasiApiController::class, 'getRekapKehadiranPembelajaran']);
 
 
 
