@@ -268,7 +268,7 @@ class ValidasiPembelajaran extends Component
                 'status_validasi' => 'tidak terlaksana',
                 'jadwal_pelajaran_id' => $this->jadwal_id,
                 'guru_piket_id' => $guruPiketId,
-                'keterangan' => $this->keterangan
+                'keterangan' => null
             ]);
             foreach ($this->presensi as $key => $value) {
                 KehadiranPembelajaran::create([
