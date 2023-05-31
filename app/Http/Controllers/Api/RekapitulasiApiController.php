@@ -87,7 +87,7 @@ class RekapitulasiApiController extends Controller
   public function getRekapKehadiranPembelajaran($kelas_id, $tanggalAwal, $tanggalAkhir)
   {
     $namaKelas = Kelas::select('nama')->where('id', $kelas_id)->first()->nama;
-    return Excel::download(new RekapSiswaExport($kelas_id, $tanggalAwal, $tanggalAkhir), 'Rekap Kehadiran Siswa ' . $namaKelas . 'Tanggal ' . $tanggalAwal . ' Sampai ' . $tanggalAkhir . '.xlsx');
+    return Excel::download(new RekapSiswaExport($kelas_id, $tanggalAwal, $tanggalAkhir), 'Rekap Kehadiran Siswa ' . $namaKelas . ' Tanggal ' . $tanggalAwal . ' Sampai ' . $tanggalAkhir . '.xlsx');
   }
 
   public function getRekapKehadiranKegiatan($kegiatan_id, $angkatan_id, $tanggalAwal, $tanggalAkhir)
