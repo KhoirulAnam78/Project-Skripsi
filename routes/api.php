@@ -98,4 +98,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get-daftar-kegiatan/{kegiatan_id}/{angkatan_id}/{tanggalAwal}/{tanggalAkhir}', [RekapitulasiApiController::class, 'getDaftarKegiatan']);
     //Rekap Kehadiran Kegiatan
     Route::get('/get-rekap-kehadiran-kegiatan/{kegiatan_id}/{kelas_id}/{tanggalAwal}/{tanggalAkhir}', [RekapitulasiApiController::class, 'getRekapKehadiranKegiatan']);
+
+    #REKAP WALI MURID
+    Route::get('/get-rekap-pembelajaran-siswa/{tanggalAwal}/{tanggalAkhir}', [RekapitulasiApiController::class, 'rekapPembelajaranSiswa']);
+
+    Route::get('/get-rekap-kegiatan-siswa/{kegiatan_id}/{tanggalAwal}/{tanggalAkhir}', [RekapitulasiApiController::class, 'rekapKegiatanSiswa']);
 });

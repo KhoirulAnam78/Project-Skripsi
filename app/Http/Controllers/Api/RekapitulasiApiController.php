@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Kelas;
+use App\Models\Siswa;
 use App\Models\Angkatan;
 use App\Models\Kegiatan;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use App\Models\JadwalKegiatan;
 use App\Models\JadwalPelajaran;
 use App\Models\JadwalPengganti;
 use App\Exports\RekapGuruExport;
+use App\Exports\RekapKegnasSiswa;
 use App\Exports\RekapSiswaExport;
 use App\Exports\RekapKegnasExport;
 use App\Exports\DaftarKegnasExport;
@@ -21,7 +23,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DaftarKegiatanExport;
 use App\Models\KehadiranPembelajaran;
 use App\Exports\DaftarPertemuanExport;
+use App\Exports\RekapPembelajaranSiswa;
 use App\Exports\DaftarPertemuanGuruExport;
+use App\Exports\ExportsRekapKegiatanSiswa;
 
 class RekapitulasiApiController extends Controller
 {
@@ -103,6 +107,41 @@ class RekapitulasiApiController extends Controller
       return Excel::download(new RekapKegnasExport($kelas_id, $tanggalAwal, $tanggalAkhir, $kegiatan_id, $tahunAkademik), 'Rekap Kehadiran ' . $namaKegiatan . ' ' . $namaKelas . ' ' . $tanggalAwal . ' - ' . $tanggalAkhir . '.xlsx');
     } else {
       return Excel::download(new RekapKegiatanExport($kelas_id, $tanggalAwal, $tanggalAkhir, $kegiatan_id, $tahunAkademik), 'Rekap Kehadiran ' . $namaKegiatan . ' ' . $namaKelas . ' ' . $tanggalAwal . ' - ' . $tanggalAkhir . '.xlsx');
+    }
+  }
+
+  public function rekapPembelajaranSiswa($tanggalAwal, $tanggalAkhir)
+  {
+    $jadwal = Siswa::where('user_id', auth('sanctum')->user()->id)->select('id', 'user_id')->with(['kelas' => function ($query) {
+      $query->whereRelation('tahunAkademik', 'status', 'aktif');
+    }])->first();
+    $jadwalId = [];
+    foreach ($jadwal->kelas->first()->jadwalPelajarans as $value) {
+      array_push($tjadwalId, $value->id);
+    }
+    return Excel::download(new RekapPembelajaranSiswa($jadwalId, $tanggalAwal, $tanggalAkhir, auth('sanctum')->user()->siswa->id), 'Rekapitulasi pembelajaran siswa ' . $tanggalAwal . ' sampai ' . $tanggalAkhir . '.xlsx');
+  }
+
+  public function rekapKegiatanSiswa($kegiatan_id, $tanggalAwal, $tanggalAkhir)
+  {
+    $kegiatan = Kegiatan::find($kegiatan_id);
+    $angkatan = Siswa::where('user_id', auth('sanctum')->user()->id)->select('id', 'user_id')->with(['kelas' => function ($query) {
+      $query->whereRelation('tahunAkademik', 'status', 'aktif');
+    }])->first();
+    $angkatan_id = $angkatan->kelas->first()->angkatan->id;
+    $tahunAkademikId = TahunAkademik::where('status', 'aktif')->first()->id;
+    // dd($angkatan->kelas->first()->angkatan->id);
+    $jadwal = JadwalKegiatan::where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $tahunAkademikId)->where('kegiatan_id', $kegiatan_id)->get();
+    $jadwalId = [];
+    foreach ($jadwal as $value) {
+      array_push($jadwalId, $value->id);
+    }
+
+
+    if ($kegiatan->narasumber !== '1') {
+      return Excel::download(new ExportsRekapKegiatanSiswa($jadwalId, $tanggalAwal, $tanggalAkhir, auth('sanctum')->user()->siswa->id), 'Rekapitulasi siswa kegiatan ' . $kegiatan->nama . ' ' . $tanggalAwal . ' sampai ' . $tanggalAkhir . '.xlsx');
+    } else {
+      return Excel::download(new RekapKegnasSiswa($jadwalId, $tanggalAwal, $tanggalAkhir, auth('sanctum')->user()->siswa->id), 'Rekapitulasi siswa kegiatan ' . $kegiatan->nama . ' ' . $tanggalAwal . ' sampai ' . $tanggalAkhir . '.xlsx');
     }
   }
 }
