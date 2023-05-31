@@ -3,12 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\WaliAsramaController;
 use App\Http\Controllers\Api\GuruApiController;
-use App\Http\Controllers\Api\PimpinanApiController;
 use App\Http\Controllers\Api\PresensiController;
 use App\Http\Controllers\Api\SiswaApiController;
+use App\Http\Controllers\Api\PimpinanApiController;
 use App\Http\Controllers\Api\WaliAsramaApiController;
-use App\Http\Controllers\WaliAsramaController;
+use App\Http\Controllers\Api\RekapitulasiApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,12 +68,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get-narasumber', [WaliAsramaApiController::class, 'getNarasumber']);
 
     //##AMBIL REKAP GURU##
-    //ambil kelas aktif
-    Route::get('/get-kelas', [GuruApiController::class, 'getKelas']);
-
     //ambil mata pelajaran berdasarkan kelas yang dipilih
     Route::get('/get-mapel/{kelas_id}', [GuruApiController::class, 'getMapel']);
-    Route::get('/get-rekap-guru/{data}/{kelas_id}/{mapel_id}', [GuruApiController::class, 'getRekap']);
 
     #PIMPINAN
     //Dashboard pimpinan
@@ -83,4 +80,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/detail-monitoring', [PimpinanApiController::class, 'getDetail']);
     Route::post('/get-kelas-monitoring-non-akademik', [PimpinanApiController::class, 'getKelasNonAkademik']);
     Route::post('/detail-monitoring-non-akademik', [PimpinanApiController::class, 'getDetailNonAkademik']);
+
+    #REKAPITULASI
+    //ambil kelas aktif
+    Route::get('/get-kelas', [RekapitulasiApiController::class, 'getKelas']);
+    //Get Kegiatan
+    Route::get('/get-kegiatan', [RekapitulasiApiController::class, 'getKegiatan']);
+    //Get Angkatan
+    Route::get('/get-angkatan', [RekapitulasiApiController::class, 'getAngkatan']);
+    //Get Rekap Daftar Pertemuan dan Keterlaksanaan
+    Route::get('/get-rekap-guru/{data}/{kelas_id}/{mapel_id}', [RekapitulasiApiController::class, 'getRekapGuru']);
+    //
 });

@@ -83,14 +83,6 @@ class GuruApiController extends Controller
     }
   }
 
-  public function getKelas()
-  {
-    return response()->json([
-      'message' => 'Fetch data succes',
-      'kelas' => Kelas::whereRelation('tahunAkademik', 'status', 'aktif')->select('id', 'nama')->get()
-    ]);
-  }
-
   public function getMapel($kelas_id)
   {
     $arrayMapel = [];
@@ -106,27 +98,5 @@ class GuruApiController extends Controller
       'message' => 'Fetch data succes',
       'mapel' => $mapel
     ]);
-  }
-
-  public function getRekap($data, $kelas_id, $mapel_id)
-  {
-    // return response()->json([
-    //   'message' => 'Fetch data failed',
-    //   'jenisRekap' => $data,
-    //   'bulan' => $bulan
-    // ]);
-    if ($data === 'Daftar Pertemuan') {
-      $namaKelas = Kelas::find($kelas_id)->nama;
-      $namaMapel = MataPelajaran::find($mapel_id)->nama;
-      $jml_siswa = Kelas::select('id')->find($kelas_id)->siswas->count();
-      return Excel::download(new DaftarPertemuanExport($kelas_id, $mapel_id, $jml_siswa), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . '.xlsx');
-    } else {
-      $kelasAktif = [];
-      $data = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->all();
-      foreach ($data as $d) {
-        array_push($kelasAktif, $d->id);
-      }
-      return Excel::download(new RekapGuruExport($kelasAktif, $kelas_id, $mapel_id), 'Rekap Guru ' . 'Tanggal ' . $kelas_id . ' Sampai ' . $mapel_id . '.xlsx');
-    }
   }
 }
