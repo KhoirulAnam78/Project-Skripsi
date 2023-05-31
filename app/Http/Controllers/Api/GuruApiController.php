@@ -86,7 +86,7 @@ class GuruApiController extends Controller
   public function getMapel($kelas_id)
   {
     $arrayMapel = [];
-    if (auth('sanctum')->user->role == 'guru') {
+    if (auth('sanctum')->user()->role == 'guru') {
       $jadwal = JadwalPelajaran::where('guru_id', auth('sanctum')->user()->guru->id)->where('kelas_id', $kelas_id)->with(['mataPelajaran' => function ($query) {
         $query->select('id');
       }])->select('id', 'guru_id', 'mata_pelajaran_id')->get();
