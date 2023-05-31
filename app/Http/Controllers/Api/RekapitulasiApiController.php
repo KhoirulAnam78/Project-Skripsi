@@ -19,6 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DaftarKegiatanExport;
 use App\Models\KehadiranPembelajaran;
 use App\Exports\DaftarPertemuanExport;
+use App\Exports\DaftarPertemuanGuruExport;
 
 class RekapitulasiApiController extends Controller
 {
@@ -47,13 +48,12 @@ class RekapitulasiApiController extends Controller
     ]);
   }
 
-  public function getDaftarPertemuanGuru()
+  public function getDaftarPertemuanGuru($kelas_id, $mapel_id, $tanggalAwal, $tanggalAkhir)
   {
-    // $namaKelas = Kelas::find($kelas_id)->nama;
-    // $namaMapel = MataPelajaran::find($mapel_id)->nama;
-    // $jml_siswa = Kelas::select('id')->find($kelas_id)->siswas->count();
-    // return Excel::download(new DaftarPertemuanExport($kelas_id, $mapel_id, $jml_siswa), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . '.xlsx');
-
+    $namaKelas = Kelas::find($kelas_id)->nama;
+    $namaMapel = MataPelajaran::find($mapel_id)->nama;
+    $jml_siswa = Kelas::select('id')->find($kelas_id)->siswas->count();
+    return Excel::download(new DaftarPertemuanGuruExport($kelas_id, $mapel_id, $jml_siswa, $tanggalAwal, $tanggalAkhir), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . 'Tanggal ' . $tanggalAwal . ' - ' . $tanggalAkhir . '.xlsx');
   }
 
   public function getKeterlaksanaanGuru($tanggalAwal, $tanggalAkhir)
