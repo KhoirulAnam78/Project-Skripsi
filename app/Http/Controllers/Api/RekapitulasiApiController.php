@@ -53,7 +53,7 @@ class RekapitulasiApiController extends Controller
     $namaKelas = Kelas::find($kelas_id)->nama;
     $namaMapel = MataPelajaran::find($mapel_id)->nama;
     $jml_siswa = Kelas::select('id')->find($kelas_id)->siswas->count();
-    return Excel::download(new DaftarPertemuanGuruExport($kelas_id, $mapel_id, $jml_siswa, $tanggalAwal, $tanggalAkhir), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . 'Tanggal ' . $tanggalAwal . ' - ' . $tanggalAkhir . '.xlsx');
+    return Excel::download(new DaftarPertemuanGuruExport($kelas_id, $mapel_id, $jml_siswa, $tanggalAwal, $tanggalAkhir), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . ' Tanggal ' . $tanggalAwal . ' - ' . $tanggalAkhir . '.xlsx');
   }
 
   public function getKeterlaksanaanGuru($tanggalAwal, $tanggalAkhir)
@@ -63,7 +63,7 @@ class RekapitulasiApiController extends Controller
     foreach ($data as $d) {
       array_push($kelasAktif, $d->id);
     }
-    return Excel::download(new RekapGuruExport($kelasAktif, $tanggalAwal, $tanggalAkhir), 'Rekap Guru ' . 'Tanggal ' . $tanggalAwal . ' Sampai ' . $tanggalAkhir . '.xlsx');
+    return Excel::download(new RekapGuruExport($kelasAktif, $tanggalAwal, $tanggalAkhir), 'Rekap Guru Tanggal ' . $tanggalAwal . ' Sampai ' . $tanggalAkhir . '.xlsx');
   }
 
   public function getDaftarKegiatan($kegiatan_id, $angkatan_id, $tanggalAwal, $tanggalAkhir)
