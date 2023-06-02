@@ -87,12 +87,18 @@ class AuthController extends Controller
                 'angkatan' => $angkatan->nama
             ]);
         } else {
+            $kelas = '';
+            $akademik = TahunAkademik::where('status', 'aktif')->first()->id;
+            if ($user->siswa->kelas->where('tahun_akademik_id', $akademik)->first()) {
+                $kelas = $user->siswa->kelas->where('tahun_akademik_id', $akademik)->first()->nama;
+            }
             return response()->json([
                 'message' => 'Login success',
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
-                'nama' => $user->siswa->nama
+                'nama' => $user->siswa->nama,
+                'kelas' => $kelas
             ]);
         }
     }
