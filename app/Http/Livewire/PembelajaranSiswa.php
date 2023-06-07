@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Siswa;
 use Livewire\Component;
+use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\MonitoringPembelajaran;
@@ -13,6 +14,8 @@ class PembelajaranSiswa extends Component
 {
     public $tanggalAwal, $tanggalAkhir;
     public $jadwalId = [];
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
     public function mount()
     {
