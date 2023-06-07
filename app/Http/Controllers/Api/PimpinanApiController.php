@@ -295,8 +295,7 @@ class PimpinanApiController extends Controller
       //ambil angkatan id
       $angkatan_id = Kelas::find($request->kelas_id)->angkatan->id;
 
-      $jadwal = JadwalKegiatan::where('kegiatan_id', $request->kegiatan_id)
-        ->where('hari', '=', 'Setiap Hari')->orwhere('hari', '=', $request->hari)
+      $jadwal = JadwalKegiatan::where('kegiatan_id', $request->kegiatan_id)->where('hari', '=', $request->hari)
         ->where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $this->tahunAkademik)->with('kegiatan')
         ->with(['monitoringKegnas' => function ($query) {
           if ($query) {
