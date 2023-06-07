@@ -71,7 +71,7 @@ class RekapPembelajaranSiswa extends DefaultValueBinder implements FromCollectio
             $rekap->jadwalPelajaran->mataPelajaran->nama,
             substr($rekap->waktu_mulai, 0, -3) . '-' . substr($rekap->waktu_berakhir, 0, -3),
             $rekap->topik,
-            $rekap->kehadiranPembelajarans->first()->status
+            $rekap->kehadiranPembelajarans->first() ? $rekap->kehadiranPembelajarans->first()->status : '-'
         ];
     }
 
