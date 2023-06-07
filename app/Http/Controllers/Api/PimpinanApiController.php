@@ -322,7 +322,7 @@ class PimpinanApiController extends Controller
           $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
           foreach ($siswa as $s) {
             array_push($presensi, [
-              'siswa' => $s->nama, 'presensi' => $s->kehadiranKegiatan->where('monitoring_kegiatan_id', $monitoring_id)->first() ? $s->kehadiranKegiatan->where('monitoring_kegiatan_id', $monitoring_id)->first()->status : 'hadir'
+              'siswa' => $s->nama, 'presensi' => $s->kehadiranKegiatan->where('monitoring_kegiatan_id', $monitoring_id)->first() ? $s->kehadiranKegiatan->where('monitoring_kegiatan_id', $monitoring_id)->first()->status : '-'
             ]);
           }
         }
@@ -331,7 +331,7 @@ class PimpinanApiController extends Controller
           $monitoring_id = $jadwal->monitoringKegnas->first()->id;
           $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
           foreach ($siswa as $s) {
-            array_push($presensi, ['siswa' => $s->nama, 'presensi' => $s->kehadiranKegnas->where('monitoring_kegnas_id', $monitoring_id)->first() ? $s->kehadiranKegnas->where('monitoring_kegnas_id', $monitoring_id)->first()->status : 'hadir']);
+            array_push($presensi, ['siswa' => $s->nama, 'presensi' => $s->kehadiranKegnas->where('monitoring_kegnas_id', $monitoring_id)->first() ? $s->kehadiranKegnas->where('monitoring_kegnas_id', $monitoring_id)->first()->status : '-']);
           }
         }
       }
