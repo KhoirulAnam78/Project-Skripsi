@@ -24,7 +24,10 @@ class RekapSiswa extends Component
         //ambil kelas
         $this->tanggalAkhir = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
         $this->tanggalAwal =  \Carbon\Carbon::now()->subDays(6)->translatedFormat('Y-m-d');
-        $this->filterKelas = TahunAkademik::where('status', 'aktif')->first()->kelas->first()->id;
+        $this->filterKelas = '';
+        if (TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()) {
+            $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
+        }
     }
 
     public function export()

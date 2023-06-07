@@ -65,12 +65,16 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-lg-2 col-md-3 mb-2 mx-3">
+        <div class="col-lg-3 col-md-3 mb-2 mx-3">
             <label for="search" class="form-label">Angkatan</label>
             <select wire:model="filterAngkatan" id="filterAngkatan" class="form-select">
-                @foreach ($angkatan as $a)
-                    <option value="{{ $a->id }}">{{ $a->nama }}</option>
-                @endforeach
+                @if (count($angkatan) !== 0)
+                    @foreach ($angkatan as $a)
+                        <option value="{{ $a->id }}">{{ $a->nama }}</option>
+                    @endforeach
+                @else
+                    <option value="">Tidak ada angkatan</option>
+                @endif
             </select>
         </div>
     </div>

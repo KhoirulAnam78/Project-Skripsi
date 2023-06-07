@@ -28,7 +28,11 @@ class TabelJadwalKegiatan extends Component
     public function mount()
     {
         $this->tahun_akademik_id = TahunAkademik::where('status', 'aktif')->first()->id;
-        $this->filterAngkatan = Angkatan::where('status', 'belum lulus')->first()->id;
+        if (Angkatan::where('status', 'belum lulus')->first()) {
+            $this->filterAngkatan = Angkatan::where('status', 'belum lulus')->first()->id;
+        } else {
+            $this->filterAngkatan = '';
+        }
     }
 
     public function rules()

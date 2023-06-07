@@ -129,6 +129,7 @@ class DashboardController extends Controller
                 'siswaAktif' => Siswa::where('status', 'belum lulus')->select('id')->count(),
                 'guruAktif' => Guru::where('status', 'aktif')->select('id')->count(),
                 'kelasAktif' => TahunAkademik::where('status', 'aktif')->select('id')->first()->kelas->count(),
+                'waliAsrama' => WaliAsrama::where('status', 'aktif')->select('id')->count()
             ]);
         } else if (Auth::user()->role === 'wali_asrama') {
 

@@ -37,10 +37,17 @@ class InputPresensi extends Component
     public function mount()
     {
         //Set default kelas pada tahun akademik yang aktif 
-        $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
+        if (TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()) {
+            $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
+        } else {
+            $this->filterKelas = '';
+        }
 
         //mengambil semua data siswa berdasarkan kelas default
-        $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+        $this->student = [];
+        if (Kelas::where('id', $this->filterKelas)->first()) {
+            $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+        }
         // $this->student = Kelas::select('id')->where('id', $this->filterKelas)->first()->siswas->orderBy('nama', 'asc')->all();
 
         //set deafult presensi menjadi "hadir" untuk setiap siswa
@@ -362,10 +369,15 @@ class InputPresensi extends Component
             $this->mapelPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->whereRelation('jadwalPelajaran', 'guru_id', Auth::user()->guru->id)->get();
             // dd($this->mapelPengganti);
         }
+        if (Kelas::where('id', $this->filterKelas)->first()) {
+            $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->paginate(10);
+        } else {
+            $siswa = [];
+        }
         return view('livewire.input-presensi', [
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'mapel' => $this->mapel,
-            'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->paginate(10),
+            'siswa' => $siswa,
             'jadwal_pengganti' => $this->mapelPengganti
         ]);
     }

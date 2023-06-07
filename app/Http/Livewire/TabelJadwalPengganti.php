@@ -18,7 +18,11 @@ class TabelJadwalPengganti extends Component
     public $jadwal_edit_id, $jadwal_delete_id;
     public function mount()
     {
-        $this->filterKelas = TahunAkademik::where('status', 'aktif')->first()->kelas->first()->id;
+        if (TahunAkademik::where('status', 'aktif')->first()->kelas->first()) {
+            $this->filterKelas = TahunAkademik::where('status', 'aktif')->first()->kelas->first()->id;
+        } else {
+            $this->filterKelas = '';
+        }
         $this->mapel = JadwalPelajaran::with('mataPelajaran')->with('guru')->where('kelas_id', $this->filterKelas)->orderBy('hari', 'asc')->get()->all();
         // dd($this->mapel);
         if ($this->mapel) {

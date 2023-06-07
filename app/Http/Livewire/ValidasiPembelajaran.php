@@ -33,7 +33,10 @@ class ValidasiPembelajaran extends Component
     {
         //mengambil nama hari 
         $this->day = \Carbon\Carbon::now()->translatedFormat('l');
-        $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
+        $this->filterKelas = '';
+        if (TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()) {
+            $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
+        }
         $this->jadwal_id = '';
 
         //mengambil tanggal
@@ -285,11 +288,15 @@ class ValidasiPembelajaran extends Component
 
     public function render()
     {
+        $siswa = [];
+        if (Kelas::where('id', $this->filterKelas)->first()) {
+            $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10);
+        }
         return view('livewire.validasi-pembelajaran', [
             'jadwal' => $this->jadwal,
             'jadwalPengganti' => $this->jadwalPengganti,
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
-            'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10)
+            'siswa' => $siswa
         ]);
     }
 

@@ -11,12 +11,12 @@
         <div class="col-lg-4 col-md-4">
             <label for="kelas_id" class="form-label">Kelas</label>
             <select wire:model="filterKelas" id="kelas_id" class="form-select">
-                @if ($kelas !== null)
+                @if (count($kelas) !== 0)
                     @foreach ($kelas as $k)
                         <option value="{{ $k->id }}">{{ $k->nama }}</option>
                     @endforeach
                 @else
-                    <option>Tidak ada kelas</option>
+                    <option value="">Tidak ada kelas</option>
                 @endif
             </select>
         </div>

@@ -29,7 +29,10 @@ class DaftarPertemuan extends Component
     public function mount()
     {
         //set default kelas
-        $this->filterKelas = TahunAkademik::where('status', 'aktif')->first()->kelas->first()->id;
+        $this->filterKelas = '';
+        if (TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()) {
+            $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
+        }
         //Ambil Mata pelajaran
         if (Auth::user()->role === 'guru') {
             //Ambil Jadwal Guru
@@ -110,12 +113,20 @@ class DaftarPertemuan extends Component
 
     public function render()
     {
+        $jml_siswa = 0;
+        if (Kelas::where('id', $this->filterKelas)->first()) {
+            $jml_siswa = count(Kelas::where('id', $this->filterKelas)->first()->siswas);
+        }
+        $siswa = [];
+        if (Kelas::where('id', $this->filterKelas)->first()) {
+            $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10);
+        }
         return view('livewire.daftar-pertemuan', [
             'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
             'mapel' => $this->mapel,
             'pertemuan' => MonitoringPembelajaran::with('kehadiranPembelajarans')->whereRelation('jadwalPelajaran', 'mata_pelajaran_id', $this->filterMapel)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->orderBy('tanggal', 'asc')->paginate(10),
-            'jml_siswa' => count(Kelas::where('id', $this->filterKelas)->first()->siswas),
-            'siswa' => Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10)
+            'jml_siswa' => $jml_siswa,
+            'siswa' => $siswa
         ]);
     }
     public function updatingMapel()
