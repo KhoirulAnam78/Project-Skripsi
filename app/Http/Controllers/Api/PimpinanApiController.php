@@ -339,7 +339,8 @@ class PimpinanApiController extends Controller
         'message' => 'Fetch data success',
         'jadwal' => $jadwal,
         'monitoring_id' => $monitoring_id,
-        'presensi' => $presensi
+        'presensi' => $presensi,
+        'kegiatan_id' => $request->kegiatan_id
       ]);
     } else {
       return response()->json([
