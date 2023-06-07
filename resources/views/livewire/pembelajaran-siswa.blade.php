@@ -52,7 +52,11 @@
                                 <td>{{ $m->jadwalPelajaran->mataPelajaran->nama }}</td>
                                 <td>{{ substr($m->waktu_mulai, 0, -3) . '-' . substr($m->waktu_berakhir, 0, -3) }}</td>
                                 <td style="white-space: normal">{{ $m->topik }}</td>
-                                <td>{{ ucwords($m->kehadiranPembelajarans->first()->status) }}</td>
+                                @if ($m->kehadiranPembelajarans->first())
+                                    <td>{{ ucwords($m->kehadiranPembelajarans->first()->status) }}</td>
+                                @else
+                                    <td>-</td>
+                                @endif
                             </tr>
                         @endforeach
                     @endif
