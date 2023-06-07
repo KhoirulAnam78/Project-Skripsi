@@ -92,20 +92,61 @@ class ValidasiPembelajaran extends Component
 
     public function updatedFilterKelas()
     {
-        //Mengambil jadwal hari ini
-        $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
-            [
-                'kelas' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-                'mataPelajaran' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-            ]
-        )->get();
 
-        //Get Jadwal Pengganti
-        $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+        if (Auth::user()->role === 'guru') {
+            $jadwalToday = JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->first();
+            // ->where(function ($query) {
+            //     $query->where('waktu_mulai', '<=', \Carbon\Carbon::now()->translatedFormat('H:i'))->where('waktu_berakhir', '>=', \Carbon\Carbon::now()->translatedFormat('H:i'));
+            // })->first();
+            if ($jadwalToday === null) {
+                $this->jadwal = [];
+                $this->jadwalPengganti = [];
+            } else {
+                //Mengambil jadwal hari ini
+                $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->where('kelas_id', $this->filterKelas)->with(
+                    [
+                        'kelas' => function ($query) {
+                            $query->select('id', 'nama');
+                        },
+                        'mataPelajaran' => function ($query) {
+                            $query->select('id', 'nama');
+                        },
+                    ]
+                )->get();
+
+                //Get Jadwal Pengganti
+                $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+            }
+        } else {
+            //Mengambil jadwal hari ini
+            $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+                [
+                    'kelas' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                    'mataPelajaran' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                ]
+            )->get();
+
+            //Get Jadwal Pengganti
+            $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+        }
+        //Mengambil jadwal hari ini
+        // $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+        //     [
+        //         'kelas' => function ($query) {
+        //             $query->select('id', 'nama');
+        //         },
+        //         'mataPelajaran' => function ($query) {
+        //             $query->select('id', 'nama');
+        //         },
+        //     ]
+        // )->get();
+
+        // //Get Jadwal Pengganti
+        // $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
     }
 
     public function empty()
