@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Guru;
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\TahunAkademik;
 use App\Exports\RekapGuruExport;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,9 @@ class RekapGuru extends Component
     public $tanggalAkhir;
     public $kelasAktif = [];
     public $search = '';
+
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
     public function mount()
     {

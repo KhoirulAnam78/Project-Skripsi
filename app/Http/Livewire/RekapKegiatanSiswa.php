@@ -2,20 +2,24 @@
 
 namespace App\Http\Livewire;
 
-use App\Exports\ExportsRekapKegiatanSiswa;
-use App\Exports\RekapKegnasSiswa;
 use App\Models\Siswa;
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\TahunAkademik;
 use App\Models\JadwalKegiatan;
 use App\Models\MonitoringKegnas;
+use App\Exports\RekapKegnasSiswa;
 use App\Models\MonitoringKegiatan;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportsRekapKegiatanSiswa;
 
 class RekapKegiatanSiswa extends Component
 {
     public $kegiatan, $tanggalAwal, $tanggalAkhir, $jadwalId = [];
+
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
     public function mount($kegiatan)
     {
         $this->kegiatan = $kegiatan;
