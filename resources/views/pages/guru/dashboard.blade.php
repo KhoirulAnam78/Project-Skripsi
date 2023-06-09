@@ -74,7 +74,7 @@
                                                     } else {
                                                         $status = 'Sedang Berlangsung';
                                                     }
-                                                } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3)) {
+                                                } elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_mulai, 0, -3) or \Carbon\Carbon::now()->translatedFormat('H:i') < substr($j->waktu_berakhir, 0, -3)) {
                                                     $status = 'Belum Dimulai';
                                                 } else {
                                                     $status = 'Tidak Terlaksana';
