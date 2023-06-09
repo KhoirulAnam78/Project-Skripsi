@@ -333,7 +333,7 @@ class InputPresensi extends Component
         }
         $this->update = true;
         session()->flash('message', 'Presensi berhasil diinputkan !');
-        $this->empty();
+        // $this->empty();
     }
 
     public function update()
