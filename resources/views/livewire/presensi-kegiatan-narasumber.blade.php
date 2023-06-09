@@ -178,7 +178,7 @@ if(count($siswa) === 0 or $allow === false){
                         } else if(\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir){
                             echo 'disabled';
                         } else{
-                            echo 'wire:click="save()"';
+                            echo 'wire:click="save()" wire:key="simpan"';
                         } @endphp>Simpan</button>
                 @else
                     <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
@@ -190,7 +190,7 @@ if(count($siswa) === 0 or $allow===false){
                                             } else if(\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir){
                                                 echo 'disabled';
                                             } else {
-                                                echo 'wire:click="update()"';
+                                                echo 'wire:click="update()" wire:key="update"';
                                             } @endphp>Update</button>
                 @endif
             @endcan

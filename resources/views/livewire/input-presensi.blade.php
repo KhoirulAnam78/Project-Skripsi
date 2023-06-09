@@ -159,7 +159,8 @@
 
             @endcan
             @can('guru')
-                @if ($update === false)
+                {{-- @if ($update === false)
+
                     <button class="btn btn-primary"
                         @php
 if($filterMapel === ''){
@@ -184,6 +185,32 @@ if($filterMapel === ''){
                                             } else {
                                                 echo 'wire:click="update()"';
                                             } @endphp>Update</button>
+                @endif --}}
+
+                @if ($update === false)
+                    @if ($filterMapel === '')
+                        <button class="btn btn-primary" disabled>Simpan</button>
+                    @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai)
+                        <button class="btn btn-primary" disabled>Simpan</button>
+                    @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir)
+                        <button class="btn btn-primary" disabled>Simpan</button>
+                    @else
+                        <button class="btn btn-primary" wire:key="simpan" wire:click="save()">Simpan</button>
+                    @endif
+                @else
+                    @if ($filterMapel === '')
+                        <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
+                            class="btn btn-success" disabled>Update</button>
+                    @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai)
+                        <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
+                            class="btn btn-success" disabled>Update</button>
+                    @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir)
+                        <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
+                            class="btn btn-success" disabled>Update</button>
+                    @else
+                        <button wire:key="update" style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
+                            class="btn btn-success" wire:click="update()">Update</button>
+                    @endif
                 @endif
             @endcan
         </div>
