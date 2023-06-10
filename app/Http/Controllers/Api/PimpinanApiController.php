@@ -298,57 +298,57 @@ class PimpinanApiController extends Controller
 
       $kegiatan = Kegiatan::find($request->kegiatan_id);
       if ($kegiatan->narasumber == 0) {
-        $hari = $kegiatan;
+        $hari = 'Setiap Hari';
       } else {
         $hari = $request->hari;
       }
 
-      // $jadwal = JadwalKegiatan::where('kegiatan_id', $request->kegiatan_id)
-      //   ->where('hari', '=', $hari)
-      //   ->where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $this->tahunAkademik)->with('kegiatan')
-      //   ->with(['monitoringKegnas' => function ($query) {
-      //     if ($query) {
-      //       $query->with('narasumber')->where('tanggal', $this->tanggal);
-      //     } else {
-      //       $query;
-      //     }
-      //   }])->with(['monitoringKegiatan' => function ($query) {
-      //     if ($query) {
-      //       $query->where('tanggal', $this->tanggal);
-      //     } else {
-      //       $query;
-      //     }
-      //   }])
-      //   ->first();
+      $jadwal = JadwalKegiatan::where('kegiatan_id', $request->kegiatan_id)
+        ->where('hari', '=', $hari)
+        ->where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $this->tahunAkademik)->with('kegiatan')
+        ->with(['monitoringKegnas' => function ($query) {
+          if ($query) {
+            $query->with('narasumber')->where('tanggal', $this->tanggal);
+          } else {
+            $query;
+          }
+        }])->with(['monitoringKegiatan' => function ($query) {
+          if ($query) {
+            $query->where('tanggal', $this->tanggal);
+          } else {
+            $query;
+          }
+        }])
+        ->first();
 
-      // // ambil monitoring id dan siswa
-      // $monitoring_id = '';
-      // $presensi = [];
-      // if ($jadwal->kegiatan->narasumber == 0) {
-      //   if ($jadwal->monitoringKegiatan->first()) {
-      //     $monitoring_id = $jadwal->monitoringKegiatan->first()->id;
-      //     $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
-      //     foreach ($siswa as $s) {
-      //       array_push($presensi, [
-      //         'siswa' => $s->nama, 'presensi' => $s->kehadiranKegiatan->where('monitoring_kegiatan_id', $monitoring_id)->first() ? $s->kehadiranKegiatan->where('monitoring_kegiatan_id', $monitoring_id)->first()->status : '-'
-      //       ]);
-      //     }
-      //   }
-      // } else {
-      //   if ($jadwal->monitoringKegnas->first()) {
-      //     $monitoring_id = $jadwal->monitoringKegnas->first()->id;
-      //     $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
-      //     foreach ($siswa as $s) {
-      //       array_push($presensi, ['siswa' => $s->nama, 'presensi' => $s->kehadiranKegnas->where('monitoring_kegnas_id', $monitoring_id)->first() ? $s->kehadiranKegnas->where('monitoring_kegnas_id', $monitoring_id)->first()->status : '-']);
-      //     }
-      //   }
-      // }
+      // ambil monitoring id dan siswa
+      $monitoring_id = '';
+      $presensi = [];
+      if ($jadwal->kegiatan->narasumber == 0) {
+        if ($jadwal->monitoringKegiatan->first()) {
+          $monitoring_id = $jadwal->monitoringKegiatan->first()->id;
+          $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
+          foreach ($siswa as $s) {
+            array_push($presensi, [
+              'siswa' => $s->nama, 'presensi' => $s->kehadiranKegiatan->where('monitoring_kegiatan_id', $monitoring_id)->first() ? $s->kehadiranKegiatan->where('monitoring_kegiatan_id', $monitoring_id)->first()->status : '-'
+            ]);
+          }
+        }
+      } else {
+        if ($jadwal->monitoringKegnas->first()) {
+          $monitoring_id = $jadwal->monitoringKegnas->first()->id;
+          $siswa = Kelas::where('id', $request->kelas_id)->first()->siswas;
+          foreach ($siswa as $s) {
+            array_push($presensi, ['siswa' => $s->nama, 'presensi' => $s->kehadiranKegnas->where('monitoring_kegnas_id', $monitoring_id)->first() ? $s->kehadiranKegnas->where('monitoring_kegnas_id', $monitoring_id)->first()->status : '-']);
+          }
+        }
+      }
       return response()->json([
         'message' => 'Fetch data success',
-        'hari' => $hari
-        // 'jadwal' => $jadwal,
-        // 'monitoring_id' => $monitoring_id,
-        // 'presensi' => $presensi,
+        'hari' => $hari,
+        'jadwal' => $jadwal,
+        'monitoring_id' => $monitoring_id,
+        'presensi' => $presensi,
       ]);
     } else {
       return response()->json([
