@@ -183,7 +183,7 @@ class PimpinanApiController extends Controller
   {
     if ($request->waktu_mulai && $request->waktu_berakhir && $request->tanggal && $request->kelas_id && $request->hari) {
       $this->tanggal = $request->tanggal;
-      $jadwal = JadwalPelajaran::where('waktu_mulai', '<=', $request->waktu_mulai)->where('hari', $request->hari)->where('waktu_berakhir', '<=', $request->waktu_berakhir)->where('kelas_id', $request->kelas_id)->with(['guru' => function ($query) {
+      $jadwal = JadwalPelajaran::where('waktu_mulai', '<=', $request->waktu_mulai)->where('hari', $request->hari)->where('waktu_berakhir', '>=', $request->waktu_berakhir)->where('kelas_id', $request->kelas_id)->with(['guru' => function ($query) {
         $query->select('id', 'nama');
       }])->with(['mataPelajaran' => function ($query) {
         $query->select('id', 'nama');
