@@ -66,7 +66,7 @@ class PresensiController extends Controller
             ]);
         }
         return response()->json([
-            'message' => 'Data berhasil diinputkan',
+            'message' => 'Presensi berhasil',
         ]);
     }
 
