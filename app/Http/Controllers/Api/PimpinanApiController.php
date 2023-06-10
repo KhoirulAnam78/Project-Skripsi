@@ -153,14 +153,14 @@ class PimpinanApiController extends Controller
         } else {
           $persen = 0;
         }
-        array_push($persentase, ['waktu_mulai' => $w['mulai'], 'waktu_berakhir' => $w['berakhir'], 'persentase' => $persen]);
+        array_push($persentase, ['waktu_mulai' => $w['mulai'], 'waktu_berakhir' => $w['berakhir'], 'persentase' => $persen, 'jadwal' => $jadwal]);
       }
 
       return response()->json([
         'message' => 'Fetch data success',
         'tanggal' => $request->tanggal,
-        'waktu' => $persentase,
-        'jadwal' => $jadwal
+        'waktu' => $persentase
+        // 'jadwal-pengganti' => $jadwalPengganti
       ]);
     } else {
       return response()->json([
