@@ -159,8 +159,8 @@ class PimpinanApiController extends Controller
       return response()->json([
         'message' => 'Fetch data success',
         'tanggal' => $request->tanggal,
-        'waktu' => $persentase
-        // 'jadwal-pengganti' => $jadwalPengganti
+        'waktu' => $persentase,
+        'jadwal' => $jadwal
       ]);
     } else {
       return response()->json([
