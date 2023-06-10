@@ -133,7 +133,7 @@ class PimpinanApiController extends Controller
         );
       }
       foreach ($waktu as $w) {
-        $jadwal = JadwalPelajaran::where('waktu_mulai', '>=', $w['mulai'])->where('waktu_berakhir', '<=', $w['berakhir'])->where('hari', $request->hari)->whereIn('kelas_id', $this->kelasAktif)->with(['monitoringPembelajarans' => function ($query) {
+        $jadwal = JadwalPelajaran::where('waktu_mulai', '>=', $w['mulai'])->where('waktu_berakhir', '>=', $w['berakhir'])->where('hari', $request->hari)->whereIn('kelas_id', $this->kelasAktif)->with(['monitoringPembelajarans' => function ($query) {
           if ($query) {
             $query->where('tanggal', $this->tanggal)->select('id', 'jadwal_pelajaran_id', 'status_validasi');
           };
