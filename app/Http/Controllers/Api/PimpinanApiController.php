@@ -298,7 +298,7 @@ class PimpinanApiController extends Controller
 
       $kegiatan = Kegiatan::find($request->kegiatan_id);
       if ($kegiatan->narasumber == 0) {
-        $hari = $kegiatan->hari;
+        $hari = $kegiatan;
       } else {
         $hari = $request->hari;
       }
