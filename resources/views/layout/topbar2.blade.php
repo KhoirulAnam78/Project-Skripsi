@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="container-fluid mx-3">
         <div class="app-brand demo m-0">
             <a href="/" class="app-brand-link">
@@ -19,16 +19,16 @@
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse mt-2" id="navbarNav">
+        <div class="collapse navbar-collapse mt-2 justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item {{ $title === 'Beranda' ? 'active' : '' }}">
+                <li class="nav-item {{ $title === 'Beranda' ? 'active' : '' }} mx-2">
                     <a class="nav-link" aria-current="page" href="/">Beranda</a>
                 </li>
-                <li class="nav-item {{ $title === 'Monitoring Pembelajaran' ? 'active' : '' }}">
+                <li class="nav-item {{ $title === 'Monitoring Pembelajaran' ? 'active' : '' }} mx-2">
                     <a class="nav-link" href="/monitoring">Monitoring</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-primary nav-link text-white" style="background-color: #0402FC !important"
+                    <a class="btn btn-primary nav-link text-white mx-2" style="background-color: #0402FC !important"
                         href="/login">Login</a>
                 </li>
             </ul>
