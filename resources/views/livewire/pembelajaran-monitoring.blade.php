@@ -1,7 +1,7 @@
-<div>
-    {{-- <div>
-        <h2>Currrent Time : {{ now() }}</h2>
-    </div> --}}
+<div wire:poll.20s>
+    <div class="d-flex justify-content-end">
+        <h5>Waktu saat ini : {{ \Carbon\Carbon::now()->translatedFormat('H:i:s') }}</h5>
+    </div>
     <div class="row  mt-3">
         <div class="col-lg-9 col-xl-9 col-md-9 col-sm-6">
             <div class="row">

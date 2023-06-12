@@ -12,6 +12,8 @@
                 </div>
                 @if ($filterKegiatan == 'pembelajaran')
                     <livewire:pembelajaran-monitoring />
+                @else
+                    <livewire:kegiatan-monitoring />
                 @endif
             </div>
         </div>

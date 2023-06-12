@@ -1,7 +1,7 @@
 @extends('layout.main2')
 
 @section('content')
-    <div class="container-fluid ">
+    <div class="container-fluid mb-3">
         <h4 class="fw-bold py-3 mb-4">Monitoring pembelajaran hari ini
             {{ \Carbon\Carbon::now()->translatedFormat('l') . ', ' . date('d-m-Y') }}</h4>
         <div class="row">
