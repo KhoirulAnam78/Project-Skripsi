@@ -50,23 +50,51 @@
                                         Materi :
                                         {{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? '-' : $j->jadwalPelajaran->monitoringPembelajarans->first()->topik }}
                                         <br>
-                                        H :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'hadir')->count() }} |
-                                        I :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'izin')->count() }} |
-                                        A :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'alfa')->count() }} |
-                                        <br>
-                                        S :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'sakit')->count() }} |
-                                        DD :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'dinas dalam')->count() }}
-                                        |
-                                        DL :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'dinas luar')->count() }}
-                                        |
+                                        {{-- A :
+                                     |
+                                    <br>
+                                    S :
+                                    {{ $presensi === null ? '0' : $presensi->where('status', 'sakit')->count() }} |
+                                    DD :
+                                    {{ $presensi === null ? '0' : $presensi->where('status', 'dinas dalam')->count() }}
+                                    |
+                                    DL :
+                                    {{ $presensi === null ? '0' : $presensi->where('status', 'dinas luar')->count() }}
+                                    | --}}
                                     </p>
-                                    </p>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr class="table-dark">
+                                                    <td>H</td>
+                                                    <td>I</td>
+                                                    <td>A</td>
+                                                    <td>S</td>
+                                                    <td>DD</td>
+                                                    <td>DL</td>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ $presensi === null ? '0' : $presensi->where('status', 'hadir')->count() }}
+                                                    </td>
+                                                    <td>{{ $presensi === null ? '0' : $presensi->where('status', 'izin')->count() }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $presensi === null ? '0' : $presensi->where('status', 'alfa')->count() }}
+                                                    </td>
+                                                    <td>{{ $presensi === null ? '0' : $presensi->where('status', 'sakit')->count() }}
+                                                    </td>
+                                                    <td>{{ $presensi === null ? '0' : $presensi->where('status', 'dinas dalam')->count() }}
+                                                    </td>
+                                                    <td>{{ $presensi === null ? '0' : $presensi->where('status', 'dinas luar')->count() }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -113,23 +141,39 @@
                                         Materi :
                                         {{ count($j->monitoringPembelajarans) === 0 ? '-' : $j->monitoringPembelajarans->first()->topik }}
                                         <br>
-                                        H :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'hadir')->count() }} |
-                                        I :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'izin')->count() }} |
-                                        A :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'alfa')->count() }} |
-                                        <br>
-                                        S :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'sakit')->count() }} |
-                                        DD :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'dinas dalam')->count() }}
-                                        |
-                                        DL :
-                                        {{ $presensi === null ? '0' : $presensi->where('status', 'dinas luar')->count() }}
-                                        |
                                     </p>
-                                    </p>
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr class="table-dark">
+                                                    <td>H</td>
+                                                    <td>I</td>
+                                                    <td>A</td>
+                                                    <td>S</td>
+                                                    <td>DD</td>
+                                                    <td>DL</td>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{ $presensi === null ? '0' : $presensi->where('status', 'hadir')->count() }}
+                                                    </td>
+                                                    <td>{{ $presensi === null ? '0' : $presensi->where('status', 'izin')->count() }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $presensi === null ? '0' : $presensi->where('status', 'alfa')->count() }}
+                                                    </td>
+                                                    <td>{{ $presensi === null ? '0' : $presensi->where('status', 'sakit')->count() }}
+                                                    </td>
+                                                    <td>{{ $presensi === null ? '0' : $presensi->where('status', 'dinas dalam')->count() }}
+                                                    </td>
+                                                    <td>{{ $presensi === null ? '0' : $presensi->where('status', 'dinas luar')->count() }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
