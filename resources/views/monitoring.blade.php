@@ -7,8 +7,6 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <h5 class="card-header px-3">Informasi pembelajaran
-                    </h5>
                     <livewire:monitoring-page />
                 </div>
             </div>
