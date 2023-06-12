@@ -40,9 +40,10 @@ class PembelajaranMonitoring extends Component
             ]
         )->with(['monitoringPembelajarans' => function ($query) {
             $query->where('tanggal', $this->tanggal)->get();
-        }])->orderBy('waktu_mulai')->get()->sortBy(function ($query) {
-            return $query->kelas->nama;
-        });
+        }])->orderBy('waktu_mulai')->get();
+        // ->sortBy(function ($query) {
+        //     return $query->kelas->nama;
+        // });
 
         $this->tidakHadir = MonitoringPembelajaran::where('tanggal', $this->tanggal)->with(['jadwalPelajaran' => function ($query) {
             $query->with([
@@ -70,7 +71,7 @@ class PembelajaranMonitoring extends Component
                     $query->where('status', '!=', 'hadir');
                 }]);
             }]);
-        }])->get();
+        }])->orderBy('waktu_mulai')->get();
         return view('livewire.pembelajaran-monitoring');
     }
 }
