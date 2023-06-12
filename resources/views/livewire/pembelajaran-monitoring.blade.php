@@ -139,7 +139,8 @@
         </div>
 
         <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6">
-            <div class="card bg-secondary text-white mb-3 mt-4">
+            <h5 class="text-white">Presensi</h5>
+            <div class="card bg-secondary text-white mb-3">
                 <div class="card-header fw-bold">Siswa Tidak Hadir Dalam Pembelajaran</div>
                 <div class="card-body">
                     @if (count($tidakHadir) !== 0)
