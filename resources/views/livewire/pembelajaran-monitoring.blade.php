@@ -5,8 +5,8 @@
     <div class="row  mt-3">
         <div class="col-lg-9 col-xl-9 col-md-6 col-sm-6">
             <div class="row">
-                <h5>Jadwal Pengganti</h5>
                 @if (count($jadwalPengganti) !== 0)
+                    <h5>Jadwal Pengganti</h5>
                     @foreach ($jadwalPengganti as $j)
                         {{-- PRESENSI --}}
                         @php
@@ -74,8 +74,8 @@
                 @endif
             </div>
             <div class="row">
-                <h5>Jadwal Normal</h5>
                 @if (count($jadwal) !== 0)
+                    <h5>Jadwal Normal</h5>
                     @foreach ($jadwal as $j)
                         @php
                             if (count($j->monitoringPembelajarans) !== 0) {
