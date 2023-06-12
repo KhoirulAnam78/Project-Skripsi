@@ -1,5 +1,5 @@
 <div wire:poll.20s>
-    <div class="d-flex justify-content-end">
+    <div class="d-flex justify-content-end mt-3">
         <h5>Waktu saat ini : {{ \Carbon\Carbon::now()->translatedFormat('H:i:s') }}</h5>
     </div>
     <div class="row mt-3">
