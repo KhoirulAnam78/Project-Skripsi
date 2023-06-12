@@ -3,7 +3,7 @@
         <h2>Currrent Time : {{ now() }}</h2>
     </div> --}}
     <div class="row  mt-3">
-        <div class="col-lg-9 col-xl-9 col-md-8 col-sm-6">
+        <div class="col-lg-9 col-xl-9 col-md-9 col-sm-6">
             <div class="row">
                 @if (count($jadwalPengganti) !== 0)
                     <h5>Jadwal Pengganti</h5>
@@ -32,7 +32,7 @@
                                 $status = 'Tidak Terlaksana';
                             }
                         @endphp
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xl-4">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xl-4 col-xxl-3">
                             <div class="card mb-3" style="background-color: rgb(243, 243, 243)">
                                 {{-- <div
                                     class="card-header fw-bold ">
@@ -114,7 +114,7 @@
                                 $status = 'Tidak Terlaksana';
                             }
                         @endphp
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xl-4">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xl-4 col-xxl-3">
                             <div class="card mb-3" style="background-color: rgb(243, 243, 243)">
                                 <span
                                     class="badge {{ $status == 'Telah Berakhir' ? 'bg-label-primary' : '' }} {{ $status == 'Tidak Terlaksana' ? 'bg-label-danger' : '' }} {{ $status == 'Sedang Berlangsung' ? 'bg-label-success' : '' }} {{ $status == 'Belum Dimulai' ? 'bg-label-warning' : '' }}"
@@ -171,7 +171,7 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-xl-3 col-md-4 col-sm-6">
+        <div class="col-lg-3 col-xl-3 col-md-3 col-sm-6">
             <h5 class="text-white">Presensi</h5>
             <div class="card bg-secondary text-white mb-3">
                 <div class="card-header fw-bold">Siswa Tidak Hadir Dalam Pembelajaran</div>
