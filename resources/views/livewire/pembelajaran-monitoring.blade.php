@@ -50,17 +50,6 @@
                                         Materi :
                                         {{ count($j->jadwalPelajaran->monitoringPembelajarans) === 0 ? '-' : $j->jadwalPelajaran->monitoringPembelajarans->first()->topik }}
                                         <br>
-                                        {{-- A :
-                                     |
-                                    <br>
-                                    S :
-                                    {{ $presensi === null ? '0' : $presensi->where('status', 'sakit')->count() }} |
-                                    DD :
-                                    {{ $presensi === null ? '0' : $presensi->where('status', 'dinas dalam')->count() }}
-                                    |
-                                    DL :
-                                    {{ $presensi === null ? '0' : $presensi->where('status', 'dinas luar')->count() }}
-                                    | --}}
                                     </p>
                                     <div class="table-responsive text-nowrap">
                                         <table class="table table-bordered">
@@ -94,7 +83,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -103,7 +91,7 @@
             </div>
             <div class="row">
                 @if (count($jadwal) !== 0)
-                    <h5>Jadwal Normal</h5>
+                    <h5>Jadwal Pelajaran</h5>
                     @foreach ($jadwal as $j)
                         @php
                             if (count($j->monitoringPembelajarans) !== 0) {
@@ -174,6 +162,7 @@
                                             </tbody>
                                         </table>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
