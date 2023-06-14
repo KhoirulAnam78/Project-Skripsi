@@ -71,13 +71,7 @@ class DaftarKegiatanNara extends Component
 
     public function detail($id)
     {
-        // dd('Masuk Sini');
-        //ambil data
-        // $this->monitoring = $id);
-        //ambil data kehadiran siswa yang sudah diinputkan
         $this->detail = KehadiranKegnas::where('monitoring_kegnas_id', $id)->where('status', '!=', 'hadir')->get()->all();
-        // dd($this->detail);
-
         $this->dispatchBrowserEvent('show-detail-modal');
     }
 

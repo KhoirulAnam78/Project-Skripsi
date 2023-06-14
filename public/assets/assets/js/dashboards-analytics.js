@@ -292,7 +292,7 @@
       },
       yaxis: {
         labels: {
-          show: false
+          show: true
         },
         min: 0,
         max: 60,
@@ -391,7 +391,7 @@
       },
       yaxis: {
         labels: {
-          show: false
+          show: true
         },
         min: 0,
         max: 60,

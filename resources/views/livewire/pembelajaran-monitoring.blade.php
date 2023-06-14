@@ -169,6 +169,11 @@
                     @endforeach
                 @endif
             </div>
+            <div class="row">
+                @if (count($jadwal) !== 0)
+                    {{ $jadwal->links() }}
+                @endif
+            </div>
         </div>
 
         <div class="col-lg-3 col-xl-3 col-md-3 col-sm-6">

@@ -37,15 +37,28 @@
                     {{ $message }}</span>
             @enderror
         </div>
-        <div class="col-lg-4 col-md-4">
-            <label for="tanggal" class="form-label">Tanggal Hari Ini</label>
-            <input disabled type="date" value="{{ $tanggal }}" name="tanggal" id="tanggal"
-                class="form-control" />
-            @error('tanggal')
-                <span class="error" style="color:red; font-size:12px; font-style:italic">*
-                    {{ $message }}</span>
-            @enderror
-        </div>
+        @can('admin')
+            <div class="col-lg-4 col-md-4">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <input type="date" value="{{ $tanggal }}" wire:model="tanggal" name="tanggal" id="tanggal"
+                    class="form-control" />
+                @error('tanggal')
+                    <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                        {{ $message }}</span>
+                @enderror
+            </div>
+        @endcan
+        @can('waliAsrama')
+            <div class="col-lg-4 col-md-4">
+                <label for="tanggal" class="form-label">Tanggal Hari Ini</label>
+                <input disabled type="date" value="{{ $tanggal }}" name="tanggal" id="tanggal"
+                    class="form-control" />
+                @error('tanggal')
+                    <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                        {{ $message }}</span>
+                @enderror
+            </div>
+        @endcan
     </div>
 
     <div class="row mx-2 mb-3">

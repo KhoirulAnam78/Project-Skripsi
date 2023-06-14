@@ -52,12 +52,15 @@ class ValidasiPembelajaran extends Component
                 $this->jadwalPengganti = [];
             } else {
                 //Mengambil jadwal hari ini
-                $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->where('kelas_id', $this->filterKelas)->with(
+                $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->where('kelas_id', $this->filterKelas)->with(
                     [
                         'kelas' => function ($query) {
                             $query->select('id', 'nama');
                         },
                         'mataPelajaran' => function ($query) {
+                            $query->select('id', 'nama');
+                        },
+                        'guru' => function ($query) {
                             $query->select('id', 'nama');
                         },
                     ]
@@ -68,12 +71,15 @@ class ValidasiPembelajaran extends Component
             }
         } else {
             //Mengambil jadwal hari ini
-            $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+            $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
                 [
                     'kelas' => function ($query) {
                         $query->select('id', 'nama');
                     },
                     'mataPelajaran' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                    'guru' => function ($query) {
                         $query->select('id', 'nama');
                     },
                 ]
@@ -103,12 +109,15 @@ class ValidasiPembelajaran extends Component
                 $this->jadwalPengganti = [];
             } else {
                 //Mengambil jadwal hari ini
-                $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->where('kelas_id', $this->filterKelas)->with(
+                $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->where('kelas_id', $this->filterKelas)->with(
                     [
                         'kelas' => function ($query) {
                             $query->select('id', 'nama');
                         },
                         'mataPelajaran' => function ($query) {
+                            $query->select('id', 'nama');
+                        },
+                        'guru' => function ($query) {
                             $query->select('id', 'nama');
                         },
                     ]
@@ -119,12 +128,15 @@ class ValidasiPembelajaran extends Component
             }
         } else {
             //Mengambil jadwal hari ini
-            $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+            $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
                 [
                     'kelas' => function ($query) {
                         $query->select('id', 'nama');
                     },
                     'mataPelajaran' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                    'guru' => function ($query) {
                         $query->select('id', 'nama');
                     },
                 ]
@@ -133,31 +145,43 @@ class ValidasiPembelajaran extends Component
             //Get Jadwal Pengganti
             $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
         }
-        //Mengambil jadwal hari ini
-        // $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
-        //     [
-        //         'kelas' => function ($query) {
-        //             $query->select('id', 'nama');
-        //         },
-        //         'mataPelajaran' => function ($query) {
-        //             $query->select('id', 'nama');
-        //         },
-        //     ]
-        // )->get();
-
-        // //Get Jadwal Pengganti
-        // $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
     }
 
-    public function empty()
+    public function updatedTanggal()
     {
-        $this->editPresensi = null;
-        $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+        $this->day = \Carbon\Carbon::createFromFormat('Y-m-d', $this->tanggal)->translatedFormat('l');
+
+        //Mengambil jadwal hari ini
+        $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
             [
                 'kelas' => function ($query) {
                     $query->select('id', 'nama');
                 },
                 'mataPelajaran' => function ($query) {
+                    $query->select('id', 'nama');
+                },
+                'guru' => function ($query) {
+                    $query->select('id', 'nama');
+                },
+            ]
+        )->get();
+
+        //Get Jadwal Pengganti
+        $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
+    }
+
+    public function empty()
+    {
+        $this->editPresensi = null;
+        $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+            [
+                'kelas' => function ($query) {
+                    $query->select('id', 'nama');
+                },
+                'mataPelajaran' => function ($query) {
+                    $query->select('id', 'nama');
+                },
+                'guru' => function ($query) {
                     $query->select('id', 'nama');
                 },
             ]
@@ -168,6 +192,8 @@ class ValidasiPembelajaran extends Component
         $this->resetErrorBag();
         $this->resetValidation();
     }
+
+
     public function showId($id)
     {
 

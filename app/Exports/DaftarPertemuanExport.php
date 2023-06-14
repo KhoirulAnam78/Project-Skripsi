@@ -2,7 +2,6 @@
 
 namespace App\Exports;
 
-use App\Models\Kelas;
 use App\Models\MonitoringPembelajaran;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -22,11 +21,15 @@ class DaftarPertemuanExport extends DefaultValueBinder implements FromCollection
     public $kelas_id;
     public $mapel_id;
     public $jml_siswa;
-    public function __construct($kelas_id, $mapel_id, $jml_siswa)
+    public $tanggalAwal;
+    public $tanggalAkhir;
+    public function __construct($kelas_id, $mapel_id, $jml_siswa, $tanggalAwal, $tanggalAkhir)
     {
         $this->kelas_id = $kelas_id;
         $this->mapel_id = $mapel_id;
         $this->jml_siswa = $jml_siswa;
+        $this->tanggalAwal = $tanggalAwal;
+        $this->tanggalAkhir = $tanggalAkhir;
     }
     public function columnFormats(): array
     {
@@ -34,15 +37,16 @@ class DaftarPertemuanExport extends DefaultValueBinder implements FromCollection
             'A' => NumberFormat::FORMAT_DATE_DATETIME,
             'B' => NumberFormat::FORMAT_TEXT,
             'C' => NumberFormat::FORMAT_TEXT,
-            'D' => NumberFormat::FORMAT_NUMBER,
+            'D' => NumberFormat::FORMAT_TEXT,
             'E' => NumberFormat::FORMAT_NUMBER,
             'F' => NumberFormat::FORMAT_NUMBER,
             'G' => NumberFormat::FORMAT_NUMBER,
             'H' => NumberFormat::FORMAT_NUMBER,
             'I' => NumberFormat::FORMAT_NUMBER,
             'J' => NumberFormat::FORMAT_NUMBER,
-            'K' => NumberFormat::FORMAT_TEXT,
-            'L' => NumberFormat::FORMAT_TEXT
+            'K' => NumberFormat::FORMAT_NUMBER,
+            'L' => NumberFormat::FORMAT_TEXT,
+            'M' => NumberFormat::FORMAT_TEXT
         ];
     }
 
@@ -60,7 +64,7 @@ class DaftarPertemuanExport extends DefaultValueBinder implements FromCollection
 
     public function collection()
     {
-        $mapel =  MonitoringPembelajaran::with('kehadiranPembelajarans')->whereRelation('jadwalPelajaran', 'mata_pelajaran_id', $this->mapel_id)->whereRelation('jadwalPelajaran', 'kelas_id', $this->kelas_id)->get();
+        $mapel =  MonitoringPembelajaran::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('jadwalPelajaran')->with('kehadiranPembelajarans')->whereRelation('jadwalPelajaran', 'mata_pelajaran_id', $this->mapel_id)->whereRelation('jadwalPelajaran', 'kelas_id', $this->kelas_id)->get();
         return $mapel->sortBy('tanggal');
     }
 
@@ -70,6 +74,7 @@ class DaftarPertemuanExport extends DefaultValueBinder implements FromCollection
             //data yang dari kolom tabel database yang akan diambil
             $mapel->tanggal,
             $mapel->topik,
+            $mapel->jadwalPelajaran->guru->nama,
             substr($mapel->waktu_mulai, 0, -3) . '-' . substr($mapel->waktu_berakhir, 0, -3),
             $this->jml_siswa,
             count($mapel->kehadiranPembelajarans->where('status', 'hadir')),
@@ -85,6 +90,6 @@ class DaftarPertemuanExport extends DefaultValueBinder implements FromCollection
 
     public function headings(): array
     {
-        return ['Tanggal', 'Topik', 'Waktu', 'Jml Siswa', 'Hadir', 'Izin', 'Sakit', 'Alfa', 'DD', 'DL', 'Status', 'Keterangan'];
+        return ['Tanggal', 'Topik', 'Guru', 'Waktu', 'Jml Siswa', 'Hadir', 'Izin', 'Sakit', 'Alfa', 'DD', 'DL', 'Status', 'Keterangan'];
     }
 }

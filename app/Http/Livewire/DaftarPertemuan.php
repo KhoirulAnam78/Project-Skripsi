@@ -20,6 +20,10 @@ class DaftarPertemuan extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $mapel;
+    public $filterTahunAkademik;
+
+    public $tanggalAwal;
+    public $tanggalAkhir;
     public $filterKelas = '';
     public $filterMapel = null;
     public $presensi = [];
@@ -30,6 +34,9 @@ class DaftarPertemuan extends Component
     {
         //set default kelas
         $this->filterKelas = '';
+        $this->tanggalAkhir = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
+        $this->tanggalAwal =  \Carbon\Carbon::now()->subDays(6)->translatedFormat('Y-m-d');
+        $this->filterTahunAkademik = TahunAkademik::select('id')->where('status', 'aktif')->first()->id;
         if (TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()) {
             $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
         }
@@ -79,7 +86,7 @@ class DaftarPertemuan extends Component
         $namaKelas = Kelas::find($this->filterKelas)->nama;
         $namaMapel = MataPelajaran::find($this->filterMapel)->nama;
         $jml_siswa = Kelas::select('id')->find($this->filterKelas)->siswas->count();
-        return Excel::download(new DaftarPertemuanExport($this->filterKelas, $this->filterMapel, $jml_siswa), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . '.xlsx');
+        return Excel::download(new DaftarPertemuanExport($this->filterKelas, $this->filterMapel, $jml_siswa, $this->tanggalAwal, $this->tanggalAkhir), 'Daftar Pertemuan ' . $namaMapel . ' ' . $namaKelas . ' Tanggal ' . $this->tanggalAwal . ' sampai ' . $this->tanggalAkhir . '.xlsx');
     }
 
     public function updatedFilterKelas()
@@ -111,6 +118,22 @@ class DaftarPertemuan extends Component
         }
     }
 
+    public function updatedFilterTahunAkademik()
+    {
+        $this->filterKelas = '';
+        if (TahunAkademik::select('id')->find($this->filterTahunAkademik)->kelas->first()) {
+            $this->filterKelas = TahunAkademik::select('id')->find($this->filterTahunAkademik)->kelas->first()->id;
+        }
+        $this->mapel = MataPelajaran::all();
+        if (count($this->mapel) !== 0) {
+            $this->filterMapel = $this->mapel->first()->id;
+        } else {
+            $this->filterMapel = '';
+        }
+    }
+
+
+
     public function render()
     {
         $jml_siswa = 0;
@@ -122,11 +145,12 @@ class DaftarPertemuan extends Component
             $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10);
         }
         return view('livewire.daftar-pertemuan', [
-            'kelas' => TahunAkademik::where('status', 'aktif')->first()->kelas,
+            'kelas' => TahunAkademik::find($this->filterTahunAkademik)->kelas,
             'mapel' => $this->mapel,
-            'pertemuan' => MonitoringPembelajaran::with('kehadiranPembelajarans')->whereRelation('jadwalPelajaran', 'mata_pelajaran_id', $this->filterMapel)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->orderBy('tanggal', 'asc')->paginate(10),
+            'pertemuan' => MonitoringPembelajaran::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('jadwalPelajaran')->with('kehadiranPembelajarans')->whereRelation('jadwalPelajaran', 'mata_pelajaran_id', $this->filterMapel)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->orderBy('tanggal', 'asc')->paginate(10),
             'jml_siswa' => $jml_siswa,
-            'siswa' => $siswa
+            'siswa' => $siswa,
+            'tahunAkademik' => TahunAkademik::all()
         ]);
     }
     public function updatingMapel()

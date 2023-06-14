@@ -240,6 +240,90 @@ class PresensiKegiatanTanpanara extends Component
         }
     }
 
+    public function updatedTanggal()
+    {
+        $this->empty();
+        $this->today = \Carbon\Carbon::createFromFormat('Y-m-d', $this->tanggal)->translatedFormat('l');
+        $angkatan_id = Kelas::find($this->filterKelas)->angkatan_id;
+        $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas->first();
+        if ($siswa) {
+            $siswa_id = $siswa->id;
+        } else {
+            $siswa_id = '';
+        }
+        // dd($siswa_id);
+        $this->jadwal = JadwalKegiatan::where('kegiatan_id', $this->kegiatan->id)->where('angkatan_id', $angkatan_id)->where('tahun_akademik_id', $this->tahun_akademik_id)->first();
+        if ($this->jadwal) {
+            $this->hari = $this->jadwal->hari;
+            if ($this->hari !== 'Setiap Hari') {
+                if ($this->today !== $this->hari) {
+                    $this->allow = false;
+                } else {
+                    $this->allow = true;
+                }
+            } else {
+                $this->allow = true;
+            }
+            $this->waktu_mulai = substr($this->jadwal->waktu_mulai, 0, -3);
+            $this->waktu_berakhir = substr($this->jadwal->waktu_berakhir, 0, -3);
+            $this->update = false;
+
+            //Cek apakah jadwal sudah diinputkan
+            if (MonitoringKegiatan::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first()) {
+                //ambil data
+                $monitoring = MonitoringKegiatan::where('jadwal_kegiatan_id', $this->jadwal->id)->where('tanggal', $this->tanggal)->first();
+                //set data berdasarkan data yang sudah diinputkan
+                $this->editPresensi = $monitoring->id;
+                $this->tanggal = $monitoring->tanggal;
+                $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
+                $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
+
+                //set update true, berarti data akan diupdate
+
+                //ambil data kehadiran siswa yang sudah diinputkan
+                if (KehadiranKegiatan::where('monitoring_kegiatan_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
+                    $this->update = true;
+                    $kehadiran = KehadiranKegiatan::where('monitoring_kegiatan_id', $monitoring->id)->get()->all();
+                    foreach ($kehadiran as $k) {
+                        $this->presensi[$k->siswa_id] = $k->status;
+                    }
+                } else {
+
+                    //ambil data siswa kelas yang dipilih
+                    $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+
+                    //set presensi menjadi hadir bagi setiap siswa
+                    $this->presensi = [];
+                    foreach ($this->student as $s) {
+                        $this->presensi[$s->id] = 'hadir';
+                    }
+                }
+            } else {
+                //ambil data siswa kelas yang dipilih
+                $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+
+                //set presensi menjadi hadir bagi setiap siswa
+                $this->presensi = [];
+                foreach ($this->student as $s) {
+                    $this->presensi[$s->id] = 'hadir';
+                }
+            }
+        } else {
+            $this->allow = false;
+            $this->hari = '';
+            $this->waktu_mulai = '';
+            $this->waktu_berakhir = '';
+            //ambil data siswa kelas yang dipilih
+            $this->student = Kelas::where('id', $this->filterKelas)->first()->siswas()->orderBy('nama', 'asc')->get();
+
+            //set presensi menjadi hadir bagi setiap siswa
+            $this->presensi = [];
+            foreach ($this->student as $s) {
+                $this->presensi[$s->id] = 'hadir';
+            }
+        }
+    }
+
     public function save()
     {
         $this->validate();

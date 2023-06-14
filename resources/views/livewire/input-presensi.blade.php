@@ -49,15 +49,28 @@
 
             </select>
         </div>
-        <div class="col-lg-4 col-md-4">
-            <label for="tanggal" class="form-label">Tanggal</label>
-            <input disabled type="date" value="{{ $tanggal }}" name="tanggal" id="tanggal"
-                class="form-control" />
-            @error('tanggal')
-                <span class="error" style="color:red; font-size:12px; font-style:italic">*
-                    {{ $message }}</span>
-            @enderror
-        </div>
+        @can('admin')
+            <div class="col-lg-4 col-md-4">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <input type="date" value="{{ $tanggal }}" wire:model="tanggal" name="tanggal" id="tanggal"
+                    class="form-control" />
+                @error('tanggal')
+                    <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                        {{ $message }}</span>
+                @enderror
+            </div>
+        @endcan
+        @can('guru')
+            <div class="col-lg-4 col-md-4">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <input disabled type="date" value="{{ $tanggal }}" name="tanggal" id="tanggal"
+                    class="form-control" />
+                @error('tanggal')
+                    <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                        {{ $message }}</span>
+                @enderror
+            </div>
+        @endcan
     </div>
 
     <div class="row mx-2 mb-3">
@@ -121,8 +134,8 @@
                                         id="presensiSakit" name="presensi.{{ $s->id }}" value='sakit'
                                         wire:model="presensi.{{ $s->id }}">
                                     S <span class="mx-1"></span>
-                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio" id="presensiAlfa"
-                                        name="presensi.{{ $s->id }}" value='alfa'
+                                    <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
+                                        id="presensiAlfa" name="presensi.{{ $s->id }}" value='alfa'
                                         wire:model="presensi.{{ $s->id }}">
                                     A <span class="mx-1"></span>
                                     <input {{ $filterMapel === '' ? 'disabled' : '' }} type="radio"
@@ -159,34 +172,6 @@
 
             @endcan
             @can('guru')
-                {{-- @if ($update === false)
-
-                    <button class="btn btn-primary"
-                        @php
-if($filterMapel === ''){
-                            echo 'disabled';
-                            // dd('Filter Mapel');
-                        } else if(\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai){
-                            echo 'disabled';
-                        } else if(\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir){
-                            echo 'disabled';
-                        } else{
-                            echo 'wire:click="save()"';
-                        } @endphp>Simpan</button>
-                @else
-                    <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
-                        @php
-if($filterMapel === ''){
-                                                echo 'disabled';
-                                            } else if(\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai){
-                                                echo 'disabled';
-                                            } else if(\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir){
-                                                echo 'disabled';
-                                            } else {
-                                                echo 'wire:click="update()"';
-                                            } @endphp>Update</button>
-                @endif --}}
-
                 @if ($update === false)
                     @if ($filterMapel === '')
                         <button class="btn btn-primary" disabled>Simpan</button>

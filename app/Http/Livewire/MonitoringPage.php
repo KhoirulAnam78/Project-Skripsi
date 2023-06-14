@@ -3,17 +3,24 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use App\Models\TahunAkademik;
-use App\Models\JadwalPelajaran;
-use App\Models\JadwalPengganti;
+use Livewire\WithPagination;
 
 class MonitoringPage extends Component
 {
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+
     public $filterKegiatan;
 
     public function mount()
     {
         $this->filterKegiatan = 'pembelajaran';
+    }
+
+    public function updatedFilterKegiatan()
+    {
+
+        $this->resetPage();
     }
 
     // public function updatedFilterKelas()

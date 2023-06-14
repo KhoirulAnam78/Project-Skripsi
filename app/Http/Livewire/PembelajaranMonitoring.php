@@ -3,14 +3,15 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\JadwalPelajaran;
 use App\Models\JadwalPengganti;
 use App\Models\MonitoringPembelajaran;
 
 class PembelajaranMonitoring extends Component
 {
-
-    public $jadwal;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
     public $jadwalPengganti;
     public $day, $tanggal;
     public $tidakHadir = [];
@@ -26,25 +27,6 @@ class PembelajaranMonitoring extends Component
     }
     public function render()
     {
-        $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'hari', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->with(
-            [
-                'kelas' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-                'mataPelajaran' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-                'guru' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-            ]
-        )->with(['monitoringPembelajarans' => function ($query) {
-            $query->where('tanggal', $this->tanggal)->get();
-        }])->orderBy('waktu_mulai')->get();
-        // ->sortBy(function ($query) {
-        //     return $query->kelas->nama;
-        // });
-
         $this->tidakHadir = MonitoringPembelajaran::where('tanggal', $this->tanggal)->with(['jadwalPelajaran' => function ($query) {
             $query->with([
                 'kelas' => function ($query) {
@@ -72,6 +54,22 @@ class PembelajaranMonitoring extends Component
                 }]);
             }]);
         }])->orderBy('waktu_mulai')->get();
-        return view('livewire.pembelajaran-monitoring');
+        return view('livewire.pembelajaran-monitoring', [
+            'jadwal' => JadwalPelajaran::select('id', 'waktu_mulai', 'hari', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->with(
+                [
+                    'kelas' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                    'mataPelajaran' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                    'guru' => function ($query) {
+                        $query->select('id', 'nama');
+                    },
+                ]
+            )->with(['monitoringPembelajarans' => function ($query) {
+                $query->where('tanggal', $this->tanggal)->get();
+            }])->orderBy('waktu_mulai')->paginate(12)
+        ]);
     }
 }

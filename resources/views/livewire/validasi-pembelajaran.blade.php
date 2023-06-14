@@ -20,6 +20,17 @@
                 @endif
             </select>
         </div>
+        @can('admin')
+            <div class="col-lg-4 col-md-4">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <input type="date" value="{{ $tanggal }}" wire:model="tanggal" name="tanggal" id="tanggal"
+                    class="form-control" />
+                @error('tanggal')
+                    <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                        {{ $message }}</span>
+                @enderror
+            </div>
+        @endcan
     </div>
     <div class="row mx-2">
         <div class="table-responsive text-nowrap mb-3">
@@ -29,6 +40,7 @@
                         <th>No</th>
                         <th>Kelas</th>
                         <th>Mapel</th>
+                        <th>Guru</th>
                         <th>Waktu</th>
                         <th>Topik Pembelajaran</th>
                         <th>Status</th>
@@ -52,6 +64,7 @@
                                 </td>
                                 <td>{{ $j->kelas->nama }}</td>
                                 <td>{{ $j->mataPelajaran->nama }}</td>
+                                <td>{{ $j->guru->nama }}</td>
                                 <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
                                 @php
                                     $data = $j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
@@ -86,6 +99,7 @@
                                 </td>
                                 <td>{{ $j->jadwalPelajaran->kelas->nama }}</td>
                                 <td>{{ $j->jadwalPelajaran->mataPelajaran->nama }}</td>
+                                <td>{{ $j->jadwalPelajaran->guru->nama }}</td>
                                 <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
                                 @php
                                     $data = $j->jadwalPelajaran->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));

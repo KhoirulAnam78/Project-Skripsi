@@ -23,7 +23,17 @@
         </div>
     </div>
     <div class="row mx-2 mb-3">
-        <div class="col-lg-4 col-md-4">
+        @can('adpim')
+            <div class="col-lg-3 col-md-3 mb-3 mx-2">
+                <label for="tahun_akademik_id" class="form-label">Tahun Akademik</label>
+                <select wire:model="filterTahunAkademik" id="filterTahunAkademik" class="form-select">
+                    @foreach ($tahunAkademik as $ta)
+                        <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endcan
+        <div class="col-lg-4 mb-3 col-md-4">
             <label for="kelas_id" class="form-label">Kelas</label>
             <select wire:model="filterKelas" id="kelas_id" class="form-select">
                 @if (count($kelas) !== 0)
@@ -34,6 +44,23 @@
                     <option value="">Tidak ada kelas</option>
                 @endif
             </select>
+        </div>
+        <div class="col-lg-3 col-md-3 mx-2">
+            <label for="tanggalAwal" class="form-label">Tanggal Awal</label>
+            <input type="date" wire:model="tanggalAwal" name="tanggalAwal" id="tanggalAwal" class="form-control" />
+            @error('tanggalAwal')
+                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                    {{ $message }}</span>
+            @enderror
+        </div>
+        <div class="col-lg-3 col-md-3 mx-2">
+            <label for="tanggalAkhir" class="form-label">Tanggal Akhir</label>
+            <input type="date" wire:model="tanggalAkhir" name="tanggalAkhir" id="tanggalAkhir"
+                class="form-control" />
+            @error('tanggalAkhir')
+                <span class="error" style="color:red; font-size:12px; font-style:italic">*
+                    {{ $message }}</span>
+            @enderror
         </div>
         <div class="col-lg-4 col-md-4">
             <label for="japel_id" class="form-label">Mata Pelajaran</label>
@@ -56,6 +83,7 @@
                         <th>No</th>
                         <th>Tanggal</th>
                         <th>Topik Pembelajaran</th>
+                        <th>Guru</th>
                         <th>Waktu</th>
                         <th>Jml Siswa</th>
                         <th>H</th>
@@ -81,6 +109,7 @@
                                 </td>
                                 <td>{{ $s->tanggal }}</td>
                                 <td style="white-space: normal">{{ $s->topik }}</td>
+                                <td>{{ $s->jadwalPelajaran->guru->nama }}</td>
                                 <td>{{ substr($s->waktu_mulai, 0, -3) . '-' . substr($s->waktu_berakhir, 0, -3) }}</td>
                                 <td align="center">{{ $jml_siswa }}</td>
                                 <td align="center">{{ count($s->kehadiranPembelajarans->where('status', 'hadir')) }}
