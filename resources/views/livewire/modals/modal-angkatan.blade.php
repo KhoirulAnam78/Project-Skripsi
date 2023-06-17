@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 mb-2">
                         <label for="search" class="form-label">Wali Asrama</label>
-                        <input type="text" wire:model="search2" id="search" class="form-control"
+                        <input type="text" wire:model="search" id="search" class="form-control"
                             placeholder="Cari berdasarkan nama wali asrama" />
                     </div>
                     @error('waliAsrama')
@@ -52,9 +52,6 @@
                                 </tr>
                             </thead>
                             <tbody class="table-border-bottom-0">
-                                @php
-                                    $i = 0;
-                                @endphp
                                 @if ($wali === null)
                                     <tr>
                                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
@@ -62,10 +59,10 @@
                                 @else
                                     @foreach ($wali as $g)
                                         <tr>
-                                            <td>{{ ++$i }}</td>
+                                            <td>{{ ($wali->currentpage() - 1) * $wali->perpage() + $loop->index + 1 }}
+                                            </td>
                                             <td>{{ $g->nama }}</td>
                                             <td align="center"><input type="checkbox" wire:model="waliAsrama"
-                                                    wire:key="myUniqueWireKey-{{ $g->id }}"
                                                     value="{{ $g->id }}"></td>
                                         </tr>
                                     @endforeach

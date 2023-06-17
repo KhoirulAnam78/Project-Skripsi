@@ -26,9 +26,7 @@
                                 </tr>
                             </thead>
                             <tbody class="table-border-bottom-0">
-                                @php
-                                    $i = 0;
-                                @endphp
+
                                 @if ($dataSiswa === null)
                                     <tr>
                                         <td colspan='7' align="center"><span>Tidak ada data</span></td>
@@ -36,7 +34,8 @@
                                 @else
                                     @foreach ($dataSiswa as $g)
                                         <tr>
-                                            <td>{{ ++$i }}</td>
+                                            <td>{{ ($dataSiswa->currentpage() - 1) * $dataSiswa->perpage() + $loop->index + 1 }}
+                                            </td>
                                             <td>{{ $g->nisn }}</td>
                                             <td>{{ $g->nama }}</td>
                                             <td align="center"><input type="checkbox" wire:model="selectedSiswa"

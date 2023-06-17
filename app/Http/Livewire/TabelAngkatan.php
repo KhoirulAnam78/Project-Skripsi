@@ -14,7 +14,7 @@ class TabelAngkatan extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     //Inisialisasi Variable
-    public $nama, $status, $angkatan_edit_id, $angkatan_delete_id;
+    public $nama, $status, $angkatan_edit_id, $angkatan_delete_id, $search = '';
     public $waliAsrama = [];
 
     public function rules()
@@ -46,6 +46,7 @@ class TabelAngkatan extends Component
         $this->angkatan_delete_id = null;
         $this->resetErrorBag();
         $this->resetValidation();
+        $this->resetPage();
     }
 
     //Custom Errror messages for validation
@@ -205,7 +206,7 @@ class TabelAngkatan extends Component
     {
         return view('livewire.tabel-angkatan', [
             'angkatan' => Angkatan::orderBy('created_at', 'desc')->paginate(5),
-            'wali' => WaliAsrama::where('status', 'aktif')->paginate(5)
+            'wali' => WaliAsrama::where('nama', 'like', '%' . $this->search . '%')->where('status', 'aktif')->paginate(5)
         ]);
     }
 }

@@ -67,7 +67,7 @@
                                 <td>{{ $j->guru->nama }}</td>
                                 <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
                                 @php
-                                    $data = $j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
+                                    $data = $j->monitoringPembelajarans->where('tanggal', $tanggal);
                                 @endphp
                                 <td style="white-space: normal">
                                     {{ count($data) === 0 ? '' : $data->first()->topik }}
@@ -102,7 +102,7 @@
                                 <td>{{ $j->jadwalPelajaran->guru->nama }}</td>
                                 <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
                                 @php
-                                    $data = $j->jadwalPelajaran->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
+                                    $data = $j->jadwalPelajaran->monitoringPembelajarans->where('tanggal', $tanggal);
                                 @endphp
                                 <td>{{ count($data) === 0 ? '' : $data->first()->topik }}
                                 </td>
