@@ -34,9 +34,13 @@ class InputPresensi extends Component
     public $tanggal, $waktu_mulai, $waktu_berakhir, $topik;
     //menampung kehadiran siswa
     public $presensi = [];
+    public $minDate;
 
     public function mount()
     {
+        if (TahunAkademik::select('id')->where('status', 'aktif')->first()) {
+            $this->minDate = TahunAkademik::select('id', 'tgl_mulai')->where('status', 'aktif')->first()->tgl_mulai;
+        }
         //Set default kelas pada tahun akademik yang aktif 
         if (TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()) {
             $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;

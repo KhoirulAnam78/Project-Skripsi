@@ -53,7 +53,8 @@
             <div class="col-lg-4 col-md-4">
                 <label for="tanggal" class="form-label">Tanggal</label>
                 <input type="date" value="{{ $tanggal }}" wire:model="tanggal" name="tanggal" id="tanggal"
-                    class="form-control" />
+                    class="form-control" min="{{ $minDate }}"
+                    max="{{ \Carbon\Carbon::now()->translatedFormat('Y-m-d') }}" />
                 @error('tanggal')
                     <span class="error" style="color:red; font-size:12px; font-style:italic">*
                         {{ $message }}</span>

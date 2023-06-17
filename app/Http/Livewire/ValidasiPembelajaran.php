@@ -28,12 +28,16 @@ class ValidasiPembelajaran extends Component
     public $presensi = [], $keterangan, $status, $editPresensi;
     public $update = false;
     public $jadwal_id;
+    public $minDate;
 
     public function mount()
     {
         //mengambil nama hari 
         $this->day = \Carbon\Carbon::now()->translatedFormat('l');
         $this->filterKelas = '';
+        if (TahunAkademik::select('id')->where('status', 'aktif')->first()) {
+            $this->minDate = TahunAkademik::select('id', 'tgl_mulai')->where('status', 'aktif')->first()->tgl_mulai;
+        }
         if (TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()) {
             $this->filterKelas = TahunAkademik::select('id')->where('status', 'aktif')->first()->kelas->first()->id;
         }

@@ -37,8 +37,13 @@ class PresensiKegiatanNarasumber extends Component
     public $kegiatan, $allow;
     public $angkatan_id;
     public $tahun_akademik_id;
+    public $minDate;
+
     public function mount($kegiatan)
     {
+        if (TahunAkademik::select('id')->where('status', 'aktif')->first()) {
+            $this->minDate = TahunAkademik::select('id', 'tgl_mulai')->where('status', 'aktif')->first()->tgl_mulai;
+        }
         //Set default kelas pada tahun akademik yang aktif 
         if (Auth::user()->role === 'wali_asrama') {
             $this->angkatan_id = WaliAsrama::where('user_id', Auth::user()->id)->first()->angkatans->where('status', 'belum lulus')->first()->id;
