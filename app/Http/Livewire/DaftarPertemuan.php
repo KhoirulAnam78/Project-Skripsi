@@ -58,7 +58,8 @@ class DaftarPertemuan extends Component
                 $this->filterMapel = '';
             }
         } else {
-            $this->mapel = MataPelajaran::all();
+            $this->mapel = MataPelajaran::orderBy('nama', 'asc')->get();
+            // dd($this->mapel);
             if (count($this->mapel) !== 0) {
                 $this->filterMapel = $this->mapel->first()->id;
             } else {
@@ -124,7 +125,7 @@ class DaftarPertemuan extends Component
         if (TahunAkademik::select('id')->find($this->filterTahunAkademik)->kelas->first()) {
             $this->filterKelas = TahunAkademik::select('id')->find($this->filterTahunAkademik)->kelas->first()->id;
         }
-        $this->mapel = MataPelajaran::all();
+        $this->mapel = MataPelajaran::orderBy('nama',)->get();
         if (count($this->mapel) !== 0) {
             $this->filterMapel = $this->mapel->first()->id;
         } else {
