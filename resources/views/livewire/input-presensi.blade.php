@@ -33,12 +33,14 @@
             <select wire:model="filterMapel" id="filterMapel" class="form-select">
                 @if (count($mapel) !== 0)
                     @foreach ($mapel as $m)
-                        <option value="{{ $m->id }}">{{ $m->mataPelajaran->nama }}</option>
+                        <option value="{{ $m->id }}">{{ $m->mataPelajaran->nama }} ({{ $m->guru->nama }})
+                        </option>
                     @endforeach
                 @endif
                 @if (count($jadwal_pengganti) !== 0)
                     @foreach ($jadwal_pengganti as $j)
                         <option value="{{ $j->jadwal_pelajaran_id }}">{{ $j->jadwalPelajaran->mataPelajaran->nama }}
+                            ({{ $j->jadwalPelajaran->guru->nama }})
                             (pengganti)
                         </option>
                     @endforeach
