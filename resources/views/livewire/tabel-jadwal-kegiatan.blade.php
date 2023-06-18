@@ -69,6 +69,7 @@
             <label for="search" class="form-label">Angkatan</label>
             <select wire:model="filterAngkatan" id="filterAngkatan" class="form-select">
                 @if (count($angkatan) !== 0)
+                    <option value="">Semua</option>
                     @foreach ($angkatan as $a)
                         <option value="{{ $a->id }}">{{ $a->nama }}</option>
                     @endforeach

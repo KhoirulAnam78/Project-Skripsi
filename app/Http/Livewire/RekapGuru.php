@@ -57,4 +57,9 @@ class RekapGuru extends Component
             'guru' => $data
         ]);
     }
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
 }
