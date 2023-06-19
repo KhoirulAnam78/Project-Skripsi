@@ -20,7 +20,7 @@ class ImportNarasumber implements ToCollection, WithHeadingRow, WithValidation
     {
         return [
             'nama' => 'required',
-            'nomor_telepon' => 'required|max:14',
+            'nomor_telepon' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             'instansi' => 'required',
         ];
     }
@@ -31,7 +31,8 @@ class ImportNarasumber implements ToCollection, WithHeadingRow, WithValidation
             'instansi.required' => 'Instansi wajib diisi !',
             'nama.required' => 'Nama wajib diisi !',
             'nomor_telepon.required' => 'No Telp wajib diisi !',
-            'no_telepon.max' => 'No Telp maksimal 14 karakter number !',
+            'nomor_telepon.max' => 'No Telp maksimal 14 karakter number !',
+            'nomor_telepon.regex' => 'No Telp merupakan angka dan boleh menggunakan karakter + !',
         ];
     }
 

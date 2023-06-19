@@ -92,6 +92,10 @@
                                             <a class="dropdown-item" wire:click="editSiswa({{ $g->id }})"><i
                                                     class="bx bx-edit-alt me-1"></i>
                                                 Edit</a>
+
+                                            <a class="dropdown-item" wire:click="resetPassword({{ $g->id }})"><i
+                                                    class='bx bx-key'></i>
+                                                Reset Akun</a>
                                             <a class="dropdown-item"
                                                 wire:click="deleteConfirmation({{ $g->id }})"><i
                                                     class="bx bx-trash me-1"></i>

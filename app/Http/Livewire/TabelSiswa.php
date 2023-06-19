@@ -239,4 +239,16 @@ class TabelSiswa extends Component
     {
         $this->resetPage();
     }
+
+    public function resetPassword($id)
+    {
+        $user = Siswa::find($id);
+
+        User::where('id', $user->user_id)->update([
+            'username' => $user->nisn,
+            'password' => bcrypt($user->nisn)
+        ]);
+
+        session()->flash('message', 'Akun berhasil direset, user dapat login menggunakan nisn sebagai username dan password !');
+    }
 }

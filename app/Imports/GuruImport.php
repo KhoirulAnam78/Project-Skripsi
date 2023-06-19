@@ -24,10 +24,10 @@ class GuruImport implements ToCollection, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            'nip' => 'required|min:18|unique:gurus',
+            'nip' => 'required|numeric|min_digits:18|max_digits:18|unique:gurus',
             'nama' => 'required',
-            'nomor_telepon' => 'required|max:14',
-            'status' => 'in:aktif,tidak aktif',
+            'nomor_telepon' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
+            'status' => 'required|in:aktif,tidak aktif',
             'kode_guru' => 'required|min:2|max:2|unique:gurus',
         ];
     }
@@ -36,11 +36,15 @@ class GuruImport implements ToCollection, WithHeadingRow, WithValidation
     {
         return [
             'nip.required' => 'NIP wajib diisi !',
-            'nip.min' => 'NIP harus berisi 18 karakter !',
+            'nip.min_digits' => 'NIP harus berisi 18 karakter !',
+            'nip.max_digits' => 'NIP lebih dari 18 karakter !',
+            'nip.numeric' => 'NIP harus merupakan angka !',
             'nip.unique' => 'NIP telah digunakan !',
             'nama.required' => 'Nama wajib diisi !',
             'nomor_telepon.required' => 'No Telp wajib diisi !',
             'nomor_telepon.max' => 'No Telp maksimal 14 karakter number !',
+            'nomor_telepon.regex' => 'No Telp merupakan angka dan boleh menggunakan karakter + !',
+            'nama.required' => 'Status wajib diisi !',
             'status.in' => 'Status tidak diketahui (Harap isi dengan aktif/tidak aktif) !',
             'kode_guru.required' => 'Kode Guru wajib diisi !',
             'kode_guru.min' => 'Kode Guru harus berisi 2 karakter !',

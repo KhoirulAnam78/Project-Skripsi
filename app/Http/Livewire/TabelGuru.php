@@ -257,6 +257,18 @@ class TabelGuru extends Component
     }
 
 
+    public function resetPassword($id)
+    {
+        $user = Guru::find($id);
+
+        User::where('id', $user->user_id)->update([
+            'username' => $user->nip,
+            'password' => bcrypt($user->nip)
+        ]);
+
+        session()->flash('message', 'Akun berhasil direset, user dapat login menggunakan nip sebagai username dan password !');
+    }
+
     public function render()
     {
         return view('livewire.guru', [

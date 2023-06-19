@@ -26,7 +26,7 @@ class WaliAsramaImport implements ToCollection, WithHeadingRow, WithValidation
     {
         return [
             'nama' => 'required',
-            'nomor_telepon' => 'required|max:14',
+            'nomor_telepon' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             'status' => 'in:aktif,tidak aktif',
         ];
     }
@@ -37,6 +37,7 @@ class WaliAsramaImport implements ToCollection, WithHeadingRow, WithValidation
             'nama.required' => 'Nama wajib diisi !',
             'nomor_telepon.required' => 'No Telp wajib diisi !',
             'nomor_telepon.max' => 'No Telp maksimal 14 karakter number !',
+            'nomor_telepon.regex' => 'No Telp merupakan angka dan boleh menggunakan karakter + !',
             'status.in' => 'Status tidak diketahui (Harap isi dengan aktif/tidak aktif) !',
         ];
     }

@@ -179,7 +179,7 @@ class TabelWaliAsrama extends Component
             $this->file = '';
             $this->dispatchBrowserEvent('close-modal-import');
         } catch (\Illuminate\Database\QueryException $ex) {
-            session()->flash('error', 'Terdapat nip yang sama pada file excel. Periksa kembali !');
+            session()->flash('error', 'Terdapat nama yang sama pada file excel atau pada sistem. Periksa kembali !');
             $this->dispatchBrowserEvent('close-modal-import');
         }
     }
@@ -211,6 +211,18 @@ class TabelWaliAsrama extends Component
     public function export()
     {
         return Excel::download(new WaliAsramaExport, 'Data Wali Asrama SMAN Titian Teras.xlsx');
+    }
+
+    public function resetPassword($id)
+    {
+        $user = WaliAsrama::find($id);
+
+        User::where('id', $user->user_id)->update([
+            'username' => Str::slug($user->nama),
+            'password' => bcrypt('monitoring2023')
+        ]);
+
+        session()->flash('message', 'Akun berhasil direset, username : ' . Str::slug($user->nama) . ' dan password : ' . 'monitoring2023');
     }
 
 
