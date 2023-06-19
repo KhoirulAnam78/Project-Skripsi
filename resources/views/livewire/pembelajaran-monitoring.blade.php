@@ -1,4 +1,13 @@
 <div wire:poll.20s>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 mt-3">
+            <label for="Kegiatan" class="form-label">Tampilan Monitoring</label>
+            <select wire:model="filterTampilan" id="tampilan" class="form-select">
+                <option value="semua">Semua</option>
+                <option value="rentang">Waktu saat ini</option>
+            </select>
+        </div>
+    </div>
     <div class="d-flex justify-content-end mt-3">
         <h5>Waktu saat ini : {{ \Carbon\Carbon::now()->translatedFormat('H:i:s') }}</h5>
     </div>
@@ -169,6 +178,13 @@
                     @endforeach
                 @endif
             </div>
+            @if (count($jadwal) === 0 and count($jadwalPengganti) === 0)
+                <div class="row">
+                    <center>
+                        <h5>Tidak Ada Monitoring</h5>
+                    </center>
+                </div>
+            @endif
             <div class="row">
                 @if (count($jadwal) !== 0)
                     {{ $jadwal->links() }}
