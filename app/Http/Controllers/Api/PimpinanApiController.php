@@ -149,7 +149,7 @@ class PimpinanApiController extends Controller
           }
         }
         if ($total !== 0) {
-          $persen = round($terlaksana / $total, 1);
+          $persen = round($terlaksana / $total, 2);
         } else {
           $persen = 0;
         }
