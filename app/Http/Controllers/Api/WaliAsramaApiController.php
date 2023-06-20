@@ -38,6 +38,7 @@ class WaliAsramaApiController extends Controller
     $tahunAkademik = TahunAkademik::where('status', 'aktif')->first()->id;
     $angkatan_id = WaliAsrama::where('user_id', auth('sanctum')->user()->id)->first()->angkatans->where('status', 'belum lulus')->first()->id;
     $kelas = Kelas::where('tahun_akademik_id', $tahunAkademik)->where('angkatan_id', $angkatan_id)->get();
+
     return response()->json([
       'message' => 'Fetch data success',
       'kelas' => $kelas,
@@ -47,6 +48,7 @@ class WaliAsramaApiController extends Controller
   public $tanggal;
   public $presensi = [];
   public $student;
+
 
   public function getPresensiSiswa(Request $request)
   {
@@ -75,11 +77,13 @@ class WaliAsramaApiController extends Controller
 
         //ambil data kehadiran siswa yang sudah diinputkan
         if (KehadiranKegiatan::where('monitoring_kegiatan_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
+          $statusPresensi = 'Sudah Presensi';
           $kehadiran = KehadiranKegiatan::where('monitoring_kegiatan_id', $monitoring->id)->get()->all();
           foreach ($kehadiran as $k) {
             $this->presensi[$k->siswa_id] = $k->status;
           }
         } else {
+          $statusPresensi = 'Belum Presensi';
           //set presensi menjadi hadir bagi setiap siswa
           $this->presensi = [];
           foreach ($this->student as $s) {
@@ -87,6 +91,8 @@ class WaliAsramaApiController extends Controller
           }
         }
       } else {
+
+        $statusPresensi = 'Belum Presensi';
         //set presensi menjadi hadir bagi setiap siswa
         $this->presensi = [];
         foreach ($this->student as $s) {
@@ -97,6 +103,7 @@ class WaliAsramaApiController extends Controller
         'message' => 'Fetch data success',
         'presensi' => $this->presensi,
         'siswa' => $this->student,
+        'status-presensi' => $statusPresensi
       ]);
     } else {
       //ambil data siswa kelas yang dipilih
@@ -114,11 +121,14 @@ class WaliAsramaApiController extends Controller
 
         //ambil data kehadiran siswa yang sudah diinputkan
         if (KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->where('siswa_id', $siswa_id)->get()->first()) {
+          $statusPresensi = 'Sudah Presensi';
           $kehadiran = KehadiranKegnas::where('monitoring_kegnas_id', $monitoring->id)->get()->all();
           foreach ($kehadiran as $k) {
             $this->presensi[$k->siswa_id] = $k->status;
           }
         } else {
+
+          $statusPresensi = 'Belum Presensi';
           //set presensi menjadi hadir bagi setiap siswa
           $this->presensi = [];
           foreach ($this->student as $s) {
@@ -126,6 +136,8 @@ class WaliAsramaApiController extends Controller
           }
         }
       } else {
+
+        $statusPresensi = 'Belum Presensi';
         //set presensi menjadi hadir bagi setiap siswa
         $this->presensi = [];
         foreach ($this->student as $s) {
@@ -138,7 +150,8 @@ class WaliAsramaApiController extends Controller
         'presensi' => $this->presensi,
         'siswa' => $this->student,
         'narasumber_id' => $narasumber_id,
-        'topik' => $topik
+        'topik' => $topik,
+        'status-presensi' => $statusPresensi
       ]);
     }
   }
