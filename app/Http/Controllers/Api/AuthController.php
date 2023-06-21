@@ -80,6 +80,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Login success',
                 'access_token' => $token,
+                'user' => $user,
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
                 'nama' => $user->waliAsrama->nama,
@@ -95,6 +96,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Login success',
                 'access_token' => $token,
+                'user' => $user,
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
                 'nama' => $user->siswa->nama,
