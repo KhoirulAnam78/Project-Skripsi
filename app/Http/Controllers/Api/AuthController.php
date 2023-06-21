@@ -68,6 +68,7 @@ class AuthController extends Controller
                 'role' => auth('sanctum')->user()->role,
                 'pimpinan' => auth('sanctum')->user()->guru->pimpinan,
                 'user' => $user,
+                'username' => auth('sanctum')->user()->username,
                 'mapel' => $mapel,
                 'jadwalPiket' => $jadwalPiket
             ]);
@@ -80,7 +81,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Login success',
                 'access_token' => $token,
-                'user' => $user,
+                'username' => auth('sanctum')->user()->username,
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
                 'nama' => $user->waliAsrama->nama,
@@ -96,7 +97,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Login success',
                 'access_token' => $token,
-                'user' => $user,
+                'username' => auth('sanctum')->user()->username,
                 'token_type' => 'Bearer',
                 'role' => auth('sanctum')->user()->role,
                 'nama' => $user->siswa->nama,
