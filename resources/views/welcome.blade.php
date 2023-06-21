@@ -8,7 +8,9 @@
             <div class="card-body">
                 <h5 class="card-title fw-bold">Selamat Datang</h5>
                 <p class="card-text">Sistem informasi monitoring pembelajaran SMAN Titian Teras merupakan sistem yang
-                    digunakan untuk memonitoring pembelajaran yang terjadi di sekolah. </p>
+                    digunakan untuk memonitoring pembelajaran yang terjadi di sekolah.
+                    Untuk penggunaan aplikasi yang lebih efisien, Disarankan untuk mengunduh aplikasi mobile pada link
+                    berikut : <a href="/download-app-simobel">Mobile App Simobel</a></p>
             </div>
             <img src="{{ url('') }}/assets/assets/img/titers.webp" class="card-img-top" style="border-radius : 0px"
                 alt="image.jpg">

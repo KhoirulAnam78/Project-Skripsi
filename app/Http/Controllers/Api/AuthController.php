@@ -103,6 +103,24 @@ class AuthController extends Controller
         }
     }
 
+    public function changePassword(Request $request)
+    {
+        if ($request->username && $request->password) {
+            User::where('id', auth('sanctum')->user()->id)->update([
+                'username' => $request->username,
+                'password' => bcrypt($request->password)
+            ]);
+            return response()->json([
+                'message' => 'Username dan password berhasil diubah',
+                'username' => $request->username,
+                'password' => $request->password
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Username dan password wajib diisi'
+            ]);
+        }
+    }
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();

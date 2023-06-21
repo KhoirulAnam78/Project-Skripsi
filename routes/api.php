@@ -29,6 +29,9 @@ Route::middleware('auth:sanctum')->group(function () {
     //Update Role Pimpinan/Guru
     Route::post('/status-pimpinan', [GuruApiController::class, 'updateRole']);
 
+    //Ubah Password
+    Route::post('/ubah-password', AuthController::class, 'changePassword');
+
     //Logout
     Route::get('/logout', [AuthController::class, 'logout']);
 
