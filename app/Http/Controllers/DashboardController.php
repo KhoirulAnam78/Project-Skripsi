@@ -109,7 +109,7 @@ class DashboardController extends Controller
                 $query->select('id', 'nama');
             }])->with(['mataPelajaran' => function ($query) {
                 $query->select('id', 'nama');
-            }])->paginate(10);
+            }])->orderBy('waktu_mulai')->paginate(10);
 
             //Ambil Jadwal Piket
             if (JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()) {
