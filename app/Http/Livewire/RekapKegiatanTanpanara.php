@@ -46,8 +46,12 @@ class RekapKegiatanTanpanara extends Component
     public function updatedFilterTahunAkademik()
     {
         $this->kelas = TahunAkademik::find($this->filterTahunAkademik)->kelas;
-        $this->filterKelas = $this->kelas->first()->id;
-        $this->angkatan_id = $this->kelas->first()->angkatan_id;
+        $this->filterKelas = '';
+        $this->angkatan_id = '';
+        if ($this->kelas->first()) {
+            $this->filterKelas = $this->kelas->first()->id;
+            $this->angkatan_id = $this->kelas->first()->angkatan_id;
+        }
     }
 
     public function updatedFilterKelas()
