@@ -33,7 +33,7 @@ use App\Http\Controllers\MonitoringPembelajaranController;
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
 
 Route::get('/download-app-simobel', function () {
-    $path = public_path() . '/assets/mobileApp/simobel.apk';
+    $path = public_path() . '/assets/mobileApp/Simobel V 1.0.0.apk';
     return response()->file($path, [
         'Content-Type' => 'application/vnd.android.package-archive',
         'Content-Disposition' => 'attachment; filename="simobel.apk"',
