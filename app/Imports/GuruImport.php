@@ -24,11 +24,11 @@ class GuruImport implements ToCollection, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            'nip' => 'required|numeric|min_digits:18|max_digits:18|unique:gurus',
+            'nip' => 'required|numeric|min_digits:18|max_digits:18|unique:gurus,nip',
             'nama' => 'required',
             'nomor_telepon' => 'required|max:14|regex:/^([0-9\s\+]*)$/',
             'status' => 'required|in:aktif,tidak aktif',
-            'kode_guru' => 'required|min:2|max:2|unique:gurus',
+            'kode_guru' => 'required|min:2|max:2|unique:gurus,kode_guru',
         ];
     }
 
