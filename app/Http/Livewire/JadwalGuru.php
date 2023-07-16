@@ -37,7 +37,7 @@ class JadwalGuru extends Component
             $query->select('id', 'nama');
         }])->with(['mataPelajaran' => function ($query) {
             $query->select('id', 'nama');
-        }])->orderBy('hari', 'asc')->paginate(10);
+        }])->orderBy('hari', 'asc')->orderBy('waktu_mulai')->paginate(10);
 
         return view('livewire.jadwal-guru', [
             'jadwal' => $jadwal
