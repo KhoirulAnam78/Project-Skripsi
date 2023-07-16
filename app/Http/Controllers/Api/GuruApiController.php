@@ -54,7 +54,7 @@ class GuruApiController extends Controller
         if ($query) {
           $query->where('tanggal', $this->tanggal);
         };
-      }])->select('id', 'hari', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->get();
+      }])->select('id', 'hari', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id')->get()->orderBy('waktu_mulai');
 
       $jadwalPengganti = JadwalPengganti::where('tanggal', $request->tanggal)->whereRelation('jadwalPelajaran', 'guru_id', auth('sanctum')->user()->guru->id)->with(['jadwalPelajaran' => function ($query) {
         // $query->with()->get();
@@ -67,7 +67,7 @@ class GuruApiController extends Controller
             $query->where('tanggal', $this->tanggal);
           };
         }])->get();
-      }])->get();
+      }])->get()->orderBy('waktu_mulai');
 
       return response()->json([
         'message' => 'Fetch data success',
