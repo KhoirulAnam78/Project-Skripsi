@@ -29,106 +29,106 @@ class PimpinanApiController extends Controller
       if ($request->hari == 'Senin') {
         $waktu = array(
           array(
-            'mulai' => '07:55',
-            'berakhir' => '08:35'
+            'mulai' => '07:45',
+            'berakhir' => '08:30'
           ),
           array(
-            'mulai' => '08:35',
+            'mulai' => '08:30',
             'berakhir' => '09:15'
           ),
           array(
             'mulai' => '09:15',
-            'berakhir' => '09:55'
+            'berakhir' => '10:00'
           ),
           array(
-            'mulai' => '10:40',
-            'berakhir' => '11:20'
+            'mulai' => '10:30',
+            'berakhir' => '11:15'
           ),
           array(
-            'mulai' => '11:20',
+            'mulai' => '11:15',
             'berakhir' => '12:00'
           ),
           array(
             'mulai' => '13:00',
-            'berakhir' => '13:35'
+            'berakhir' => '13:45'
           ),
           array(
-            'mulai' => '13:35',
-            'berakhir' => '14:10'
+            'mulai' => '13:45',
+            'berakhir' => '14:30'
           ),
           array(
-            'mulai' => '14:10',
-            'berakhir' => '15:45'
+            'mulai' => '14:30',
+            'berakhir' => '15:15'
           ),
           array(
-            'mulai' => '15:45',
-            'berakhir' => '15:20'
+            'mulai' => '15:15',
+            'berakhir' => '16:00'
           ),
         );
       } else if ($request->hari == 'Jumat') {
         $waktu = array(
           array(
             'mulai' => '07:15',
-            'berakhir' => '07:55'
+            'berakhir' => '08:00'
           ),
           array(
-            'mulai' => '07:55',
-            'berakhir' => '08:35'
+            'mulai' => '08:00',
+            'berakhir' => '08:45'
           ),
           array(
-            'mulai' => '08:35',
-            'berakhir' => '09:15'
+            'mulai' => '08:45',
+            'berakhir' => '09:30'
           ),
           array(
             'mulai' => '10:00',
-            'berakhir' => '10:40'
+            'berakhir' => '10:45'
           ),
           array(
-            'mulai' => '10:40',
-            'berakhir' => '11:20'
+            'mulai' => '10:45',
+            'berakhir' => '11:30'
           ),
         );
       } else {
         $waktu = array(
           array(
-            'mulai' => '07:15',
-            'berakhir' => '07:55'
+            'mulai' => '07:00',
+            'berakhir' => '07:45'
           ),
           array(
-            'mulai' => '07:55',
-            'berakhir' => '08:35'
+            'mulai' => '07:45',
+            'berakhir' => '08:30'
           ),
           array(
-            'mulai' => '08:35',
+            'mulai' => '08:30',
             'berakhir' => '09:15'
           ),
           array(
             'mulai' => '09:15',
-            'berakhir' => '09:55'
+            'berakhir' => '10:00'
           ),
           array(
-            'mulai' => '10:40',
-            'berakhir' => '11:20'
+            'mulai' => '10:30',
+            'berakhir' => '11:15'
           ),
           array(
-            'mulai' => '11:20',
+            'mulai' => '11:15',
             'berakhir' => '12:00'
           ),
           array(
             'mulai' => '13:00',
-            'berakhir' => '13:35'
+            'berakhir' => '13:45'
           ),
           array(
-            'mulai' => '13:35',
-            'berakhir' => '14:10'
+            'mulai' => '13:45',
+            'berakhir' => '14:30'
           ),
           array(
-            'mulai' => '14:10',
-            'berakhir' => '15:45'
+            'mulai' => '14:30',
+            'berakhir' => '15:15'
           ),
           array(
-            'mulai' => '15:45',
-            'berakhir' => '15:20'
+            'mulai' => '15:15',
+            'berakhir' => '16:00'
           ),
         );
       }
