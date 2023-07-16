@@ -205,7 +205,7 @@ class TabelAngkatan extends Component
     public function render()
     {
         return view('livewire.tabel-angkatan', [
-            'angkatan' => Angkatan::orderBy('created_at', 'desc')->paginate(5),
+            'angkatan' => Angkatan::orderBy('created_at', 'desc')->paginate(10),
             'wali' => WaliAsrama::where('nama', 'like', '%' . $this->search . '%')->where('status', 'aktif')->paginate(5)
         ]);
     }

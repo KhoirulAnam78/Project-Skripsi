@@ -211,7 +211,7 @@ class TabelJadwalKegiatan extends Component
             $angkatan = Angkatan::get()->all();
         }
         return view('livewire.tabel-jadwal-kegiatan', [
-            'jadwalKegiatan' => JadwalKegiatan::where('angkatan_id', 'like', '%' . $this->filterAngkatan . '%')->where('tahun_akademik_id', $this->tahun_akademik_id)->latest()->paginate(5),
+            'jadwalKegiatan' => JadwalKegiatan::where('angkatan_id', 'like', '%' . $this->filterAngkatan . '%')->where('tahun_akademik_id', $this->tahun_akademik_id)->latest()->paginate(10),
             'allow' => $allow,
             'angkatan' => $angkatan,
             'kegiatan' => Kegiatan::all(),

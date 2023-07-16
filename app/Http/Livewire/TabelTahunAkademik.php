@@ -153,7 +153,7 @@ class TabelTahunAkademik extends Component
     public function render()
     {
         return view('livewire.tabel-tahun-akademik', [
-            'tahun_akademik' => TahunAkademik::where('nama', 'like', '%' . $this->search . '%')->orderBy('created_at', 'desc')->paginate(5),
+            'tahun_akademik' => TahunAkademik::where('nama', 'like', '%' . $this->search . '%')->orderBy('created_at', 'desc')->paginate(10),
 
         ]);
     }

@@ -227,9 +227,9 @@ class TabelJadwalPelajaran extends Component
             }
             if ($this->filterKelas !== '') {
                 if ($this->filterHari !== '') {
-                    $jadwalPelajaran = JadwalPelajaran::with('guru')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->where('hari', $this->filterHari)->paginate(5);
+                    $jadwalPelajaran = JadwalPelajaran::with('guru')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->where('hari', $this->filterHari)->orderBy('hari', 'asc')->paginate(10);
                 } else {
-                    $jadwalPelajaran = JadwalPelajaran::with('guru')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->orderBy('hari', 'asc')->paginate(5);
+                    $jadwalPelajaran = JadwalPelajaran::with('guru')->with('mataPelajaran')->where('kelas_id', $this->filterKelas)->orderBy('hari', 'asc')->paginate(10);
                 }
             } else {
                 $jadwalPelajaran = [];

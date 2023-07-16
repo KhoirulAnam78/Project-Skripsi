@@ -156,7 +156,7 @@ class TabelNarasumber extends Component
     public function render()
     {
         return view('livewire.tabel-narasumber', [
-            'narasumber' => Narasumber::where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(5),
+            'narasumber' => Narasumber::where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(10),
         ]);
     }
 

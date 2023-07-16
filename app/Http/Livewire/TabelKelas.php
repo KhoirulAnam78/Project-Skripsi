@@ -170,7 +170,7 @@ class TabelKelas extends Component
             $allow = false;
         }
         return view('livewire.tabel-kelas', [
-            'kelas' => Kelas::where('nama', 'like', '%' . $this->search . '%')->where('tahun_akademik_id', $this->filter)->orderBy('nama', 'asc')->paginate(5),
+            'kelas' => Kelas::where('nama', 'like', '%' . $this->search . '%')->where('tahun_akademik_id', $this->filter)->orderBy('nama', 'asc')->paginate(10),
             'tahun_akademik' => TahunAkademik::latest()->get()->all(),
             'angkatan' => Angkatan::where('status', 'belum lulus')->get()->all(),
             'allow' => $allow

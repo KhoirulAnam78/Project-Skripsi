@@ -126,7 +126,7 @@ class TabelKegiatan extends Component
     public function render()
     {
         return view('livewire.tabel-kegiatan', [
-            'kegiatan' => Kegiatan::where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(5),
+            'kegiatan' => Kegiatan::where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(10),
         ]);
     }
 

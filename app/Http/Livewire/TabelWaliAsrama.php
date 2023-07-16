@@ -229,7 +229,7 @@ class TabelWaliAsrama extends Component
     public function render()
     {
         return view('livewire.tabel-wali-asrama', [
-            'wali_asrama' => WaliAsrama::where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(5),
+            'wali_asrama' => WaliAsrama::where('nama', 'like', '%' . $this->search . '%')->orderBy('nama', 'asc')->paginate(10),
         ]);
     }
 
