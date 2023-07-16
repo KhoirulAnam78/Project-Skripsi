@@ -88,7 +88,7 @@ class PimpinanApiController extends Controller
             'berakhir' => '11:30'
           ),
         );
-      } else if ($request->hari == 'Jumat') {
+      } else if ($request->hari == 'Sabtu') {
         $waktu = [];
       } else {
         $waktu = array(
