@@ -88,6 +88,7 @@ Route::get('/download-template-wali-asrama', [WaliAsramaController::class, 'down
 
 //DATA ROMBEL
 Route::get('/rombongan-belajar', [RombelController::class, 'index'])->middleware('auth');
+Route::get('/download-template-rombel', [SiswaController::class, 'download'])->middleware('auth');
 
 //DATA MAPEL
 Route::get('/mata-pelajaran', [MataPelajaranController::class, 'index'])->middleware('auth');
