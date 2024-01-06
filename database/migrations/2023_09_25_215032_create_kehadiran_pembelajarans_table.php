@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->enum('status', ['hadir', 'sakit', 'alfa', 'izin', 'dinas luar', 'dinas dalam']);
             $table->foreignId('siswa_id')->constrained('siswas');
-            $table->foreignId('monitoring_pembelajaran_id')->constrained('monitoring_pembelajarans');
+            $table->foreignId('monitoring_pembelajaran_id')->constrained('monitoring_pembelajaran_news','monitoring_pembelajaran_id');
             $table->timestamps();
         });
     }

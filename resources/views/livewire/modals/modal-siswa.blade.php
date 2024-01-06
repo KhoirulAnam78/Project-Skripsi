@@ -35,6 +35,7 @@
                                 <option value="">Status</option>
                                 <option value="belum lulus">Belum Lulus</option>
                                 <option value="lulus">Lulus</option>
+                                <option value="non aktif">Non Aktif</option>
                             </select>
                             @error('status')
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
@@ -124,6 +125,7 @@
                                 <option value="">Status</option>
                                 <option value="belum lulus">Belum Lulus</option>
                                 <option value="lulus">Lulus</option>
+                                <option value="non aktif">Non Aktif</option>
                             </select>
                             @error('status')
                                 <span class="error" style="font-size:12px; font-style:italic">*

@@ -180,6 +180,7 @@ class TabelSiswa extends Component
 
     public function import()
     {
+        set_time_limit(0);
         $this->validate([
             'file' => 'required|mimes:xlsx,xls'
         ]);

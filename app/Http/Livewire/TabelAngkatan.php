@@ -8,6 +8,7 @@ use App\Models\WaliAsrama;
 use Livewire\WithPagination;
 use App\Models\TahunAkademik;
 use App\Models\AngkatanWaliAsrama;
+use Illuminate\Support\Facades\DB;
 
 class TabelAngkatan extends Component
 {
@@ -24,14 +25,12 @@ class TabelAngkatan extends Component
                 [
                     'nama' => 'required|unique:angkatans,nama,' . $this->angkatan_edit_id,
                     'status' => 'required',
-                    'waliAsrama' => 'required'
                 ];
         } else {
             return
                 [
                     'nama' => 'required|unique:angkatans,nama,NULL,id',
                     'status' => 'required',
-                    'waliAsrama' => 'required'
                 ];
         }
     }
@@ -69,20 +68,23 @@ class TabelAngkatan extends Component
         $this->validate([
             'nama' => 'required|unique:angkatans,nama,NULL,id',
             'status' => 'required',
-            'waliAsrama' => 'required'
         ]);
 
-        $angkatan = Angkatan::create([
-            'nama' => $this->nama,
-            'status' => $this->status
-        ]);
-
-        foreach ($this->waliAsrama as $w) {
-            AngkatanWaliAsrama::create([
-                'angkatan_id' => $angkatan->id,
-                'wali_asrama_id' => $w
+        DB::transaction(function () {
+            $angkatan = Angkatan::create([
+                'nama' => $this->nama,
+                'status' => $this->status
             ]);
-        }
+            
+            if(count($this->waliAsrama) != 0){
+                foreach ($this->waliAsrama as $w) {
+                    AngkatanWaliAsrama::create([
+                        'angkatan_id' => $angkatan->id,
+                        'wali_asrama_id' => $w
+                    ]);
+                }
+            }
+        });
 
         session()->flash('message', 'Data berhasil ditambahkan !');
         $this->dispatchBrowserEvent('close-modal');
@@ -110,55 +112,60 @@ class TabelAngkatan extends Component
         $this->validate([
             'nama' => 'required|unique:angkatans,nama,' . $this->angkatan_edit_id,
             'status' => 'required',
-            'waliAsrama' => 'required'
         ]);
         if ($this->status === 'belum lulus') {
 
-            Angkatan::where('id', $this->angkatan_edit_id)->update([
-                'nama' => $this->nama,
-                'status' => $this->status
-            ]);
-            $akademik = TahunAkademik::where('status', 'aktif')->first()->id;
-            $kelas = Angkatan::find($this->angkatan_edit_id)->kelas->where('tahun_akademik_id', $akademik)->all();
-            // dd($kelas);
-            foreach ($kelas as $k) {
-                $siswa = $k->siswas;
-                foreach ($siswa as $s) {
-                    $s->update(['status' => 'belum lulus']);
-                }
-            }
-
-            AngkatanWaliAsrama::where('angkatan_id', $this->angkatan_edit_id)->delete();
-
-            // dd($this->waliAsrama);
-            foreach ($this->waliAsrama as $w) {
-                AngkatanWaliAsrama::create([
-                    'angkatan_id' => $this->angkatan_edit_id,
-                    'wali_asrama_id' => $w
+            DB::transaction(function () {
+                Angkatan::where('id', $this->angkatan_edit_id)->update([
+                    'nama' => $this->nama,
+                    'status' => $this->status
                 ]);
-            }
+                $akademik = TahunAkademik::where('status', 'aktif')->first()->id;
+                $kelas = Angkatan::find($this->angkatan_edit_id)->kelas->where('tahun_akademik_id', $akademik)->all();
+                // dd($kelas);
+                foreach ($kelas as $k) {
+                    $siswa = $k->siswas;
+                    foreach ($siswa as $s) {
+                        $s->update(['status' => 'belum lulus']);
+                    }
+                }
+    
+                AngkatanWaliAsrama::where('angkatan_id', $this->angkatan_edit_id)->delete();
+    
+                // dd($this->waliAsrama);
+                if(count($this->waliAsrama) != 0){
+                    foreach ($this->waliAsrama as $w) {
+                        AngkatanWaliAsrama::create([
+                            'angkatan_id' => $this->angkatan_edit_id,
+                            'wali_asrama_id' => $w
+                        ]);
+                    }  
+                }
+            });
         } else {
-            Angkatan::where('id', $this->angkatan_edit_id)->update([
-                'nama' => $this->nama,
-                'status' => $this->status
-            ]);
-            $kelas = Angkatan::find($this->angkatan_edit_id)->kelas->all();
-            foreach ($kelas as $k) {
-                $siswa = $k->siswas;
-                foreach ($siswa as $s) {
-                    $s->update(['status' => 'lulus']);
-                }
-            }
-
-            AngkatanWaliAsrama::where('angkatan_id', $this->angkatan_edit_id)->delete();
-
-            // dd($this->waliAsrama);
-            foreach ($this->waliAsrama as $w) {
-                AngkatanWaliAsrama::create([
-                    'angkatan_id' => $this->angkatan_edit_id,
-                    'wali_asrama_id' => $w
+            DB::transaction(function () {
+                Angkatan::where('id', $this->angkatan_edit_id)->update([
+                    'nama' => $this->nama,
+                    'status' => $this->status
                 ]);
-            }
+                $kelas = Angkatan::find($this->angkatan_edit_id)->kelas->all();
+                foreach ($kelas as $k) {
+                    $siswa = $k->siswas;
+                    foreach ($siswa as $s) {
+                        $s->update(['status' => 'lulus']);
+                    }
+                }
+    
+                AngkatanWaliAsrama::where('angkatan_id', $this->angkatan_edit_id)->delete();
+    
+                // dd($this->waliAsrama);
+                foreach ($this->waliAsrama as $w) {
+                    AngkatanWaliAsrama::create([
+                        'angkatan_id' => $this->angkatan_edit_id,
+                        'wali_asrama_id' => $w
+                    ]);
+                }
+            });
         }
         session()->flash('message', 'Data berhasil diedit !');
         $this->dispatchBrowserEvent('close-edit-modal');
@@ -178,11 +185,12 @@ class TabelAngkatan extends Component
     {
         $angkatan = Angkatan::where('id', $this->angkatan_delete_id)->first();
         try {
-            foreach ($this->waliAsrama as $w) {
-                AngkatanWaliAsrama::where('angkatan_id', $angkatan->id)->where('wali_asrama_id', $w->id)->first()->delete();
-            }
-            $angkatan->delete();
-
+            DB::transaction(function () { 
+                foreach ($this->waliAsrama as $w) {
+                    AngkatanWaliAsrama::where('angkatan_id', $angkatan->id)->where('wali_asrama_id', $w->id)->first()->delete();
+                }
+                $angkatan->delete();
+            });
             session()->flash('message', 'Data berhasil dihapus');
         } catch (\Throwable $th) {
             session()->flash('error', 'Data gagal dihapus karena digunakan di dalam sistem');

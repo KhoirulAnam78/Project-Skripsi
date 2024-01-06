@@ -9,6 +9,7 @@ use App\Models\TahunAkademik;
 use App\Models\JadwalKegiatan;
 use App\Models\JadwalGuruPiket;
 use App\Models\JadwalPelajaran;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -105,12 +106,21 @@ class DashboardController extends Controller
             //mengambil nama hari 
             $day = \Carbon\Carbon::now()->translatedFormat('l');
 
-            $jadwal = JadwalPelajaran::where('guru_id', Auth::user()->guru->id)->whereIn('kelas_id', $kelasAktif)->where('hari', $day)->with(['kelas' => function ($query) {
-                $query->select('id', 'nama');
-            }])->with(['mataPelajaran' => function ($query) {
-                $query->select('id', 'nama');
-            }])->orderBy('waktu_mulai')->paginate(10);
+            $jadwal = DB::table('jadwal_pelajarans as a')
+                    ->where('a.guru_id',Auth::user()->guru->id)
+                    ->whereIn('a.kelas_id',$kelasAktif)
+                    ->where('a.hari','selasa')
+                    ->leftjoin('mata_pelajarans as b','b.id','a.mata_pelajaran_id')
+                    ->leftjoin('kelas as c','c.id','a.kelas_id')
+                    ->leftjoin('monitoring_pembelajaran_news as d',function($join){
+                        $join->on('d.mata_pelajaran_id','a.mata_pelajaran_id')
+                            ->on('d.guru_id','a.guru_id')
+                            ->where('d.tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
+                    })
+                    ->select('a.waktu_mulai','a.waktu_berakhir','b.nama as mata_pelajaran','c.nama as kelas','d.status_validasi')
+                    ->get();
 
+                    
             //Ambil Jadwal Piket
             if (JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()) {
                 $jadwalPiket = JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()->hari;

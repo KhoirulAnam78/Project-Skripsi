@@ -27,7 +27,27 @@
         </div>
     @endif
     <div class="mx-3 my-2">
-        <p>Pilih tahun akademik dan kelas terlebih dahulu !</p>
+        @can('admin')
+
+            @if ($allow !== false)
+                <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" wire:click="pageReset()"
+                    class="btn btn-primary active mb-2 {{ $allow === false ? 'disabled' : '' }}"
+                    style="background-color : #1052BA;border-color: #1052BA"><i class='bx bx-add-to-queue'></i> Tambah</a>
+                <a href="" class="btn btn-success active mb-2 {{ $allow === false ? 'disabled' : '' }}"
+                    data-bs-toggle="modal" data-bs-target="#importModal"
+                    style="background-color: #5CB85C;border-color: #5CB85C"><i class='bx bxs-file-import'></i>
+                    Import</a>
+            @else
+                <a href="" class="btn btn-primary active mb-2 disabled"
+                    style="background-color : #1052BA;border-color: #1052BA"><i class='bx bx-add-to-queue'></i> Tambah</a>
+                <a href="" class="btn btn-success active mb-2 disabled"
+                    style="background-color: #5CB85C;border-color: #5CB85C"><i class='bx bxs-file-import'></i>
+                    Import</a>
+            @endif
+        @endcan
+        <a class="btn btn-info mb-2 text-white" wire:click="export()"
+            style="background-color: #F0AD4E;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
+            Export</a>
     </div>
     <div class="row justify-content-start">
         <div class="col-lg-4 col-md-4 mb-3 mx-3">
@@ -51,29 +71,7 @@
             </select>
         </div>
     </div>
-    <div class="mx-3 my-2">
-        @can('admin')
 
-            @if ($allow !== false)
-                <a href="" data-bs-toggle="modal" data-bs-target="#inputModal" wire:click="pageReset()"
-                    class="btn btn-primary active mb-2 {{ $allow === false ? 'disabled' : '' }}"
-                    style="background-color : #1052BA;border-color: #1052BA"><i class='bx bx-add-to-queue'></i> Tambah</a>
-                <a href="" class="btn btn-success active mb-2 {{ $allow === false ? 'disabled' : '' }}"
-                    data-bs-toggle="modal" data-bs-target="#importModal"
-                    style="background-color: #5CB85C;border-color: #5CB85C"><i class='bx bxs-file-import'></i>
-                    Import</a>
-            @else
-                <a href="" class="btn btn-primary active mb-2 disabled"
-                    style="background-color : #1052BA;border-color: #1052BA"><i class='bx bx-add-to-queue'></i> Tambah</a>
-                <a href="" class="btn btn-success active mb-2 disabled"
-                    style="background-color: #5CB85C;border-color: #5CB85C"><i class='bx bxs-file-import'></i>
-                    Import</a>
-            @endif
-        @endcan
-        <a class="btn btn-info mb-2 text-white" wire:click="export()"
-            style="background-color: #F0AD4E;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
-            Export</a>
-    </div>
     <div class="col-lg-4 col-md-4 mb-2 mx-3">
         <label for="search" class="form-label">Pencarian</label>
         <input type="text" wire:model="search" id="search" class="form-control"

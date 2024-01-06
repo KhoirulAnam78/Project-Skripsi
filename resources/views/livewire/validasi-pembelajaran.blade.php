@@ -63,26 +63,24 @@
                             <tr>
                                 <td>{{ ++$a }}
                                 </td>
-                                <td>{{ $j->kelas->nama }}</td>
-                                <td>{{ $j->mataPelajaran->nama }}</td>
-                                <td>{{ $j->guru->nama }}</td>
+                                <td>{{ $j->kelas }}</td>
+                                <td>{{ $j->mata_pelajaran }}</td>
+                                <td>{{ $j->guru }}</td>
                                 <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}</td>
-                                @php
-                                    $data = $j->monitoringPembelajarans->where('tanggal', $tanggal);
-                                @endphp
                                 <td style="white-space: normal">
-                                    {{ count($data) === 0 ? '' : $data->first()->topik }}
+                                    {{ $j->topik }}
                                 </td>
-                                <td>{{ count($data) === 0 ? '' : ucwords($data->first()->status_validasi) }}
+                                <td>{{ $j->status_validasi }}
                                 </td>
-                                <td><button {{ count($data) === 0 ? 'disabled' : '' }}
+                                <td><button {{ $j->topik === null ? 'disabled' : '' }}
                                         wire:click="showId({{ $j->id }})" class="btn btn-primary"><i
                                             class='bx bx-show'></i>
                                     </button>
-                                    <button {{ count($data) === 0 ? 'disabled' : '' }}
-                                        @if (count($data) !== 0) @if ($data->first()->status_validasi === 'terlaksana')
+                                    <button {{ $j->topik === null ? 'disabled' : '' }}
+                                        @if ($j->topik === null) @if ($j->status_validasi === 'terlaksana')
                                 {{ 'disabled' }} @endif
-                                        @endif wire:click="showValid({{ $j->id }})"
+                                        @endif
+                                        wire:click="showValid({{ $j->id }})"
                                         class="btn btn-success"><i class='bx bx-check'></i>
                                     </button>
                                     <button wire:click="presensi({{ $j->id }})" class="btn btn-danger"><i
@@ -105,15 +103,15 @@
                                 @php
                                     $data = $j->jadwalPelajaran->monitoringPembelajarans->where('tanggal', $tanggal);
                                 @endphp
-                                <td>{{ count($data) === 0 ? '' : $data->first()->topik }}
+                                <td>{{ count($data) === 0 ? '' : $j->topik }}
                                 </td>
-                                <td>{{ count($data) === 0 ? '' : ucwords($data->first()->status_validasi) }}
+                                <td>{{ count($data) === 0 ? '' : ucwords($j->status_validasi) }}
                                 </td>
                                 <td><button {{ count($data) === 0 ? 'disabled' : '' }} class="btn btn-primary"
                                         wire:click="showId({{ $j->jadwal_pelajaran_id }})"><i class='bx bx-show'></i>
                                     </button>
                                     <button {{ count($data) === 0 ? 'disabled' : '' }}
-                                        @if (count($data) !== 0) @if ($data->first()->status_validasi === 'terlaksana')
+                                        @if (count($data) !== 0) @if ($j->status_validasi === 'terlaksana')
                                         {{ 'disabled' }} @endif
                                         @endif
                                         class="btn btn-success"

@@ -10,9 +10,10 @@ use App\Models\TahunAkademik;
 use App\Models\JadwalGuruPiket;
 use App\Models\JadwalPelajaran;
 use App\Models\JadwalPengganti;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\KehadiranPembelajaran;
-use App\Models\MonitoringPembelajaran;
+use App\Models\MonitoringPembelajaranNew;
 
 class InputPresensi extends Component
 {
@@ -29,7 +30,7 @@ class InputPresensi extends Component
     public $update = false;
     public $editPresensi;
     //menampung jadwal pelajaran dan jadwal pengganti
-    public $mapel, $mapelPengganti;
+    public $mapel, $mapelPengganti, $guru_id;
     //atribut inputan
     public $tanggal, $waktu_mulai, $waktu_berakhir, $topik;
     //menampung kehadiran siswa
@@ -88,18 +89,22 @@ class InputPresensi extends Component
             //kalau ada jadwal mapel maka set default filter mapel pertama
             if (count($this->mapel) !== 0) {
                 $this->filterMapel = $this->mapel[0]->id;
+                $this->guru_id = $this->mapel[0]->guru->id;
+                $mapel_id = $this->mapel[0]->mata_pelajaran_id;
             } else {
                 //kalau tidak set default mapel dari jadwal pengganti
                 $this->filterMapel = $this->mapelPengganti[0]->id;
+                $this->guru_id = $this->mapelPengganti[0]->guru->id;
+                $mapel_id = $this->mapelPengganti[0]->mata_pelajaran_id;
             }
 
             //Cek apakah presensi sudah diinputkan
-            if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
+            if (MonitoringPembelajaranNew::where('mata_pelajaran_id', $mapel_id)->where('guru_id',$this->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first()) {
                 //ambil data
-                $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
+                $monitoring = MonitoringPembelajaranNew::where('mata_pelajaran_id', $mapel_id)->where('guru_id',$this->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first();
 
                 //set data berdasarkan data yang sudah diinputkan
-                $this->editPresensi = $monitoring->id;
+                $this->editPresensi = $monitoring->monitoring_pembelajaran_id;
                 $this->tanggal = $monitoring->tanggal;
                 $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
                 $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
@@ -109,7 +114,7 @@ class InputPresensi extends Component
                 $this->update = true;
 
                 //ambil data kehadiran siswa yang sudah diinputkan
-                $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+                $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->monitoring_pembelajaran_id)->get()->all();
                 foreach ($kehadiran as $k) {
                     $this->presensi[$k->siswa_id] = $k->status;
                 }
@@ -211,18 +216,22 @@ class InputPresensi extends Component
             //kalau ada jadwal mapel maka set default filter mapel pertama
             if (count($this->mapel) !== 0) {
                 $this->filterMapel = $this->mapel[0]->id;
+                $this->guru_id = $this->mapel[0]->guru->id;
+                $mapel_id = $this->mapel[0]->mata_pelajaran_id;
             } else {
                 //kalau tidak set default mapel dari jadwal pengganti
                 $this->filterMapel = $this->mapelPengganti[0]->id;
+                $this->guru_id = $this->mapelPengganti[0]->guru->id;
+                $mapel_id = $this->mapelPengganti[0]->mata_pelajaran_id;
             }
 
             //Cek apakah presensi sudah diinputkan
-            if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
+            if (MonitoringPembelajaranNew::where('mata_pelajaran_id', $mapel_id)->where('guru_id',$this->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first()) {
                 //ambil data
-                $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
+                $monitoring = MonitoringPembelajaranNew::where('mata_pelajaran_id', $mapel_id)->where('guru_id',$this->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first();
 
                 //set data berdasarkan data yang sudah diinputkan
-                $this->editPresensi = $monitoring->id;
+                $this->editPresensi = $monitoring->monitoring_pembelajaran_id;
                 $this->tanggal = $monitoring->tanggal;
                 $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
                 $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
@@ -232,7 +241,7 @@ class InputPresensi extends Component
                 $this->update = true;
 
                 //ambil data kehadiran siswa yang sudah diinputkan
-                $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+                $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->monitoring_pembelajaran_id)->get()->all();
                 foreach ($kehadiran as $k) {
                     $this->presensi[$k->siswa_id] = $k->status;
                 }
@@ -258,15 +267,17 @@ class InputPresensi extends Component
     public function updatedFilterMapel()
     {
         $this->empty();
+        $data = JadwalPelajaran::where('id',$this->filterMapel)->first();
+        $this->guru_id = $data->guru_id;
+        $mapel_id = $data->mata_pelajaran_id;
         //Cek apakah presensi sudah diinputkan
-        if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
-
+        if (MonitoringPembelajaranNew::where('mata_pelajaran_id', $mapel_id)->where('guru_id',$this->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first()) {
             //ambil data yang sudah diinputkan
-            $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
+            $monitoring = MonitoringPembelajaranNew::where('mata_pelajaran_id', $mapel_id)->where('guru_id',$this->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first();
 
             //set form inputan dengan nilai yang ada di database
             $this->tanggal = $monitoring->tanggal;
-            $this->editPresensi = $monitoring->id;
+            $this->editPresensi = $monitoring->monitoring_pembelajaran_id;
             $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
             $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
             $this->topik = $monitoring->topik;
@@ -275,7 +286,7 @@ class InputPresensi extends Component
             $this->update = true;
 
             //set kehadiran berdasarkan database
-            $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+            $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->monitoring_pembelajaran_id)->get()->all();
             foreach ($kehadiran as $k) {
                 $this->presensi[$k->siswa_id] = $k->status;
             }
@@ -320,22 +331,28 @@ class InputPresensi extends Component
             $guruPiketId = null;
             $status = 'terlaksana';
         }
-        $monitoring = MonitoringPembelajaran::create([
-            'tanggal' => $this->tanggal,
-            'topik' => $this->topik,
-            'waktu_mulai' => $this->waktu_mulai,
-            'waktu_berakhir' => $this->waktu_berakhir,
-            'status_validasi' => $status,
-            'jadwal_pelajaran_id' => $this->filterMapel,
-            'guru_piket_id' => $guruPiketId
-        ]);
-        foreach ($this->presensi as $key => $value) {
-            KehadiranPembelajaran::create([
-                'siswa_id' => $key,
-                'status' => $value,
-                'monitoring_pembelajaran_id' => $monitoring->id
+        $data = JadwalPelajaran::where('id',$this->filterMapel)->first();
+        DB::transaction(function () use ($data,$status,$guruPiketId) {
+            $monitoring = MonitoringPembelajaranNew::create([
+                'tanggal' => $this->tanggal,
+                'topik' => $this->topik,
+                'waktu_mulai' => $this->waktu_mulai,
+                'waktu_berakhir' => $this->waktu_berakhir,
+                'status_validasi' => $status,
+                'kelas_id' => $data->kelas_id,
+                'guru_id' => $data->guru_id,
+                'mata_pelajaran_id' => $data->mata_pelajaran_id,
+                'guru_piket_id' => $guruPiketId
             ]);
-        }
+    
+            foreach ($this->presensi as $key => $value) {
+                KehadiranPembelajaran::create([
+                    'siswa_id' => $key,
+                    'status' => $value,
+                    'monitoring_pembelajaran_id' => $monitoring->monitoring_pembelajaran_id
+                ]);
+            }
+        });
         $this->update = true;
         session()->flash('message', 'Presensi berhasil diinputkan !');
         // $this->empty();
@@ -344,17 +361,19 @@ class InputPresensi extends Component
     public function update()
     {
         $this->validate();
-        MonitoringPembelajaran::where('id', $this->editPresensi)->update([
-            'tanggal' => $this->tanggal,
-            'topik' => $this->topik,
-            'waktu_mulai' => $this->waktu_mulai,
-            'waktu_berakhir' => $this->waktu_berakhir,
-        ]);
-        foreach ($this->presensi as $key => $value) {
-            KehadiranPembelajaran::where('monitoring_pembelajaran_id', $this->editPresensi)->where('siswa_id', $key)->update([
-                'status' => $value,
+        DB::transaction(function () {
+            MonitoringPembelajaranNew::where('monitoring_pembelajaran_id', $this->editPresensi)->update([
+                'tanggal' => $this->tanggal,
+                'topik' => $this->topik,
+                'waktu_mulai' => $this->waktu_mulai,
+                'waktu_berakhir' => $this->waktu_berakhir,
             ]);
-        }
+            foreach ($this->presensi as $key => $value) {
+                KehadiranPembelajaran::where('monitoring_pembelajaran_id', $this->editPresensi)->where('siswa_id', $key)->update([
+                    'status' => $value,
+                ]);
+            }
+        });
         session()->flash('message', 'Presensi berhasil diupdate !');
     }
 
@@ -387,18 +406,22 @@ class InputPresensi extends Component
             //kalau ada jadwal mapel maka set default filter mapel pertama
             if (count($this->mapel) !== 0) {
                 $this->filterMapel = $this->mapel[0]->id;
+                $this->guru_id = $this->mapel[0]->guru->id;
+                $mapel_id = $this->mapel[0]->mata_pelajaran_id;
             } else {
                 //kalau tidak set default mapel dari jadwal pengganti
                 $this->filterMapel = $this->mapelPengganti[0]->id;
+                $this->guru_id = $this->mapelPengganti[0]->guru->id;
+                $mapel_id = $this->mapelPengganti[0]->mata_pelajaran_id;
             }
 
             //Cek apakah presensi sudah diinputkan
-            if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first()) {
+            if (MonitoringPembelajaranNew::where('mata_pelajaran_id', $mapel_id)->where('guru_id',$this->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first()) {
                 //ambil data
-                $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->filterMapel)->where('tanggal', $this->tanggal)->first();
+                $monitoring = MonitoringPembelajaranNew::where('mata_pelajaran_id', $mapel_id)->where('guru_id',$this->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first();
 
                 //set data berdasarkan data yang sudah diinputkan
-                $this->editPresensi = $monitoring->id;
+                $this->editPresensi = $monitoring->monitoring_pembelajaran_id;
                 $this->tanggal = $monitoring->tanggal;
                 $this->waktu_mulai = substr($monitoring->waktu_mulai, 0, -3);
                 $this->waktu_berakhir = substr($monitoring->waktu_berakhir, 0, -3);
@@ -408,7 +431,7 @@ class InputPresensi extends Component
                 $this->update = true;
 
                 //ambil data kehadiran siswa yang sudah diinputkan
-                $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+                $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->monitoring_pembelajaran_id)->get()->all();
                 foreach ($kehadiran as $k) {
                     $this->presensi[$k->siswa_id] = $k->status;
                 }

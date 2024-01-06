@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\MonitoringPembelajaran;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -64,32 +65,53 @@ class DaftarPertemuanExport extends DefaultValueBinder implements FromCollection
 
     public function collection()
     {
-        $mapel =  MonitoringPembelajaran::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('jadwalPelajaran')->with('kehadiranPembelajarans')->whereRelation('jadwalPelajaran', 'mata_pelajaran_id', $this->mapel_id)->whereRelation('jadwalPelajaran', 'kelas_id', $this->kelas_id)->get();
-        return $mapel->sortBy('tanggal');
+        $mapel =  $monitoring = DB::table('monitoring_pembelajaran_news as a')
+        ->where('a.kelas_id',$this->kelas_id)
+        ->where('a.tanggal', '>=', $this->tanggalAwal)
+        ->where('a.tanggal', '<=', $this->tanggalAkhir)
+        ->where('a.mata_pelajaran_id',$this->mapel_id)
+        ->leftJoin('kehadiran_pembelajarans as b','b.monitoring_pembelajaran_id','a.monitoring_pembelajaran_id','left outer')
+        ->leftJoin('gurus as c', 'c.id','a.guru_id')
+        ->leftjoin('gurus as d','d.id','a.guru_piket_id')
+        ->select('a.monitoring_pembelajaran_id','a.tanggal','a.waktu_mulai','a.waktu_berakhir','a.topik','a.status_validasi','c.nama as guru','d.nama as piket', 'a.keterangan',
+        DB::raw("SUM(CASE WHEN b.status = 'hadir' THEN 1 ELSE 0 END) AS hadir"),
+        DB::raw("SUM(CASE WHEN b.status = 'izin' THEN 1 ELSE 0 END) AS izin"),
+        DB::raw("SUM(CASE WHEN b.status = 'sakit' THEN 1 ELSE 0 END) AS sakit"),
+        DB::raw("SUM(CASE WHEN b.status = 'alfa' THEN 1 ELSE 0 END) AS alfa"),
+        DB::raw("SUM(CASE WHEN b.status = 'dinas dalam' THEN 1 ELSE 0 END) AS dd"),
+        DB::raw("SUM(CASE WHEN b.status = 'dinas luar' THEN 1 ELSE 0 END) AS dl"),
+        DB::raw("COUNT(b.id) AS total")
+        )
+        ->groupBy('a.monitoring_pembelajaran_id')
+        ->orderBy('a.tanggal','asc')
+        ->distinct()
+        ->get();
+        return $monitoring;
     }
 
-    public function map($mapel): array
+    public function map($monitoring): array
     {
         return [
             //data yang dari kolom tabel database yang akan diambil
-            $mapel->tanggal,
-            $mapel->topik,
-            $mapel->jadwalPelajaran->guru->nama,
-            substr($mapel->waktu_mulai, 0, -3) . '-' . substr($mapel->waktu_berakhir, 0, -3),
-            $this->jml_siswa,
-            count($mapel->kehadiranPembelajarans->where('status', 'hadir')),
-            count($mapel->kehadiranPembelajarans->where('status', 'izin')),
-            count($mapel->kehadiranPembelajarans->where('status', 'sakit')),
-            count($mapel->kehadiranPembelajarans->where('status', 'alfa')),
-            count($mapel->kehadiranPembelajarans->where('status', 'dinas dalam')),
-            count($mapel->kehadiranPembelajarans->where('status', 'dinas luar')),
-            $mapel->status_validasi,
-            $mapel->keterangan
+            $monitoring->tanggal,
+            $monitoring->topik,
+            $monitoring->guru,
+            substr($monitoring->waktu_mulai, 0, -3) . '-' . substr($monitoring->waktu_berakhir, 0, -3),
+            $monitoring->total,
+            $monitoring->hadir,
+            $monitoring->izin,
+            $monitoring->sakit,
+            $monitoring->alfa,
+            $monitoring->dd,
+            $monitoring->dl,
+            $monitoring->status_validasi,
+            ($monitoring->piket === null) ? 'Admin' : $monitoring->piket,
+            $monitoring->keterangan
         ];
     }
 
     public function headings(): array
     {
-        return ['Tanggal', 'Topik', 'Guru', 'Waktu', 'Jml Siswa', 'Hadir', 'Izin', 'Sakit', 'Alfa', 'DD', 'DL', 'Status', 'Keterangan'];
+        return ['Tanggal', 'Topik', 'Guru', 'Waktu', 'Jml Siswa', 'Hadir', 'Izin', 'Sakit', 'Alfa', 'DD', 'DL', 'Status','Validator', 'Keterangan'];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\MataPelajaran;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -18,7 +19,7 @@ class MapelImport implements ToCollection, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            'nama_mata_pelajaran' => 'required|unique:mata_pelajarans,nama',
+            'nama_mata_pelajaran' => 'required',
         ];
     }
 
@@ -33,9 +34,12 @@ class MapelImport implements ToCollection, WithHeadingRow, WithValidation
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            MataPelajaran::create([
-                'nama' => $row['nama_mata_pelajaran'],
-            ]);
+            DB::transaction(function () use ($row) {
+                MataPelajaran::updateOrCreate(
+                    ['nama' => $row['nama_mata_pelajaran']],
+                    ['nama' => $row['nama_mata_pelajaran']]
+                );
+            });
         }
     }
 }

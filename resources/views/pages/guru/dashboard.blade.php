@@ -64,11 +64,11 @@
                                         <tr class="table-default">
                                             <td>{{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }}
                                             </td>
-                                            <td>{{ $j->mataPelajaran->nama }}</td>
-                                            <td>{{ $j->kelas->nama }}</td>
+                                            <td>{{ $j->mata_pelajaran }}</td>
+                                            <td>{{ $j->kelas }}</td>
                                             @php
                                                 // dd($j->waktu_berakhir);
-                                                if (count($j->monitoringPembelajarans->where('tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'))) != 0) {
+                                                if ($j->status_validasi != null) {
                                                     if (\Carbon\Carbon::now()->translatedFormat('H:i') > substr($j->waktu_berakhir, 0, -3)) {
                                                         $status = 'Telah Berakhir';
                                                     } else {
@@ -92,7 +92,8 @@ if ($status == 'Telah Berakhir'){
                                                         echo'badge bg-label-success my-1';
                                                     } else {
                                                         echo'badge bg-label-danger my-1';
-                                                    } @endphp">{{ $status }}</span>
+                                                    } @endphp
+                                                ">{{ $status }}</span>
                                             </td>
 
                                         </tr>

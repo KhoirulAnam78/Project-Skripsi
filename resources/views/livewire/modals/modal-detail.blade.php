@@ -4,7 +4,8 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <h5 class="modal-title text-white" id="exampleModalLabel1">Lihat Presensi Pertemuan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="closeModal()"
+                    aria-label="Close"></button>
             </div>
             <form wire:submit.prevent="save">
                 <div class="modal-body">
@@ -41,30 +42,9 @@
                                             <td>{{ $s->nisn }}</td>
                                             <td>{{ $s->nama }}</td>
                                             <td>
-                                                <input disabled type="radio" id="presensihadir"
-                                                    name="presensi.{{ $s->id }}" value='hadir'
+                                                <input type="text" class="form-control" disabled id="presensihadir"
+                                                    name="presensi.{{ $s->id }}"
                                                     wire:model="presensi.{{ $s->id }}">
-                                                H <span class="mx-1"></span>
-                                                <input disabled type="radio" id="presensiIzin"
-                                                    name="presensi.{{ $s->id }}" value='izin'
-                                                    wire:model="presensi.{{ $s->id }}">
-                                                I <span class="mx-1"></span>
-                                                <input disabled type="radio" id="presensiSakit"
-                                                    name="presensi.{{ $s->id }}" value='sakit'
-                                                    wire:model="presensi.{{ $s->id }}">
-                                                S <span class="mx-1"></span>
-                                                <input disabled type="radio" id="presensiAlfa"
-                                                    name="presensi.{{ $s->id }}" value='alfa'
-                                                    wire:model="presensi.{{ $s->id }}">
-                                                A <span class="mx-1"></span>
-                                                <input disabled type="radio" id="presensiDinasDalam"
-                                                    name="presensi.{{ $s->id }}" value='dinas dalam'
-                                                    wire:model="presensi.{{ $s->id }}">
-                                                DD <span class="mx-1"></span>
-                                                <input disabled type="radio" id="presensiDinasLuar"
-                                                    name="presensi.{{ $s->id }}" value='dinas luar'
-                                                    wire:model="presensi.{{ $s->id }}">
-                                                DL <span class="mx-1"></span>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -79,7 +59,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-outline-secondary" wire:click="closeModal()"
+                        data-bs-dismiss="modal">
                         Close
                     </button>
                 </div>

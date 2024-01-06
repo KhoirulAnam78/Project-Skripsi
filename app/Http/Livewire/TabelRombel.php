@@ -77,12 +77,13 @@ class TabelRombel extends Component
 
     public function import()
     {
+        set_time_limit(0);
         $this->validate([
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
         try {
-            Excel::import(new ImportRombel($this->filterKelas), $this->file);
+            Excel::import(new ImportRombel($this->filterTahunAkademik), $this->file);
             session()->flash('message', 'Data berhasil diimport');
             $this->file = '';
             $this->dispatchBrowserEvent('close-modal-import');

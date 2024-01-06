@@ -8,11 +8,13 @@ use Livewire\WithPagination;
 use App\Models\MataPelajaran;
 use App\Models\TahunAkademik;
 use App\Models\JadwalPelajaran;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\KehadiranPembelajaran;
 use App\Exports\DaftarPertemuanExport;
 use App\Models\MonitoringPembelajaran;
+use App\Models\MonitoringPembelajaranNew;
 
 class DaftarPertemuan extends Component
 {
@@ -71,15 +73,19 @@ class DaftarPertemuan extends Component
     public function detail($id)
     {
         //ambil data
-        $monitoring = MonitoringPembelajaran::find($id);
+        $monitoring = MonitoringPembelajaranNew::find($id);
         $this->keterangan = $monitoring->keterangan;
 
         //ambil data kehadiran siswa yang sudah diinputkan
-        $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+        $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->monitoring_pembelajaran_id)->get()->all();
         foreach ($kehadiran as $k) {
             $this->presensi[$k->siswa_id] = $k->status;
         }
         $this->dispatchBrowserEvent('show-detail-modal');
+    }
+
+    public function closeModal(){
+        $this->resetPage();
     }
 
     public function export()
@@ -137,6 +143,29 @@ class DaftarPertemuan extends Component
 
     public function render()
     {
+        $monitoring = DB::table('monitoring_pembelajaran_news as a')
+                    ->where('a.kelas_id',$this->filterKelas)
+                    ->where('a.tanggal', '>=', $this->tanggalAwal)
+                    ->where('a.tanggal', '<=', $this->tanggalAkhir)
+                    ->where('a.mata_pelajaran_id',$this->filterMapel)
+                    ->leftJoin('kehadiran_pembelajarans as b','b.monitoring_pembelajaran_id','a.monitoring_pembelajaran_id','left outer')
+                    ->leftJoin('gurus as c', 'c.id','a.guru_id')
+                    ->leftjoin('gurus as d','d.id','a.guru_piket_id')
+                    ->select('a.monitoring_pembelajaran_id','a.tanggal','a.waktu_mulai','a.waktu_berakhir','a.topik','a.status_validasi','c.nama as guru','d.nama as piket', 
+                    DB::raw("SUM(CASE WHEN b.status = 'hadir' THEN 1 ELSE 0 END) AS hadir"),
+                    DB::raw("SUM(CASE WHEN b.status = 'izin' THEN 1 ELSE 0 END) AS izin"),
+                    DB::raw("SUM(CASE WHEN b.status = 'sakit' THEN 1 ELSE 0 END) AS sakit"),
+                    DB::raw("SUM(CASE WHEN b.status = 'alfa' THEN 1 ELSE 0 END) AS alfa"),
+                    DB::raw("SUM(CASE WHEN b.status = 'dinas dalam' THEN 1 ELSE 0 END) AS dd"),
+                    DB::raw("SUM(CASE WHEN b.status = 'dinas luar' THEN 1 ELSE 0 END) AS dl"),
+                    DB::raw("COUNT(b.id) AS total")
+                    )
+                    ->groupBy('a.monitoring_pembelajaran_id')
+                    ->orderBy('a.tanggal','asc')
+                    ->distinct()
+                    ->paginate(10);
+        // dd($monitoring);
+
         $jml_siswa = 0;
         if (Kelas::where('id', $this->filterKelas)->first()) {
             $jml_siswa = count(Kelas::where('id', $this->filterKelas)->first()->siswas);
@@ -148,7 +177,7 @@ class DaftarPertemuan extends Component
         return view('livewire.daftar-pertemuan', [
             'kelas' => TahunAkademik::find($this->filterTahunAkademik)->kelas,
             'mapel' => $this->mapel,
-            'pertemuan' => MonitoringPembelajaran::where('tanggal', '>=', $this->tanggalAwal)->where('tanggal', '<=', $this->tanggalAkhir)->with('jadwalPelajaran')->with('kehadiranPembelajarans')->whereRelation('jadwalPelajaran', 'mata_pelajaran_id', $this->filterMapel)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->orderBy('tanggal', 'asc')->paginate(10),
+            'pertemuan' => $monitoring,
             'jml_siswa' => $jml_siswa,
             'siswa' => $siswa,
             'tahunAkademik' => TahunAkademik::all()

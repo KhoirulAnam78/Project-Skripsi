@@ -9,9 +9,11 @@ use App\Models\TahunAkademik;
 use App\Models\JadwalGuruPiket;
 use App\Models\JadwalPelajaran;
 use App\Models\JadwalPengganti;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\KehadiranPembelajaran;
 use App\Models\MonitoringPembelajaran;
+use App\Models\MonitoringPembelajaranNew;
 
 class ValidasiPembelajaran extends Component
 {
@@ -48,46 +50,62 @@ class ValidasiPembelajaran extends Component
 
         if (Auth::user()->role === 'guru') {
             $jadwalToday = JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->first();
-            // ->where(function ($query) {
-            //     $query->where('waktu_mulai', '<=', \Carbon\Carbon::now()->translatedFormat('H:i'))->where('waktu_berakhir', '>=', \Carbon\Carbon::now()->translatedFormat('H:i'));
-            // })->first();
             if ($jadwalToday === null) {
                 $this->jadwal = [];
                 $this->jadwalPengganti = [];
             } else {
                 //Mengambil jadwal hari ini
-                $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->where('kelas_id', $this->filterKelas)->with(
-                    [
-                        'kelas' => function ($query) {
-                            $query->select('id', 'nama');
-                        },
-                        'mataPelajaran' => function ($query) {
-                            $query->select('id', 'nama');
-                        },
-                        'guru' => function ($query) {
-                            $query->select('id', 'nama');
-                        },
-                    ]
-                )->get();
+                $this->jadwal = DB::table('jadwal_pelajarans as a')
+                                ->where('a.hari', $this->day)
+                                ->where('a.waktu_mulai', '>=', $jadwalToday->waktu_mulai)
+                                ->where('a.waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)
+                                ->where('a.kelas_id', $this->filterKelas)
+                                ->leftjoin('kelas as b','b.id','a.kelas_id')
+                                ->leftjoin('gurus as c','c.id','a.guru_id')
+                                ->leftjoin('mata_pelajarans as d','d.id','a.mata_pelajaran_id')
+                                ->leftjoin('monitoring_pembelajaran_news as e',function($join){
+                                    $join->on('e.mata_pelajaran_id','a.mata_pelajaran_id')
+                                        ->on('e.kelas_id','a.kelas_id')
+                                        ->on('e.guru_id','a.guru_id');
+                                })
+                                ->select('a.id','a.waktu_mulai','a.waktu_berakhir','a.kelas_id','a.mata_pelajaran_id','a.guru_id','b.nama as kelas','c.nama as guru','d.nama as mata_pelajaran','e.*')
+                                ->get();                
+                
+                
+                // JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->where('kelas_id', $this->filterKelas)->with(
+                //     [
+                //         'kelas' => function ($query) {
+                //             $query->select('id', 'nama');
+                //         },
+                //         'mataPelajaran' => function ($query) {
+                //             $query->select('id', 'nama');
+                //         },
+                //         'guru' => function ($query) {
+                //             $query->select('id', 'nama');
+                //         },
+                //     ]
+                // )->get();
 
                 //Get Jadwal Pengganti
                 $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
             }
         } else {
             //Mengambil jadwal hari ini
-            $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
-                [
-                    'kelas' => function ($query) {
-                        $query->select('id', 'nama');
-                    },
-                    'mataPelajaran' => function ($query) {
-                        $query->select('id', 'nama');
-                    },
-                    'guru' => function ($query) {
-                        $query->select('id', 'nama');
-                    },
-                ]
-            )->get();
+            $this->jadwal = DB::table('jadwal_pelajarans as a')
+                            ->where('a.hari', $this->day)
+                            // ->where('a.waktu_mulai', '>=', $jadwalToday->waktu_mulai)
+                            // ->where('a.waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)
+                            ->where('a.kelas_id', $this->filterKelas)
+                            ->leftjoin('kelas as b','b.id','a.kelas_id')
+                            ->leftjoin('gurus as c','c.id','a.guru_id')
+                            ->leftjoin('mata_pelajarans as d','d.id','a.mata_pelajaran_id')
+                            ->leftjoin('monitoring_pembelajaran_news as e',function($join){
+                                $join->on('e.mata_pelajaran_id','a.mata_pelajaran_id')
+                                    ->on('e.kelas_id','a.kelas_id')
+                                    ->on('e.guru_id','a.guru_id');
+                            })
+                            ->select('a.id','a.waktu_mulai','a.waktu_berakhir','a.kelas_id','a.mata_pelajaran_id','a.guru_id','b.nama as kelas','c.nama as guru','d.nama as mata_pelajaran','e.*')
+                            ->get();;
 
             //Get Jadwal Pengganti
             $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
@@ -113,38 +131,68 @@ class ValidasiPembelajaran extends Component
                 $this->jadwalPengganti = [];
             } else {
                 //Mengambil jadwal hari ini
-                $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->where('kelas_id', $this->filterKelas)->with(
-                    [
-                        'kelas' => function ($query) {
-                            $query->select('id', 'nama');
-                        },
-                        'mataPelajaran' => function ($query) {
-                            $query->select('id', 'nama');
-                        },
-                        'guru' => function ($query) {
-                            $query->select('id', 'nama');
-                        },
-                    ]
-                )->get();
+                $this->jadwal = DB::table('jadwal_pelajarans as a')
+                                ->where('a.hari', $this->day)
+                                ->where('a.waktu_mulai', '>=', $jadwalToday->waktu_mulai)
+                                ->where('a.waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)
+                                ->where('a.kelas_id', $this->filterKelas)
+                                ->leftjoin('kelas as b','b.id','a.kelas_id')
+                                ->leftjoin('gurus as c','c.id','a.guru_id')
+                                ->leftjoin('mata_pelajarans as d','d.id','a.mata_pelajaran_id')
+                                ->leftjoin('monitoring_pembelajaran_news as e',function($join){
+                                    $join->on('e.mata_pelajaran_id','a.mata_pelajaran_id')
+                                        ->on('e.kelas_id','a.kelas_id')
+                                        ->on('e.guru_id','a.guru_id');
+                                })
+                                ->select('a.id','a.waktu_mulai','a.waktu_berakhir','a.kelas_id','a.mata_pelajaran_id','a.guru_id','b.nama as kelas','c.nama as guru','d.nama as mata_pelajaran','e.*')
+                                ->get();
+                
+                // JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->where('kelas_id', $this->filterKelas)->with(
+                //     [
+                //         'kelas' => function ($query) {
+                //             $query->select('id', 'nama');
+                //         },
+                //         'mataPelajaran' => function ($query) {
+                //             $query->select('id', 'nama');
+                //         },
+                //         'guru' => function ($query) {
+                //             $query->select('id', 'nama');
+                //         },
+                //     ]
+                // )->get();
 
                 //Get Jadwal Pengganti
                 $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->where('waktu_mulai', '>=', $jadwalToday->waktu_mulai)->where('waktu_berakhir', '<=', $jadwalToday->waktu_berakhir)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
             }
         } else {
             //Mengambil jadwal hari ini
-            $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
-                [
-                    'kelas' => function ($query) {
-                        $query->select('id', 'nama');
-                    },
-                    'mataPelajaran' => function ($query) {
-                        $query->select('id', 'nama');
-                    },
-                    'guru' => function ($query) {
-                        $query->select('id', 'nama');
-                    },
-                ]
-            )->get();
+            $this->jadwal = DB::table('jadwal_pelajarans as a')
+                            ->where('a.hari', $this->day)
+                            ->where('a.kelas_id', $this->filterKelas)
+                            ->leftjoin('kelas as b','b.id','a.kelas_id')
+                            ->leftjoin('gurus as c','c.id','a.guru_id')
+                            ->leftjoin('mata_pelajarans as d','d.id','a.mata_pelajaran_id')
+                            ->leftjoin('monitoring_pembelajaran_news as e',function($join){
+                                $join->on('e.mata_pelajaran_id','a.mata_pelajaran_id')
+                                    ->on('e.kelas_id','a.kelas_id')
+                                    ->on('e.guru_id','a.guru_id');
+                            })
+                            ->select('a.id','a.waktu_mulai','a.waktu_berakhir','a.kelas_id','a.mata_pelajaran_id','a.guru_id','b.nama as kelas','c.nama as guru','d.nama as mata_pelajaran','e.*')
+                            ->get();
+            
+            // JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
+            //     [
+            //         'kelas' => function ($query) {
+            //             $query->select('id', 'nama');
+            //         },
+            //         'mataPelajaran' => function ($query) {
+            //             $query->select('id', 'nama');
+            //         },
+            //         'guru' => function ($query) {
+            //             $query->select('id', 'nama');
+            //         },
+            //     ]
+            // )->get();
 
             //Get Jadwal Pengganti
             $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
@@ -156,19 +204,19 @@ class ValidasiPembelajaran extends Component
         $this->day = \Carbon\Carbon::createFromFormat('Y-m-d', $this->tanggal)->translatedFormat('l');
 
         //Mengambil jadwal hari ini
-        $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
-            [
-                'kelas' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-                'mataPelajaran' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-                'guru' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-            ]
-        )->get();
+        $this->jadwal = DB::table('jadwal_pelajarans as a')
+                        ->where('a.hari', $this->day)
+                        ->where('a.kelas_id', $this->filterKelas)
+                        ->leftjoin('kelas as b','b.id','a.kelas_id')
+                        ->leftjoin('gurus as c','c.id','a.guru_id')
+                        ->leftjoin('mata_pelajarans as d','d.id','a.mata_pelajaran_id')
+                        ->leftjoin('monitoring_pembelajaran_news as e',function($join){
+                            $join->on('e.mata_pelajaran_id','a.mata_pelajaran_id')
+                                ->on('e.kelas_id','a.kelas_id')
+                                ->on('e.guru_id','a.guru_id');
+                        })
+                        ->select('a.id','a.waktu_mulai','a.waktu_berakhir','a.kelas_id','a.mata_pelajaran_id','a.guru_id','b.nama as kelas','c.nama as guru','d.nama as mata_pelajaran','e.*')
+                        ->get();
 
         //Get Jadwal Pengganti
         $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
@@ -177,19 +225,19 @@ class ValidasiPembelajaran extends Component
     public function empty()
     {
         $this->editPresensi = null;
-        $this->jadwal = JadwalPelajaran::select('id', 'waktu_mulai', 'waktu_berakhir', 'kelas_id', 'mata_pelajaran_id', 'guru_id')->where('hari', $this->day)->where('kelas_id', $this->filterKelas)->with(
-            [
-                'kelas' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-                'mataPelajaran' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-                'guru' => function ($query) {
-                    $query->select('id', 'nama');
-                },
-            ]
-        )->get();
+        $this->jadwal = DB::table('jadwal_pelajarans as a')
+                        ->where('a.hari', $this->day)
+                        ->where('a.kelas_id', $this->filterKelas)
+                        ->leftjoin('kelas as b','b.id','a.kelas_id')
+                        ->leftjoin('gurus as c','c.id','a.guru_id')
+                        ->leftjoin('mata_pelajarans as d','d.id','a.mata_pelajaran_id')
+                        ->leftjoin('monitoring_pembelajaran_news as e',function($join){
+                            $join->on('e.mata_pelajaran_id','a.mata_pelajaran_id')
+                                ->on('e.kelas_id','a.kelas_id')
+                                ->on('e.guru_id','a.guru_id');
+                        })
+                        ->select('a.id','a.waktu_mulai','a.waktu_berakhir','a.kelas_id','a.mata_pelajaran_id','a.guru_id','b.nama as kelas','c.nama as guru','d.nama as mata_pelajaran','e.*')
+                        ->get();
 
         //Get Jadwal Pengganti
         $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
@@ -200,7 +248,6 @@ class ValidasiPembelajaran extends Component
 
     public function showId($id)
     {
-
         //mengambil semua data siswa berdasarkan kelas default
         $this->student = Kelas::select('id')->where('id', $this->filterKelas)->first()->siswas;
 
@@ -208,11 +255,12 @@ class ValidasiPembelajaran extends Component
         foreach ($this->student as $s) {
             $this->presensi[$s->id] = 'hadir';
         }
+        $data = JadwalPelajaran::where('id',$id)->first();
 
         //cek apakah ada data yang diinputkan
-        if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $id)->where('tanggal', $this->tanggal)->first()) {
+        if (MonitoringPembelajaranNew::where('mata_pelajaran_id', $data->mata_pelajaran_id)->where('guru_id',$data->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first()) {
             //ambil data
-            $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $id)->where('tanggal', $this->tanggal)->first();
+            $monitoring = MonitoringPembelajaranNew::where('mata_pelajaran_id', $data->mata_pelajaran_id)->where('guru_id',$data->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first();
             //set data berdasarkan data yang sudah diinputkan
             // $this->tanggal = $monitoring->tanggal;
             $this->topik = $monitoring->topik;
@@ -220,7 +268,7 @@ class ValidasiPembelajaran extends Component
             $this->status = $monitoring->status_validasi;
 
             //ambil data kehadiran siswa yang sudah diinputkan
-            $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+            $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->monitoring_pembelajaran_id)->get()->all();
             foreach ($kehadiran as $k) {
                 $this->presensi[$k->siswa_id] = $k->status;
             }
@@ -251,17 +299,17 @@ class ValidasiPembelajaran extends Component
         // dd($this->jadwal_id);
 
         //cek apakah ada data yang diinputkan
-        if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $id)->where('tanggal', $this->tanggal)->first()) {
+        if (MonitoringPembelajaranNew::where('mata_pelajaran_id', $jadwal->mata_pelajaran_id)->where('guru_id',$jadwal->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first()) {
             //ambil data
-            $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $id)->where('tanggal', $this->tanggal)->first();
+            $monitoring = MonitoringPembelajaranNew::where('mata_pelajaran_id', $jadwal->mata_pelajaran_id)->where('guru_id',$jadwal->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first();
             //set data berdasarkan data yang sudah diinputkan
             // $this->tanggal = $monitoring->tanggal;
             $this->topik = $monitoring->topik;
-            $this->editPresensi = $monitoring->id;
+            $this->editPresensi = $monitoring->monitoring_pembelajaran_id;
             $this->keterangan = $monitoring->keterangan;
 
             //ambil data kehadiran siswa yang sudah diinputkan
-            $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->id)->get()->all();
+            $kehadiran = KehadiranPembelajaran::where('monitoring_pembelajaran_id', $monitoring->monitoring_pembelajaran_id)->get()->all();
             foreach ($kehadiran as $k) {
                 $this->presensi[$k->siswa_id] = $k->status;
             }
@@ -276,12 +324,13 @@ class ValidasiPembelajaran extends Component
 
     public function showValid($id)
     {
+        $data = JadwalPelajaran::where('id',$id)->first();
         //cek apakah ada data yang diinputkan
-        if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $id)->where('tanggal', $this->tanggal)->first()) {
+        if (MonitoringPembelajaranNew::where('mata_pelajaran_id', $data->mata_pelajaran_id)->where('guru_id',$data->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first()) {
             //ambil data
-            $monitoring = MonitoringPembelajaran::where('jadwal_pelajaran_id', $id)->where('tanggal', $this->tanggal)->first();
+            $monitoring = MonitoringPembelajaranNew::where('mata_pelajaran_id', $data->mata_pelajaran_id)->where('guru_id',$data->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first();
             //set data berdasarkan data yang sudah diinputkan
-            $this->editPresensi = $monitoring->id;
+            $this->editPresensi = $monitoring->monitoring_pembelajaran_id;
         }
         $this->dispatchBrowserEvent('show-valid-modal');
     }
@@ -290,13 +339,13 @@ class ValidasiPembelajaran extends Component
     public function valid()
     {
         if (Auth::user()->role === 'guru') {
-            MonitoringPembelajaran::where('id', $this->editPresensi)->update([
+            MonitoringPembelajaranNew::where('monitoring_pembelajaran_id', $this->editPresensi)->update([
                 'status_validasi' => 'terlaksana',
                 'keterangan' => null,
                 'guru_piket_id' => Auth::user()->guru->id
             ]);
         } else {
-            MonitoringPembelajaran::where('id', $this->editPresensi)->update([
+            MonitoringPembelajaranNew::where('monitoring_pembelajaran_id', $this->editPresensi)->update([
                 'status_validasi' => 'terlaksana',
                 'keterangan' => null,
                 'guru_piket_id' => null
@@ -320,37 +369,47 @@ class ValidasiPembelajaran extends Component
         } else {
             $guruPiketId = null;
         }
-        if (MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->jadwal_id)->where('tanggal', $this->tanggal)->first()) {
+
+        $data = JadwalPelajaran::where('id',$this->jadwal_id)->first();
+
+        if (MonitoringPembelajaranNew::where('mata_pelajaran_id', $data->mata_pelajaran_id)->where('guru_id',$data->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->first()) {
             // MonitoringPembelajaran::where('id', $this->editPresensi)
-            MonitoringPembelajaran::where('jadwal_pelajaran_id', $this->jadwal_id)->where('tanggal', $this->tanggal)->update([
-                'keterangan' => $this->keterangan,
-                'topik' => $this->topik,
-                'status_validasi' => 'tidak terlaksana',
-                'guru_piket_id' => $guruPiketId
-            ]);
-            foreach ($this->presensi as $key => $value) {
-                KehadiranPembelajaran::where('monitoring_pembelajaran_id', $this->editPresensi)->where('siswa_id', $key)->update([
-                    'status' => $value,
+            DB::transaction(function () use ($data,$guruPiketId) {
+                MonitoringPembelajaranNew::where('mata_pelajaran_id', $data->mata_pelajaran_id)->where('guru_id',$data->guru_id)->where('kelas_id',$this->filterKelas)->where('tanggal', $this->tanggal)->update([
+                    'keterangan' => $this->keterangan,
+                    'topik' => $this->topik,
+                    'status_validasi' => 'tidak terlaksana',
+                    'guru_piket_id' => $guruPiketId
                 ]);
-            }
+                foreach ($this->presensi as $key => $value) {
+                    KehadiranPembelajaran::where('monitoring_pembelajaran_id', $this->editPresensi)->where('siswa_id', $key)->update([
+                        'status' => $value,
+                    ]);
+                }
+            });
         } else {
-            $monitoring = MonitoringPembelajaran::create([
-                'tanggal' => $this->tanggal,
-                'topik' => $this->topik,
-                'waktu_mulai' => $this->waktu_mulai,
-                'waktu_berakhir' => $this->waktu_berakhir,
-                'status_validasi' => 'tidak terlaksana',
-                'jadwal_pelajaran_id' => $this->jadwal_id,
-                'guru_piket_id' => $guruPiketId,
-                'keterangan' => $this->keterangan
-            ]);
-            foreach ($this->presensi as $key => $value) {
-                KehadiranPembelajaran::create([
-                    'siswa_id' => $key,
-                    'status' => $value,
-                    'monitoring_pembelajaran_id' => $monitoring->id
+            DB::transaction(function () use($guruPiketId,$data) {
+                $monitoring = MonitoringPembelajaranNew::create([
+                    'tanggal' => $this->tanggal,
+                    'topik' => $this->topik,
+                    'waktu_mulai' => $this->waktu_mulai,
+                    'waktu_berakhir' => $this->waktu_berakhir,
+                    'status_validasi' =>'tidak terlaksana',
+                    'kelas_id' => $data->kelas_id,
+                    'guru_id' => $data->guru_id,
+                    'mata_pelajaran_id' => $data->mata_pelajaran_id,
+                    'guru_piket_id' => $guruPiketId,
+                    'keterangan' => $this->keterangan
                 ]);
-            }
+        
+                foreach ($this->presensi as $key => $value) {
+                    KehadiranPembelajaran::create([
+                        'siswa_id' => $key,
+                        'status' => $value,
+                        'monitoring_pembelajaran_id' => $monitoring->monitoring_pembelajaran_id
+                    ]);
+                }
+            });
         }
         session()->flash('message', 'Presensi berhasil diperbarui !');
         $this->dispatchBrowserEvent('close-edit-modal');
@@ -363,6 +422,21 @@ class ValidasiPembelajaran extends Component
         if (Kelas::where('id', $this->filterKelas)->first()) {
             $siswa = Kelas::where('id', $this->filterKelas)->first()->siswas()->paginate(10);
         }
+
+        $this->jadwal = DB::table('jadwal_pelajarans as a')
+        ->where('a.hari', $this->day)
+        ->where('a.kelas_id', $this->filterKelas)
+        ->leftjoin('kelas as b','b.id','a.kelas_id')
+        ->leftjoin('gurus as c','c.id','a.guru_id')
+        ->leftjoin('mata_pelajarans as d','d.id','a.mata_pelajaran_id')
+        ->leftjoin('monitoring_pembelajaran_news as e',function($join){
+            $join->on('e.mata_pelajaran_id','a.mata_pelajaran_id')
+                ->on('e.kelas_id','a.kelas_id')
+                ->on('e.guru_id','a.guru_id')
+                ->where('e.tanggal',$this->tanggal);
+        })
+        ->select('a.id','a.waktu_mulai','a.waktu_berakhir','a.kelas_id','a.mata_pelajaran_id','a.guru_id','b.nama as kelas','c.nama as guru','d.nama as mata_pelajaran','e.topik', 'e.status_validasi')
+        ->get();
         return view('livewire.validasi-pembelajaran', [
             'jadwal' => $this->jadwal,
             'jadwalPengganti' => $this->jadwalPengganti,

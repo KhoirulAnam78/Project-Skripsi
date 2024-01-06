@@ -109,22 +109,22 @@
                                 </td>
                                 <td>{{ $s->tanggal }}</td>
                                 <td style="white-space: normal">{{ $s->topik }}</td>
-                                <td>{{ $s->jadwalPelajaran->guru->nama }}</td>
+                                <td>{{ $s->guru }}</td>
                                 <td>{{ substr($s->waktu_mulai, 0, -3) . '-' . substr($s->waktu_berakhir, 0, -3) }}</td>
-                                <td align="center">{{ $jml_siswa }}</td>
-                                <td align="center">{{ count($s->kehadiranPembelajarans->where('status', 'hadir')) }}
+                                <td align="center">{{ $s->total }}</td>
+                                <td align="center">{{ $s->hadir }}
                                 </td>
-                                <td align="center">{{ count($s->kehadiranPembelajarans->where('status', 'izin')) }}
+                                <td align="center">{{ $s->izin }}
                                 </td>
-                                <td align="center">{{ count($s->kehadiranPembelajarans->where('status', 'sakit')) }}
+                                <td align="center">{{ $s->sakit }}
                                 </td>
-                                <td align="center">{{ count($s->kehadiranPembelajarans->where('status', 'alfa')) }}
-                                </td>
-                                <td align="center">
-                                    {{ count($s->kehadiranPembelajarans->where('status', 'dinas dalam')) }}
+                                <td align="center">{{ $s->alfa }}
                                 </td>
                                 <td align="center">
-                                    {{ count($s->kehadiranPembelajarans->where('status', 'dinas luar')) }}
+                                    {{ $s->dd }}
+                                </td>
+                                <td align="center">
+                                    {{ $s->dl }}
                                 </td>
                                 <td>
                                     @if ($s->status_validasi === 'terlaksana')
@@ -134,9 +134,9 @@
                                             class="badge bg-label-danger me-1">{{ ucfirst($s->status_validasi) }}</span>
                                     @endif
                                 </td>
-                                <td>{{ $s->guru_piket_id === null ? 'Admin' : $s->guru->nama }}</td>
-                                <td><button wire:click="detail({{ $s->id }})" class="btn btn-primary"><i
-                                            class='bx bx-show'></i></button></td>
+                                <td>{{ $s->piket === null ? 'Admin' : $s->piket }}</td>
+                                <td><button wire:click="detail({{ $s->monitoring_pembelajaran_id }})"
+                                        class="btn btn-primary"><i class='bx bx-show'></i></button></td>
                             </tr>
                         @endforeach
                     @endif

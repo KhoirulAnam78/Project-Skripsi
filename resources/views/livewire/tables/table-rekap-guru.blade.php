@@ -12,16 +12,16 @@
         </tr>
     </thead>
     <tbody class="table-border-bottom-0">
-        @if (count($guru) === 0)
+        @if (count($data) === 0)
             <tr>
                 <td colspan='9' align="center"><span>Tidak ada data</span></td>
             </tr>
         @else
-            @foreach ($guru as $g)
-                @if (count($g->jadwalPelajarans->groupBy('mata_pelajaran_id')) !== 0)
+            @foreach ($data as $g)
+                @if (count($g['mengajar']) !== 0)
                     @php
-                        $b = $g->jadwalPelajarans->groupBy('mata_pelajaran_id')->first();
-                        $rowCount = count($g->jadwalPelajarans->groupBy('mata_pelajaran_id'));
+                        $b = $g['mengajar'][0];
+                        $rowCount = count($g['mengajar']);
                     @endphp
                 @else
                     @php
@@ -30,34 +30,42 @@
                     @endphp
                 @endif
                 <tr>
-                    <td
-                        {{ count($g->jadwalPelajarans->groupBy('mata_pelajaran_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
+                    <td {{ count($g['mengajar']) !== 1 ? 'rowspan=' . $rowCount : '' }}>
                         {{ ($guru->currentpage() - 1) * $guru->perpage() + $loop->index + 1 }}
                     </td>
-                    <td
-                        {{ count($g->jadwalPelajarans->groupBy('mata_pelajaran_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
-                        {{ $g->nama }}</td>
-                    <td
-                        {{ count($g->jadwalPelajarans->groupBy('mata_pelajaran_id')) !== 1 ? 'rowspan=' . $rowCount : '' }}>
-                        {{ $g->kode_guru }}</td>
-                    <td>{{ $b !== null ? $b->first()->mataPelajaran->nama : '' }}</td>
-                    @php
-                        $diff = 0;
-                        if ($b !== null) {
-                            foreach ($b as $j) {
-                                $datetime1 = strtotime($j->waktu_mulai);
-                                $datetime2 = strtotime($j->waktu_berakhir);
-                                $interval = abs($datetime2 - $datetime1);
-                                $minutes = round($interval / 60);
-                                // dd($minutes);
-                                $perbedaan = floor($minutes / 35);
-                                $diff = $diff + $perbedaan;
-                                // dd(floor($diff));
-                            }
-                        }
-                    @endphp
-                    <td align="center">{{ $diff }}</td>
+                    <td {{ count($g['mengajar']) !== 1 ? 'rowspan=' . $rowCount : '' }}>
+                        {{ $g['nama'] }}</td>
+                    <td {{ count($g['mengajar']) !== 1 ? 'rowspan=' . $rowCount : '' }}>
+                        {{ $g['kode_guru'] }}</td>
+                    <td>{{ $b !== null ? $b['mapel'] : '' }}</td>
+                    <td align="center">{{ $b !== null ? $b['jam'] : 0 }}</td>
 
+                    <td align="center">{{ $b !== null ? $b['tidak_terlaksana'] : 0 }}
+                    </td>
+                    <td align="center">
+                        @if ($b !== null)
+                            @if ($b['tidak_terlaksana'] === 0)
+                                {{ '100%' }}
+                            @else
+                                @php
+                                    $data1 = $b['tidak_terlaksana'];
+                                    $data2 = $b['jam'];
+                                    $total = round((($data2 - $data1) / $data2) * 100);
+                                @endphp
+                                {{ $total . '%' }}
+                            @endif
+                        @else
+                            0
+                        @endif
+                    </td>
+                    <td>
+                        @if ($b !== null)
+                            @foreach ($b['keterangan'] as $k => $value)
+                                <span>{{ $value[$k] }}</span>
+                            @endforeach
+                        @endif
+                    </td>
+                    {{-- 
                     @php
                         $jml = 0;
                         $keterangan = [];
@@ -108,15 +116,42 @@
                                 <br>
                             @endif
                         @endforeach
-                    </td>
+                    </td> --}}
                 </tr>
-                @foreach ($g->jadwalPelajarans->groupBy('mata_pelajaran_id') as $key => $b)
+                @foreach ($g['mengajar'] as $key => $b)
                     @if ($loop->first)
                         @continue
                     @endif
                     <tr>
-                        <td>{{ $b !== null ? $b->first()->mataPelajaran->nama : '' }}</td>
-                        @php
+                        <td>{{ $b !== null ? $b['mapel'] : '' }}</td>
+                        <td align="center">{{ $b !== null ? $b['jam'] : 0 }}</td>
+
+                        <td align="center">{{ $b !== null ? $b['tidak_terlaksana'] : 0 }}
+                        </td>
+                        <td align="center">
+                            @if ($b !== null)
+                                @if ($b['tidak_terlaksana'] === 0)
+                                    {{ '100%' }}
+                                @else
+                                    @php
+                                        $data1 = $b['tidak_terlaksana'];
+                                        $data2 = $b['jam'];
+                                        $total = round((($data2 - $data1) / $data2) * 100);
+                                    @endphp
+                                    {{ $total . '%' }}
+                                @endif
+                            @else
+                                0
+                            @endif
+                        </td>
+                        <td>
+                            @if ($b !== null)
+                                @foreach ($b['keterangan'] as $k => $value)
+                                    <span>{{ $value[$k] }}</span>
+                                @endforeach
+                            @endif
+                        </td>
+                        {{-- @php
                             $diff = 0;
                             if ($b !== null) {
                                 foreach ($b as $j) {
@@ -167,16 +202,16 @@
                             @endif
                         </td>
                         <td>
-                            {{-- @foreach ($keterangan as $k)
+                            @foreach ($keterangan as $k)
                                 {{ $k }}
-                            @endforeach --}}
+                            @endforeach
                             @foreach ($keterangan as $key => $k)
                                 @if ($k !== null)
                                     {{ $tgl[$key] . ' : ' . $k }}
                                     <br>
                                 @endif
                             @endforeach
-                        </td>
+                        </td> --}}
                     </tr>
                 @endforeach
             @endforeach

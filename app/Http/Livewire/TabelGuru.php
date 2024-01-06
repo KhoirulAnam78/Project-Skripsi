@@ -195,6 +195,7 @@ class TabelGuru extends Component
 
     public function import()
     {
+        set_time_limit(0);
         $this->validate([
             'file' => 'required|mimes:xlsx,xls'
         ]);
@@ -210,7 +211,7 @@ class TabelGuru extends Component
             $this->file = '';
             $this->dispatchBrowserEvent('close-modal-import');
         } catch (\Illuminate\Database\QueryException $ex) {
-            session()->flash('error', 'Terdapat nip yang sama pada file excel. Periksa kembali !');
+            session()->flash('error', 'Gagal melakukan import data, periksa kembali file excel ! Pastikan tidak terdapat kode guru yang sama !');
             $this->dispatchBrowserEvent('close-modal-import');
         }
     }

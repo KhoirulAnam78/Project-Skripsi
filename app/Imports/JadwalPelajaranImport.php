@@ -3,9 +3,10 @@
 namespace App\Imports;
 
 use App\Models\Guru;
-use App\Models\JadwalPelajaran;
 use App\Models\MataPelajaran;
+use App\Models\JadwalPelajaran;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -51,9 +52,11 @@ class JadwalPelajaranImport implements ToCollection, WithHeadingRow, WithValidat
         return [
             'mata_pelajaran_id' => 'required|exists:mata_pelajarans,id',
             'guru_id' => 'required|exists:gurus,id',
-            'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_pelajarans,waktu_mulai,NULL,id,hari,' . $this->hari . ',kelas_id,' . $this->kelas,
+            'waktu_mulai' => 'required|date_format:H:i|',
+            // unique:jadwal_pelajarans,waktu_mulai,NULL,id,hari,' . $this->hari . ',kelas_id,' . $this->kelas,
             'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_pelajarans,hari,NULL,id,kelas_id,' . $this->kelas . ',waktu_mulai,' . $this->waktu_mulai
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|'
+            // unique:jadwal_pelajarans,hari,NULL,id,kelas_id,' . $this->kelas . ',waktu_mulai,' . $this->waktu_mulai
         ];
     }
 
@@ -80,14 +83,22 @@ class JadwalPelajaranImport implements ToCollection, WithHeadingRow, WithValidat
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            JadwalPelajaran::create([
-                'kelas_id' => $this->kelas,
-                'mata_pelajaran_id' => $row['mata_pelajaran_id'],
-                'guru_id' => $row['guru_id'],
-                'hari' => $row['hari'],
-                'waktu_mulai' => $row['waktu_mulai'],
-                'waktu_berakhir' => $row['waktu_berakhir']
-            ]);
+            DB::transaction(function () use ($row) {
+                JadwalPelajaran::updateOrCreate(
+                    [
+                        'kelas_id' => $this->kelas,
+                        'hari' => $row['hari'],
+                        'waktu_mulai' => $row['waktu_mulai']
+                    ],
+                    [
+                    'kelas_id' => $this->kelas,
+                    'mata_pelajaran_id' => $row['mata_pelajaran_id'],
+                    'guru_id' => $row['guru_id'],
+                    'hari' => $row['hari'],
+                    'waktu_mulai' => $row['waktu_mulai'],
+                    'waktu_berakhir' => $row['waktu_berakhir']
+                ]);
+            });
         }
     }
 }

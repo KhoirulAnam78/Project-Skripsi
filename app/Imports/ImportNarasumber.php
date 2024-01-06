@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Narasumber;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -39,11 +40,17 @@ class ImportNarasumber implements ToCollection, WithHeadingRow, WithValidation
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            Narasumber::create([
-                'nama' => $row['nama'],
-                'no_telp' => $row['nomor_telepon'],
-                'instansi' => $row['instansi'],
-            ]);
+            DB::transaction(function () use ($row) {
+                Narasumber::updateOrCreate(
+                [
+                    'nama' => $row['nama'],
+                ],
+                [
+                    'nama' => $row['nama'],
+                    'no_telp' => $row['nomor_telepon'],
+                    'instansi' => $row['instansi'],
+                ]);
+            });
         }
     }
 }

@@ -30,7 +30,7 @@ class RombelController extends Controller
         if (Auth::user()->role === 'siswa') {
             return abort(403, 'Anda tidak memiliki akses kehalaman ini.');
         }
-        $file = public_path() . '/assets/template-excel/Data Siswa.xlsx';
+        $file = public_path() . '/assets/template-excel/Data Mapping Rombel.xlsx';
         $headers = array(
             'Content-Type: application/xlsx',
         );

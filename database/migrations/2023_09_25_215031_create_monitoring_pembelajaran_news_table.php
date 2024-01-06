@@ -13,16 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('monitoring_pembelajarans', function (Blueprint $table) {
-            $table->id();
+        Schema::create('monitoring_pembelajaran_news', function (Blueprint $table) {
+            $table->id('monitoring_pembelajaran_id');
             $table->date('tanggal');
             $table->time('waktu_mulai');
             $table->time('waktu_berakhir');
             $table->string('topik');
             $table->enum('status_validasi', ['terlaksana', 'tidak terlaksana', 'belum tervalidasi']);
             $table->string('keterangan')->nullable();
-            $table->foreignId('jadwal_pelajaran_id')->constrained('jadwal_pelajarans');
+            $table->foreignId('kelas_id')->constrained('kelas');
+            $table->foreignId('mata_pelajaran_id')->constrained('mata_pelajarans');
+            $table->foreignId('guru_id')->constrained('gurus');
             $table->foreignId('guru_piket_id')->nullable()->constrained('gurus');
+            
             $table->timestamps();
         });
     }
@@ -34,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('monitoring_pembelajarans');
+        Schema::dropIfExists('monitoring_pembelajaran_news');
     }
 };

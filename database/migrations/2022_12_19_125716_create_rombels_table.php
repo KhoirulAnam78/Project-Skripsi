@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('siswa_id')->constrained('siswas');
             $table->foreignId('kelas_id')->constrained('kelas');
-            $table->unique(['siswa_id', 'kelas_id']);
+            $table->foreignId('tahun_akademik_id')->constrained('tahun_akademiks');
+            $table->unique(['siswa_id', 'tahun_akademik_id']);
             $table->timestamps();
         });
     }

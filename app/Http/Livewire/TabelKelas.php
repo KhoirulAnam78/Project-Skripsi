@@ -179,6 +179,8 @@ class TabelKelas extends Component
 
     public function import()
     {
+        
+        set_time_limit(0);
         $this->validate([
             'file' => 'required|mimes:xlsx,xls'
         ]);
@@ -192,6 +194,9 @@ class TabelKelas extends Component
             $failures = $e->failures();
             session()->flash('importError', $failures);
             $this->file = '';
+            $this->dispatchBrowserEvent('close-modal-import');
+        }catch (\Illuminate\Database\QueryException $ex) {
+            session()->flash('error', 'Gagal melakukan import data, periksa kembali file excel ! Pastikan tidak terdapat nama kelas yang sama !');
             $this->dispatchBrowserEvent('close-modal-import');
         }
     }

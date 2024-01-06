@@ -12,7 +12,7 @@ class KehadiranPembelajaran extends Model
 
     public function monitoringPembelajaran()
     {
-        return $this->belongsTo(MonitoringPembelajaran::class);
+        return $this->belongsTo(MonitoringPembelajaranNew::class);
     }
 
     public function siswa()

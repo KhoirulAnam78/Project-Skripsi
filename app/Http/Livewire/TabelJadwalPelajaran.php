@@ -10,6 +10,7 @@ use App\Models\MataPelajaran;
 use App\Models\TahunAkademik;
 use Livewire\WithFileUploads;
 use App\Models\JadwalPelajaran;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\JadwalPelajaranExport;
 use App\Imports\JadwalPelajaranImport;
@@ -39,23 +40,15 @@ class TabelJadwalPelajaran extends Component
 
     public function rules()
     {
-        if ($this->jadwal_edit_id) {
-            return [
-                'mata_pelajaran_id' => 'required',
-                'guru_id' => 'required',
-                'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_pelajarans,waktu_mulai,' . $this->jadwal_edit_id . ',id,hari,' . $this->hari . ',kelas_id,' . $this->filterKelas,
-                'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_pelajarans,hari,' . $this->jadwal_edit_id . ',id,kelas_id,' . $this->filterKelas . ',waktu_mulai,' . $this->waktu_mulai
-            ];
-        } else {
-            return [
-                'mata_pelajaran_id' => 'required',
-                'guru_id' => 'required',
-                'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_pelajarans,waktu_mulai,NULL,id,hari,' . $this->hari . ',kelas_id,' . $this->filterKelas,
-                'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_pelajarans,hari,NULL,id,kelas_id,' . $this->filterKelas . ',waktu_mulai,' . $this->waktu_mulai
-            ];
-        }
+        return [
+            'mata_pelajaran_id' => 'required',
+            'guru_id' => 'required',
+            'waktu_mulai' => 'required|date_format:H:i',
+            // |unique:jadwal_pelajarans,waktu_mulai,' . $this->jadwal_edit_id . ',id,hari,' . $this->hari . ',kelas_id,' . $this->filterKelas,
+            'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu'
+            // |unique:jadwal_pelajarans,hari,' . $this->jadwal_edit_id . ',id,kelas_id,' . $this->filterKelas . ',waktu_mulai,' . $this->waktu_mulai
+        ];
     }
 
     //Custom Errror messages for validation
@@ -94,13 +87,16 @@ class TabelJadwalPelajaran extends Component
     public function save()
     {
         $this->validate();
-        JadwalPelajaran::create([
+        JadwalPelajaran::updateOrCreate(
+        [
             'hari' => $this->hari,
-            'guru_id' => $this->guru_id,
             'waktu_mulai' => $this->waktu_mulai,
+            'kelas_id' => $this->filterKelas
+        ],
+        [
+            'guru_id' => $this->guru_id,
             'waktu_berakhir' => $this->waktu_berakhir,
             'mata_pelajaran_id' => $this->mata_pelajaran_id,
-            'kelas_id' => $this->filterKelas
         ]);
         session()->flash('message', 'Data berhasil ditambahkan !');
         $this->empty();
@@ -123,13 +119,20 @@ class TabelJadwalPelajaran extends Component
     public function update()
     {
         $this->validate();
-        JadwalPelajaran::where('id', $this->jadwal_edit_id)->update([
-            'hari' => $this->hari,
-            'mata_pelajaran_id' => $this->mata_pelajaran_id,
-            'waktu_mulai' => $this->waktu_mulai,
-            'waktu_berakhir' => $this->waktu_berakhir,
-            'guru_id' => $this->guru_id,
-        ]);
+        DB::transaction(function () {
+            JadwalPelajaran::where('id',$this->jadwal_edit_id)->first()->delete();
+            JadwalPelajaran::updateOrCreate(
+            [
+                'hari' => $this->hari,
+                'waktu_mulai' => $this->waktu_mulai,
+                'kelas_id' => $this->filterKelas
+            ],
+            [
+                'mata_pelajaran_id' => $this->mata_pelajaran_id,
+                'waktu_berakhir' => $this->waktu_berakhir,
+                'guru_id' => $this->guru_id,
+            ]);
+        });
         session()->flash('message', 'Data berhasil diedit !');
         $this->empty();
         $this->dispatchBrowserEvent('close-edit-modal');

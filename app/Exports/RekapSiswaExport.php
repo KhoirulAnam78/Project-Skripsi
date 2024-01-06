@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Kelas;
 use App\Models\Siswa;
+use Illuminate\Support\Facades\DB;
 use App\Models\MonitoringPembelajaran;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -57,24 +58,40 @@ class RekapSiswaExport extends DefaultValueBinder implements FromCollection, Wit
 
     public function collection()
     {
-        $siswa =  Siswa::whereRelation('kelas', 'kelas_id', $this->kelas_id)->with(['kehadiranPembelajarans' => function ($query) {
-            $query->whereRelation('monitoringPembelajaran', 'tanggal', '>=', $this->tanggalAwal)->whereRelation('monitoringPembelajaran', 'tanggal', '<=', $this->tanggalAkhir);
-        }])->get();
-        return $siswa;
+        $dataSiswa = DB::table('siswas as a')
+                    ->leftjoin('kelas_siswa as b','a.id','b.siswa_id')
+                    ->where('b.kelas_id',$this->kelas_id)
+                    ->leftjoin('kehadiran_pembelajarans as c','c.siswa_id','a.id')
+                    ->leftjoin('monitoring_pembelajaran_news as d','d.monitoring_pembelajaran_id','c.monitoring_pembelajaran_id')
+                    ->where('d.tanggal', '>=', $this->tanggalAwal)
+                    ->where('d.tanggal', '<=', $this->tanggalAkhir)
+                    ->groupBy('a.id')
+                    ->select('a.nisn','a.nama',
+                        DB::raw("SUM(CASE WHEN c.status = 'hadir' THEN 1 ELSE 0 END) AS hadir"),
+                        DB::raw("SUM(CASE WHEN c.status = 'izin' THEN 1 ELSE 0 END) AS izin"),
+                        DB::raw("SUM(CASE WHEN c.status = 'sakit' THEN 1 ELSE 0 END) AS sakit"),
+                        DB::raw("SUM(CASE WHEN c.status = 'alfa' THEN 1 ELSE 0 END) AS alfa"),
+                        DB::raw("SUM(CASE WHEN c.status = 'dinas dalam' THEN 1 ELSE 0 END) AS dd"),
+                        DB::raw("SUM(CASE WHEN c.status = 'dinas luar' THEN 1 ELSE 0 END) AS dl"),
+                    )
+                    ->orderBy('a.nama')
+                    ->distinct()
+                    ->get();
+        return $dataSiswa;
     }
 
-    public function map($siswa): array
+    public function map($s): array
     {
         return [
             //data yang dari kolom tabel database yang akan diambil
-            $siswa->nisn,
-            $siswa->nama,
-            count($siswa->kehadiranPembelajarans->where('status', 'hadir')),
-            count($siswa->kehadiranPembelajarans->where('status', 'izin')),
-            count($siswa->kehadiranPembelajarans->where('status', 'sakit')),
-            count($siswa->kehadiranPembelajarans->where('status', 'alfa')),
-            count($siswa->kehadiranPembelajarans->where('status', 'dinas dalam')),
-            count($siswa->kehadiranPembelajarans->where('status', 'dinas luar')),
+            $s->nisn,
+            $s->nama,
+            $s->hadir,
+            $s->izin,
+            $s->sakit,
+            $s->alfa,
+            $s->dd,
+            $s->dl
         ];
     }
 

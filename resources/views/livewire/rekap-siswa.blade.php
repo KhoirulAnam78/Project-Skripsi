@@ -88,19 +88,19 @@
                                 </td>
                                 <td>{{ $s->nisn }}</td>
                                 <td>{{ $s->nama }}</td>
-                                <td>{{ count($s->kehadiranPembelajarans->where('status', 'hadir')) }}
+                                <td>{{ $s->hadir }}
                                 </td>
-                                <td>{{ count($s->kehadiranPembelajarans->where('status', 'izin')) }}
+                                <td>{{ $s->izin }}
                                 </td>
-                                <td>{{ count($s->kehadiranPembelajarans->where('status', 'sakit')) }}
+                                <td>{{ $s->sakit }}
                                 </td>
-                                <td>{{ count($s->kehadiranPembelajarans->where('status', 'alfa')) }}
-                                </td>
-                                <td>
-                                    {{ count($s->kehadiranPembelajarans->where('status', 'dinas dalam')) }}
+                                <td>{{ $s->alfa }}
                                 </td>
                                 <td>
-                                    {{ count($s->kehadiranPembelajarans->where('status', 'dinas luar')) }}
+                                    {{ $s->dd }}
+                                </td>
+                                <td>
+                                    {{ $s->dl }}
                                 </td>
                             </tr>
                         @endforeach
