@@ -51,7 +51,7 @@ class PembelajaranMonitoring extends Component
         ->get();
         return view('livewire.pembelajaran-monitoring', [
             'jadwal' => DB::table('jadwal_pelajarans as a')
-            ->where('a.hari', 'senin')
+            ->where('a.hari', $this->day)
             ->leftJoin('kelas as b', 'b.id', '=', 'a.kelas_id')
             ->leftJoin('gurus as c', 'c.id', '=', 'a.guru_id')
             ->leftJoin('mata_pelajarans as d', 'd.id', '=', 'a.mata_pelajaran_id')
