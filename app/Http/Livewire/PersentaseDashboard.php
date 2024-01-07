@@ -15,14 +15,16 @@ use App\Models\KehadiranKegnas;
 use App\Models\MonitoringKegnas;
 use App\Models\KehadiranKegiatan;
 use App\Models\MonitoringKegiatan;
+use Illuminate\Support\Facades\DB;
 use App\Models\KehadiranPembelajaran;
 use App\Models\MonitoringPembelajaran;
+use App\Models\MonitoringPembelajaranNew;
 
 class PersentaseDashboard extends Component
 {
     public $bulan = [];
     public $filterBulan;
-    public $pembelajaran;
+    // public $pembelajaran;
     public $presensi = [];
     public $grafikJmlPembelajaran = [];
     public $grafikJmlTidakHadir = [];
@@ -55,16 +57,35 @@ class PersentaseDashboard extends Component
         //Ambil Bulan Tahun dan jumlah Pembelajaran tidak terlaksana
         foreach ($this->bulan as $b) {
             $carbon = \Carbon\Carbon::createFromFormat('d-m-Y', $b['tanggal']);
-            $monitoring = MonitoringPembelajaran::whereMonth('tanggal', $carbon->translatedFormat('m'))->whereYear('tanggal', '=', $carbon->translatedFormat('Y'))->select('id', 'tanggal')->with('kehadiranPembelajarans')->get();
-            $jml = MonitoringPembelajaran::whereMonth('tanggal', $carbon->translatedFormat('m'))->whereYear('tanggal', '=', $carbon->translatedFormat('Y'))->select('id', 'tanggal')->where('status_validasi', 'tidak terlaksana')->count();
+
+
+            // GRAFIK PEMBELAJARAN TIDAK TERLAKSANA
+            $jml =DB::table('monitoring_pembelajaran_news as a')
+            ->whereMonth('a.tanggal', $carbon->translatedFormat('m'))->whereYear('a.tanggal', '=', $carbon->translatedFormat('Y'))
+            ->where('status_validasi','tidak terlaksana')
+            ->count();
+
             array_push($this->grafikJmlPembelajaran, ['bulan' => $carbon->translatedFormat('F Y'), 'jml' => $jml]);
+
+
+            // GRAFIK JUMLAH TIDAK HADIR
+
+            //ambil monitoring
+            $monitoring = DB::table('monitoring_pembelajaran_news as a')
+            ->join('kehadiran_pembelajarans as b','b.monitoring_pembelajaran_id', 'a.monitoring_pembelajaran_id')
+            ->whereMonth('a.tanggal', $carbon->translatedFormat('m'))->whereYear('a.tanggal', '=', $carbon->translatedFormat('Y'))
+            ->select(
+                DB::raw("SUM(CASE WHEN b.status != 'hadir' THEN 1 ELSE 0 END) as jml_tidak_hadir")
+            )
+            ->first();
+                
             $tidakHadir = 0;
-            foreach ($monitoring as $m) {
-                $tidakHadir = $tidakHadir + $m->kehadiranPembelajarans->where('status', '!=', 'hadir')->count();
+            if($monitoring){
+                $tidakHadir = (int) $monitoring->jml_tidak_hadir;
             }
             array_push($this->grafikJmlTidakHadir, $tidakHadir);
         }
-
+        
 
         $this->filterBulan = $tgl . "-" . \Carbon\Carbon::now()->translatedFormat('m-Y');
 
@@ -72,114 +93,56 @@ class PersentaseDashboard extends Component
 
         $this->tgl = new DateTime($this->filterBulan);
 
-        $this->pembelajaran = MonitoringPembelajaran::whereMonth('tanggal', $this->tgl->format('m'))->whereYear('tanggal', '=', $this->tgl->format('Y'))->select('id', 'tanggal', 'status_validasi')->get();
+        $presensi = DB::table('monitoring_pembelajaran_news as a')
+        ->join('kehadiran_pembelajarans as b', 'b.monitoring_pembelajaran_id','a.monitoring_pembelajaran_id')
+        ->whereMonth('a.tanggal', $this->tgl->format('m'))
+        ->whereYear('a.tanggal', '=', $this->tgl->format('Y'))
+        ->select(
+            DB::raw("SUM(CASE WHEN b.status = 'hadir' THEN 1 ELSE 0 END) as jml_hadir"),
+            DB::raw("SUM(CASE WHEN b.status = 'sakit' THEN 1 ELSE 0 END) as jml_sakit"),
+            DB::raw("SUM(CASE WHEN b.status = 'alfa' THEN 1 ELSE 0 END) as jml_alfa"),
+            DB::raw("SUM(CASE WHEN b.status = 'izin' THEN 1 ELSE 0 END) as jml_izin"),
+            DB::raw("SUM(CASE WHEN b.status = 'dinas dalam' THEN 1 ELSE 0 END) as jml_dd"),
+            DB::raw("SUM(CASE WHEN b.status = 'dinas luar' THEN 1 ELSE 0 END) as jml_dl")
+        )
+        ->first();
 
-        $kegiatan = Kegiatan::all();
-        $this->jumlahKegiatan = [];
-        foreach ($kegiatan as $k) {
-            $jadwal = JadwalKegiatan::where('kegiatan_id', $k->id)->get();
-            $jmlKegiatan = 0;
-            foreach ($jadwal as $j) {
-                if ($k->narasumber == 0) {
-                    // $jmlKegiatan = $j->with(['monitoringKegiatan' => function ($query) {
-                    //     $query->whereMonth('tanggal', $this->tgl->format('m'))->whereYear('tanggal', '=', $this->tgl->format('Y'));
-                    // }])->get();
-                    $jmlKegiatan = $jmlKegiatan + MonitoringKegiatan::where('jadwal_kegiatan_id', $j->id)->whereMonth('tanggal', $this->tgl->format('m'))->whereYear('tanggal', '=', $this->tgl->format('Y'))->select('id', 'tanggal')->count();
-                    // dd($jmlKegiatan);
-                } else {
-
-                    $jmlKegiatan = $jmlKegiatan + MonitoringKegnas::where('jadwal_kegiatan_id', $j->id)->whereMonth('tanggal', $this->tgl->format('m'))->whereYear('tanggal', '=', $this->tgl->format('Y'))->select('id', 'tanggal')->count();
-                }
-            }
-            array_push($this->jumlahKegiatan, ['kegiatan' => $k->nama, 'jml' => $jmlKegiatan]);
-        }
-
-        $hadir = 0;
-        $izin = 0;
-        $sakit = 0;
-        $alfa = 0;
-        $dinasDalam = 0;
-        $dinasLuar = 0;
-
-        foreach ($this->pembelajaran as $p) {
-            $hadir = $hadir + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'hadir')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-            $izin = $izin + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'izin')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-            $sakit = $sakit + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'sakit')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-            $alfa = $alfa + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'alfa')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-            $dinasDalam = $dinasDalam + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'dinas dalam')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-            $dinasLuar = $dinasLuar + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'dinas luar')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-        }
-
-        array_push($this->presensi, ['hadir' => $hadir, 'izin' => $izin, 'sakit' => $sakit, 'alfa' => $alfa, 'dd' => $dinasDalam, 'dl' => $dinasLuar]);
-
-
-        $hadir = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'hadir')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'hadir')->count();
-        $izin = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'izin')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'izin')->count();
-        $sakit = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'sakit')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'sakit')->count();
-        $alfa = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'alfa')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'alfa')->count();
-        $dinasDalam = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'dinas dalam')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'dinas dalam')->count();
-        $dinasLuar = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'dinas luar')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'dinas luar')->count();
-
-        array_push($this->presensiKegiatan, ['hadir' => $hadir, 'izin' => $izin, 'sakit' => $sakit, 'alfa' => $alfa, 'dd' => $dinasDalam, 'dl' => $dinasLuar]);
+        array_push($this->presensi, ['hadir' => $presensi->jml_hadir, 'izin' => $presensi->jml_izin, 'sakit' => $presensi->jml_sakit, 'alfa' => $presensi->jml_alfa, 'dd' => $presensi->jml_dd, 'dl' => $presensi->jml_dl]);
     }
 
     public function updatedFilterBulan()
     {
         $this->presensi = [];
         $this->tgl = new DateTime($this->filterBulan);
+        
+        $presensi = DB::table('monitoring_pembelajaran_news as a')
+        ->join('kehadiran_pembelajarans as b', 'b.monitoring_pembelajaran_id','a.monitoring_pembelajaran_id')
+        ->whereMonth('a.tanggal', $this->tgl->format('m'))
+        ->whereYear('a.tanggal', '=', $this->tgl->format('Y'))
+        ->select(
+            DB::raw("SUM(CASE WHEN b.status = 'hadir' THEN 1 ELSE 0 END) as jml_hadir"),
+            DB::raw("SUM(CASE WHEN b.status = 'sakit' THEN 1 ELSE 0 END) as jml_sakit"),
+            DB::raw("SUM(CASE WHEN b.status = 'alfa' THEN 1 ELSE 0 END) as jml_alfa"),
+            DB::raw("SUM(CASE WHEN b.status = 'izin' THEN 1 ELSE 0 END) as jml_izin"),
+            DB::raw("SUM(CASE WHEN b.status = 'dinas dalam' THEN 1 ELSE 0 END) as jml_dd"),
+            DB::raw("SUM(CASE WHEN b.status = 'dinas luar' THEN 1 ELSE 0 END) as jml_dl")
+        )
+        ->first();
 
-        $kegiatan = Kegiatan::all();
-        $this->jumlahKegiatan = [];
-        foreach ($kegiatan as $k) {
-            $jadwal = JadwalKegiatan::where('kegiatan_id', $k->id)->get();
-            $jmlKegiatan = 0;
-            foreach ($jadwal as $j) {
-                if ($k->narasumber == 0) {
-                    // $jmlKegiatan = $j->with(['monitoringKegiatan' => function ($query) {
-                    //     $query->whereMonth('tanggal', $this->tgl->format('m'))->whereYear('tanggal', '=', $this->tgl->format('Y'));
-                    // }])->get();
-                    $jmlKegiatan = $jmlKegiatan + MonitoringKegiatan::where('jadwal_kegiatan_id', $j->id)->whereMonth('tanggal', $this->tgl->format('m'))->whereYear('tanggal', '=', $this->tgl->format('Y'))->select('id', 'tanggal')->count();
-                    // dd($jmlKegiatan);
-                } else {
+        array_push($this->presensi, ['hadir' => $presensi->jml_hadir, 'izin' => $presensi->jml_izin, 'sakit' => $presensi->jml_sakit, 'alfa' => $presensi->jml_alfa, 'dd' => $presensi->jml_dd, 'dl' => $presensi->jml_dl]);
 
-                    $jmlKegiatan = $jmlKegiatan + MonitoringKegnas::where('jadwal_kegiatan_id', $j->id)->whereMonth('tanggal', $this->tgl->format('m'))->whereYear('tanggal', '=', $this->tgl->format('Y'))->select('id', 'tanggal')->count();
-                }
-            }
-            array_push($this->jumlahKegiatan, ['kegiatan' => $k->nama, 'jml' => $jmlKegiatan]);
-        }
-
-        $this->pembelajaran = MonitoringPembelajaran::whereMonth('tanggal', $this->tgl->format('m'))->whereYear('tanggal', '=', $this->tgl->format('Y'))->select('id', 'tanggal', 'status_validasi')->get();
-
-        $hadir = 0;
-        $izin = 0;
-        $sakit = 0;
-        $alfa = 0;
-        $dinasDalam = 0;
-        $dinasLuar = 0;
-
-        foreach ($this->pembelajaran as $p) {
-            $hadir = $hadir + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'hadir')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-            $izin = $izin + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'izin')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-            $sakit = $sakit + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'sakit')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-            $alfa = $alfa + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'alfa')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-            $dinasDalam = $dinasDalam + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'dinas dalam')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-            $dinasLuar = $dinasLuar + KehadiranPembelajaran::where('monitoring_pembelajaran_id', $p->id)->where('status', 'dinas luar')->select('id', 'status', 'monitoring_pembelajaran_id')->count();
-        }
-
-        array_push($this->presensi, ['hadir' => $hadir, 'izin' => $izin, 'sakit' => $sakit, 'alfa' => $alfa, 'dd' => $dinasDalam, 'dl' => $dinasLuar]);
-
-        $hadir = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'hadir')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'hadir')->count();
-        $izin = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'izin')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'izin')->count();
-        $sakit = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'sakit')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'sakit')->count();
-        $alfa = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'alfa')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'alfa')->count();
-        $dinasDalam = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'dinas dalam')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'dinas dalam')->count();
-        $dinasLuar = KehadiranKegiatan::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'dinas luar')->count() + KehadiranKegnas::whereMonth('created_at', $this->tgl->format('m'))->whereYear('created_at', '=', $this->tgl->format('Y'))->where('status', 'dinas luar')->count();
-
-        array_push($this->presensiKegiatan, ['hadir' => $hadir, 'izin' => $izin, 'sakit' => $sakit, 'alfa' => $alfa, 'dd' => $dinasDalam, 'dl' => $dinasLuar]);
         $this->dispatchBrowserEvent('refresh-chart');
     }
     public function render()
     {
-        return view('livewire.persentase-dashboard',);
+        $pembelajaran = DB::table('monitoring_pembelajaran_news as a')
+        ->whereMonth('a.tanggal', $this->tgl->format('m'))
+        ->whereYear('a.tanggal', '=', $this->tgl->format('Y'))
+        ->select(
+            DB::raw("SUM(CASE WHEN a.status_validasi = 'terlaksana' THEN 1 ELSE 0 END) as terlaksana"),
+            DB::raw("SUM(CASE WHEN a.status_validasi != 'terlaksana' THEN 1 ELSE 0 END) as tidak_terlaksana"),
+            DB::raw("COUNT(*) as total")
+        )->first();
+        return view('livewire.persentase-dashboard',compact('pembelajaran'));
     }
 }

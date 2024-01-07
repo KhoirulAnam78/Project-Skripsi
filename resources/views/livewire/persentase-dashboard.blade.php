@@ -22,11 +22,9 @@
                         <input type="hidden" id="pembelajaranPerbulan"
                             value="{{ json_encode($grafikJmlPembelajaran) }}">
                         <input type="hidden" id="kehadiranPerbulan" value="{{ json_encode($grafikJmlTidakHadir) }}">
-                        <input type="hidden" id="jmlPembelajaran" value="{{ $pembelajaran->count() }}">
-                        <input type="hidden" id="terlaksana"
-                            value="{{ $pembelajaran->where('status_validasi', 'terlaksana')->count() }}">
-                        <input type="hidden" id="tidakTerlaksana"
-                            value="{{ $pembelajaran->where('status_validasi', '!=', 'terlaksana') }}">
+                        <input type="hidden" id="jmlPembelajaran" value="{{ $pembelajaran->total }}">
+                        <input type="hidden" id="terlaksana" value="{{ $pembelajaran->terlaksana }}">
+                        <input type="hidden" id="tidakTerlaksana" value="{{ $pembelajaran->tidak_terlaksana }}">
                         <div class="col-lg-4 col-md-4">
                             <label for="filterBulan" class="form-label">Bulan</label>
                             <select wire:model="filterBulan" id="filterBulan" class="form-select">
@@ -63,7 +61,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <div class="d-flex flex-column align-items-center gap-1">
-                            <h2 class="mb-2">{{ $pembelajaran->count() }}</h2>
+                            <h2 class="mb-2">{{ $pembelajaran->total }}</h2>
                             <span>Total Pembelajaran</span>
                         </div>
                         <div id="orderStatisticsChart"></div>
@@ -79,8 +77,7 @@
                                     <small class="text-muted"></small>
                                 </div>
                                 <div class="user-progress">
-                                    <small
-                                        class="fw-semibold">{{ $pembelajaran->where('status_validasi', 'terlaksana')->count() }}</small>
+                                    <small class="fw-semibold">{{ $pembelajaran->terlaksana }}</small>
                                 </div>
                             </div>
                         </li>
@@ -94,8 +91,7 @@
                                     <small class="text-muted"></small>
                                 </div>
                                 <div class="user-progress">
-                                    <small
-                                        class="fw-semibold">{{ $pembelajaran->where('status_validasi', '!=', 'terlaksana')->count() }}</small>
+                                    <small class="fw-semibold">{{ $pembelajaran->tidak_terlaksana }}</small>
                                 </div>
                             </div>
                         </li>
@@ -188,7 +184,7 @@
 
 
         <!-- Transactions -->
-        <div class="col-sm-12 col-md-6 col-lg-6 order-2 mb-4">
+        {{-- <div class="col-sm-12 col-md-6 col-lg-6 order-2 mb-4">
             <div class="card h-100">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="card-title m-0 me-2">Jumlah Pelaksanaan Kegiatan</h5>
@@ -294,7 +290,7 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
     </div>
 
