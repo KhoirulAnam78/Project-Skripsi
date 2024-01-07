@@ -21,7 +21,7 @@ class PembelajaranMonitoring extends Component
     public $time;
     public function mount()
     {
-        $this->filterTampilan = 'sekarang';
+        $this->filterTampilan = 'semua';
         $this->day = \Carbon\Carbon::now()->translatedFormat('l');
         //mengambil tanggal
         $this->tanggal = \Carbon\Carbon::now()->translatedFormat('Y-m-d');
