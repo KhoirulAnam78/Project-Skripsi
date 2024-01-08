@@ -109,7 +109,7 @@ class DashboardController extends Controller
             $jadwal = DB::table('jadwal_pelajarans as a')
                     ->where('a.guru_id',Auth::user()->guru->id)
                     ->whereIn('a.kelas_id',$kelasAktif)
-                    ->where('a.hari','selasa')
+                    ->where('a.hari', $day)
                     ->leftjoin('mata_pelajarans as b','b.id','a.mata_pelajaran_id')
                     ->leftjoin('kelas as c','c.id','a.kelas_id')
                     ->leftjoin('monitoring_pembelajaran_news as d',function($join){
@@ -119,7 +119,6 @@ class DashboardController extends Controller
                     })
                     ->select('a.waktu_mulai','a.waktu_berakhir','b.nama as mata_pelajaran','c.nama as kelas','d.status_validasi')
                     ->get();
-
                     
             //Ambil Jadwal Piket
             if (JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()) {
