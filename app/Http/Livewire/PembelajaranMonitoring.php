@@ -78,6 +78,7 @@ class PembelajaranMonitoring extends Component
             )
             ->groupBy('a.id', 'a.hari', 'a.waktu_mulai', 'a.waktu_berakhir', 'a.kelas_id', 'a.mata_pelajaran_id', 'a.guru_id',
                 'b.nama', 'c.nama', 'd.nama', 'e.topik', 'e.status_validasi')
+            ->orderBy('a.waktu_mulai')
             ->paginate(12)
         ]);
 
