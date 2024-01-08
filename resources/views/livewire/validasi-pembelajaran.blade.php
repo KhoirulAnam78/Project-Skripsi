@@ -49,11 +49,11 @@
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    @if (count($jadwal) === 0 and count($jadwalPengganti) === 0)
+                    {{-- @if (count($jadwal) === 0 and count($jadwalPengganti) === 0)
                         <tr>
                             <td colspan='9' align="center"><span>Tidak ada data</span></td>
                         </tr>
-                    @endif
+                    @endif --}}
                     @php
                         $a = 0;
                     @endphp
@@ -90,7 +90,7 @@
                         @endforeach
                     @endif
 
-                    @if (count($jadwalPengganti) !== 0)
+                    {{-- @if (count($jadwalPengganti) !== 0)
 
                         @foreach ($jadwalPengganti as $j)
                             <tr>
@@ -123,7 +123,7 @@
                                 </td>
                             </tr>
                         @endforeach
-                    @endif
+                    @endif --}}
                 </tbody>
             </table>
         </div>
