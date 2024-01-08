@@ -118,6 +118,7 @@ class DashboardController extends Controller
                             ->where('d.tanggal', \Carbon\Carbon::now()->translatedFormat('Y-m-d'));
                     })
                     ->select('a.waktu_mulai','a.waktu_berakhir','b.nama as mata_pelajaran','c.nama as kelas','d.status_validasi')
+                    ->orderBy('a.waktu_mulai')
                     ->get();
                     
             //Ambil Jadwal Piket
