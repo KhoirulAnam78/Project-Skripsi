@@ -294,8 +294,8 @@
         labels: {
           show: true
         },
-        min: 0,
-        max: 60,
+        // min: 0,
+        // max: 60,
         tickAmount: 4
       }
     };
@@ -393,8 +393,8 @@
         labels: {
           show: true
         },
-        min: 0,
-        max: 60,
+        // min: 0,
+        // max: 60,
         tickAmount: 4
       }
     };
