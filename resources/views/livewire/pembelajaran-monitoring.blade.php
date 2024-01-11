@@ -11,8 +11,8 @@
     <div class="d-flex justify-content-end mt-3">
         <h5>Waktu saat ini : {{ \Carbon\Carbon::now()->translatedFormat('H:i:s') }}</h5>
     </div>
-    <div class="row  mt-3">
-        <div class="col-lg-9 col-xl-9 col-md-9 col-sm-6">
+    <div class="row  my-3">
+        <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
             <div class="row">
                 {{-- @if (count($jadwalPengganti) !== 0)
                     <h5>Jadwal Pengganti</h5>
@@ -190,36 +190,43 @@
                 @endif
             </div>
         </div>
+    </div>
+    <div class="row">
 
-        <div class="col-lg-3 col-xl-3 col-md-3 col-sm-6">
+        <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
             <h5 class="text-white">Presensi</h5>
             <div class="card bg-secondary text-white mb-3">
                 <div class="card-header fw-bold">Siswa Tidak Hadir Dalam Pembelajaran</div>
                 <div class="card-body">
-                    @if (count($tidakHadir) !== 0)
-                        @foreach ($tidakHadir as $p)
-                            <div class="card text-dark mt-3">
-                                <div class="card-header">
-                                    <p class="card-text fw-bold">
-                                        {{ $p->kelas }} :
-                                        {{ $p->mata_pelajaran }} <br>
-                                    </p>
+                    <div class="row">
+                        @if (count($tidakHadir) !== 0)
+                            @foreach ($tidakHadir as $p)
+                                <div class="col-3">
+                                    <div class="card text-dark mt-3">
+                                        <div class="card-header">
+                                            <p class="card-text fw-bold">
+                                                {{ $p->kelas }} :
+                                                {{ $p->mata_pelajaran }} <br>
+                                            </p>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>
+                                                {{ $p->nama_siswa }}
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <p>
-                                        {{ $p->nama_siswa }}
-                                    </p>
-                                </div>
-                            </div>
-                        @endforeach
-                    @else
-                        <p class="card-text fw-bold">
-                            --Tidak ada data--
+                            @endforeach
+                        @else
+                            <p class="card-text fw-bold">
+                                --Tidak ada data--
 
-                        </p>
-                    @endif
+                            </p>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
