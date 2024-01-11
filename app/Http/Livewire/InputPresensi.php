@@ -332,27 +332,30 @@ class InputPresensi extends Component
             $status = 'terlaksana';
         }
         $data = JadwalPelajaran::where('id',$this->filterMapel)->first();
-        DB::transaction(function () use ($data,$status,$guruPiketId) {
-            $monitoring = MonitoringPembelajaranNew::create([
-                'tanggal' => $this->tanggal,
-                'topik' => $this->topik,
-                'waktu_mulai' => $this->waktu_mulai,
-                'waktu_berakhir' => $this->waktu_berakhir,
-                'status_validasi' => $status,
-                'kelas_id' => $data->kelas_id,
-                'guru_id' => $data->guru_id,
-                'mata_pelajaran_id' => $data->mata_pelajaran_id,
-                'guru_piket_id' => $guruPiketId
-            ]);
-    
-            foreach ($this->presensi as $key => $value) {
-                KehadiranPembelajaran::create([
-                    'siswa_id' => $key,
-                    'status' => $value,
-                    'monitoring_pembelajaran_id' => $monitoring->monitoring_pembelajaran_id
+        $cek_presensi = MonitoringPembelajaranNew::where('tanggal',$this->tanggal)->where('kelas_id',$data->kelas_id)->where('guru_id',$data->guru_id)->where('mata_pelajaran_id',$data->mata_pelajaran_id)->first();
+        if(!$cek_presensi){
+            DB::transaction(function () use ($data,$status,$guruPiketId) {
+                $monitoring = MonitoringPembelajaranNew::create([
+                    'tanggal' => $this->tanggal,
+                    'topik' => $this->topik,
+                    'waktu_mulai' => $this->waktu_mulai,
+                    'waktu_berakhir' => $this->waktu_berakhir,
+                    'status_validasi' => $status,
+                    'kelas_id' => $data->kelas_id,
+                    'guru_id' => $data->guru_id,
+                    'mata_pelajaran_id' => $data->mata_pelajaran_id,
+                    'guru_piket_id' => $guruPiketId
                 ]);
-            }
-        });
+        
+                foreach ($this->presensi as $key => $value) {
+                    KehadiranPembelajaran::create([
+                        'siswa_id' => $key,
+                        'status' => $value,
+                        'monitoring_pembelajaran_id' => $monitoring->monitoring_pembelajaran_id
+                    ]);
+                }
+            });
+        }
         $this->update = true;
         session()->flash('message', 'Presensi berhasil diinputkan !');
         // $this->empty();

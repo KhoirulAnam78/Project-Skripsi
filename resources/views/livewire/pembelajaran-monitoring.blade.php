@@ -198,7 +198,7 @@
                 <div class="card-body">
                     @if (count($tidakHadir) !== 0)
                         @foreach ($tidakHadir as $p)
-                            <div class="card text-dark">
+                            <div class="card text-dark mt-3">
                                 <div class="card-header">
                                     <p class="card-text fw-bold">
                                         {{ $p->kelas }} :

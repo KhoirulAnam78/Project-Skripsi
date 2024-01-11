@@ -166,11 +166,18 @@
         <div class="col-2">
             @can('admin')
                 @if ($update === false)
-                    <button class="btn btn-primary" {{ $filterMapel === '' ? 'disabled' : '' }}
-                        wire:click="save()">Simpan</button>
+                    <span wire:click="save()" class="btn btn-primary" {{ $filterMapel === '' ? 'disabled' : '' }}
+                        wire:loading.attr="disabled">
+                        <span wire:loading.remove wire:target="save">Simpan</span>
+                        <span wire:loading wire:target="save">Proses...</span>
+                    </span>
                 @else
-                    <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)" class="btn btn-success"
-                        {{ $filterMapel === '' ? 'disabled' : '' }} wire:click="update()">Update</button>
+                    <span wire:click="update()" class="btn btn-success"
+                        style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
+                        {{ $filterMapel === '' ? 'disabled' : '' }} wire:loading.attr="disabled">
+                        <span wire:loading.remove wire:target="update">Update</span>
+                        <span wire:loading wire:target="update">Proses...</span>
+                    </span>
                 @endif
 
             @endcan
@@ -183,7 +190,10 @@
                     @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir)
                         <button class="btn btn-primary" disabled>Simpan</button>
                     @else
-                        <button class="btn btn-primary" wire:key="simpan" wire:click="save()">Simpan</button>
+                        <span wire:click="save()" class="btn btn-primary" wire:loading.attr="disabled">
+                            <span wire:loading.remove wire:target="save">Simpan</span>
+                            <span wire:loading wire:target="save">Proses...</span>
+                        </span>
                     @endif
                 @else
                     @if ($filterMapel === '')
@@ -196,8 +206,12 @@
                         <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
                             class="btn btn-success" disabled>Update</button>
                     @else
-                        <button wire:key="update" style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
-                            class="btn btn-success" wire:click="update()">Update</button>
+                        <span wire:click="update()" class="btn btn-success"
+                            style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
+                            {{ $filterMapel === '' ? 'disabled' : '' }} wire:loading.attr="disabled">
+                            <span wire:loading.remove wire:target="update">Update</span>
+                            <span wire:loading wire:target="update">Proses...</span>
+                        </span>
                     @endif
                 @endif
             @endcan
