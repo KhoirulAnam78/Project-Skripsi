@@ -46,7 +46,7 @@ class PembelajaranMonitoring extends Component
         ->select(
             'c.nama as kelas',
             'd.nama as mata_pelajaran',
-            DB::raw('GROUP_CONCAT(e.nama ," (",a.status,")") as nama_siswa') // Concatenate names of non-attending students
+            DB::raw('GROUP_CONCAT(e.nama ," (",a.status,")<br>" SEPARATOR "") as nama_siswa') // Concatenate names of non-attending students
         )
         ->get();
         return view('livewire.pembelajaran-monitoring', [

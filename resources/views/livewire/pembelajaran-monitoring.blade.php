@@ -211,7 +211,7 @@
                                         </div>
                                         <div class="card-body">
                                             <p>
-                                                {{ $p->nama_siswa }}
+                                                {!! $p->nama_siswa !!}
                                             </p>
                                         </div>
                                     </div>
