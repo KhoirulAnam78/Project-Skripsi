@@ -93,7 +93,7 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form wire:submit.prevent="tidakValid">
+            <form>
                 <div class="modal-body">
                     <div class="row mb-3">
                         <div class="col-6">
@@ -186,8 +186,11 @@
                         data-bs-dismiss="modal">
                         Close
                     </button>
-
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <span wire:click="tidakValid()" class="btn btn-primary" wire:loading.attr="disabled">
+                        <span wire:loading.remove wire:target="tidakValid">Simpan</span>
+                        <span wire:loading wire:target="tidakValid">Proses...</span>
+                    </span>
+                    {{-- <button type="submit" class="btn btn-primary">Simpan</button> --}}
                 </div>
             </form>
         </div>
@@ -213,7 +216,11 @@
                     data-bs-dismiss="modal">
                     Close
                 </button>
-                <button type="submit" class="btn btn-primary" wire:click="valid()">Terlaksana</button>
+                <span wire:click="valid()" class="btn btn-primary" wire:loading.attr="disabled">
+                    <span wire:loading.remove wire:target="valid">Simpan</span>
+                    <span wire:loading wire:target="valid">Proses...</span>
+                </span>
+                {{-- <button type="submit" class="btn btn-primary" wire:click="valid()">Terlaksana</button> --}}
             </div>
         </div>
     </div>

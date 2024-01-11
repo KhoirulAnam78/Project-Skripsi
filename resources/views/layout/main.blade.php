@@ -45,6 +45,7 @@
     <script src="{{ url('') }}/assets/assets/js/config.js"></script>
     @livewireStyles
     @yield('css')
+    @stack('style')
 </head>
 
 <body>
@@ -109,6 +110,7 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     @livewireScripts
     @yield('script')
+    @stack('js')
 </body>
 
 </html>

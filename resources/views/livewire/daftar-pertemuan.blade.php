@@ -17,9 +17,15 @@
     @endif
     <div class="row mx-2 mb-3 justify-content-start">
         <div class="col-lg-2">
-            <a class="btn btn-info mb-2 text-white" wire:click="export({{ $filterKelas }},{{ $filterMapel }})"
+            <span wire:click="export({{ $filterKelas }},{{ $filterMapel }})" class="btn btn-info mb-2 text-white"
+                wire:loading.attr="disabled"style="background-color:#F0AD4E ;border-color: #F0AD4E"><i
+                    class='bx bxs-file-export'></i>
+                <span wire:loading.remove wire:target="export({{ $filterKelas }},{{ $filterMapel }})">Export</span>
+                <span wire:loading wire:target="export({{ $filterKelas }},{{ $filterMapel }})">Proses...</span>
+            </span>
+            {{-- <a class="btn btn-info mb-2 text-white" wire:click="export({{ $filterKelas }},{{ $filterMapel }})"
                 style="background-color:#F0AD4E ;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
-                Export</a>
+                Export</a> --}}
         </div>
     </div>
     <div class="row mx-2 mb-3">
@@ -93,7 +99,7 @@
                         <th>DD</th>
                         <th>DL</th>
                         <th>Status</th>
-                        <th>Validator</th>
+                        <th>export({{ $filterKelas }},{{ $filterMapel }})ator</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>

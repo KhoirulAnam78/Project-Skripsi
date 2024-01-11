@@ -129,21 +129,33 @@
         </div>
     </div>
     @include('livewire.modals.modal-validasi')
+
+</div>
+
+@push('js')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        document.addEventListener('alert-tidak-valid', function(e) {
+            $('#editModal').modal('hide');
+            swal(e.detail.info, e.detail.message, "success");
+        });
+        document.addEventListener('alert-valid', function(e) {
+            $('#validModal').modal('hide');
+            swal(e.detail.info, e.detail.message, "success");
+        });
+    </script>
     <script>
         window.addEventListener('show-modal', event => {
             $('#showModal').modal('show');
         });
-        window.addEventListener('close-edit-modal', event => {
-            $('#editModal').modal('hide');
-        });
+
         window.addEventListener('show-edit-modal', event => {
             $('#editModal').modal('show');
         });
-        window.addEventListener('close-valid-modal', event => {
-            $('#validModal').modal('hide');
-        });
+
         window.addEventListener('show-valid-modal', event => {
             $('#validModal').modal('show');
         });
     </script>
-</div>
+@endpush

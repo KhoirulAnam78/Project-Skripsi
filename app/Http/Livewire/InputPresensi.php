@@ -320,15 +320,14 @@ class InputPresensi extends Component
     {
         $this->validate();
         if (Auth::user()->role === 'guru') {
-            $jadwalToday = JadwalGuruPiket::where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->where('waktu_mulai', '<=', \Carbon\Carbon::now()->translatedFormat('H:i'))->where('waktu_berakhir', '>=', \Carbon\Carbon::now()->translatedFormat('H:i'))->first();
+            // $jadwalToday = JadwalGuruPiket::where('hari', \Carbon\Carbon::now()->translatedFormat('l'))->where('waktu_mulai', '<=', \Carbon\Carbon::now()->translatedFormat('H:i'))->where('waktu_berakhir', '>=', \Carbon\Carbon::now()->translatedFormat('H:i'))->first();
             $status = 'belum tervalidasi';
-            if ($jadwalToday === null) {
-                $guruPiketId = null;
-            } else {
-                $guruPiketId = $jadwalToday->guru_id;
-            }
+            // if ($jadwalToday === null) {
+            //     $guruPiketId = null;
+            // } else {
+            //     $guruPiketId = $jadwalToday->guru_id;
+            // }
         } else {
-            $guruPiketId = null;
             $status = 'terlaksana';
         }
         $data = JadwalPelajaran::where('id',$this->filterMapel)->first();
@@ -344,7 +343,7 @@ class InputPresensi extends Component
                     'kelas_id' => $data->kelas_id,
                     'guru_id' => $data->guru_id,
                     'mata_pelajaran_id' => $data->mata_pelajaran_id,
-                    'guru_piket_id' => $guruPiketId
+                    'guru_piket_id' => null
                 ]);
         
                 foreach ($this->presensi as $key => $value) {
@@ -357,8 +356,8 @@ class InputPresensi extends Component
             });
         }
         $this->update = true;
-        session()->flash('message', 'Presensi berhasil diinputkan !');
-        // $this->empty();
+        // session()->flash('message', 'Presensi berhasil diinputkan !');
+        $this->dispatchBrowserEvent('alert-save',['info' => 'Berhasil', 'message' => 'Presensi berhasil diinputkan!']);
     }
 
     public function update()
@@ -377,7 +376,9 @@ class InputPresensi extends Component
                 ]);
             }
         });
-        session()->flash('message', 'Presensi berhasil diupdate !');
+        // session()->flash('message', 'Presensi berhasil diupdate !');
+        
+        $this->dispatchBrowserEvent('alert-update',['info' => 'Berhasil', 'message' => 'Presensi berhasil diupdate!']);
     }
 
     public function updatedTanggal()

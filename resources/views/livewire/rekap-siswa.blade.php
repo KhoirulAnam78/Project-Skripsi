@@ -17,9 +17,12 @@
     @endif
     <div class="row mx-2 mb-3 justify-content-start">
         <div class="col-lg-2">
-            <a class="btn btn-info mb-2 text-white" wire:click="export()"
-                style="background-color: #F0AD4E;border-color: #F0AD4E"><i class='bx bxs-file-export'></i>
-                Export</a>
+            <span wire:click="export()" class="btn btn-info mb-2 text-white"
+                wire:loading.attr="disabled"style="background-color:#F0AD4E ;border-color: #F0AD4E"><i
+                    class='bx bxs-file-export'></i>
+                <span wire:loading.remove wire:target="export">Export</span>
+                <span wire:loading wire:target="export">Proses...</span>
+            </span>
         </div>
     </div>
     <div class="row mx-2 mb-3">

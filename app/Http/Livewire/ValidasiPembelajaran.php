@@ -147,6 +147,7 @@ class ValidasiPembelajaran extends Component
         $this->jadwalPengganti = JadwalPengganti::where('tanggal', $this->tanggal)->whereRelation('jadwalPelajaran', 'kelas_id', $this->filterKelas)->get();
         $this->resetErrorBag();
         $this->resetValidation();
+        $this->resetPage();
     }
 
 
@@ -256,9 +257,11 @@ class ValidasiPembelajaran extends Component
             ]);
         }
 
-        session()->flash('message', 'Presensi berhasil diperbarui !');
+        // session()->flash('message', 'Presensi berhasil diperbarui !');
         $this->empty();
-        $this->dispatchBrowserEvent('close-valid-modal');
+        // $this->dispatchBrowserEvent('close-valid-modal');
+        $this->dispatchBrowserEvent('alert-valid',['info' => 'Berhasil', 'message' => 'Validasi berhasil disimpan!']);
+    
     }
 
     public function tidakValid()
@@ -317,8 +320,9 @@ class ValidasiPembelajaran extends Component
                 }
             });
         }
-        session()->flash('message', 'Presensi berhasil diperbarui !');
-        $this->dispatchBrowserEvent('close-edit-modal');
+        // session()->flash('message', 'Presensi berhasil diperbarui !');
+        // $this->dispatchBrowserEvent('close-edit-modal');
+        $this->dispatchBrowserEvent('alert-tidak-valid',['info' => 'Berhasil', 'message' => 'Validasi berhasil disimpan!']);
         $this->empty();
     }
 

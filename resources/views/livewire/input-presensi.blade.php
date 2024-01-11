@@ -218,3 +218,16 @@
         </div>
     </div>
 </div>
+
+@push('js')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        document.addEventListener('alert-save', function(e) {
+            swal(e.detail.info, e.detail.message, "success");
+        });
+        document.addEventListener('alert-update', function(e) {
+            swal(e.detail.info, e.detail.message, "success");
+        });
+    </script>
+@endpush
