@@ -162,49 +162,16 @@
             @endif
         </div>
     </div>
-    <div class="row mx-3 justify-content-end my-3">
-        <div class="col-2">
-            @can('admin')
-                @if ($update === false)
-                    <span wire:click="save()" class="btn btn-primary" {{ $filterMapel === '' ? 'disabled' : '' }}
-                        wire:loading.attr="disabled">
-                        <span wire:loading.remove wire:target="save">Simpan</span>
-                        <span wire:loading wire:target="save">Proses...</span>
-                    </span>
-                @else
-                    <span wire:click="update()" class="btn btn-success"
-                        style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
-                        {{ $filterMapel === '' ? 'disabled' : '' }} wire:loading.attr="disabled">
-                        <span wire:loading.remove wire:target="update">Update</span>
-                        <span wire:loading wire:target="update">Proses...</span>
-                    </span>
-                @endif
-
-            @endcan
-            @can('guru')
-                @if ($update === false)
-                    @if ($filterMapel === '')
-                        <button class="btn btn-primary" disabled>Simpan</button>
-                    @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai)
-                        <button class="btn btn-primary" disabled>Simpan</button>
-                    @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir)
-                        <button class="btn btn-primary" disabled>Simpan</button>
-                    @else
-                        <span wire:click="save()" class="btn btn-primary" wire:loading.attr="disabled">
+    <div class="card-footer">
+        <div class="row my-3">
+            <div class="col-2">
+                @can('admin')
+                    @if ($update === false)
+                        <span wire:click="save()" class="btn btn-primary" {{ $filterMapel === '' ? 'disabled' : '' }}
+                            wire:loading.attr="disabled">
                             <span wire:loading.remove wire:target="save">Simpan</span>
                             <span wire:loading wire:target="save">Proses...</span>
                         </span>
-                    @endif
-                @else
-                    @if ($filterMapel === '')
-                        <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
-                            class="btn btn-success" disabled>Update</button>
-                    @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai)
-                        <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
-                            class="btn btn-success" disabled>Update</button>
-                    @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir)
-                        <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
-                            class="btn btn-success" disabled>Update</button>
                     @else
                         <span wire:click="update()" class="btn btn-success"
                             style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
@@ -213,8 +180,43 @@
                             <span wire:loading wire:target="update">Proses...</span>
                         </span>
                     @endif
-                @endif
-            @endcan
+
+                @endcan
+                @can('guru')
+                    @if ($update === false)
+                        @if ($filterMapel === '')
+                            <button class="btn btn-primary" disabled>Simpan</button>
+                        @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai)
+                            <button class="btn btn-primary" disabled>Simpan</button>
+                        @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir)
+                            <button class="btn btn-primary" disabled>Simpan</button>
+                        @else
+                            <span wire:click="save()" class="btn btn-primary" wire:loading.attr="disabled">
+                                <span wire:loading.remove wire:target="save">Simpan</span>
+                                <span wire:loading wire:target="save">Proses...</span>
+                            </span>
+                        @endif
+                    @else
+                        @if ($filterMapel === '')
+                            <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
+                                class="btn btn-success" disabled>Update</button>
+                        @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') < $waktu_mulai)
+                            <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
+                                class="btn btn-success" disabled>Update</button>
+                        @elseif (\Carbon\Carbon::now()->translatedFormat('H:i') > $waktu_berakhir)
+                            <button style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
+                                class="btn btn-success" disabled>Update</button>
+                        @else
+                            <span wire:click="update()" class="btn btn-success"
+                                style="background-color: rgb(0, 185, 0);border-color: rgb(0, 185, 0)"
+                                {{ $filterMapel === '' ? 'disabled' : '' }} wire:loading.attr="disabled">
+                                <span wire:loading.remove wire:target="update">Update</span>
+                                <span wire:loading wire:target="update">Proses...</span>
+                            </span>
+                        @endif
+                    @endif
+                @endcan
+            </div>
         </div>
     </div>
 </div>

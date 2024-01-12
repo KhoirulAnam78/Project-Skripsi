@@ -333,7 +333,7 @@ class InputPresensi extends Component
         $data = JadwalPelajaran::where('id',$this->filterMapel)->first();
         $cek_presensi = MonitoringPembelajaranNew::where('tanggal',$this->tanggal)->where('kelas_id',$data->kelas_id)->where('guru_id',$data->guru_id)->where('mata_pelajaran_id',$data->mata_pelajaran_id)->first();
         if(!$cek_presensi){
-            DB::transaction(function () use ($data,$status,$guruPiketId) {
+            DB::transaction(function () use ($data,$status) {
                 $monitoring = MonitoringPembelajaranNew::create([
                     'tanggal' => $this->tanggal,
                     'topik' => $this->topik,
