@@ -99,7 +99,7 @@
                         <th>DD</th>
                         <th>DL</th>
                         <th>Status</th>
-                        <th>export({{ $filterKelas }},{{ $filterMapel }})ator</th>
+                        <th>Validator</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
