@@ -24,7 +24,7 @@ class ImportJadwalPiket implements ToCollection, WithHeadingRow, WithValidation
 
     public function prepareForValidation(array $row)
     {
-        $row['hari'] = ucfirst($row['hari']);
+        // $row['hari'] = ucfirst($row['hari']);
         $this->hari = $row['hari'];
         if (Guru::where('kode_guru', $row['kode_guru'])->first()) {
             $row['guru_id'] = Guru::where('kode_guru', $row['kode_guru'])->first()->id;

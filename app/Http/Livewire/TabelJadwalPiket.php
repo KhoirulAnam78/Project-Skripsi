@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use App\Models\JadwalGuruPiket;
 use App\Exports\ExportJadwalPiket;
 use App\Imports\ImportJadwalPiket;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TabelJadwalPiket extends Component
@@ -28,17 +29,20 @@ class TabelJadwalPiket extends Component
         if ($this->jadwal_edit_id) {
             return [
                 'guru_id' => 'required',
-                'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_guru_pikets,waktu_mulai,' . $this->jadwal_edit_id . ',id,hari,' . $this->hari,
+                'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_guru_pikets,waktu_mulai,' . $this->jadwal_edit_id . ',id,guru_id,' . $this->guru_id,
                 'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_guru_pikets,hari,' . $this->jadwal_edit_id . ',id,guru_id,' . $this->guru_id
+                // 'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu'
+                // |unique:jadwal_guru_pikets,hari,' . $this->jadwal_edit_id . ',id,guru_id,' . $this->guru_id
             ];
         } else {
             return [
                 'file' => 'required|mimes:xlsx,xls',
                 'guru_id' => 'required',
-                'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_guru_pikets,waktu_mulai,NULL,id,hari,' . $this->hari,
+                'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_guru_pikets,hari,NULL,id,guru_id,' . $this->guru_id,
+                // |unique:jadwal_guru_pikets,waktu_mulai,NULL,id,hari,' . $this->hari,
                 'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_guru_pikets,hari,NULL,id,guru_id,' . $this->guru_id
+                // 'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu'
+                // |unique:jadwal_guru_pikets,hari,NULL,id,guru_id,' . $this->guru_id
             ];
         }
     }
@@ -79,12 +83,13 @@ class TabelJadwalPiket extends Component
     {
         $this->validate([
             'guru_id' => 'required',
-            'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_guru_pikets,waktu_mulai,NULL,id,hari,' . $this->hari,
+            'waktu_mulai' => 'required|date_format:H:i|unique:jadwal_guru_pikets,hari,NULL,id,guru_id,' . $this->guru_id,
+            // unique:jadwal_guru_pikets,waktu_mulai,NULL,id,hari,' . $this->hari,
             'waktu_berakhir' => 'required|date_format:H:i|after:waktu_mulai',
-            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_guru_pikets,hari,NULL,id,guru_id,' . $this->guru_id
+            // 'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu|unique:jadwal_guru_pikets,hari,NULL,id,guru_id,' . $this->guru_id
         ]);
         JadwalGuruPiket::create([
-            'hari' => $this->hari,
+            'hari' => 'Setiap Hari',
             'guru_id' => $this->guru_id,
             'waktu_mulai' => $this->waktu_mulai,
             'waktu_berakhir' => $this->waktu_berakhir,
@@ -111,7 +116,7 @@ class TabelJadwalPiket extends Component
     {
         $this->validate();
         JadwalGuruPiket::where('id', $this->jadwal_edit_id)->update([
-            'hari' => $this->hari,
+            'hari' => 'Setiap Hari',
             'waktu_mulai' => $this->waktu_mulai,
             'waktu_berakhir' => $this->waktu_berakhir,
             'guru_id' => $this->guru_id,
@@ -173,8 +178,11 @@ class TabelJadwalPiket extends Component
     {
         // dd(Carbon::now()->isoFormat('dddd, D MMMM Y'));
         return view('livewire.tabel-jadwal-piket', [
-            'jadwalPiket' => Guru::with('jadwalGuruPikets')->whereHas('jadwalGuruPikets')->where('nama', 'like', '%' . $this->search . '%')->latest()->paginate(10),
-            // 'guru' => Guru::doesntHave('jadwalGuruPikets')->get()
+            'jadwalPiket' => DB::table('jadwal_guru_pikets as a')
+            ->join('gurus as b', 'b.id','a.guru_id')
+            ->where('b.nama', 'like', '%' . $this->search . '%')
+            ->select('a.waktu_mulai','a.hari','a.waktu_berakhir','b.nama','b.kode_guru','a.id')
+            ->paginate(10),
             'guru' => Guru::all()
         ]);
     }

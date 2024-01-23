@@ -25,14 +25,14 @@
                         </div>
                         <div class="col mb-0">
                             <label for="hari" class="form-label">Hari</label>
-                            <select name="hari" wire:model="hari" id="hari" class="form-select">
-                                <option value="">Pilih Hari</option>
-                                <option value="Senin">Senin</option>
+                            <select name="hari" disabled wire:model="hari" id="hari" class="form-select">
+                                <option value="">Setiap Hari</option>
+                                {{-- <option value="Senin">Senin</option>
                                 <option value="Selasa">Selasa</option>
                                 <option value="Rabu">Rabu</option>
                                 <option value="Kamis">Kamis</option>
                                 <option value="Jumat">Jumat</option>
-                                <option value="Sabtu">Sabtu</option>
+                                <option value="Sabtu">Sabtu</option> --}}
                             </select>
                             @error('hari')
                                 <span class="error" style="font-size:12px; font-style:italic">* {{ $message }}</span>
@@ -98,14 +98,14 @@
                         </div>
                         <div class="col mb-0">
                             <label for="hari" class="form-label">Hari</label>
-                            <select name="hari" wire:model="hari" id="hari" class="form-select">
-                                <option value="">Pilih Hari</option>
-                                <option value="Senin">Senin</option>
+                            <select name="hari" disabled wire:model="hari" id="hari" class="form-select">
+                                <option value="">Setiap Hari</option>
+                                {{-- <option value="Senin">Senin</option>
                                 <option value="Selasa">Selasa</option>
                                 <option value="Rabu">Rabu</option>
                                 <option value="Kamis">Kamis</option>
                                 <option value="Jumat">Jumat</option>
-                                <option value="Sabtu">Sabtu</option>
+                                <option value="Sabtu">Sabtu</option> --}}
                             </select>
                             @error('hari')
                                 <span class="error" style="font-size:12px; font-style:italic">*

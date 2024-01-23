@@ -168,6 +168,12 @@ foreach ($kegiatan as $k) {
                     <div data-i18n="Validasi Pembelajaran">Validasi Pembelajaran</div>
                 </a>
             </li>
+            {{-- <li class="menu-item {{ $title === 'Pembelajaran Belum Divalidasi' ? 'active' : '' }}">
+                <a href="/pembelajaran-belum-tervalidasi" class="menu-link">
+                    <i class='menu-icon tf-icons bx bx-check-square'></i>
+                    <div data-i18n="Validasi Pembelajaran">Pembelajaran Belum Divalidasi</div>
+                </a>
+            </li> --}}
             <!-- Components -->
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Rekapitulasi</span></li>
             <!-- Data Rekapitulasi -->

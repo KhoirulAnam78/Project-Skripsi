@@ -27,7 +27,10 @@
                                     rekapitulasi keterlaksanaan
                                     pembelajaran.
                                 </p>
-                                <h5 class="card-title text-primary">Jadwal Piket : {{ $jadwalPiket }}
+                                <h5 class="card-title text-primary">Hari Piket :
+                                    {{ $jadwalPiket ? $jadwalPiket->hari : '-' }} <br> Jam Piket :
+                                    {{ $jadwalPiket ? substr($jadwalPiket->waktu_mulai, 0, -3) . '-' . substr($jadwalPiket->waktu_berakhir, 0, -3) : '-' }}
+                                </h5>
                             </div>
                         </div>
                         <div class="col-sm-4 text-center text-sm-left">

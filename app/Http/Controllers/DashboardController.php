@@ -123,9 +123,9 @@ class DashboardController extends Controller
                     
             //Ambil Jadwal Piket
             if (JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()) {
-                $jadwalPiket = JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first()->hari;
+                $jadwalPiket = JadwalGuruPiket::where('guru_id', Auth::user()->guru->id)->first();
             } else {
-                $jadwalPiket = '-';
+                $jadwalPiket = null;
             }
 
             return view('pages.guru.dashboard', [

@@ -12,6 +12,7 @@
             <label for="kelas_id" class="form-label">Kelas</label>
             <select wire:model="filterKelas" id="kelas_id" class="form-select">
                 @if (count($kelas) !== 0)
+                    <option value="">Semua</option>
                     @foreach ($kelas as $k)
                         <option value="{{ $k->id }}">{{ $k->nama }}</option>
                     @endforeach
@@ -20,7 +21,7 @@
                 @endif
             </select>
         </div>
-        @can('admin')
+        {{-- @can('admin')
             <div class="col-lg-4 col-md-4">
                 <label for="tanggal" class="form-label">Tanggal</label>
                 <input type="date" value="{{ $tanggal }}" wire:model="tanggal" name="tanggal" id="tanggal"
@@ -31,21 +32,21 @@
                         {{ $message }}</span>
                 @enderror
             </div>
-        @endcan
+        @endcan --}}
     </div>
     <div class="row mx-2">
         <div class="table-responsive text-nowrap mb-3">
-            <table class="table table-striped align-top" id="example">
+            <table class="table table-striped table-bordered align-top" id="example">
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Tanggal</th>
                         <th>Ringkasan</th>
-                        {{-- <th>Mapel</th> --}}
-                        {{-- <th>Guru</th> --}}
-                        {{-- <th>Waktu</th> --}}
+                        {{-- <th>Mapel</th>
+                        <th>Guru</th>
+                        <th>Waktu</th> --}}
                         <th>Topik Pembelajaran</th>
-                        <th>Status Validasi</th>
-                        {{-- <th>Validator</th> --}}
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -64,14 +65,17 @@
                             <tr>
                                 <td>{{ ++$a }}
                                 </td>
-                                <td>{{ $j->kelas }} <br> {{ $j->mata_pelajaran }} <br>
-                                    {{ substr($j->jam_mulai, 0, -3) . '-' . substr($j->jam_berakhir, 0, -3) }} <br>
-                                    {{ $j->guru }} </td>
-                                {{-- <td></td> --}}
+                                <td>{{ $j->tanggal }}</td>
+                                <td>{{ $j->kelas }} <br>
+                                    {{ $j->mata_pelajaran }} <br>
+                                    {{ substr($j->waktu_mulai, 0, -3) . '-' . substr($j->waktu_berakhir, 0, -3) }} <br>
+                                    {{ $j->guru }}
+                                </td>
                                 <td style="white-space: normal">
                                     {{ $j->topik }}
                                 </td>
-                                <td>{{ ucfirst($j->status_validasi) }} <br>
+                                <td>
+                                    {{ ucfirst($j->status_validasi) }} <br>
                                     @if ($j->status_validasi != 'belum tervalidasi')
                                         @if ($j->guru_piket && $j->topik)
                                             <span style='font-size:12px'>Divalidasi oleh : {{ $j->guru_piket }} </span>
@@ -82,23 +86,20 @@
                                         @endif
 
                                     @endif
-
-
                                 </td>
-                                {{-- <td></td> --}}
                                 <td><button {{ $j->topik === null ? 'disabled' : '' }}
-                                        wire:click="showId({{ $j->id }})" class="btn btn-primary"><i
-                                            class='bx bx-show'></i>
+                                        wire:click="showId({{ $j->monitoring_pembelajaran_id }})"
+                                        class="btn btn-primary"><i class='bx bx-show'></i>
                                     </button>
                                     <button {{ $j->topik === null ? 'disabled' : '' }}
                                         @if ($j->topik === null) @if ($j->status_validasi === 'terlaksana')
                                 {{ 'disabled' }} @endif
                                         @endif
-                                        wire:click="showValid({{ $j->id }})"
+                                        wire:click="showValid({{ $j->monitoring_pembelajaran_id }})"
                                         class="btn btn-success"><i class='bx bx-check'></i>
                                     </button>
-                                    <button wire:click="presensi({{ $j->id }})" class="btn btn-danger"><i
-                                            class='bx bx-x'></i></button>
+                                    <button wire:click="presensi({{ $j->monitoring_pembelajaran_id }})"
+                                        class="btn btn-danger"><i class='bx bx-x'></i></button>
                                 </td>
                             </tr>
                         @endforeach
