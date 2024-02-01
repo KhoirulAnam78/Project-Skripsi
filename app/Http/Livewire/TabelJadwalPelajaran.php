@@ -125,10 +125,10 @@ class TabelJadwalPelajaran extends Component
             [
                 'hari' => $this->hari,
                 'waktu_mulai' => $this->waktu_mulai,
-                'kelas_id' => $this->filterKelas
+                'kelas_id' => $this->filterKelas,
+                'mata_pelajaran_id' => $this->mata_pelajaran_id,
             ],
             [
-                'mata_pelajaran_id' => $this->mata_pelajaran_id,
                 'waktu_berakhir' => $this->waktu_berakhir,
                 'guru_id' => $this->guru_id,
             ]);
