@@ -120,7 +120,7 @@ class TabelJadwalPelajaran extends Component
     {
         $this->validate();
         DB::transaction(function () {
-            JadwalPelajaran::where('id',$this->jadwal_edit_id)->first()->delete();
+            // JadwalPelajaran::where('id',$this->jadwal_edit_id)->first()->delete();
             JadwalPelajaran::updateOrCreate(
             [
                 'hari' => $this->hari,
